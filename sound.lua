@@ -7,6 +7,9 @@ love.sounds = {}
 	
 --Functions for playing sounds
 
+function love.sounds.init()
+	love.sounds.playBackground("sounds/background.ogg")
+end
 
 -- Adds an BackgroundMusic
 -- @param filepath to BackgroundMusicFile
