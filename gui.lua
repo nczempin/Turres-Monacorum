@@ -24,6 +24,13 @@ local height = love.window.getHeight()
 local buttonsizeh = 40
 local buttonsizev = 20
 
+local activemenu = {
+	start = false,
+	load = false,
+	settings = false,
+	quit = false
+}
+
 function love.mousepressed(x, y, key)
 	if(key=="l") then
 		buttonDetected=1
@@ -36,28 +43,22 @@ function love.turris.checkButtonPosition(x,y)
 	--love.changegamestate(1)
 	currentgstate=love.getgamestate()
 	if(currentgstate==0) then--MainMenu
-		--if((gui.width/2)-(gui.ButtonSizeH/2)<x or (gui.width/2)+(gui.ButtonSizeH/2)<x) then -- half horizontal screen -menu button <x or x>half horizontal screen + menu button
-			--if(y>(gui.width/5)-(gui.ButtonSizeV/2) or (gui.width/5)+(gui.buttonSizeV/2)<y) then
-				love.changegamestate(1)
+		if((width/2)-(buttonsizeh/2)<x or (width/2)+(buttonsizeh/2)<x) then -- half horizontal screen -menu button <x or x>half horizontal screen + menu button
+			if(y>(width/5)-(buttonsizev/2) or (width/5)+(buttonsizev/2)<y) then
+				--love.changegamestate(1)
 				--gui.startGame()
-				--activeMenu.start = true
-		--elseif(false) then
-		--end
-        --love.turris.mainMenuButtonPushed()
-		--end
+				activemenu.start = true
+			elseif(false) then
+			end
+        love.turris.mainmenubuttonpushed()
+		end
 	end
-	if(currentGameState==1) then --ingame
+	if(currentgstate==1) then --ingame
+		love.changegamestate(0)
 	--NYI
 	end
 	
 end
-
-local activeMenu = {
-	start = false,
-	load = false,
-	settings = false,
-	quit = false
-}
 
 function gui.drawMainMenu()
 	love.graphics.setBackgroundColor(100,100,220)
@@ -88,19 +89,19 @@ function gui.drawMainMenu()
 end
 
 function love.turris.mainmenubuttonpushed()
-	if(activeMenu.start) then
+	if(activemenu.start==true) then
 		love.turris.startGame()
-	elseif(activeMenu.load) then
+	elseif(activemenu.load==true) then
 		love.turris.showLoadWindow()
-	elseif(activeMenu.settings) then
+	elseif(activemenu.settings) then
 		love.turris.openSettings()
-	elseif(activeMenu.quit) then
+	elseif(activemenu.quit) then
 		love.turris.quitGame()
 	end
-	activeMenu.start = false
-	activeMenu.load = false
-	activeMenu.settings = false
-	activeMenu.quit = false
+	activemenu.start = false
+	activemenu.load = false
+	activemenu.settings = false
+	activemenu.quit = false
 end
 
 function love.turris.startGame()

@@ -21,6 +21,9 @@ function love.load()
 
 	bloomOn = false
 end
+function love.getgamestate()
+	return currentgamestate
+end
 
 function love.changegamestate(newgamestate)
 	currentgamestate = newgamestate
@@ -34,11 +37,11 @@ function love.draw()
 	W.setTitle("FPS: " .. love.timer.getFPS())
 	love.postshader.setBuffer("render")
 	if(currentgamestate==0) then --render main menu only
-		--gui.drawMainMenu()
+		gui.drawMainMenu()
 	elseif(currentgamestate==1) then --render game only
 		turGame.draw()
 	end
-	currentgamestate =1 -- quick workaround, will be removed once the mouse buttons work correctly
+	--currentgamestate =1 -- quick workaround, will be removed once the mouse buttons work correctly
 	if bloomOn then
 		love.postshader.addEffect("bloom")
 	end
