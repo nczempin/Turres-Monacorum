@@ -16,7 +16,7 @@ function love.load()
 	currentgamestate = 0
 	-- create game world
 	turGame = love.turris.newGame()
-	turMap = love.turris.newMap(15,15)
+	turMap = love.turris.newMap(23,23)
 	turGame.init()
 
 	bloomOn = false
