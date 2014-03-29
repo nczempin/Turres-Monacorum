@@ -1,8 +1,17 @@
+require "enemy"
+
 function love.turris.newGame()
 	local o = {}
 	o.map = {}
 	o.ground = {}
 	o.tower = {}
+	o.enemies = {}
+	o.enemyCount = 7
+	for i=1, o.enemyCount do
+	o.enemies[i]= love.turris.newEnemy()
+	o.enemies[i].x = i*5
+	o.enemies[i].y = 0
+	end
 	o.init = function()
 		o.newGround("gfx/ground01.png")
 		o.newTower("gfx/tower00_diffuse.png")
