@@ -17,7 +17,7 @@ gui.current = nil
 buttonDetected=0
 font = love.graphics.newFont(16)
 -- GameStates:0=MainMenu, 1=inGame, 2=Load, 3=Settings
-currentgamestate = 0
+--currentgamestate = 0
 
 local width = love.window.getWidth()
 local height = love.window.getHeight()
@@ -25,27 +25,31 @@ local buttonsizeh = 40
 local buttonsizev = 20
 
 function love.mousepressed(x, y, key)
-	if(key==1) then
+	if(key=="l") then
 		buttonDetected=1
-		love.changegamestate(1)
-		checkButtonPosition(x,y)
+		--love.changegamestate(1)
+		love.turris.checkButtonPosition(x,y)
 	end
 end
 
-function checkButtonPosition(x,y)
-	if(currentGameState==0) then--MainMenu
-		if((gui.width/2)-(gui.ButtonSizeH/2)<x or (gui.width/2)+(gui.ButtonSizeH/2)<x) then -- half horizontal screen -menu button <x or x>half horizontal screen + menu button
-			if(y>(gui.width/5)-(gui.ButtonSizeV/2) or (gui.width/5)+(gui.buttonSizeV/2)<y) then
-			activeMenu.start = true
-			elseif(false) then
-			end
-		end
+function love.turris.checkButtonPosition(x,y)
+	--love.changegamestate(1)
+	currentgstate=love.getgamestate()
+	if(currentgstate==0) then--MainMenu
+		--if((gui.width/2)-(gui.ButtonSizeH/2)<x or (gui.width/2)+(gui.ButtonSizeH/2)<x) then -- half horizontal screen -menu button <x or x>half horizontal screen + menu button
+			--if(y>(gui.width/5)-(gui.ButtonSizeV/2) or (gui.width/5)+(gui.buttonSizeV/2)<y) then
+				love.changegamestate(1)
+				--gui.startGame()
+				--activeMenu.start = true
+		--elseif(false) then
+		--end
+        --love.turris.mainMenuButtonPushed()
+		--end
 	end
 	if(currentGameState==1) then --ingame
-		--NYI
+	--NYI
 	end
-
-	gui.mainMenuButtonPushed()
+	
 end
 
 local activeMenu = {
@@ -57,13 +61,13 @@ local activeMenu = {
 
 function gui.drawMainMenu()
 	love.graphics.setBackgroundColor(100,100,220)
-	
+
 	local allbuttonspositionv = width/2 -- all buttons are equal in their vertical position as of yet
 	local startpositionh = height/5
 	local loadpositionh = height*2/5
 	local settingspositionh = height*3/5
 	local quitpositionh = height*4/5
-	
+
 	love.graphics.setColor(250,250,250)
 	--startButton
 	love.graphics.rectangle("fill", (allbuttonspositionv-(buttonsizev/2)), (startpositionh-(buttonsizeh/2)), (buttonsizev), (buttonsizeh))
@@ -83,15 +87,15 @@ function gui.drawMainMenu()
 	love.graphics.printf("Beenden", allbuttonspositionv,quitpositionh-buttonsizeh/2,buttonsizeh/2)
 end
 
-function mainMenuButtonPushed()
+function love.turris.mainmenubuttonpushed()
 	if(activeMenu.start) then
-		gui.startGame()
+		love.turris.startGame()
 	elseif(activeMenu.load) then
-		gui.showLoadWindow()
+		love.turris.showLoadWindow()
 	elseif(activeMenu.settings) then
-		gui.openSettings() 
+		love.turris.openSettings()
 	elseif(activeMenu.quit) then
-		gui.quitGame()
+		love.turris.quitGame()
 	end
 	activeMenu.start = false
 	activeMenu.load = false
@@ -99,23 +103,23 @@ function mainMenuButtonPushed()
 	activeMenu.quit = false
 end
 
-function gui.startGame()
-	print("Not yet implemented")
+function love.turris.startGame()
+	love.changegamestate(1)
 	--hier wird das eigentliche Spiel gestartet
 end
-function gui.showLoadWindow() -- hier wird eine Liste mit allen Spielstaenden angezeigt
+function love.turris.showLoadWindow() -- hier wird eine Liste mit allen Spielstaenden angezeigt
 	local savestates = {
-	save1 = "save 1",
-	save2 = "save 2",
-	save3 = "save 3"
+		save1 = "save 1",
+		save2 = "save 2",
+		save3 = "save 3"
 	}
 end
 
-function gui.openSettings()
-	
-	--Startbildschirm am Ende neu laden und ggf. Button-Positionen neu berechnen !!
+function love.turris.openSettings()
+
+--Startbildschirm am Ende neu laden und ggf. Button-Positionen neu berechnen !!
 end
 
-function gui.quitGame()
+function love.turris.quitGame()
 	love.quit()
 end
