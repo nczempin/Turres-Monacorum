@@ -1,13 +1,15 @@
 require "postshader"
 require "light"
-<<<<<<< HEAD
+
 require "sound"
 require "TESound"
-=======
 require "world"
 require "game"
 require "map"
->>>>>>> 8e6bac6170a62f07de0853cb03935a0e8c6c169a
+require "world"
+require "game"
+require "map"
+
 
 function love.load()
 	G = love.graphics
@@ -20,12 +22,11 @@ function love.load()
 end
 
 function love.update(dt)
-<<<<<<< HEAD
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
-=======
 	turMap.setState(4, 3, 1)
 	turGame.setMap(turMap.getMap())
->>>>>>> 8e6bac6170a62f07de0853cb03935a0e8c6c169a
+	turMap.setState(4, 3, 1)
+	turGame.setMap(turMap.getMap())
 end
 
 function love.draw()
@@ -40,7 +41,7 @@ function love.keypressed(key, code)
 	
 	--Start Sound
 	if key == "1" then
-		love.sounds.addSound("sounds/Explosion.wav")
+		love.sounds.playSound("sounds/Explosion.wav")
 	end
 	
 	if key == "2" then
