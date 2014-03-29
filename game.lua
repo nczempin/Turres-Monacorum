@@ -23,7 +23,7 @@ function love.turris.newGame()
 		o.setMap(turMap.getMap())
 		o.map.setState(4, 3, 1)
 		o.map.setState(7, 13, 1)
-		o.map.setState(10, 10, 2)
+		o.map.setState(11,11, 2)
 	end
 	o.update = function(dt)
 		for i = 1, o.enemyCount do
@@ -65,7 +65,7 @@ function love.turris.newGame()
 		--      local entry = enemyEntrances[i]
 		--    end
 		local mx, my = love.mouse.getPosition()  -- current position of the mouse
-		G.line(0,300, mx, my)
+		G.line(0,300, 400, 300)
 	end
 	o.drawEnemies = function()
 
