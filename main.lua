@@ -1,5 +1,8 @@
 require "postshader"
 require "light"
+require "world"
+require "game"
+require "map"
 
 require "sound"
 require "TESound"
