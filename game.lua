@@ -19,8 +19,10 @@ function love.turris.newGame()
 		turMap.setState(7, 13, 1)
 		o.setMap(turMap.getMap())
 	end
-	o.update = function()
-
+	o.update = function(dt)
+    for i = 1, o.enemyCount do
+      o.enemies[i].x = o.enemies[i].x+dt*10
+    end
 	end
 	o.drawMap = function()
 		lightMouse.setPosition(love.mouse.getX(), love.mouse.getY())
