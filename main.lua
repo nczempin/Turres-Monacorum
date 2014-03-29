@@ -18,6 +18,7 @@ function love.load()
 	turGame = love.turris.newGame()
 	turMap = love.turris.newMap(20, 20)
 	turGame.init()
+	S.init()
 end
 
 function love.changegamestate(newgamestate)
