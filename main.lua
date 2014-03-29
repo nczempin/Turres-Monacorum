@@ -14,12 +14,10 @@ function love.load()
 
 	turGame = love.turris.newGame()
 	turMap = love.turris.newMap(20, 20)
+	turGame.init()
 end
 
 function love.update(dt)
-	turMap.setState(4, 3, 1)
-	turMap.setState(7, 13, 1)
-	turGame.setMap(turMap.getMap())
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
 end
 

@@ -3,6 +3,13 @@ function love.turris.newGame()
 	o.map = {}
 	o.ground = {}
 	o.tower = {}
+	o.init = function()
+		o.newGround("gfx/ground01.png")
+		o.newTower("gfx/tower00_diffuse.png")
+		turMap.setState(4, 3, 1)
+		turMap.setState(7, 13, 1)
+		o.setMap(turMap.getMap())
+	end
 	o.update = function()
 
 	end
@@ -39,9 +46,6 @@ function love.turris.newGame()
 	o.setMap = function(map)
 		o.map = map
 	end
-
-	o.newGround("gfx/ground01.png")
-	o.newTower("gfx/tower00_diffuse.png")
 
 	return o
 end
