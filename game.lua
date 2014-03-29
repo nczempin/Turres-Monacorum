@@ -46,7 +46,7 @@ function love.turris.newGame()
 					if o.map.map[i][k] > 0 then
 						local img = o.tower[o.map.map[i][k]].img
 						G.setColor(255, 255, 255)
-						G.draw(img, i * 32 - 16, k * 24 - 20, 0, 1.0 / img:getWidth() * 32, 1.0 / img:getHeight() * 32)
+						G.draw(img, i * 32, k * 24 - 8)
 					end
 				end
 			end
