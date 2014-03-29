@@ -1,11 +1,24 @@
+require "enemy"
+
 function love.turris.newGame()
-  o = {}
+  local o = {}
   o.map = {}
   o.ground = {}
   o.tower = {}
+  o.enemies = {}
+  o.enemyCount = 7
+  for i=1, o.enemyCount do
+    o.enemies[i]= love.turris.newEnemy()
+    o.enemies[i].x = i*5
+    o.enemies[i].y = 0
+  end
+
   o.update = function()
 
   end
+
+
+
   o.drawMap = function()
     if o.map and o.map.width and o.map.height then
       for i = 1, o.map.width do
