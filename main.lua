@@ -22,7 +22,11 @@ function love.load()
 end
 
 function love.changegamestate(newgamestate)
-	currentgamestate = newgamestate
+	currentgamestate = 1 --newgamestate
+end
+
+function love.getgamestate()
+	return currentgamestate
 end
 function love.update(dt)
 	turGame.update(dt)
@@ -36,7 +40,8 @@ function love.draw()
 	elseif(currentgamestate==1) then --render game only
 		turGame.draw()
 	end
-	currentgamestate =1 -- quick workaround, will be removed once the mouse buttons work correctly
+	--love.changegamestate(1)
+	--currentgamestate =1 -- quick workaround, will be removed once the mouse buttons work correctly
 end
 
 function love.keypressed(key, code)
