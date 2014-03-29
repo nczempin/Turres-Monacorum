@@ -6,13 +6,14 @@ require "map"
 require "tower"
 require "sound"
 require "TESound"
+require "gui"
 
 function love.load()
 	G = love.graphics
 	W = love.window
 	T = love.turris
 	S = love.sounds
-
+	currentgamestate = 0
 	-- create game world
 	turGame = love.turris.newGame()
 	turMap = love.turris.newMap(20, 20)
@@ -21,23 +22,27 @@ function love.load()
 	bloomOn = false
 end
 
+function love.changegamestate(newgamestate)
+	currentgamestate = newgamestate
+end
 function love.update(dt)
+	turGame.update(dt)
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
 end
 
 function love.draw()
 	W.setTitle("FPS: " .. love.timer.getFPS())
 	love.postshader.setBuffer("render")
-	turGame.drawMap()
-	turGame.drawEnemies()
+	if(currentgamestate==0) then --render main menu only
+		--gui.drawMainMenu()
+	elseif(currentgamestate==1) then --render game only
+		turGame.draw()
+	end
+	currentgamestate =1 -- quick workaround, will be removed once the mouse buttons work correctly
 	if bloomOn then
 		love.postshader.addEffect("bloom")
 	end
 	love.postshader.draw()
-end
-
-function love.mousepressed(x, y, key)
-	
 end
 
 function love.keypressed(key, code)

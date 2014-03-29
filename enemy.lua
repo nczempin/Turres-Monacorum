@@ -1,4 +1,4 @@
-function love.turris.newEnemy()
+function love.turris.newEnemy(img)
   local o={}
   o.x = {}
   o.y = {}

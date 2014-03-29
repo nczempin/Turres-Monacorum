@@ -7,20 +7,26 @@ function love.turris.newGame()
 	o.tower = {}
 	o.enemies = {}
 	o.enemyCount = 7
+	local creepImg = G.newImage("gfx/creep00_diffuse.png")
 	for i=1, o.enemyCount do
-	o.enemies[i]= love.turris.newEnemy()
-	o.enemies[i].x = i*5
-	o.enemies[i].y = 0
+		o.enemies[i]= love.turris.newEnemy("")
+		o.enemies[i].x = i*60
+		o.enemies[i].y = 60
+		o.enemies[i].img =  creepImg
 	end
 	o.init = function()
 		o.newGround("gfx/ground01.png")
 		o.newTower("gfx/tower00")
-		turMap.setState(4, 3, 1)
-		turMap.setState(7, 13, 1)
+		o.newTower("gfx/placeholder")
 		o.setMap(turMap.getMap())
+		o.map.setState(4, 3, 1)
+		o.map.setState(7, 13, 1)
+		o.map.setState(10, 10, 2)
 	end
-	o.update = function()
-
+	o.update = function(dt)
+		for i = 1, o.enemyCount do
+			o.enemies[i].x = o.enemies[i].x+dt*10
+		end
 	end
 	o.drawMap = function()
 		lightMouse.setPosition(love.mouse.getX(), love.mouse.getY())
@@ -47,9 +53,28 @@ function love.turris.newGame()
 			lightWorld.drawGlow()
 		end
 	end
+	o.draw = function()
+		o.drawMap()
+		o.drawEnemies()
+		o.drawPaths()
+	end
+	o.drawPaths = function()
+		--    for i = 1, o.entryCount do
+		--      local entry = enemyEntrances[i]
+		--    end
+		local mx, my = love.mouse.getPosition()  -- current position of the mouse
+		G.line(0,300, mx, my)
+	end
 	o.drawEnemies = function()
+
 		for i = 1, o.enemyCount do
-			G.circle("fill", o.enemies[i].x, o.enemies[i].y, 16, 16 )
+			local e = o.enemies[i]
+			local x = e.x
+			local y = e.y
+			local img = e.img
+			G.setColor(255, 255, 255)
+			G.draw(img, x, y, 0, 1.0 / img:getWidth() * 80, 1.0 / img:getHeight() * 64)
+			-- G.circle("fill", o.enemies[i].x, o.enemies[i].y, 16, 16 )
 		end
 	end
 	o.newGround = function(img)
