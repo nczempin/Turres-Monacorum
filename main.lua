@@ -17,6 +17,8 @@ function love.load()
 	turGame = love.turris.newGame()
 	turMap = love.turris.newMap(20, 20)
 	turGame.init()
+
+	bloomOn = false
 end
 
 function love.update(dt)
@@ -25,8 +27,13 @@ end
 
 function love.draw()
 	W.setTitle("FPS: " .. love.timer.getFPS())
+	love.postshader.setBuffer("render")
 	turGame.drawMap()
 	turGame.drawEnemies()
+	if bloomOn then
+		love.postshader.addEffect("bloom")
+	end
+	love.postshader.draw()
 end
 
 function love.mousepressed(x, y, key)
@@ -41,5 +48,9 @@ function love.keypressed(key, code)
 
 	if key == "2" then
 		love.sounds.background("sounds/Explosion.wav")
+	end
+
+	if key == "b" then
+		bloomOn = not bloomOn
 	end
 end

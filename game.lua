@@ -14,7 +14,7 @@ function love.turris.newGame()
 	end
 	o.init = function()
 		o.newGround("gfx/ground01.png")
-		o.newTower("gfx/tower00_diffuse.png")
+		o.newTower("gfx/tower00")
 		turMap.setState(4, 3, 1)
 		turMap.setState(7, 13, 1)
 		o.setMap(turMap.getMap())
@@ -33,17 +33,18 @@ function love.turris.newGame()
 					G.draw(o.ground[1], i * 32, k * 24)
 				end
 			end
-
 			lightWorld.drawShadow()
 			for i = 1, o.map.width do
 				for k = 1, o.map.height do
 					if o.map.map[i][k] > 0 then
 						local img = o.tower[o.map.map[i][k]].img
 						G.setColor(255, 255, 255)
-						G.draw(img, i * 32, k * 24 - 8, 0, 1.0 / img:getWidth() * 80, 1.0 / img:getHeight() * 64)
+						G.draw(img, i * 32 - 16, k * 24 - 20, 0, 1.0 / img:getWidth() * 32, 1.0 / img:getHeight() * 32)
 					end
 				end
 			end
+			lightWorld.drawPixelShadow()
+			lightWorld.drawGlow()
 		end
 	end
 	o.drawEnemies = function()
