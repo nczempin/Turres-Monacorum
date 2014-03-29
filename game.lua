@@ -6,12 +6,12 @@ function love.turris.newGame()
 	o.ground = {}
 	o.tower = {}
 	o.enemies = {}
-	o.enemyCount = 7
+	o.enemyCount = 1
 	local creepImg = G.newImage("gfx/creep00_diffuse.png")
 	for i=1, o.enemyCount do
 		o.enemies[i]= love.turris.newEnemy("")
-		o.enemies[i].x = i*60
-		o.enemies[i].y = 60
+		o.enemies[i].x = (i-1)*60
+		o.enemies[i].y = 300-48
 		o.enemies[i].img =  creepImg
 
 	end
@@ -27,7 +27,7 @@ function love.turris.newGame()
 	end
 	o.update = function(dt)
 		for i = 1, o.enemyCount do
-			o.enemies[i].x = o.enemies[i].x+dt*10
+			o.enemies[i].x = o.enemies[i].x+dt*20
 		end
 	end
 	o.drawMap = function()
@@ -74,7 +74,7 @@ function love.turris.newGame()
 			local y = e.y
 			local img = e.img
 			G.setColor(255, 255, 255)
-			G.draw(img, x, y, 0, 1.0 / img:getWidth() * 80, 1.0 / img:getHeight() * 64)
+			G.draw(img, x, y, 0, -1.0 / img:getWidth() * 40, 1.0 / img:getHeight() * 32)
 			-- G.circle("fill", o.enemies[i].x, o.enemies[i].y, 16, 16 )
 		end
 	end
