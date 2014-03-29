@@ -81,7 +81,7 @@ function love.light.newWorld()
 		for i = 1, #o.lights do
 			if o.lights[i].changed or o.changed then
 				if  o.lights[i].x + o.lights[i].range > LOVE_LIGHT_TRANSLATE_X and o.lights[i].x - o.lights[i].range < love.graphics.getWidth() + LOVE_LIGHT_TRANSLATE_X
-				and o.lights[i].y + o.lights[i].range > LOVE_LIGHT_TRANSLATE_Y and o.lights[i].y - o.lights[i].range < love.graphics.getHeight() + LOVE_LIGHT_TRANSLATE_Y
+					and o.lights[i].y + o.lights[i].range > LOVE_LIGHT_TRANSLATE_Y and o.lights[i].y - o.lights[i].range < love.graphics.getHeight() + LOVE_LIGHT_TRANSLATE_Y
 				then
 					local lightposrange = {o.lights[i].x, love.graphics.getHeight() - o.lights[i].y, o.lights[i].range}
 					LOVE_LIGHT_CURRENT = o.lights[i]
@@ -313,7 +313,7 @@ function love.light.newWorld()
 				end
 			end
 		end
-		
+
 		love.graphics.setColor(0, 0, 0)
 		for i = 1, #o.body do
 			if not o.body[i].refractive then
@@ -1335,21 +1335,21 @@ function dot(v1, v2)
 end
 
 function lengthSqr(v)
-    return v[1] * v[1] + v[2] * v[2]
+	return v[1] * v[1] + v[2] * v[2]
 end
 
 function length(v)
-    return math.sqrt(lengthSqr(v))
+	return math.sqrt(lengthSqr(v))
 end
 
 function calculateShadows(light, body)
-    local shadowGeometry = {}
-    local shadowLength = 10000
+	local shadowGeometry = {}
+	local shadowLength = 10000
 
-    for i = 1, #body do
+	for i = 1, #body do
 		if body[i].shadowType == "rectangle" or body[i].shadowType == "polygon" then
 			curPolygon = body[i].data
-			if not body[i].castsNoShadow then 
+			if not body[i].castsNoShadow then
 				local edgeFacingTo = {}
 				for k = 1, #curPolygon, 2 do
 					local indexOfNextVertex = (k + 2) % #curPolygon
@@ -1368,7 +1368,7 @@ function calculateShadows(light, body)
 				for k = 1, #edgeFacingTo do
 					local nextIndex = (k + 1) % #edgeFacingTo
 					if nextIndex == 0 then nextIndex = #edgeFacingTo end
-					if edgeFacingTo[k] and not edgeFacingTo[nextIndex] then 
+					if edgeFacingTo[k] and not edgeFacingTo[nextIndex] then
 						curShadowGeometry[1] = curPolygon[nextIndex*2-1]
 						curShadowGeometry[2] = curPolygon[nextIndex*2]
 
@@ -1376,7 +1376,7 @@ function calculateShadows(light, body)
 						curShadowGeometry[3] = curShadowGeometry[1] + lightVecFrontBack[1] * shadowLength
 						curShadowGeometry[4] = curShadowGeometry[2] + lightVecFrontBack[2] * shadowLength
 
-					elseif not edgeFacingTo[k] and edgeFacingTo[nextIndex] then 
+					elseif not edgeFacingTo[k] and edgeFacingTo[nextIndex] then
 						curShadowGeometry[7] = curPolygon[nextIndex*2-1]
 						curShadowGeometry[8] = curPolygon[nextIndex*2]
 
@@ -1386,13 +1386,13 @@ function calculateShadows(light, body)
 					end
 				end
 				if  curShadowGeometry[1]
-				and curShadowGeometry[2]
-				and curShadowGeometry[3]
-				and curShadowGeometry[4]
-				and curShadowGeometry[5]
-				and curShadowGeometry[6]
-				and curShadowGeometry[7]
-				and curShadowGeometry[8]
+					and curShadowGeometry[2]
+					and curShadowGeometry[3]
+					and curShadowGeometry[4]
+					and curShadowGeometry[5]
+					and curShadowGeometry[6]
+					and curShadowGeometry[7]
+					and curShadowGeometry[8]
 				then
 					curShadowGeometry.alpha = body[i].alpha
 					curShadowGeometry.red = body[i].red
@@ -1431,7 +1431,7 @@ function calculateShadows(light, body)
 		end
 	end
 
-    return shadowGeometry
+	return shadowGeometry
 end
 
 shadowStencil = function()
@@ -1440,7 +1440,7 @@ shadowStencil = function()
 			love.graphics.polygon("fill", unpack(LOVE_LIGHT_SHADOW_GEOMETRY[i]))
 		end
 	end
-    for i = 1, #LOVE_LIGHT_BODY do
+	for i = 1, #LOVE_LIGHT_BODY do
 		if not LOVE_LIGHT_BODY[i].castsNoShadow then
 			if LOVE_LIGHT_BODY[i].shadowType == "circle" then
 				love.graphics.circle("fill", LOVE_LIGHT_BODY[i].x - LOVE_LIGHT_BODY[i].ox, LOVE_LIGHT_BODY[i].y - LOVE_LIGHT_BODY[i].oy, LOVE_LIGHT_BODY[i].radius)
@@ -1449,14 +1449,14 @@ shadowStencil = function()
 			elseif LOVE_LIGHT_BODY[i].shadowType == "polygon" then
 				love.graphics.polygon("fill", unpack(LOVE_LIGHT_BODY[i].data))
 			elseif LOVE_LIGHT_BODY[i].shadowType == "image" then
-				--love.graphics.rectangle("fill", LOVE_LIGHT_BODY[i].x - LOVE_LIGHT_BODY[i].ox, LOVE_LIGHT_BODY[i].y - LOVE_LIGHT_BODY[i].oy, LOVE_LIGHT_BODY[i].width, LOVE_LIGHT_BODY[i].height)
+			--love.graphics.rectangle("fill", LOVE_LIGHT_BODY[i].x - LOVE_LIGHT_BODY[i].ox, LOVE_LIGHT_BODY[i].y - LOVE_LIGHT_BODY[i].oy, LOVE_LIGHT_BODY[i].width, LOVE_LIGHT_BODY[i].height)
 			end
 		end
 	end
 end
 
 polyStencil = function()
-    for i = 1, #LOVE_LIGHT_BODY do
+	for i = 1, #LOVE_LIGHT_BODY do
 		if LOVE_LIGHT_BODY[i].shine and (LOVE_LIGHT_BODY[i].glowStrength == 0.0 or (LOVE_LIGHT_BODY[i].type == "image" and not LOVE_LIGHT_BODY[i].normal)) then
 			if LOVE_LIGHT_BODY[i].shadowType == "circle" then
 				love.graphics.circle("fill", LOVE_LIGHT_BODY[i].x - LOVE_LIGHT_BODY[i].ox, LOVE_LIGHT_BODY[i].y - LOVE_LIGHT_BODY[i].oy, LOVE_LIGHT_BODY[i].radius)
@@ -1465,7 +1465,7 @@ polyStencil = function()
 			elseif LOVE_LIGHT_BODY[i].shadowType == "polygon" then
 				love.graphics.polygon("fill", unpack(LOVE_LIGHT_BODY[i].data))
 			elseif LOVE_LIGHT_BODY[i].shadowType == "image" then
-				--love.graphics.rectangle("fill", LOVE_LIGHT_BODY[i].x - LOVE_LIGHT_BODY[i].ox, LOVE_LIGHT_BODY[i].y - LOVE_LIGHT_BODY[i].oy, LOVE_LIGHT_BODY[i].width, LOVE_LIGHT_BODY[i].height)
+			--love.graphics.rectangle("fill", LOVE_LIGHT_BODY[i].x - LOVE_LIGHT_BODY[i].ox, LOVE_LIGHT_BODY[i].y - LOVE_LIGHT_BODY[i].oy, LOVE_LIGHT_BODY[i].width, LOVE_LIGHT_BODY[i].height)
 			end
 		end
 	end

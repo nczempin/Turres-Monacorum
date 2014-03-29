@@ -25,9 +25,9 @@ local buttonsizeh = 40
 local buttonsizev = 20
 
 function love.mousepressed(x, y, key)
-	if(key==1) then
+	if(key=="l") then
 		buttonDetected=1
-		love.changegamestate(1)
+		--love.changegamestate(1)
 		checkButtonPosition(x,y)
 	end
 end
@@ -36,16 +36,16 @@ function checkButtonPosition(x,y)
 	if(currentGameState==0) then--MainMenu
 		if((gui.width/2)-(gui.ButtonSizeH/2)<x or (gui.width/2)+(gui.ButtonSizeH/2)<x) then -- half horizontal screen -menu button <x or x>half horizontal screen + menu button
 			if(y>(gui.width/5)-(gui.ButtonSizeV/2) or (gui.width/5)+(gui.buttonSizeV/2)<y) then
-			activeMenu.start = true
-			elseif(false) then
-			end
+				activeMenu.start = true
+		elseif(false) then
 		end
+        gui.mainMenuButtonPushed()
+	end
 	end
 	if(currentGameState==1) then --ingame
-		--NYI
+	--NYI
 	end
-
-	gui.mainMenuButtonPushed()
+	
 end
 
 local activeMenu = {
@@ -57,13 +57,13 @@ local activeMenu = {
 
 function gui.drawMainMenu()
 	love.graphics.setBackgroundColor(100,100,220)
-	
+
 	local allbuttonspositionv = width/2 -- all buttons are equal in their vertical position as of yet
 	local startpositionh = height/5
 	local loadpositionh = height*2/5
 	local settingspositionh = height*3/5
 	local quitpositionh = height*4/5
-	
+
 	love.graphics.setColor(250,250,250)
 	--startButton
 	love.graphics.rectangle("fill", (allbuttonspositionv-(buttonsizev/2)), (startpositionh-(buttonsizeh/2)), (buttonsizev), (buttonsizeh))
@@ -89,7 +89,7 @@ function mainMenuButtonPushed()
 	elseif(activeMenu.load) then
 		gui.showLoadWindow()
 	elseif(activeMenu.settings) then
-		gui.openSettings() 
+		gui.openSettings()
 	elseif(activeMenu.quit) then
 		gui.quitGame()
 	end
@@ -105,15 +105,15 @@ function gui.startGame()
 end
 function gui.showLoadWindow() -- hier wird eine Liste mit allen Spielstaenden angezeigt
 	local savestates = {
-	save1 = "save 1",
-	save2 = "save 2",
-	save3 = "save 3"
+		save1 = "save 1",
+		save2 = "save 2",
+		save3 = "save 3"
 	}
 end
 
 function gui.openSettings()
-	
-	--Startbildschirm am Ende neu laden und ggf. Button-Positionen neu berechnen !!
+
+--Startbildschirm am Ende neu laden und ggf. Button-Positionen neu berechnen !!
 end
 
 function gui.quitGame()
