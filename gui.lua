@@ -1,9 +1,8 @@
 --[[#########################################
 -- GUI und Hauptmenue sind hier drin
--- Aldo B.
 --#########################################
 -- vorab: sorry, gelegentlich wird die Kommentarsprache gewechselt
--- Elemente für das Hauptmenue:
+-- Elemente fuer das Hauptmenue:
 -- *neues Spiel starten
 --- -> Start in der 1. Mission
 -- *Spiel fortsetzen/laden
@@ -15,15 +14,22 @@
 -- gui = require "Quickie" -- not yet
 gui={}
 gui.current = nil
-
+buttonDetected=0
 font = love.graphics.newFont(16)
 -- GameStates:0=MainMenu, 1=inGame, 2=Load, 3=Settings
 currentgamestate = 0
 
 local width = love.window.getWidth()
 local height = love.window.getHeight()
-local ButtonSizeH = 40
-local ButtonSizeV = 20
+local buttonsizeh = 40
+local buttonsizev = 20
+
+function love.mousepressed(x,y,button)
+	if(button==1) then
+		buttonDetected=1
+		checkButtonPosition(x,y)
+	end
+end
 
 function checkButtonPosition(x,y)
 	if(currentGameState==0) then--MainMenu
@@ -52,28 +58,28 @@ function gui.drawMainMenu()
 	love.graphics.setBackgroundColor(100,100,220)
 	
 	local allbuttonspositionv = width/2 -- all buttons are equal in their vertical position as of yet
-	local startpositionh = gui.height/5
-	local loadpositionh = gui.height*2/5
-	local settingspositionh = gui.height*3/5
-	local quitpositionh = gui.height*4/5
+	local startpositionh = height/5
+	local loadpositionh = height*2/5
+	local settingspositionh = height*3/5
+	local quitpositionh = height*4/5
 	
 	love.graphics.setColor(250,250,250)
 	--startButton
-	love.graphics.rectangle("fill", (gui.allbuttonspositionv-(gui.buttonsizev/2)), (gui.startpositionh-(gui.buttonsizeh/2)), (gui.buttonsizev), (gui.buttonsizeh))
+	love.graphics.rectangle("fill", (allbuttonspositionv-(buttonsizev/2)), (startpositionh-(buttonsizeh/2)), (buttonsizev), (buttonsizeh))
 	--startText
-	love.graphics.printf("Spiel starten", gui.allbuttonspositionv,gui.startpositionh-gui.buttonsizeh/2,buttonsizeh/2)
+	love.graphics.printf("Spiel starten", allbuttonspositionv,startpositionh-buttonsizeh/2,buttonsizeh/2)
 	--loadbutton
-	love.graphics.rectangle("fill", (gui.allbuttonspositionv-(gui.buttonsizev/2)), (gui.loadpositionh-(gui.buttonsizeh/2)), (gui.buttonsizev), (gui.buttonsizeh))
+	love.graphics.rectangle("fill", (allbuttonspositionv-(buttonsizev/2)), (loadpositionh-(buttonsizeh/2)), (buttonsizev), (buttonsizeh))
 	--loadText
-	love.graphics.printf("Spiel laden", gui.allbuttonspositionv,gui.loadpositionh-gui.buttonsizeh/2,buttonsizeh/2)
+	love.graphics.printf("Spiel laden", allbuttonspositionv,loadpositionh-buttonsizeh/2,buttonsizeh/2)
 	--settingsbutton
-	love.graphics.rectangle("fill", (gui.allbuttonspositionv-(gui.buttonsizev/2)), (gui.settingspositionh-(gui.buttonsizeh/2)), (gui.buttonsizev), (gui.buttonsizeh))
+	love.graphics.rectangle("fill", (allbuttonspositionv-(buttonsizev/2)), (settingspositionh-(buttonsizeh/2)), (buttonsizev), (buttonsizeh))
 	--settingsText
-	love.graphics.printf("Einstellungen", gui.allbuttonspositionv,gui.settingspositionh-gui.buttonsizeh/2,buttonsizeh/2)
+	love.graphics.printf("Einstellungen", allbuttonspositionv,settingspositionh-buttonsizeh/2,buttonsizeh/2)
 	--quitbutton
-	love.graphics.rectangle("fill", (gui.allbuttonspositionv-(gui.buttonsizev/2)), (gui.quitpositionh-(gui.buttonsizeh/2)), (gui.buttonsizev), (gui.buttonsizeh))
+	love.graphics.rectangle("fill", (allbuttonspositionv-(buttonsizev/2)), (quitpositionh-(buttonsizeh/2)), (buttonsizev), (buttonsizeh))
 	--quitText
-	love.graphics.printf("Beenden", gui.allbuttonspositionv,gui.quitpositionh-gui.buttonsizeh/2,buttonsizeh/2)
+	love.graphics.printf("Beenden", allbuttonspositionv,quitpositionh-buttonsizeh/2,buttonsizeh/2)
 end
 
 function mainMenuButtonPushed()
