@@ -12,15 +12,17 @@ function love.turris.newGame()
 		o.enemies[i]= love.turris.newEnemy(creepImg)
 		o.enemies[i].x = (i-1)*60
 		o.enemies[i].y = 300
-		end
+	end
 	o.init = function()
 		o.newGround("gfx/ground01.png")
 		o.newTower("gfx/tower00")
 		o.newTower("gfx/placeholder")
 		o.setMap(turMap.getMap())
-		o.map.setState(4, 3, 1)
-		o.map.setState(7, 13, 1)
-		o.map.setState(10, 10, 2)
+		o.map.setState(1, 1, 1)
+		o.map.setState(7, 1, 1)
+		local baseX = math.floor(o.map.width/2)
+		local baseY = math.floor(o.map.height/2)
+		o.map.setState(baseX, baseY, 2)
 	end
 	o.update = function(dt)
 		for i = 1, o.enemyCount do
