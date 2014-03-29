@@ -25,6 +25,7 @@ end
 function love.draw()
 	W.setTitle("FPS: " .. love.timer.getFPS())
 	turGame.drawMap()
+	turGame.drawEnemies()
 end
 
 function love.mousepressed(x, y, key)

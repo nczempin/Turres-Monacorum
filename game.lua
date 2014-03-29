@@ -9,8 +9,8 @@ function love.turris.newGame()
   o.enemyCount = 7
   for i=1, o.enemyCount do
     o.enemies[i]= love.turris.newEnemy()
-    o.enemies[i].x = i*5
-    o.enemies[i].y = 0
+    o.enemies[i].x = i*60
+    o.enemies[i].y = 60
   end
   o.init = function()
     o.newGround("gfx/ground01.png")
@@ -38,6 +38,12 @@ function love.turris.newGame()
           end
         end
       end
+    end
+  end
+  o.drawEnemies = function()
+
+    for i=1,o.enemyCount do
+      G.circle("fill", o.enemies[i].x, o.enemies[i].y, 16, 16 )
     end
   end
   o.newGround = function(img)
