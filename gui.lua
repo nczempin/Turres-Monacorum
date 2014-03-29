@@ -21,8 +21,8 @@ font = love.graphics.newFont(16)
 
 local width = love.window.getWidth()
 local height = love.window.getHeight()
-local buttonsizeh = 40
-local buttonsizev = 20
+local buttonsizeh = 100
+local buttonsizev = 40
 
 local activemenu = {
 	start = false,
@@ -39,18 +39,21 @@ function love.mousepressed(x, y, key)
 	end
 end
 
-function love.turris.checkButtonPosition(x,y)
+function love.turris.checkButtonPosition(clickx,clicky)
 	--love.changegamestate(1)
 	currentgstate=love.getgamestate()
+	--print(love.window.getWidth())
+	--print(clickx.." "..clicky)
 	if(currentgstate==0) then--MainMenu
-		if((width/2)-(buttonsizeh/2)<x or (width/2)+(buttonsizeh/2)<x) then -- half horizontal screen -menu button <x or x>half horizontal screen + menu button
-			if(y>(width/5)-(buttonsizev/2) or (width/5)+(buttonsizev/2)<y) then
-				--love.changegamestate(1)
-				--gui.startGame()
+		if((width/2)-(buttonsizeh/2)<clickx and (width/2)+(buttonsizeh/2)>clickx) then -- half horizontal screen -menu button <x or x>half horizontal screen + menu button
+			if(clicky>(height/5)-(buttonsizev/2) and (height/5)+(buttonsizev/2)>clicky) then
 				activemenu.start = true
-			elseif(false) then
+			elseif(true) then
+				print("click not within y range")
 			end
         love.turris.mainmenubuttonpushed()
+		else
+		print("click not within x range")
 		end
 	end
 	if(currentgstate==1) then --ingame
@@ -63,29 +66,38 @@ end
 function gui.drawMainMenu()
 	love.graphics.setBackgroundColor(100,100,220)
 
-	local allbuttonspositionv = width/2 -- all buttons are equal in their vertical position as of yet
-	local startpositionh = height/5
-	local loadpositionh = height*2/5
-	local settingspositionh = height*3/5
-	local quitpositionh = height*4/5
+	local allbuttonspositionh = width/2 -- all buttons are equal in their vertical position as of yet
+	local startpositionv = height/5
+	local loadpositionv = height*2/5
+	local settingspositionv = height*3/5
+	local quitpositionv = height*4/5
 
 	love.graphics.setColor(250,250,250)
 	--startButton
-	love.graphics.rectangle("fill", (allbuttonspositionv-(buttonsizev/2)), (startpositionh-(buttonsizeh/2)), (buttonsizev), (buttonsizeh))
+	
+	--print(allbuttonspositionh.." "..buttonsizev)
+	love.graphics.rectangle("fill", (allbuttonspositionh-(buttonsizeh/2)), (startpositionv-(buttonsizev/2)), buttonsizeh, buttonsizev)
 	--startText
-	love.graphics.printf("Spiel starten", allbuttonspositionv,startpositionh-buttonsizeh/2,buttonsizeh/2)
+	love.graphics.setColor(0,0,0)
+	love.graphics.printf("Spiel starten", allbuttonspositionh-buttonsizeh/2,startpositionv-buttonsizev/2,buttonsizeh)
 	--loadbutton
-	love.graphics.rectangle("fill", (allbuttonspositionv-(buttonsizev/2)), (loadpositionh-(buttonsizeh/2)), (buttonsizev), (buttonsizeh))
+	love.graphics.setColor(250,250,250)
+	love.graphics.rectangle("fill", (allbuttonspositionh-(buttonsizeh/2)), (loadpositionv-(buttonsizev/2)), (buttonsizeh), (buttonsizev))
 	--loadText
-	love.graphics.printf("Spiel laden", allbuttonspositionv,loadpositionh-buttonsizeh/2,buttonsizeh/2)
+	love.graphics.setColor(0,0,0)
+	love.graphics.printf("Spiel laden", allbuttonspositionh-buttonsizeh/2,loadpositionv-buttonsizev/2,buttonsizeh/2)
 	--settingsbutton
-	love.graphics.rectangle("fill", (allbuttonspositionv-(buttonsizev/2)), (settingspositionh-(buttonsizeh/2)), (buttonsizev), (buttonsizeh))
+	love.graphics.setColor(250,250,250)
+	love.graphics.rectangle("fill", (allbuttonspositionh-(buttonsizeh/2)), (settingspositionv-(buttonsizev/2)), (buttonsizeh), (buttonsizev))
 	--settingsText
-	love.graphics.printf("Einstellungen", allbuttonspositionv,settingspositionh-buttonsizeh/2,buttonsizeh/2)
+	love.graphics.setColor(0,0,0)
+	love.graphics.printf("Einstellungen", allbuttonspositionh-buttonsizeh/2,settingspositionv-buttonsizev/2,buttonsizeh/2)
 	--quitbutton
-	love.graphics.rectangle("fill", (allbuttonspositionv-(buttonsizev/2)), (quitpositionh-(buttonsizeh/2)), (buttonsizev), (buttonsizeh))
+	love.graphics.setColor(250,250,250)
+	love.graphics.rectangle("fill", (allbuttonspositionh-(buttonsizeh/2)), (quitpositionv-(buttonsizev/2)), (buttonsizeh), (buttonsizev))
 	--quitText
-	love.graphics.printf("Beenden", allbuttonspositionv,quitpositionh-buttonsizeh/2,buttonsizeh/2)
+	love.graphics.setColor(0,0,0)
+	love.graphics.printf("Beenden", allbuttonspositionh-buttonsizeh/2,quitpositionv-buttonsizev/2,buttonsizeh/2)
 end
 
 function love.turris.mainmenubuttonpushed()
