@@ -20,11 +20,8 @@ end
 
 function love.update(dt)
 	turMap.setState(4, 3, 1)
-	turMap.setState(4, 3, 1)
+	turMap.setState(7, 13, 1)
 	turGame.setMap(turMap.getMap())
-end
-
-function love.update(dt)
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
 end
 
