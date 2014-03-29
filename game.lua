@@ -36,7 +36,6 @@ function love.turris.newGame()
   end
   o.map = love.turris.newMap(20, 20)
 
-  o.map.setState(4, 3, 1)
   o.map.setState(7, 13, 1)
   o.map.setState(4, 3, 1)
   o.newGround("gfx/ground01.png")
