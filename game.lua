@@ -98,7 +98,9 @@ function love.turris.newGame()
 
 	-- create light
 	lightMouse = lightWorld.newLight(0, 0, 255, 127, 63, 300)
-	lightMouse.setGlowStrength(0.3)
+	--lightMouse.setGlowStrength(0.3)
+	--lightMouse.setSmooth(0.01)
+	lightMouse.setRange(500)
 
 	return o
 end
