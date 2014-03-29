@@ -3,8 +3,6 @@ require "light"
 require "world"
 require "game"
 require "map"
-<<<<<<< HEAD
-
 require "sound"
 require "TESound"
 require "world"
@@ -29,8 +27,6 @@ function love.update(dt)
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
 	turMap.setState(4, 3, 1)
 	turGame.setMap(turMap.getMap())
-=======
->>>>>>> 8e6bac6170a62f07de0853cb03935a0e8c6c169a
 	turMap.setState(4, 3, 1)
 	turGame.setMap(turMap.getMap())
 end
