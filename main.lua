@@ -22,9 +22,7 @@ function love.load()
 	turMap = love.turris.newMap(20, 20)
   turMap.setState(4, 3, 1)
   turGame.setMap(turMap.getMap())
-  turMap.setState(4, 3, 1)
-  turGame.setMap(turMap.getMap())
-	print(turMap.getWidth())
+ 	print(turMap.getWidth())
 end
 
 function love.update(dt)
