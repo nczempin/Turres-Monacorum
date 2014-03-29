@@ -15,6 +15,10 @@ function love.turris.newGame()
 	o.setMap = function(map)
 		o.map = map
 	end
-
+  o.init = function(map)
+    o.map = love.turris.newMap(20, 20)
+  
+    o.map.setState(4, 3, 1)
+  end
 	return o
 end
