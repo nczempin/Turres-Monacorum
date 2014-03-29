@@ -13,7 +13,6 @@ function love.load()
   T = love.turris
 
   turGame = love.turris.newGame()
-  turGame.init()
 end
 
 
