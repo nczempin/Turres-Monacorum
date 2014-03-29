@@ -9,11 +9,10 @@ function love.turris.newGame()
 	o.enemyCount = 1
 	local creepImg = G.newImage("gfx/creep00_diffuse.png")
 	for i=1, o.enemyCount do
-		o.enemies[i]= love.turris.newEnemy("")
-		o.enemies[i].x = i*60
-		o.enemies[i].y = 60
-		o.enemies[i].img =  creepImg
-	end
+		o.enemies[i]= love.turris.newEnemy(creepImg)
+		o.enemies[i].x = (i-1)*60
+		o.enemies[i].y = 300
+		end
 	o.init = function()
 		o.newGround("gfx/ground01.png")
 		o.newTower("gfx/tower00")
@@ -25,7 +24,6 @@ function love.turris.newGame()
 	end
 	o.update = function(dt)
 		for i = 1, o.enemyCount do
-		local e = o.enemies[i]
 			o.enemies[i].x = o.enemies[i].x+o.enemies[i].xVel*dt
 		end
 	end
@@ -60,11 +58,11 @@ function love.turris.newGame()
 		o.drawPaths()
 	end
 	o.drawPaths = function()
-		--    for i = 1, o.entryCount do
-		--      local entry = enemyEntrances[i]
-		--    end
-		--local mx, my = love.mouse.getPosition()  -- current position of the mouse
-		--G.line(0,300, mx, my)
+	--    for i = 1, o.entryCount do
+	--      local entry = enemyEntrances[i]
+	--    end
+	--local mx, my = love.mouse.getPosition()  -- current position of the mouse
+	--G.line(0,300, mx, my)
 	end
 	o.drawEnemies = function()
 
