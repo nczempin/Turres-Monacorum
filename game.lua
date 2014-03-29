@@ -12,9 +12,14 @@ function love.turris.newGame()
 				for k = 1, o.map.height do
 					G.setColor(255, 255, 255)
 					G.draw(o.ground[1], i * 32, k * 24)
+				end
+			end
+			for i = 1, o.map.width do
+				for k = 1, o.map.height do
 					if o.map.map[i][k] > 0 then
+						local img = o.tower[o.map.map[i][k]].img
 						G.setColor(255, 255, 255)
-						G.draw(o.tower[o.map.map[i][k]].img, i * 32, k * 24 - 8)
+						G.draw(img, i * 32, k * 24 - 8, 0, 1.0 / img:getWidth() * 80, 1.0 / img:getHeight() * 64)
 					end
 				end
 			end
@@ -34,6 +39,9 @@ function love.turris.newGame()
 	o.setMap = function(map)
 		o.map = map
 	end
+
+	o.newGround("gfx/ground01.png")
+	o.newTower("gfx/tower00_diffuse.png")
 
 	return o
 end
