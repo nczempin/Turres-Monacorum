@@ -46,6 +46,11 @@ function love.turris.newGame()
 			end
 		end
 	end
+	o.drawEnemies = function()
+		for i = 1, o.enemyCount do
+			G.circle("fill", o.enemies[i].x, o.enemies[i].y, 16, 16 )
+		end
+	end
 	o.newGround = function(img)
 		o.ground[#o.ground + 1] = G.newImage(img)
 		return o.ground[#o.ground]
