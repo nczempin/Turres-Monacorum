@@ -25,9 +25,9 @@ local buttonsizeh = 40
 local buttonsizev = 20
 
 function love.mousepressed(x, y, key)
-	if(key==1) then
+	if(key=="l") then
 		buttonDetected=1
-		love.changegamestate(1)
+		--love.changegamestate(1)
 		checkButtonPosition(x,y)
 	end
 end
@@ -39,13 +39,13 @@ function checkButtonPosition(x,y)
 				activeMenu.start = true
 		elseif(false) then
 		end
+        gui.mainMenuButtonPushed()
 	end
 	end
 	if(currentGameState==1) then --ingame
 	--NYI
 	end
-
-	gui.mainMenuButtonPushed()
+	
 end
 
 local activeMenu = {
