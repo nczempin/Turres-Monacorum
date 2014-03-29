@@ -1,18 +1,35 @@
 require "postshader"
 require "light"
+<<<<<<< HEAD
 require "sound"
 require "TESound"
+=======
+require "world"
+require "game"
+require "map"
+>>>>>>> 8e6bac6170a62f07de0853cb03935a0e8c6c169a
 
 function love.load()
+	G = love.graphics
+	W = love.windows
+	T = love.turris
 
+	turGame = love.turris.newGame()
+	turMap = love.turris.newMap(20, 20)
+	print(turMap.getWidth())
 end
 
 function love.update(dt)
+<<<<<<< HEAD
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
+=======
+	turMap.setState(4, 3, 1)
+	turGame.setMap(turMap.getMap())
+>>>>>>> 8e6bac6170a62f07de0853cb03935a0e8c6c169a
 end
 
 function love.draw()
-
+	turGame.drawMap()
 end
 
 function love.mousepressed(x, y, key)
