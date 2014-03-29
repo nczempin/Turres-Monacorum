@@ -5,12 +5,7 @@ require "game"
 require "map"
 require "sound"
 require "TESound"
-require "world"
-require "game"
-require "map"
-require "world"
-require "game"
-require "map"
+
 
 
 function love.load()
