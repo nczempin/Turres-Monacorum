@@ -13,6 +13,7 @@ function love.load()
 	T = love.turris
 	S = love.sounds
 
+	-- create game world
 	turGame = love.turris.newGame()
 	turMap = love.turris.newMap(20, 20)
 	turGame.init()

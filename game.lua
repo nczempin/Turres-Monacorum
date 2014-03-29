@@ -1,5 +1,5 @@
 function love.turris.newGame()
-	o = {}
+	local o = {}
 	o.map = {}
 	o.ground = {}
 	o.tower = {}
@@ -14,6 +14,9 @@ function love.turris.newGame()
 
 	end
 	o.drawMap = function()
+		lightMouse.setPosition(love.mouse.getX(), love.mouse.getY())
+		lightWorld.update()
+
 		if o.map and o.map.width and o.map.height then
 			for i = 1, o.map.width do
 				for k = 1, o.map.height do
@@ -21,6 +24,8 @@ function love.turris.newGame()
 					G.draw(o.ground[1], i * 32, k * 24)
 				end
 			end
+
+			lightWorld.drawShadow()
 			for i = 1, o.map.width do
 				for k = 1, o.map.height do
 					if o.map.map[i][k] > 0 then
@@ -46,6 +51,15 @@ function love.turris.newGame()
 	o.setMap = function(map)
 		o.map = map
 	end
+
+	-- create light world
+	lightWorld = love.light.newWorld()
+	lightWorld.setAmbientColor(15, 15, 31)
+	lightWorld.setRefractionStrength(32.0)
+
+	-- create light
+	lightMouse = lightWorld.newLight(0, 0, 255, 127, 63, 300)
+	lightMouse.setGlowStrength(0.3)
 
 	return o
 end

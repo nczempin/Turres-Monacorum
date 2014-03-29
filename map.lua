@@ -9,6 +9,14 @@ function love.turris.newMap(width, height)
 			o.map[i][k] = 0
 		end
     end
+	o.shadow = {}
+	for i = 1, o.width do
+		o.shadow[i] = {}
+		for k = 1, o.height do
+			o.shadow[i][k] = lightWorld.newRectangle(i * 32, k * 32, 32, 24)
+			o.shadow[i][k].setShadow(false)
+		end
+    end
 	o.getState = function(x, y)
 		return o.map[x][y]
 	end
@@ -23,6 +31,7 @@ function love.turris.newMap(width, height)
 	end
 	o.setState = function(x, y, n)
 		o.map[x][y] = n
+		o.shadow[x][y].setShadow(n)
 	end
 
 	return o
