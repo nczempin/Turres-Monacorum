@@ -14,9 +14,6 @@ function love.load()
 
 	turGame = love.turris.newGame()
 	turGame.init()
-	turMap = love.turris.newMap(20, 20)
-	turGame.newGround("gfx/ground01.png")
- 	turGame.newTower("gfx/tower01.png")
 end
 
 
