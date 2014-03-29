@@ -27,7 +27,8 @@ function love.turris.newGame()
 	end
 	o.update = function(dt)
 		for i = 1, o.enemyCount do
-			o.enemies[i].x = o.enemies[i].x+dt*20
+		local e = o.enemies[i]
+			e.x = e.x+dt*e.xVel
 		end
 	end
 	o.drawMap = function()
