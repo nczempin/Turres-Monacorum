@@ -6,29 +6,26 @@ function love.turris.newGame()
 	o.ground = {}
 	o.tower = {}
 	o.enemies = {}
-	o.enemyCount = 1
+	o.enemyCount = 7
 	local creepImg = G.newImage("gfx/creep00_diffuse.png")
 	for i=1, o.enemyCount do
 		o.enemies[i]= love.turris.newEnemy("")
-		o.enemies[i].x = (i-1)*60
-		o.enemies[i].y = 300-48
+		o.enemies[i].x = i*60
+		o.enemies[i].y = 60
 		o.enemies[i].img =  creepImg
-
 	end
 	o.init = function()
 		o.newGround("gfx/ground01.png")
-		o.newTower("gfx/tower00_diffuse.png")
-		o.newTower("gfx/placeholder.png")
-
+		o.newTower("gfx/tower00")
+		o.newTower("gfx/placeholder")
 		o.setMap(turMap.getMap())
 		o.map.setState(4, 3, 1)
 		o.map.setState(7, 13, 1)
-		o.map.setState(11,11, 2)
+		o.map.setState(10, 10, 2)
 	end
 	o.update = function(dt)
 		for i = 1, o.enemyCount do
-		local e = o.enemies[i]
-			e.x = e.x+dt*e.xVel
+			o.enemies[i].x = o.enemies[i].x+dt*10
 		end
 	end
 	o.drawMap = function()
@@ -42,17 +39,18 @@ function love.turris.newGame()
 					G.draw(o.ground[1], i * 32, k * 24)
 				end
 			end
-
 			lightWorld.drawShadow()
 			for i = 1, o.map.width do
 				for k = 1, o.map.height do
 					if o.map.map[i][k] > 0 then
 						local img = o.tower[o.map.map[i][k]].img
 						G.setColor(255, 255, 255)
-						G.draw(img, i * 32, k * 24 - 8, 0, 1.0 / img:getWidth() * 80, 1.0 / img:getHeight() * 64)
+						G.draw(img, i * 32 - 16, k * 24 - 20, 0, 1.0 / img:getWidth() * 32, 1.0 / img:getHeight() * 32)
 					end
 				end
 			end
+			lightWorld.drawPixelShadow()
+			lightWorld.drawGlow()
 		end
 	end
 	o.draw = function()
@@ -65,7 +63,7 @@ function love.turris.newGame()
 		--      local entry = enemyEntrances[i]
 		--    end
 		local mx, my = love.mouse.getPosition()  -- current position of the mouse
-		G.line(0,300, 400, 300)
+		G.line(0,300, mx, my)
 	end
 	o.drawEnemies = function()
 
@@ -75,7 +73,7 @@ function love.turris.newGame()
 			local y = e.y
 			local img = e.img
 			G.setColor(255, 255, 255)
-			G.draw(img, x, y, 0, -1.0 / img:getWidth() * 40, 1.0 / img:getHeight() * 32)
+			G.draw(img, x, y, 0, 1.0 / img:getWidth() * 80, 1.0 / img:getHeight() * 64)
 			-- G.circle("fill", o.enemies[i].x, o.enemies[i].y, 16, 16 )
 		end
 	end
