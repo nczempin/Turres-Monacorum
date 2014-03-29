@@ -24,9 +24,10 @@ local height = love.window.getHeight()
 local buttonsizeh = 40
 local buttonsizev = 20
 
-function love.mousepressed(x,y,button)
-	if(button==1) then
+function love.mousepressed(x, y, key)
+	if(key==1) then
 		buttonDetected=1
+		love.changegamestate(1)
 		checkButtonPosition(x,y)
 	end
 end
