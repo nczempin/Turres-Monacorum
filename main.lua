@@ -6,13 +6,14 @@ require "map"
 require "tower"
 require "sound"
 require "TESound"
+require "gui"
 
 function love.load()
   G = love.graphics
   W = love.window
   T = love.turris
   S = love.sounds
-
+  currentgamestate = 0
   -- create game world
   turGame = love.turris.newGame()
   turMap = love.turris.newMap(20, 20)
@@ -26,11 +27,11 @@ end
 
 function love.draw()
   W.setTitle("FPS: " .. love.timer.getFPS())
+  if(currentgamestate==0) then --render main menu only
+	gui.drawMainMenu()
+  elseif(currentgamestate==1) then
   turGame.draw()
-end
-
-function love.mousepressed(x, y, key)
-
+  end
 end
 
 function love.keypressed(key, code)
