@@ -41,7 +41,6 @@ function love.light.newWorld()
 	o.reflectionMap2 = love.graphics.newCanvas()
 	o.normalInvert = false
 	o.glowBlur = 1.0
-	o.isGlowBlur = false
 	o.glowTimer = 0.0
 	o.glowDown = false
 	o.refractionStrength = 8.0
@@ -299,7 +298,6 @@ function love.light.newWorld()
 		end
 
 		love.graphics.setShader()
-		o.isGlowBlur = false
 
 		-- create refraction map
 		o.refractionMap:clear()
@@ -435,7 +433,7 @@ function love.light.newWorld()
 	-- draw glow
 	o.drawGlow = function()
 		love.graphics.setColor(255, 255, 255)
-		if o.isGlowBlur or o.glowBlur == 0.0 then
+		if o.glowBlur == 0.0 then
 			love.graphics.setBlendMode("additive")
 			love.graphics.setShader()
 			love.graphics.draw(o.glowMap, LOVE_LIGHT_TRANSLATE_X, LOVE_LIGHT_TRANSLATE_Y)
@@ -453,12 +451,9 @@ function love.light.newWorld()
 			love.graphics.setShader(LOVE_LIGHT_BLURH)
 			love.graphics.draw(o.glowMap2, LOVE_LIGHT_TRANSLATE_X, LOVE_LIGHT_TRANSLATE_Y)
 			love.graphics.setCanvas(LOVE_LIGHT_LAST_BUFFER)
-			--love.graphics.setBlendMode("additive")
 			love.graphics.setShader()
 			love.graphics.draw(o.glowMap, LOVE_LIGHT_TRANSLATE_X, LOVE_LIGHT_TRANSLATE_Y)
 			love.graphics.setBlendMode("alpha")
-
-			o.isGlowBlur = true
 		end
 	end
 	-- draw refraction

@@ -1,5 +1,5 @@
 function love.turris.newEnemy(img)
-	local o={}
+	local o = {}
 	o.x = {}
 	o.y = {}
 	o.xVel = 20

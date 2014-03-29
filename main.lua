@@ -18,7 +18,11 @@ function love.load()
 	turGame = love.turris.newGame()
 	turMap = love.turris.newMap(20, 20)
 	turGame.init()
-	S.init()
+
+	bloomOn = false
+end
+function love.getgamestate()
+	return currentgamestate
 end
 
 function love.changegamestate(newgamestate)
@@ -31,12 +35,17 @@ end
 
 function love.draw()
 	W.setTitle("FPS: " .. love.timer.getFPS())
+	love.postshader.setBuffer("render")
 	if(currentgamestate==0) then --render main menu only
 		gui.drawMainMenu()
 	elseif(currentgamestate==1) then --render game only
 		turGame.draw()
 	end
-	currentgamestate =1 -- quick workaround, will be removed once the mouse buttons work correctly
+	--currentgamestate =1 -- quick workaround, will be removed once the mouse buttons work correctly
+	if bloomOn then
+		love.postshader.addEffect("bloom")
+	end
+	love.postshader.draw()
 end
 
 function love.keypressed(key, code)
@@ -47,5 +56,9 @@ function love.keypressed(key, code)
 
 	if key == "2" then
 		love.sounds.background("sounds/Explosion.wav")
+	end
+
+	if key == "b" then
+		bloomOn = not bloomOn
 	end
 end
