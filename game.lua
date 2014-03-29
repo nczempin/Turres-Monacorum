@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 require "enemy"
 
 function love.turris.newGame()
@@ -56,6 +57,8 @@ function love.turris.newGame()
   o.newTower("gfx/tower01.png")
   return o
 =======
+=======
+>>>>>>> a69e21b6167c96234265f2610b276da1d0638a64
 function love.turris.newGame()
 	o = {}
 	o.map = {}
@@ -106,5 +109,8 @@ function love.turris.newGame()
 	end
 
 	return o
+<<<<<<< HEAD
+>>>>>>> a69e21b6167c96234265f2610b276da1d0638a64
+=======
 >>>>>>> a69e21b6167c96234265f2610b276da1d0638a64
 end
