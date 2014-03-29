@@ -11,11 +11,14 @@ function love.turris.newMap(width, height)
     end
 	o.shadow = {}
 	local img = love.graphics.newImage("gfx/ground01.png")
+	local normal = love.graphics.newImage("gfx/ground01_normal.png")
 	for i = 1, o.width do
 		o.shadow[i] = {}
 		for k = 1, o.height do
 			o.shadow[i][k] = lightWorld.newImage(img, i * 32, k * 24, 32, 24)
 			o.shadow[i][k].setShadow(false)
+			o.shadow[i][k].setNormalMap(normal)
+			o.shadow[i][k].setNormalOffset(0, 0)
 		end
     end
 	o.getState = function(x, y)
