@@ -14,11 +14,31 @@ function love.turris.newEnemy(img, map, baseX, baseY)
 		end
 		local visited = {}
 		for i = 1, map.width do
+			visited[i]={}
 			for j = 1, 20 do
-				visited[j]=false
-				visited[i]=visited[j]
+				visited[i][j]=false
 			end
 		end
+
+
+		-- expand in four compass directions
+		local neighbours ={{startX+1, startY},{startX-1, startY},{startX, startY+1},{startX, startY-1}}
+		for i = 1, #neighbours do
+			local n = neighbours[i]
+			local x, y = n[1],n[2]
+			print (x,y)
+			if x>0 and  y> 0 then
+				if not visited[x][y]then
+					local state = map.getState(x,y)
+					if (state==0)then
+						--empty, so it's okay
+						local d = distance(x,y,goalX,goalY)
+						print ("distance to goal: "..d)
+					end
+				end
+			end
+		end
+
 
 		local wp = {{startX,startY},{goalX,goalY}}
 		return wp
@@ -50,6 +70,12 @@ function love.turris.newEnemy(img, map, baseX, baseY)
 
 	return o
 end
+
+function distance(x1,y1,x2,y2) --TODO let's not leave this global
+	-- manhattan is sufficient for now
+	return math.abs(x1-x2)+math.abs(y1-y2)
+end
+
 function love.turris.normalize(x,y)
 	local m = math.max(math.abs(x),math.abs(y))
 	return x/m, y/m
