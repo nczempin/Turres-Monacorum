@@ -98,7 +98,9 @@ function love.turris.newGame()
 				o.towers[i] = nil
 			end
 				turMap.setState(x,y,0)
+				if(o.towerCount>0) then
 				o.towerCount = o.towerCount-1
+				end
 			print("Tower was removed at "..x..", "..y)
 			return
 	end
@@ -211,7 +213,7 @@ function love.turris.newGame()
 		local x, y = e.x, e.y
 		G.setColor(255, 0, 0)
 
-		for i = 1, o.towers.amount do
+			for i = 1, #o.towers do
 			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
 			local t = o.towers[i]
 			--o.drawLine(t.x,t.y, x,y) -- TODO use tower coordinates
