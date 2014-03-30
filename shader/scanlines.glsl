@@ -4,7 +4,7 @@ extern float time = 0.0;
 vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 pixel_coords){
 	vec2 pSize = 1.0 / screenHeight;
 	float brightness = 1.0;
-	float offsetX = sin(texture_coords.y * 10.0 + time * 2.0) * pSize.x;
+	float offsetX = sin(texture_coords.y * 10.0 + time * 4.0) * pSize.x;
 
 	if(texture_coords.x < 0.5) {
 		if(texture_coords.y < 0.5) {
