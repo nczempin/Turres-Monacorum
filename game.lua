@@ -33,7 +33,7 @@ function love.turris.newGame()
 		o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
 		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
 		for i = 1, o.enemyCount do
-			o.enemies[i]= love.turris.newEnemy(creepImg, o)
+			o.enemies[i]= love.turris.newEnemy(o.creepImg, o)
 			o.enemies[i].x = i - 2
 			o.enemies[i].y = o.baseY
 		end
@@ -177,12 +177,13 @@ function love.turris.newGame()
 			local x = e.x
 			local y = e.y
 			local img = e.img
+			G.setColor(0, 0, 0, 127)
+			love.graphics.ellipse("fill", x * o.map.tileWidth - o.offsetX - 32, y * o.map.tileHeight + o.offsetY - 16, 24, 16, 0, 16)
 			G.setColor(255, 255, 255)
 			local directionAnim = (e.getDirection() + math.pi) / (math.pi * 0.25) - 1
-			print(directionAnim)
 			o.creepAnim:seek(directionAnim)
-			o.creepAnim:draw(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 32)
-			--G.draw(o.creepImg, o.creepQuad, x * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY, 0, -1.0 / o.creepImg:getWidth() * o.map.tileWidth, 1.0 / (o.creepImg:getHeight() / 8.0) * o.map.tileHeight)
+			o.creepAnim:draw(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 16 + math.sin(love.timer.getTime() * 2.0) * 4.0)
+			--e.shadow.setPosition(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 32)
 			-- health
 			if e.health < e.maxHealth then
 				G.setColor(0, 0, 0, 127)
@@ -240,4 +241,30 @@ function love.turris.newGame()
 	gameOverEffect = 0
 
 	return o
+end
+
+function love.graphics.ellipse(mode, x, y, a, b, phi, points)
+  phi = phi or 0
+  points = points or 10
+  if points <= 0 then points = 1 end
+
+  local two_pi = math.pi*2
+  local angle_shift = two_pi/points
+  local theta = 0
+  local sin_phi = math.sin(phi)
+  local cos_phi = math.cos(phi)
+
+  local coords = {}
+  for i = 1, points do
+    theta = theta + angle_shift
+    coords[2*i-1] = x + a * math.cos(theta) * cos_phi 
+                      - b * math.sin(theta) * sin_phi
+    coords[2*i] = y + a * math.cos(theta) * sin_phi 
+                    + b * math.sin(theta) * cos_phi
+  end
+
+  coords[2*points+1] = coords[1]
+  coords[2*points+2] = coords[2]
+
+  love.graphics.polygon(mode, coords)
 end
