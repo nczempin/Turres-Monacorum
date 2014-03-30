@@ -113,8 +113,8 @@ function love.turris.newGame()
 	o.draw = function()
 		o.drawMap()
 		o.drawEnemies()
-		o.drawPaths()
 		o.drawShots()
+		o.drawPaths()
 	end
 	o.drawShots = function()
 		local e = o.enemies[1]		-- TODO this is a hack because I know there's only one creep for now
@@ -138,8 +138,9 @@ function love.turris.newGame()
 			local e = o.enemies[i]
 			local x = e.x
 			local y = e.y
+			local wp = e.waypoints[e.currentWaypoint]
 			G.setColor(232, 118, 0)
-			o.drawLine(x,y,o.baseX,o.baseY)
+			o.drawLine(x,y,wp[1],wp[2])
 		end
 	end
 	-- draw a line in world coordinates
