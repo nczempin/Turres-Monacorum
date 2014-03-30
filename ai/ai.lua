@@ -1,7 +1,7 @@
 require "ai/a-star"
 
 function aStar(start, goal, all_nodes)
-	print (start.x,start.y, goal.x,goal.y)
+	--print (start.x,start.y, goal.x,goal.y)
 
 	local valid_node_func = function ( node, neighbor )
 
