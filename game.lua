@@ -140,8 +140,7 @@ function love.turris.newGame()
 	end
 	-- draw a line in world coordinates
 	o.drawLine = function(x1,y1,x2,y2)
-				G.line((x1-0.5)*o.map.tileWidth, (y1-0.5)*o.map.tileHeight,(x2-0.5)*o.map.tileWidth, (y2-0.5)*o.map.tileHeight)
-	
+		G.line((x1-0.5)*o.map.tileWidth + o.offsetX, (y1-0.5) * o.map.tileHeight + o.offsetY,(x2-0.5) * o.map.tileWidth + o.offsetX, (y2 - 0.5)*o.map.tileHeight + o.offsetY)
 	end
 	o.drawEnemies = function()
 		for i = 1, o.enemyCount do
@@ -150,7 +149,7 @@ function love.turris.newGame()
 			local y = e.y
 			local img = e.img
 			G.setColor(255, 255, 255)
-			G.draw(img, (x)*o.map.tileWidth, (y-1)*o.map.tileHeight, 0, -1.0 / img:getWidth() * o.map.tileWidth, 1.0 / img:getHeight() * o.map.tileHeight)
+			G.draw(img, x * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY, 0, -1.0 / img:getWidth() * o.map.tileWidth, 1.0 / img:getHeight() * o.map.tileHeight)
 		end
 	end
 	o.newGround = function(img)
