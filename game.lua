@@ -98,7 +98,9 @@ function love.turris.newGame()
 					o.towers[i] = nil
 				end
 				turMap.setState(x,y,0)
+				if(o.towerCount>0) then
 				o.towerCount = o.towerCount-1
+				end
 				print("Tower was removed at "..x..", "..y)
 				return
 			end
