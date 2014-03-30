@@ -128,6 +128,7 @@ function love.turris.newGame()
 
 		end
 	end
+	
 	o.drawPaths = function()
 		--    for i = 1, o.entryCount do
 		--      local entry = enemyEntrances[i]
@@ -138,11 +139,15 @@ function love.turris.newGame()
 			local e = o.enemies[i]
 			local x = e.x
 			local y = e.y
-			local wp = e.waypoints[e.currentWaypoint]
-			G.setColor(232, 118, 0)
-			o.drawLine(x,y,wp[1],wp[2])
+			for i=1, #e.waypoints-1 do
+				local wpFrom = e.waypoints[i]
+			local wpTo = e.waypoints[i+1]
+				G.setColor(232, 118, 0)
+				o.drawLine(wpFrom[1],wpFrom[2],wpTo[1],wpTo[2])
+			end
 		end
 	end
+	
 	-- draw a line in world coordinates
 	o.drawLine = function(x1,y1,x2,y2)
 		G.line((x1-0.5)*o.map.tileWidth + o.offsetX, (y1-0.5) * o.map.tileHeight + o.offsetY,(x2-0.5) * o.map.tileWidth + o.offsetX, (y2 - 0.5)*o.map.tileHeight + o.offsetY)
