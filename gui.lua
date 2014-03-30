@@ -57,8 +57,8 @@ function love.turris.checkButtonPosition(clickx,clicky)
 	end
 	elseif currentgstate == 1 then --ingame
 		--love.changegamestate(0)
-		local clickedfieldx=((clickx-turGame.offsetX)-((clickx-turGame.offsetX)%turMap.tileWidth))/turMap.tileWidth
-		local clickedfieldy=((clicky-turGame.offsetY)-((clicky-turGame.offsetY)%turMap.tileHeight))/turMap.tileHeight
+		local clickedfieldx=((clickx-turGame.offsetX)-((clickx-turGame.offsetX)%turMap.tileWidth))/turMap.tileWidth+1
+		local clickedfieldy=((clicky-turGame.offsetY)-((clicky-turGame.offsetY)%turMap.tileHeight))/turMap.tileHeight+1
 		print("clicked field "..clickedfieldx..", "..clickedfieldy)
 		if not(clickedfieldx<0 or clickedfieldx>=turMap.width or clickedfieldy<0 or clickedfieldy>=turMap.height) then
 			if turMap.getState(clickedfieldx,clickedfieldy)==0 then
