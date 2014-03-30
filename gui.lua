@@ -40,25 +40,35 @@ function love.mousepressed(x, y, key)
 	end
 end
 
+function isinbutton(clickx,clicky)
+	if (width / 2)-(buttonsizeh / 2) * guiScale < clickx and (width / 2)+(buttonsizeh / 2) * guiScale > clickx then -- half horizontal screen -menu button <x or x>half horizontal screen + menu button
+		if clicky > (height / 5) - (buttonsizev / 2) * guiScale and (height / 5) + (buttonsizev / 2) * guiScale > clicky then
+			activemenu.start = true
+			return true
+		elseif clicky >(height*2 / 5) - (buttonsizev / 2) * guiScale and (height * 2 / 5) + (buttonsizev /2) * guiScale > clicky then
+			activemenu.load = true
+			return true
+		elseif clicky >(height*3 / 5) - (buttonsizev / 2) * guiScale and (height * 3 / 5) + (buttonsizev /2) * guiScale > clicky then
+			activemenu.settings = true
+			return true
+		elseif clicky >(height*4 / 5) - (buttonsizev / 2) * guiScale and (height * 4 / 5) + (buttonsizev /2) * guiScale > clicky then
+			activemenu.quit = true
+			return true
+		else
+			print("click not within y range")
+			return false
+		end
+	else
+		print("click not within x range")
+		return false
+	end
+end
+
 function love.turris.checkleftclick(clickx,clicky)
 	currentgstate=love.getgamestate()
 	if currentgstate == 0 then--MainMenu
-		if (width / 2)-(buttonsizeh / 2) * guiScale < clickx and (width / 2)+(buttonsizeh / 2) * guiScale > clickx then -- half horizontal screen -menu button <x or x>half horizontal screen + menu button
-			if clicky > (height / 5) - (buttonsizev / 2) * guiScale and (height / 5) + (buttonsizev / 2) * guiScale > clicky then
-				activemenu.start = true
-		elseif clicky >(height*2 / 5) - (buttonsizev / 2) * guiScale and (height * 2 / 5) + (buttonsizev /2) * guiScale > clicky then
-			activemenu.load = true
-		elseif clicky >(height*3 / 5) - (buttonsizev / 2) * guiScale and (height * 3 / 5) + (buttonsizev /2) * guiScale > clicky then
-			activemenu.settings = true
-		elseif clicky >(height*4 / 5) - (buttonsizev / 2) * guiScale and (height * 4 / 5) + (buttonsizev /2) * guiScale > clicky then
-			activemenu.quit = true
-		else
-			print("click not within y range")
-		end
+		isinbutton(clickx,clicky)
 		love.turris.mainmenubuttonpushed()
-	else
-		print("click not within x range")
-	end
 	elseif currentgstate == 1 then --ingame
 		--love.setgamestate(0)
 		local clickedfieldx,clickedfieldy=getclickedfield(clickx,clicky)
