@@ -5,6 +5,7 @@ function love.turris.newGame()
 	o.map = {}
 	o.ground = {}
 	o.tower = {}
+	o.towers = {}
 	o.enemies = {}
 	o.enemyCount = 1
 	o.dayTime = 90
@@ -20,7 +21,6 @@ function love.turris.newGame()
 		o.newTowerType("gfx/tower01")
 		o.newTowerType("gfx/tower02")
 		o.newTowerType("gfx/tower03")
-		o.towers = {}
 		o.towerCount = 0 -- TODO: get the correct number of towers (and fill the tower array)
 		o.addTower(2,2,1)
 		o.addTower(2,3,1)
