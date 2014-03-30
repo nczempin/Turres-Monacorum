@@ -146,13 +146,18 @@ function gui.drawMainMenu()
 end
 
 function love.turris.mainmenubuttonpushed()
+
 	if(activemenu.start==true) then
+		love.sounds.playSound("sounds/button_pressed.wav")
 		love.turris.startGame()
 	elseif(activemenu.load==true) then
+		love.sounds.playSound("sounds/button_deactivated.wav")
 		love.turris.showLoadWindow()
 	elseif(activemenu.settings) then
+		love.sounds.playSound("sounds/button_deactivated.wav")
 		love.turris.openSettings()
 	elseif(activemenu.quit) then
+		love.sounds.playSound("sounds/button_pressed.wav")
 		love.turris.quitGame()
 	end
 	activemenu.start = false
