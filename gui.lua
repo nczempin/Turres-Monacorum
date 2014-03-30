@@ -42,23 +42,23 @@ function love.turris.checkButtonPosition(clickx,clicky)
 		if (width / 2)-(buttonsizeh / 2) * guiScale < clickx and (width / 2)+(buttonsizeh / 2) * guiScale > clickx then -- half horizontal screen -menu button <x or x>half horizontal screen + menu button
 			if clicky > (height / 5) - (buttonsizev / 2) * guiScale and (height / 5) + (buttonsizev / 2) * guiScale > clicky then
 				activemenu.start = true
-			elseif clicky >(height*2 / 5) - (buttonsizev / 2) * guiScale and (height * 2 / 5) + (buttonsizev /2) * guiScale > clicky then
-				activemenu.load = true
-			elseif clicky >(height*3 / 5) - (buttonsizev / 2) * guiScale and (height * 3 / 5) + (buttonsizev /2) * guiScale > clicky then
-				activemenu.settings = true
-			elseif clicky >(height*4 / 5) - (buttonsizev / 2) * guiScale and (height * 4 / 5) + (buttonsizev /2) * guiScale > clicky then
-				activemenu.quit = true
-			else
-				print("click not within y range")
-			end
-        love.turris.mainmenubuttonpushed()
+		elseif clicky >(height*2 / 5) - (buttonsizev / 2) * guiScale and (height * 2 / 5) + (buttonsizev /2) * guiScale > clicky then
+			activemenu.load = true
+		elseif clicky >(height*3 / 5) - (buttonsizev / 2) * guiScale and (height * 3 / 5) + (buttonsizev /2) * guiScale > clicky then
+			activemenu.settings = true
+		elseif clicky >(height*4 / 5) - (buttonsizev / 2) * guiScale and (height * 4 / 5) + (buttonsizev /2) * guiScale > clicky then
+			activemenu.quit = true
 		else
-		print("click not within x range")
+			print("click not within y range")
 		end
+		love.turris.mainmenubuttonpushed()
+	else
+		print("click not within x range")
+	end
 	elseif currentgstate == 1 then --ingame
 		love.changegamestate(0)
-	--jumps back to the main menu at the moment
-	end
+		--jumps back to the main menu at the moment
+
 	elseif currentgstate == 4 then --game over
 		love.turris.gameoverstate()
 	end
@@ -78,7 +78,7 @@ function gui.drawMainMenu()
 
 	love.graphics.setColor(255, 127, 0)
 	--startButton
-	
+
 	--print(allbuttonspositionh.." "..buttonsizev)
 	G.setBlendMode("alpha")
 	love.graphics.setColor(0, 0, 0, 63)
@@ -161,7 +161,7 @@ end
 
 function love.turris.openSettings()
 	print("settings are not yet implemented")
---reload main screen, recalculate button positions!!
+	--reload main screen, recalculate button positions!!
 end
 
 function love.turris.quitGame()
