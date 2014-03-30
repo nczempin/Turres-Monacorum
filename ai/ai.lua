@@ -11,7 +11,7 @@ function aStar(start,goal)
 	f_score[start] = g_score[start] + distance(start.x,start.y, goal.x, goal.y)
 
 	while #openset>0 do
-		local current = getLowest(openset) -- the node in openset having the lowest f_score[] value
+		local current = getLowest(openset, f_score) -- the node in openset having the lowest f_score[] value
 		if current == goal then
 			return reconstruct_path(came_from, goal)
 		end
@@ -52,4 +52,15 @@ function set (list)
 	local set = {}
 	for _, l in ipairs(list) do set[l] = true end
 	return set
+end
+function getLowest(set, scores)
+	local lowestScore = 9999999 --TODO find out how to do MAXINT in Lua
+	local lowestNode = {}
+	for node in set do
+		if scores[node] < lowestScore then
+			lowestScore = scores[node]
+			lowestNode = node
+		end
+	end
+	return lowestNode
 end
