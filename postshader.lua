@@ -120,6 +120,8 @@ end
 
 love.postshader.draw = function()
 	if LOVE_POSTSHADER_LAST_BUFFER then
+		love.graphics.setBackgroundColor(0, 0, 0)
+		love.graphics.setBlendMode("alpha")
 		love.graphics.setCanvas()
 		love.graphics.setShader()
 		love.graphics.setColor(255, 255, 255)

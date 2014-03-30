@@ -16,10 +16,10 @@ function love.load()
 	currentgamestate = 0
 	-- create game world
 	turGame = love.turris.newGame()
-	turMap = love.turris.newMap(23,23)
+	turMap = love.turris.newMap(10, 10, 64, 48)
 	turGame.init()
 
-	bloomOn = false
+	bloomOn = true
 end
 function love.getgamestate()
 	return currentgamestate
@@ -29,17 +29,25 @@ function love.changegamestate(newgamestate)
 	currentgamestate = newgamestate
 end
 function love.update(dt)
-	turGame.update(dt)
-	TEsound.cleanup()  --Important, Clears all the channels in TEsound
+	if(currentgamestate == 1) then
+		turGame.update(dt)
+		TEsound.cleanup()  --Important, Clears all the channels in TEsound
+	end
 end
 
 function love.draw()
 	W.setTitle("FPS: " .. love.timer.getFPS())
 	love.postshader.setBuffer("render")
-	if(currentgamestate==0) then --render main menu only
+	if(currentgamestate == 0) then --render main menu only
 		gui.drawMainMenu()
-	elseif(currentgamestate==1) then --render game only
-		turGame.draw()
+	end
+
+	turGame.draw()
+
+	if(currentgamestate == 0) then --render main menu only
+		love.postshader.addEffect("blur", 2.0)
+		gui.drawMainMenu()
+		love.postshader.addEffect("scanlines")
 	end
 	--currentgamestate =1 -- quick workaround, will be removed once the mouse buttons work correctly
 	if bloomOn then
@@ -60,5 +68,10 @@ function love.keypressed(key, code)
 
 	if key == "b" then
 		bloomOn = not bloomOn
+	end
+
+	if key == "escape" then
+		buttonDetected = 1
+		love.turris.checkButtonPosition(320, 96)
 	end
 end

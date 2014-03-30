@@ -221,7 +221,7 @@ function love.light.newWorld()
 
 		for i = 1, #o.lights do
 			if o.lights[i].visible then
-				if normalInvert then
+				if o.normalInvert then
 					o.normalInvertShader:send('screenResolution', {love.graphics.getWidth(), love.graphics.getHeight()})
 					o.normalInvertShader:send('lightColor', {o.lights[i].red / 255.0, o.lights[i].green / 255.0, o.lights[i].blue / 255.0})
 					o.normalInvertShader:send('lightPosition',{o.lights[i].x, love.graphics.getHeight() - o.lights[i].y, o.lights[i].z / 255.0})
@@ -287,7 +287,7 @@ function love.light.newWorld()
 				if o.body[i].glowStrength > 0.0 and o.body[i].glow then
 					love.graphics.setShader(o.glowShader)
 					o.glowShader:send("glowImage", o.body[i].glow)
-					o.glowShader:send("glowTime", love.timer.getTime())
+					o.glowShader:send("glowTime", love.timer.getTime() * 0.5)
 					love.graphics.setColor(255, 255, 255)
 				else
 					love.graphics.setShader()

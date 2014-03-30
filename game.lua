@@ -7,6 +7,7 @@ function love.turris.newGame()
 	o.tower = {}
 	o.enemies = {}
 	o.enemyCount = 1
+	o.dayTime = 0
 	local creepImg = G.newImage("gfx/creep00_diffuse.png")
 	for i=1, o.enemyCount do
 		o.enemies[i]= love.turris.newEnemy(creepImg)
@@ -16,37 +17,45 @@ function love.turris.newGame()
 	o.init = function()
 		o.newGround("gfx/ground01.png")
 		o.newTower("gfx/tower00")
-		o.newTower("gfx/placeholder")
+		o.newTower("gfx/tower01")
+		o.newTower("gfx/tower02")
+		o.newTower("gfx/tower03")
 		o.setMap(turMap.getMap())
-		o.map.setState(1, 1, 1)
-		o.map.setState(2, 13, 1)
-		local baseX = math.floor(o.map.width/2+0.5)
-		local baseY = math.floor(o.map.height/2+0.5)
-		o.map.setState(baseX, baseY, 2)
+		o.map.setState(2, 2, 1)
+		o.map.setState(2, 3, 1)
+		o.map.setState(2, 9, 2)
+		o.map.setState(7, 3, 3)
+		local baseX = math.floor(o.map.width / 2 + 0.5)
+		local baseY = math.floor(o.map.height / 2 + 0.5)
+		o.map.setState(baseX, baseY, 4)
 	end
 	o.update = function(dt)
+		o.dayTime = o.dayTime + dt * 0.2
 		for i = 1, o.enemyCount do
 			o.enemies[i].x = o.enemies[i].x+o.enemies[i].xVel*dt
 		end
 	end
 	o.drawMap = function()
-		lightMouse.setPosition(love.mouse.getX(), love.mouse.getY())
+		local dayTime = math.abs(math.sin(o.dayTime))
+		lightWorld.setAmbientColor(dayTime * 239 + 15, dayTime * 191 + 31, dayTime * 175 + 63)
+
+		lightMouse.setPosition(love.mouse.getX(), love.mouse.getY(), 63)
 		lightWorld.update()
 
 		if o.map and o.map.width and o.map.height then
-			for i = 1, o.map.width do
-				for k = 1, o.map.height do
+			for i = 0, o.map.width - 1 do
+				for k = 0, o.map.height - 1 do
 					G.setColor(255, 255, 255)
-					G.draw(o.ground[1], i * 32, k * 24)
+					G.draw(o.ground[1], i * o.map.tileWidth, k * o.map.tileHeight)
 				end
 			end
 			lightWorld.drawShadow()
-			for i = 1, o.map.width do
-				for k = 1, o.map.height do
-					if o.map.map[i][k] > 0 then
-						local img = o.tower[o.map.map[i][k]].img
+			for i = 0, o.map.width - 1 do
+				for k = 0, o.map.height - 1 do
+					if o.map.map[i + 1][k + 1] > 0 then
+						local img = o.tower[o.map.map[i + 1][k + 1]].img
 						G.setColor(255, 255, 255)
-						G.draw(img, i * 32, k * 24 - 8)
+						G.draw(img, i * o.map.tileWidth, k * o.map.tileHeight - (img:getHeight() - o.map.tileHeight))
 					end
 				end
 			end
@@ -67,7 +76,6 @@ function love.turris.newGame()
 	--G.line(0,300, mx, my)
 	end
 	o.drawEnemies = function()
-
 		for i = 1, o.enemyCount do
 			local e = o.enemies[i]
 			local x = e.x
@@ -93,16 +101,21 @@ function love.turris.newGame()
 		o.map = map
 	end
 
+	-- set font
+	font = G.newImageFont("gfx/font.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\"")
+	G.setFont(font)
+	
 	-- create light world
 	lightWorld = love.light.newWorld()
+	lightWorld.setNormalInvert(true)
 	lightWorld.setAmbientColor(15, 15, 31)
 	lightWorld.setRefractionStrength(32.0)
 
 	-- create light
-	lightMouse = lightWorld.newLight(0, 0, 255, 127, 63, 300)
+	lightMouse = lightWorld.newLight(0, 0, 31, 191, 63, 300)
 	--lightMouse.setGlowStrength(0.3)
 	--lightMouse.setSmooth(0.01)
-	lightMouse.setRange(500)
+	lightMouse.setRange(300)
 
 	return o
 end
