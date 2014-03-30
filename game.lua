@@ -21,18 +21,16 @@ function love.turris.newGame()
 		o.map.setState(2, 2, 1)
 		o.map.setState(2, 3, 1)
 		o.map.setState(11, 9, 1)
-		o.map.setState(2, 9, 2)
+		o.map.setState(2, 9, 4)
 		o.map.setState(7, 3, 3)
 		o.baseX = math.floor(o.map.width / 2 + 0.5)
 		o.baseY = math.floor(o.map.height / 2 + 0.5)
-		o.map.setState(o.baseX, o.baseY, 4)
-			o.map.setState(2, o.baseY, 1)
+		o.map.setState(o.baseX, o.baseY, 2)
+		o.map.setState(2, o.baseY, 1)
 		local creepImg = G.newImage("gfx/creep00_diffuse.png")
-	for i = 1, o.enemyCount do
-		o.enemies[i]= love.turris.newEnemy(creepImg)
-		o.enemies[i].x = i - 2
-		o.enemies[i].y = o.baseY
-	end
+		for i = 1, o.enemyCount do
+			o.enemies[i]= love.turris.newEnemy(creepImg,i-1,o.baseY)
+		end
 	end
 	o.update = function(dt)
 		o.dayTime = o.dayTime + dt * 0.1
@@ -111,13 +109,21 @@ function love.turris.newGame()
 		o.drawMap()
 		o.drawEnemies()
 		o.drawPaths()
+		--o.drawShots()
 	end
 	o.drawPaths = function()
-	--    for i = 1, o.entryCount do
-	--      local entry = enemyEntrances[i]
-	--    end
-	--local mx, my = love.mouse.getPosition()  -- current position of the mouse
-	--G.line(0,300, mx, my)
+		--    for i = 1, o.entryCount do
+		--      local entry = enemyEntrances[i]
+		--    end
+		--local mx, my = love.mouse.getPosition()  -- current position of the mouse
+		--G.line(0,300, mx, my)
+		for i = 1, o.enemyCount do
+			local e = o.enemies[i]
+			local x = e.x
+			local y = e.y
+			G.setColor(232, 118, 0)
+			G.line((x-0.5)*o.map.tileWidth, (y-0.5)*o.map.tileHeight,(o.baseX-0.5)*o.map.tileWidth, (o.baseY-0.5)*o.map.tileHeight)
+		end
 	end
 	o.drawEnemies = function()
 		for i = 1, o.enemyCount do
@@ -127,6 +133,7 @@ function love.turris.newGame()
 			local img = e.img
 			G.setColor(255, 255, 255)
 			G.draw(img, (x)*o.map.tileWidth, (y-1)*o.map.tileHeight, 0, -1.0 / img:getWidth() * o.map.tileWidth, 1.0 / img:getHeight() * o.map.tileHeight)
+			-- draw path to nearest base
 		end
 	end
 	o.newGround = function(img)
@@ -148,7 +155,7 @@ function love.turris.newGame()
 	font = G.newImageFont("gfx/font.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\"")
 	font:setFilter("nearest", "nearest")
 	G.setFont(font)
-	
+
 	-- create light world
 	lightWorld = love.light.newWorld()
 	lightWorld.setNormalInvert(true)
