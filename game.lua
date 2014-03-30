@@ -23,6 +23,7 @@ function love.turris.newGame()
 		o.setMap(turMap.getMap())
 		o.map.setState(2, 2, 1)
 		o.map.setState(2, 3, 1)
+		o.map.setState(11, 9, 1)
 		o.map.setState(2, 9, 2)
 		o.map.setState(7, 3, 3)
 		o.baseX = math.floor(o.map.width / 2 + 0.5)
@@ -30,7 +31,7 @@ function love.turris.newGame()
 		o.map.setState(o.baseX, o.baseY, 4)
 	end
 	o.update = function(dt)
-		o.dayTime = o.dayTime + dt * 0.2
+		o.dayTime = o.dayTime + dt * 0.1
 		for i = 1, o.enemyCount do
 			o.enemies[i].x = o.enemies[i].x+o.enemies[i].xVel*dt
 			o.enemies[i].y = o.enemies[i].y+o.enemies[i].yVel*dt
@@ -48,7 +49,7 @@ function love.turris.newGame()
 	end
 	o.drawMap = function()
 		local dayTime = math.abs(math.sin(o.dayTime))
-		lightWorld.setAmbientColor(dayTime * 239 + 15, dayTime * 191 + 31, dayTime * 175 + 63)
+		lightWorld.setAmbientColor(dayTime * 239 + 15, dayTime * 191 + 31, dayTime * 143 + 63)
 
 		lightMouse.setPosition(love.mouse.getX(), love.mouse.getY(), 63)
 		lightWorld.update()

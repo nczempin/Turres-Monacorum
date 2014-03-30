@@ -17,7 +17,7 @@ function love.load()
 	currentgamestate = 0
 	-- create game world
 	turGame = love.turris.newGame()
-	turMap = love.turris.newMap(10, 10, 64, 48)
+	turMap = love.turris.newMap(13, 13, 64, 48)
 	turGame.init()
 	gameOverLayer = love.turris.newGameOverLayer()
 
