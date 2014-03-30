@@ -25,55 +25,11 @@ end
 function love.turris.newEnemy(img, map, x,y,baseX, baseY)
 	local o = {}
 	o.generateWaypoints = function(map, startX, startY, goalX, goalY)
-		local goal = {x=goalX,y=goalY}
 		local all_nodes = getAllNodes(map)
 		local start = findNode(all_nodes, startX, startY)
 		local goal = findNode(all_nodes, goalX, goalY)
 		local path = aStar(start,goal,all_nodes)
-		--print (path)
-		--		local mapXmax = map.width
-		--		local mapYmax = map.height
-		--		print ("x: "..startX)
-		--		print ("y: "..startY)
-		--		--goal found
-		--		if (startX==goalX and startY==goalY)then
-		--			local wp = {{goalX,goalY}}
-		--
-		--			return wp
-		--		end
-		--		local visited = {}
-		--		for i = 1, map.width do
-		--			visited[i]={}
-		--			for j = 1, 20 do
-		--				visited[i][j]=false
-		--			end
-		--		end
-		--
-		--
-		--		-- expand in four compass directions
-		--		local neighbours ={{startX+1, startY},{startX-1, startY},{startX, startY+1},{startX, startY-1}}
-		--		for i = 1, #neighbours do
-		--			local n = neighbours[i]
-		--			local x, y = n[1],n[2]
-		--			print (x,y)
-		--			if x>0 and  y> 0 then
-		--				if not visited[x][y]then
-		--					local state = map.getState(x,y)
-		--					if (state==0)then
-		--						--empty, so it's okay
-		--						local d = distance(x,y,goalX,goalY)
-		--						print ("distance to goal: "..d)
-		--					else
-		--						visited[x][y]=true
-		--						print ("blocked")
-		--					end
-		--				end
-		--			else
-		--				print ("visited")
-		--			end
-		--		end
-
-
+	
 		local wp = {{startX,startY},{goalX,goalY}}
 		for i=1, #path do
 			wp[i] ={path[i].x,path[i].y}
