@@ -36,12 +36,12 @@ function love.turris.newGame()
 		end
 	end
 	o.addTower = function(x,y,type)
+		o.towerCount = o.towerCount +1 -- TODO this is unsafe
 		local t = {}
 		t.x = x
 		t.y = y
 		o.map.setState(t.x, t.y, type)
 		o.towers[o.towerCount] =t
-		o.towerCount = o.towerCount +1 -- TODO this is unsafe
 
 	end
 	o.update = function(dt)
@@ -128,7 +128,7 @@ function love.turris.newGame()
 
 		local x, y = e.x, e.y
 		G.setColor(255, 0, 0)
-		for i = 1, o.towerCount-1 do
+		for i = 1, o.towerCount do
 			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
 			local t = o.towers[i]
 			o.drawLine(t.x,t.y, x,y) -- TODO use tower coordinates
