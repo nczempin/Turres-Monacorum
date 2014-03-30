@@ -18,6 +18,7 @@ function love.turris.newEnemy(img, map)
 
 	return o
 end
+
 function love.turris.updateEnemies(o,dt)
 		for i = 1, o.enemyCount do
 			o.enemies[i].x = o.enemies[i].x+o.enemies[i].xVel*dt
