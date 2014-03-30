@@ -34,7 +34,7 @@ function love.turris.newGame()
 		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
 		for i = 1, o.enemyCount do
 			o.enemies[i]= love.turris.newEnemy(creepImg,o.map,o.baseX,o.baseY)
-			o.enemies[i].x = i - 2
+			o.enemies[i].x = 1
 			o.enemies[i].y = o.baseY
 		end
 	end
@@ -179,7 +179,7 @@ function love.turris.newGame()
 			local img = e.img
 			G.setColor(255, 255, 255)
 			local directionAnim = (e.getDirection() + math.pi) / (math.pi * 0.25) - 1
-			print(directionAnim)
+			--print(directionAnim)
 			o.creepAnim:seek(directionAnim)
 			o.creepAnim:draw(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 32)
 			--G.draw(o.creepImg, o.creepQuad, x * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY, 0, -1.0 / o.creepImg:getWidth() * o.map.tileWidth, 1.0 / (o.creepImg:getHeight() / 8.0) * o.map.tileHeight)
