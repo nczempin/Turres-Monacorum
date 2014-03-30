@@ -7,6 +7,7 @@ require "tower"
 require "sound"
 require "TESound"
 require "gui"
+require "gameoverlayer"
 
 function love.load()
 	G = love.graphics
@@ -18,6 +19,7 @@ function love.load()
 	turGame = love.turris.newGame()
 	turMap = love.turris.newMap(23,23)
 	turGame.init()
+	gameOverLayer = love.turris.newGameOverLayer()
 
 	bloomOn = false
 end
@@ -42,6 +44,9 @@ function love.draw()
 		gui.drawMainMenu()
 	elseif(currentgamestate==1) then --render game only
 		turGame.draw()
+		elseif(currentgamestate == 4) then -- render game + "game over" message on top
+		turGame.draw()
+		gameOverLayer.draw()
 	end
 	--currentgamestate =1 -- quick workaround, will be removed once the mouse buttons work correctly
 	if bloomOn then

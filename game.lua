@@ -20,7 +20,7 @@ function love.turris.newGame()
 		o.setMap(turMap.getMap())
 		o.map.setState(1, 1, 1)
 		o.map.setState(2, 12, 1)
-		o.baseX = 4--math.floor(o.map.width/2+0.5)
+		o.baseX = math.floor(o.map.width/2+0.5)
 		o.baseY = math.floor(o.map.height/2+0.5)
 		o.map.setState(o.baseX, o.baseY, 2)
 	end
@@ -31,8 +31,12 @@ function love.turris.newGame()
 
 			local x = o.enemies[i].x
 			local y = o.enemies[i].y
-			if math.floor(x) == o.baseX and math.floor(y) == o.baseY then
-				io.write(x,", ",y,". ",o.baseX-x,", ", "\n")
+			if math.abs(o.baseX-x) <1 and math.abs(y-o.baseY) < 1 then
+				-- Game Over!!! (for now)
+				-- TODO: destroy ship (explosion)
+				-- TODO: destroy base (explosion!)
+				-- TODO: after explosions have finished -> transition to game over state
+				love.changegamestate(4)
 			end
 		end
 	end
@@ -82,7 +86,6 @@ function love.turris.newGame()
 			local img = e.img
 			G.setColor(255, 255, 255)
 			G.draw(img, x*32+32, y*24, 0, -1.0 / img:getWidth() * 30, 1.0 / img:getHeight() * 24)
-			-- G.circle("fill", o.enemies[i].x, o.enemies[i].y, 16, 16 )
 		end
 	end
 	o.newGround = function(img)
