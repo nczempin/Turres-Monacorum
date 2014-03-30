@@ -42,17 +42,15 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 	o.setState = function(x, y, n)
 		o.data[x][y].id = n
 		if n > 0 then
-			if n == 4 then
-				o.shadow[x][y].setShadow(false)
-			else
-				o.shadow[x][y].setShadow(true)
-			end
 			o.shadow[x][y].setImage(turGame.towerType[n].img)
 			o.shadow[x][y].setImageOffset(o.tileWidth * 0.5, o.tileHeight * 0.5 + (turGame.towerType[n].img:getHeight() - o.tileHeight))
 			o.shadow[x][y].setNormalMap(turGame.towerType[n].normal)
 			o.shadow[x][y].setNormalOffset(o.tileWidth * 0.5, o.tileHeight * 0.5 + (turGame.towerType[n].img:getHeight() - o.tileHeight))
 			o.shadow[x][y].setGlowMap(turGame.towerType[n].glow)
+			o.shadow[x][y].setShadow(true)
 		else
+			o.shadow[x][y].setNormalMap(normal)
+			o.shadow[x][y].setGlowMap(glow)
 			o.shadow[x][y].setShadow(false)
 		end
 	end
