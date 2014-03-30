@@ -48,7 +48,7 @@ function love.turris.newGame()
 		o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
 		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
 		for i = 1, o.enemyCount do
-			o.enemies[i]= love.turris.newEnemy(creepImg,o.map,1,o.baseY,o.baseX,o.baseY)
+			o.enemies[i]= love.turris.newEnemy(creepImg,o.map,1,1,o.baseX,o.baseY)
 		end
 	end
 	o.addTower = function(x,y,type)
@@ -62,18 +62,18 @@ function love.turris.newGame()
 			t.type = type
 			o.map.setState(t.x, t.y, type)
 			--o.towers[o.towerCount] =t
-			
+
 			--Playing Sound When Tower is Placed
 			if(currentgamestate ~= 0) then
 				love.sounds.playSound("sounds/tower_1.mp3")
 			end
 
-			
+
 			if o.towers.next<o.towers.maxamount then
 				o.towers[o.towers.next] = {next = towers, value =t}
 			else
 				while (o.towers) do
-					if(o.towers.next==o.towers.maxamount) then 
+					if(o.towers.next==o.towers.maxamount) then
 						o.towers.next=0
 					end
 					o.towers.next = o.towers.next+1
@@ -84,24 +84,24 @@ function love.turris.newGame()
 		end
 	end
 	o.removeTower = function(x,y) --can remove from a position
-		if (not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height) then 
-		print ("nothing will be removed here!"..x.." "..o.map.width.." "..y.." "..o.map.height)
-		return end
-		print("something might be removed..."..x.." "..o.map.width.." "..y.." "..o.map.height)
-		local state =o.map.getState(x,y)
-		if state and not(state==0) then -- TODO: don't let main tower be deleted!!!
-			--o.map.setState(x,y,0)
-			for i=1,o.towers.maxamount do
-				if o.towers[i] and o.towers[i].value and o.towers[i].value.x==x and o.towers[i].value.y==y then
-					turMap.setState(x,y,0)
-					o.towers[i] = nil
-				end
-				o.towers.amount = o.towers.amount-1
-				print("Tower was removed at "..x..", "..y)
-				return
+		if (not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height) then
+			print ("nothing will be removed here!"..x.." "..o.map.width.." "..y.." "..o.map.height)
+			return end
+	print("something might be removed..."..x.." "..o.map.width.." "..y.." "..o.map.height)
+	local state =o.map.getState(x,y)
+	if state and not(state==0) then -- TODO: don't let main tower be deleted!!!
+		--o.map.setState(x,y,0)
+		for i=1,o.towers.maxamount do
+			if o.towers[i] and o.towers[i].value and o.towers[i].value.x==x and o.towers[i].value.y==y then
+				turMap.setState(x,y,0)
+				o.towers[i] = nil
 			end
-			print("Could not delete tower at "..x..", "..y)
-		end
+			o.towers.amount = o.towers.amount-1
+			print("Tower was removed at "..x..", "..y)
+			return
+	end
+	print("Could not delete tower at "..x..", "..y)
+	end
 	end
 	o.update = function(dt)
 		o.dayTime = o.dayTime + dt * 0.1
@@ -221,10 +221,10 @@ function love.turris.newGame()
 			local timer = -math.mod(love.timer.getTime() * 2.0, 1.0)
 			G.setBlendMode("additive")
 			--local vertices = {
-				--{ 0, 0, timer, 0, 255, 0, 0,},
-				--{ o.imgLaser:getWidth(), 0, timer + 1, 0, 0, 255, 0 },
-				--{ o.imgLaser:getWidth(), o.imgLaser:getHeight(), timer + 1, 1, 0, 0, 255 },
-				--{ 0, o.imgLaser:getHeight(), timer, 1, 255, 255, 0 },
+			--{ 0, 0, timer, 0, 255, 0, 0,},
+			--{ o.imgLaser:getWidth(), 0, timer + 1, 0, 0, 255, 0 },
+			--{ o.imgLaser:getWidth(), o.imgLaser:getHeight(), timer + 1, 1, 0, 0, 255 },
+			--{ 0, o.imgLaser:getHeight(), timer, 1, 255, 255, 0 },
 			--}
 			local vertices = {
 				{ 0, 0, timer, 0, 255, 127, 0 },
@@ -258,7 +258,9 @@ function love.turris.newGame()
 
 	-- draw a line in world coordinates
 	o.drawLine = function(x1,y1,x2,y2)
-		G.line((x1-0.5)*o.map.tileWidth + o.offsetX, (y1-0.5) * o.map.tileHeight + o.offsetY,(x2-0.5) * o.map.tileWidth + o.offsetX, (y2 - 0.5)*o.map.tileHeight + o.offsetY)
+		if x1 and y1 and x2 and y2 then
+			G.line((x1-0.5)*o.map.tileWidth + o.offsetX, (y1-0.5) * o.map.tileHeight + o.offsetY,(x2-0.5) * o.map.tileWidth + o.offsetX, (y2 - 0.5)*o.map.tileHeight + o.offsetY)
+		end
 	end
 
 	o.drawEnemies = function()
@@ -335,27 +337,27 @@ function love.turris.newGame()
 end
 
 function love.graphics.ellipse(mode, x, y, a, b, phi, points)
-  phi = phi or 0
-  points = points or 10
-  if points <= 0 then points = 1 end
+	phi = phi or 0
+	points = points or 10
+	if points <= 0 then points = 1 end
 
-  local two_pi = math.pi*2
-  local angle_shift = two_pi/points
-  local theta = 0
-  local sin_phi = math.sin(phi)
-  local cos_phi = math.cos(phi)
+	local two_pi = math.pi*2
+	local angle_shift = two_pi/points
+	local theta = 0
+	local sin_phi = math.sin(phi)
+	local cos_phi = math.cos(phi)
 
-  local coords = {}
-  for i = 1, points do
-    theta = theta + angle_shift
-    coords[2*i-1] = x + a * math.cos(theta) * cos_phi 
-                      - b * math.sin(theta) * sin_phi
-    coords[2*i] = y + a * math.cos(theta) * sin_phi 
-                    + b * math.sin(theta) * cos_phi
-  end
+	local coords = {}
+	for i = 1, points do
+		theta = theta + angle_shift
+		coords[2*i-1] = x + a * math.cos(theta) * cos_phi
+			- b * math.sin(theta) * sin_phi
+		coords[2*i] = y + a * math.cos(theta) * sin_phi
+			+ b * math.sin(theta) * cos_phi
+	end
 
-  coords[2*points+1] = coords[1]
-  coords[2*points+2] = coords[2]
+	coords[2*points+1] = coords[1]
+	coords[2*points+2] = coords[2]
 
-  love.graphics.polygon(mode, coords)
+	love.graphics.polygon(mode, coords)
 end

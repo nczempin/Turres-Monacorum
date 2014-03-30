@@ -75,6 +75,9 @@ function love.turris.newEnemy(img, map, x,y,baseX, baseY)
 
 
 		local wp = {{startX,startY},{goalX,goalY}}
+		for i=1, #path do
+			wp[i] ={path[i].x,path[i].y}
+		end
 		return wp
 	end
 	o.img = img
