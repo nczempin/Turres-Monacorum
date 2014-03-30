@@ -21,6 +21,9 @@ function love.turris.newGame()
 		o.baseX = math.floor(o.map.width / 2 + 0.5)
 		o.baseY = math.floor(o.map.height / 2 + 0.5)
 		o.towers.maxamount = o.map.width*o.map.height+2
+		for i = 1, o.enemyCount do
+			o.enemies[i]= love.turris.newEnemy(creepImg,o.map,0,o.baseY,o.baseX,o.baseY)
+		end
 		o.newGround("gfx/ground01.png")
 		o.newTowerType("gfx/tower00")
 		o.newTowerType("gfx/tower01")
@@ -47,10 +50,8 @@ function love.turris.newGame()
 
 		o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
 		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
-		for i = 1, o.enemyCount do
-			o.enemies[i]= love.turris.newEnemy(creepImg,o.map,0,o.baseY,o.baseX,o.baseY)
-		end
 	end
+
 	o.addTower = function(x,y,type)
 		if not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height or not type or not (o.towerCount<o.towers.maxamount) then return end
 		local state = o.map.getState(x,y)
@@ -74,17 +75,23 @@ function love.turris.newGame()
 						o.towers.next=0
 					end
 					if not o.towers.next then
-					break
+						break
 					end
 				end
 				o.towers[o.towers.next] = t --{next = towers, value =t}
-					o.towers.next = o.towers.next+1
+				o.towers.next = o.towers.next+1
 				o.towerCount = o.towerCount+1
 				print(o.towerCount)
 				print("Tower was placed at "..x..", "..y)
+				--for i = 1, o.enemyCount do
+				local e = o.enemies[1]
+				e.waypoints = e.generateWaypoints(o.map,math.floor(e.x),math.floor(e.y),o.baseX,o.baseY)
+				--end
+
 			end
 		end
 	end
+
 	o.removeTower = function(x,y) --can remove from a position
 		if (not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height) then
 			print ("nothing will be removed here!"..x.." "..o.map.width.." "..y.." "..o.map.height)
@@ -97,10 +104,10 @@ function love.turris.newGame()
 			if o.towers[i] and o.towers[i].value and o.towers[i].value.x==x and o.towers[i].value.y==y then
 				o.towers[i] = nil
 			end
-				turMap.setState(x,y,0)
-				if(o.towerCount>0) then
+			turMap.setState(x,y,0)
+			if(o.towerCount>0) then
 				o.towerCount = o.towerCount-1
-				end
+			end
 			print("Tower was removed at "..x..", "..y)
 			return
 	end
@@ -156,7 +163,7 @@ function love.turris.newGame()
 		end
 		o.creepAnim:update(dt)
 	end
-	
+
 	o.drawMap = function()
 		local dayTime = math.abs(math.sin(o.dayTime))
 		lightWorld.setAmbientColor(dayTime * 239 + 15, dayTime * 191 + 31, dayTime * 143 + 63)
