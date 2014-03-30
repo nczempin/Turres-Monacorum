@@ -25,6 +25,10 @@ function love.turris.updateEnemies(o,dt)
 
 		local x = o.enemies[i].x
 		local y = o.enemies[i].y
+		
+		-- check if waypoint reached
+		
+		-- check for and handle game over
 		if math.abs(o.baseX - x) <1 and math.abs(y - o.baseY) < 1 then
 			-- Game Over!!! (for now)
 			-- TODO: destroy ship (explosion)
