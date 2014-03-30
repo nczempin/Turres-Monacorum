@@ -97,7 +97,7 @@ end
 -- @param name The Name of the button
 
 
-function button(xPos, yPos, width, height, name)
+function gui.button(xPos, yPos, width, height, name)
 	local o = {}
 
 	--Attribute
@@ -127,7 +127,7 @@ end
 -- Usses The Array buttonNames to Crate The buttons
 
 
-function createButtons()
+function gui.createButtons()
 	local startx = screenWidth / 2 - (buttonsizeh / 2)
 	local starty = 128
 	local buttonDistance = screenHeight / 5 - (buttonsizev)
@@ -136,7 +136,7 @@ function createButtons()
 	for i = 1, #buttonNames do		
 		buttons[#buttons +1] = gui.button(startx,starty,buttonsizeh,buttonsizev,buttonNames[i])
 		starty = starty + (buttonDistance + buttonsizev)
-		buttons[#buttons +1] = button(startx, starty, buttonsizeh, buttonsizev, buttonNames[i])
+		buttons[#buttons +1] = gui.button(startx, starty, buttonsizeh, buttonsizev, buttonNames[i])
 		starty = starty + 80
 	end
 end
