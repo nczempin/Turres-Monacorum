@@ -96,6 +96,9 @@ function love.turris.newGame()
 			local img = e.img
 			G.setColor(255, 255, 255)
 			G.draw(img, (x)*o.map.tileWidth, (y-1)*o.map.tileHeight, 0, -1.0 / img:getWidth() * o.map.tileWidth, 1.0 / img:getHeight() * o.map.tileHeight)
+			-- draw path to nearest base
+			G.setColor(255, 153, 0)
+			G.line((x-0.5)*o.map.tileWidth, (y-0.5)*o.map.tileHeight,(o.baseX-0.5)*o.map.tileWidth, (o.baseY-0.5)*o.map.tileHeight)
 		end
 	end
 	o.newGround = function(img)
