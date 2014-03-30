@@ -21,6 +21,7 @@ function love.load()
 	turMap = love.turris.newMap(13, 13, 64, 48)
 	turGame.init()
 	gameOverLayer = love.turris.newGameOverLayer()
+	createButtons()
 
 	bloomOn = true
 end

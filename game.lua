@@ -30,18 +30,16 @@ function love.turris.newGame()
 		o.map.setState(7, 3, 3)
 		o.map.setState(o.baseX, o.baseY, 2)
 
-		o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
+			o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
 		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
 		for i = 1, o.enemyCount do
-			o.enemies[i]= love.turris.newEnemy(o.creepImg, o)
-			o.enemies[i].x = i - 2
-			o.enemies[i].y = o.baseY
+			o.enemies[i]= love.turris.newEnemy(creepImg,o.map,1,o.baseY,o.baseX,o.baseY)
 		end
 	end
 	o.addTower = function(x,y,type)
 		if not x or not y or not type then return end
 		local state = o.map.getState(x,y)
-		if state and state == 0 then
+		if state and state ==0 then
 			o.towerCount = o.towerCount +1 -- TODO this is unsafe
 			local t = {}
 			t.x = x
@@ -181,6 +179,7 @@ function love.turris.newGame()
 			love.graphics.ellipse("fill", x * o.map.tileWidth - o.offsetX - 32, y * o.map.tileHeight + o.offsetY - 16, 24, 16, 0, 16)
 			G.setColor(255, 255, 255)
 			local directionAnim = (e.getDirection() + math.pi) / (math.pi * 0.25) - 1
+
 			o.creepAnim:seek(directionAnim)
 			o.creepAnim:draw(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 16 + math.sin(love.timer.getTime() * 2.0) * 4.0)
 			--e.shadow.setPosition(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 32)

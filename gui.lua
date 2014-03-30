@@ -13,14 +13,19 @@
 gui={}
 gui.current = nil
 buttonDetected=0
-font = love.graphics.newFont(16)
+font = love.graphics.newFont(64)
+love.graphics.setFont(font)
 guiScale = 2.0
 -- GameStates:0=MainMenu, 1=inGame, 2=Load, 3=Settings, 4=Game Over
 
 local width = love.window.getWidth()
 local height = love.window.getHeight()
-local buttonsizeh = 158
-local buttonsizev = 48
+local buttonsizeh = 300
+local buttonsizev = 100
+local buttons = {}
+buttonNames = {"Start", "Load", "Settings", "Quit"}
+
+
 
 local activemenu = {
 	start = false,
@@ -64,6 +69,61 @@ function isinbutton(clickx,clicky)
 	end
 end
 
+
+--Button class
+-- This Class is a Button with all its Attributes
+-- @param xPos  
+-- @param yPos 
+-- @param width 
+-- @param height 
+-- @param name The Name of the button
+
+function button(xPos, yPos, width, height, name)
+
+	local o = {}
+
+	--Attribute
+	o.xPos 		= xPos
+	o.yPos 		= yPos
+	o.width 	= width
+	o.height 	= height
+	o.name 		= name
+	o.status 	= false
+ 
+	function o.isOverButton(mouseX, mousey)
+		if mosueX > xPos and mouseX < xPos + width and mouseY > yPos and mouseY > yPos + height then
+			return true
+		else
+			return false
+		end
+	end
+	
+	return o
+end
+
+
+
+--Function to Create Buttons
+-- Usses The Array buttonNames to Crate The buttons
+function createButtons()
+
+	
+
+	local startx = width / 2
+	local starty = (height / 5) - (buttonsizev / 2)
+	local buttonDistance = height / 5 - (buttonsizev)
+
+	
+	--Creates the buttons and pushes it into the buttons array
+	for i = 1, #buttonNames do		
+		buttons[#buttons +1] = button(startx,starty,buttonsizeh,buttonsizev,buttonNames[i])
+		starty = starty + (buttonDistance + buttonsizev)
+	end
+	
+	
+	
+end
+
 function love.turris.checkleftclick(clickx,clicky)
 	currentgstate=love.getgamestate()
 	if currentgstate == 0 then--MainMenu
@@ -105,71 +165,44 @@ function love.turris.checkrightclick(clickx,clicky)
 		--turrets will be removed
 	end
 end
+
+
+
+
 function gui.drawMainMenu()
-	love.graphics.setBackgroundColor(100,100,220)
+	--love.graphics.setBackgroundColor(100,100,220)
 
 	local allbuttonspositionh = width/2/guiScale -- all buttons are equal in their vertical position as of yet
 	local startpositionv = height/5/guiScale
 	local loadpositionv = height*2/5/guiScale
 	local settingspositionv = height*3/5/guiScale
 	local quitpositionv = height*4/5/guiScale
+	
+	
+	local buttonDistance = 40
 
-	G.push()
-	G.scale(guiScale, guiScale)
 
 	love.graphics.setColor(255, 127, 0)
 	--startButton
 
-	--print(allbuttonspositionh.." "..buttonsizev)
-	G.setBlendMode("alpha")
-	love.graphics.setColor(0, 0, 0, 63)
-	love.graphics.setLineWidth(4)
-	love.graphics.rectangle("line", (allbuttonspositionh-(buttonsizeh/2)), (startpositionv-(buttonsizev/2)), buttonsizeh, buttonsizev)
-	G.setBlendMode("additive")
-	love.graphics.setColor(0, 127, 255)
-	love.graphics.setLineWidth(2)
-	love.graphics.rectangle("line", (allbuttonspositionh-(buttonsizeh/2)), (startpositionv-(buttonsizev/2)), buttonsizeh, buttonsizev)
-	--startText
-	love.graphics.setColor(0, 127, 255)
-	love.graphics.printf("start game", allbuttonspositionh-buttonsizeh/2,startpositionv-buttonsizev/2+16,buttonsizeh,"center")
-	--loadbutton
-	G.setBlendMode("alpha")
-	love.graphics.setColor(0, 0, 0, 63)
-	love.graphics.setLineWidth(4)
-	love.graphics.rectangle("line", (allbuttonspositionh-(buttonsizeh/2)), (loadpositionv-(buttonsizev/2)), (buttonsizeh), (buttonsizev))
-	G.setBlendMode("additive")
-	love.graphics.setColor(255, 127, 0)
-	love.graphics.setLineWidth(2)
-	love.graphics.rectangle("line", (allbuttonspositionh-(buttonsizeh/2)), (loadpositionv-(buttonsizev/2)), (buttonsizeh), (buttonsizev))
-	--loadText
-	love.graphics.setColor(255, 127, 0)
-	love.graphics.printf("load game", allbuttonspositionh-buttonsizeh/2,loadpositionv-(buttonsizev/2)+16,buttonsizeh,"center")
-	--settingsbutton
-	G.setBlendMode("alpha")
-	love.graphics.setColor(0, 0, 0, 63)
-	love.graphics.setLineWidth(4)
-	love.graphics.rectangle("line", (allbuttonspositionh-(buttonsizeh/2)), (settingspositionv-(buttonsizev/2)), (buttonsizeh), (buttonsizev))
-	G.setBlendMode("additive")
-	love.graphics.setColor(255, 127, 0)
-	love.graphics.setLineWidth(2)
-	love.graphics.rectangle("line", (allbuttonspositionh-(buttonsizeh/2)), (settingspositionv-(buttonsizev/2)), (buttonsizeh), (buttonsizev))
-	--settingsText
-	love.graphics.setColor(255, 127, 0)
-	love.graphics.printf("settings", allbuttonspositionh-buttonsizeh/2,settingspositionv-buttonsizev/2+16,buttonsizeh,"center")
-	--quitbutton
-	G.setBlendMode("alpha")
-	love.graphics.setColor(0, 0, 0, 63)
-	love.graphics.setLineWidth(4)
-	love.graphics.rectangle("line", (allbuttonspositionh-(buttonsizeh/2)), (quitpositionv-(buttonsizev/2)), (buttonsizeh), (buttonsizev))
-	G.setBlendMode("additive")
-	love.graphics.setColor(255, 127, 0)
-	love.graphics.setLineWidth(2)
-	love.graphics.rectangle("line", (allbuttonspositionh-(buttonsizeh/2)), (quitpositionv-(buttonsizev/2)), (buttonsizeh), (buttonsizev))
-	--quitText
-	love.graphics.setColor(255, 127, 0)
-	love.graphics.printf("quit", allbuttonspositionh-buttonsizeh/2,quitpositionv-buttonsizev/2+16,buttonsizeh,"center")
-
-	G.pop()
+	
+	for i = 1, #buttons do	
+	
+		font = love.graphics.newFont(32)
+		love.graphics.setFont(font)
+		
+		G.setBlendMode("alpha")
+		love.graphics.setColor(0, 0, 0, 63)
+		love.graphics.setLineWidth(4)
+		love.graphics.rectangle("line", buttons[i].xPos - (buttons[i].width / 2), buttons[i].yPos, buttons[i].width, buttons[i].height)
+		G.setBlendMode("additive")
+		love.graphics.setColor(0, 127, 255)
+		love.graphics.setLineWidth(4)
+		love.graphics.rectangle("line", buttons[i].xPos - (buttons[i].width / 2), buttons[i].yPos, buttons[i].width, buttons[i].height)
+		--startText
+		love.graphics.setColor(0, 127, 255)
+		love.graphics.printf(buttons[i].name, buttons[i].xPos - (buttons[i].width / 2) ,buttons[i].yPos + buttons[i].height / 3 ,buttons[i].width,"center")		
+	end
 end
 
 function love.turris.mainmenubuttonpushed()
