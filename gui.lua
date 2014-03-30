@@ -75,27 +75,44 @@ function gui.drawMainMenu()
 	--startButton
 	
 	--print(allbuttonspositionh.." "..buttonsizev)
+	love.graphics.setColor(0, 0, 0)
+	love.graphics.setLineWidth(4)
+	love.graphics.rectangle("line", (allbuttonspositionh-(buttonsizeh/2)), (startpositionv-(buttonsizev/2)), buttonsizeh, buttonsizev)
+	love.graphics.setColor(0, 127, 255)
+	love.graphics.setLineWidth(2)
 	love.graphics.rectangle("line", (allbuttonspositionh-(buttonsizeh/2)), (startpositionv-(buttonsizev/2)), buttonsizeh, buttonsizev)
 	--startText
-	--love.graphics.setColor(0,0,0)
+	love.graphics.setColor(0, 127, 255)
 	love.graphics.printf("Spiel starten", allbuttonspositionh-buttonsizeh/2,startpositionv-buttonsizev/2+24,buttonsizeh,"center")
 	--loadbutton
-	--love.graphics.setColor(250,250,250)
+	love.graphics.setColor(0, 0, 0)
+	love.graphics.setLineWidth(4)
+	love.graphics.rectangle("line", (allbuttonspositionh-(buttonsizeh/2)), (loadpositionv-(buttonsizev/2)), (buttonsizeh), (buttonsizev))
+	love.graphics.setColor(255, 127, 0)
+	love.graphics.setLineWidth(2)
 	love.graphics.rectangle("line", (allbuttonspositionh-(buttonsizeh/2)), (loadpositionv-(buttonsizev/2)), (buttonsizeh), (buttonsizev))
 	--loadText
-	--love.graphics.setColor(0,0,0)
+	love.graphics.setColor(255, 127, 0)
 	love.graphics.printf("Spiel laden", allbuttonspositionh-buttonsizeh/2,loadpositionv-(buttonsizev/2)+24,buttonsizeh,"center")
 	--settingsbutton
-	--love.graphics.setColor(250,250,250)
+	love.graphics.setColor(0, 0, 0)
+	love.graphics.setLineWidth(4)
+	love.graphics.rectangle("line", (allbuttonspositionh-(buttonsizeh/2)), (settingspositionv-(buttonsizev/2)), (buttonsizeh), (buttonsizev))
+	love.graphics.setColor(255, 127, 0)
+	love.graphics.setLineWidth(2)
 	love.graphics.rectangle("line", (allbuttonspositionh-(buttonsizeh/2)), (settingspositionv-(buttonsizev/2)), (buttonsizeh), (buttonsizev))
 	--settingsText
-	--love.graphics.setColor(0,0,0)
+	love.graphics.setColor(255, 127, 0)
 	love.graphics.printf("Einstellungen", allbuttonspositionh-buttonsizeh/2,settingspositionv-buttonsizev/2+24,buttonsizeh,"center")
 	--quitbutton
-	--love.graphics.setColor(250,250,250)
+	love.graphics.setColor(0, 0, 0)
+	love.graphics.setLineWidth(4)
+	love.graphics.rectangle("line", (allbuttonspositionh-(buttonsizeh/2)), (quitpositionv-(buttonsizev/2)), (buttonsizeh), (buttonsizev))
+	love.graphics.setColor(255, 127, 0)
+	love.graphics.setLineWidth(2)
 	love.graphics.rectangle("line", (allbuttonspositionh-(buttonsizeh/2)), (quitpositionv-(buttonsizev/2)), (buttonsizeh), (buttonsizev))
 	--quitText
-	--love.graphics.setColor(0,0,0)
+	love.graphics.setColor(255, 127, 0)
 	love.graphics.printf("Beenden", allbuttonspositionh-buttonsizeh/2,quitpositionv-buttonsizev/2+24,buttonsizeh,"center")
 end
 

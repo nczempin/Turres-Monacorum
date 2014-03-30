@@ -7,7 +7,7 @@ function love.turris.newGame()
 	o.tower = {}
 	o.enemies = {}
 	o.enemyCount = 1
-	o.dayTime = 0
+	o.dayTime = 90
 	local creepImg = G.newImage("gfx/creep00_diffuse.png")
 	for i = 1, o.enemyCount do
 		o.enemies[i]= love.turris.newEnemy(creepImg)
