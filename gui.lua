@@ -91,7 +91,7 @@ function love.turris.checkrightclick(clickx,clicky)
 	currentgstate=love.getgamestate()
 	if currentgamestate==1 then --ingame
 		clickedfieldx,clickedfieldy=getclickedfield(clickx,clicky)
-		turMap.setstate(clickedfieldx,clickedfieldy,0)
+		turMap.setState(clickedfieldx,clickedfieldy,0)
 		--turrets will be removed
 	end
 end
