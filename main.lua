@@ -79,6 +79,11 @@ function love.draw()
 	love.postshader.draw()
 end
 
+function love.turris.gameoverstate()
+	love.setgamestate(0)
+	love.turris.reinit()
+end
+
 function love.keypressed(key, code)
 
 	if key == "b" then
@@ -88,7 +93,7 @@ function love.keypressed(key, code)
 	if key == "escape" then
 		buttonDetected = 1
 		if not(love.getgamestate()==0) then
-			love.changegamestate(0)
+			love.setgamestate(0)
 			love.turris.reinit()
 		end
 		love.turris.checkButtonPosition(320, 96)
