@@ -40,6 +40,12 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 	o.getMap = function()
 		return o
 	end
+	o.getTileHeight = function()
+		return o.tileHeight
+	end
+	o.getTileWidth = function()
+		return o.tileWidth
+	end
 	o.getWidth = function()
 		return o.width
 	end

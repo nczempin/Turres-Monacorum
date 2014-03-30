@@ -16,6 +16,7 @@ function love.turris.newGame()
 	o.offsetX = 0.0
 	o.offsetY = 0.0
 	o.offsetChange = false
+	o.timer = 0
 	o.init = function()
 		o.setMap(turMap.getMap())
 		o.baseX = math.floor(o.map.width / 2 + 0.5)
@@ -100,57 +101,60 @@ function love.turris.newGame()
 	o.removeTower = function(x,y) --can remove from a position
 		if (not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height) then
 			print ("nothing will be removed here!"..x.." "..o.map.width.." "..y.." "..o.map.height)
-			return end
-	print("something might be removed..."..x.." "..o.map.width.." "..y.." "..o.map.height)
-	local state =o.map.getState(x,y)
-	if state and not(state==0) then -- TODO: don't let main tower be deleted!!!
-		--o.map.setState(x,y,0)
-		for i=1,o.towers.maxamount do
-			if o.towers[i] and o.towers[i].value and o.towers[i].value.x==x and o.towers[i].value.y==y then
-				o.towers[i] = nil
-			end
-			turMap.setState(x,y,0)
-			if(o.towerCount>0) then
-				o.towerCount = o.towerCount-1
-			end
-			print("Tower was removed at "..x..", "..y)
 			return
+		end
+
+		print("something might be removed..."..x.." "..o.map.width.." "..y.." "..o.map.height)
+		local state =o.map.getState(x,y)
+		if state and not(state==0) then -- TODO: don't let main tower be deleted!!!
+			--o.map.setState(x,y,0)
+			for i=1,o.towers.maxamount do
+				if o.towers[i] and o.towers[i].value and o.towers[i].value.x==x and o.towers[i].value.y==y then
+					o.towers[i] = nil
+				end
+				turMap.setState(x,y,0)
+				if(o.towerCount>0) then
+					o.towerCount = o.towerCount-1
+				end
+				print("Tower was removed at "..x..", "..y)
+				return
+			end
+			print("Could not delete tower at "..x..", "..y)
+		end
 	end
-	print("Could not delete tower at "..x..", "..y)
-	end
-	end
+
 	o.update = function(dt)
 		o.dayTime = o.dayTime + dt * 0.1
 		T.updateEnemies(o,dt)
 
-		if love.keyboard.isDown("left") then
+		if o.offsetX < 0 and love.keyboard.isDown("left") then
 			o.offsetX = o.offsetX + dt * 200.0
 			o.offsetChange = true
-		elseif love.keyboard.isDown("right") then
+		elseif o.offsetX > W.getWidth() - turMap.getWidth() * turMap.getTileWidth() and love.keyboard.isDown("right") then
 			o.offsetX = o.offsetX - dt * 200.0
 			o.offsetChange = true
 		end
 
-		if love.keyboard.isDown("up") then
+		if o.offsetY < 0 and love.keyboard.isDown("up") then
 			o.offsetY = o.offsetY + dt * 200.0
 			o.offsetChange = true
-		elseif love.keyboard.isDown("down") then
+		elseif o.offsetY > W.getHeight() - turMap.getHeight() * turMap.getTileHeight() and love.keyboard.isDown("down") then
 			o.offsetY = o.offsetY - dt * 200.0
 			o.offsetChange = true
 		end
 
-		if love.mouse.getX() < 128 then
+		if o.offsetX < 0 and love.mouse.getX() < 128 then
 			o.offsetX = o.offsetX + dt * (128 - love.mouse.getX()) ^ 1.25
 			o.offsetChange = true
-		elseif love.mouse.getX() > W.getWidth() - 128 then
+		elseif o.offsetX > W.getWidth() - turMap.getWidth() * turMap.getTileWidth() and love.mouse.getX() > W.getWidth() - 128 then
 			o.offsetX = o.offsetX - dt * (128 - (W.getWidth() - love.mouse.getX())) ^ 1.25
 			o.offsetChange = true
 		end
 
-		if love.mouse.getY() < 128 then
+		if o.offsetY < 0 and love.mouse.getY() < 128 then
 			o.offsetY = o.offsetY + dt * (128 - love.mouse.getY()) ^ 1.25
 			o.offsetChange = true
-		elseif love.mouse.getY() > W.getHeight() - 128 then
+		elseif o.offsetY > W.getHeight() - turMap.getHeight() * turMap.getTileHeight() and love.mouse.getY() > W.getHeight() - 128 then
 			o.offsetY = o.offsetY - dt * (128 - (W.getHeight() - love.mouse.getY())) ^ 1.25
 			o.offsetChange = true
 		end
@@ -213,12 +217,14 @@ function love.turris.newGame()
 			lightWorld.drawGlow()
 		end
 	end
+
 	o.draw = function()
 		o.drawMap()
 		o.drawShots()
 		o.drawPaths()
 		o.drawEnemies()
 	end
+
 	o.drawShots = function()
 		local e = o.enemies[1]		-- TODO this is a hack because I know there's only one creep for now
 
@@ -321,21 +327,23 @@ function love.turris.newGame()
 		o.ground[#o.ground + 1] = G.newImage(img)
 		return o.ground[#o.ground]
 	end
+
 	o.newTowerType = function(img)
 		o.towerType[#o.towerType + 1] = love.turris.newTowerType(img)
 		return o.towerType[#o.towerType]
 	end
+
 	o.getTower = function(n)
 		return o.towerType[n]
 	end
+
 	o.setMap = function(map)
 		o.map = map
 	end
 
-	-- set font
-	--font = G.newImageFont("gfx/font.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\"")
-	--font:setFilter("nearest", "nearest")
-	--G.setFont(font)
+	o.resetTimer = function()
+		o.timer = 0
+	end
 
 	-- create light world
 	lightWorld = love.light.newWorld()

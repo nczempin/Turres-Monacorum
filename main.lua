@@ -18,7 +18,7 @@ function love.load()
 	currentgamestate = 0
 	-- create game world
 	turGame = love.turris.newGame()
-	turMap = love.turris.newMap(13, 13, 64, 48)
+	turMap = love.turris.newMap(20, 20, 64, 48)
 	turGame.init()
 	gameOverLayer = love.turris.newGameOverLayer()
 	gui.createButtons()
@@ -32,22 +32,24 @@ end
 
 function love.turris.reinit()
 	turGame = love.turris.newGame()
-	turMap = love.turris.newMap(13, 13, 64, 48)
+	turMap = love.turris.newMap(20, 20, 64, 48)
 	turGame.init()
 end
 
 function love.setgamestate(newgamestate)
 	currentgamestate = newgamestate
+	gui.timer = 0
 end
 
 function love.update(dt)
-	if (currentgamestate == 1)then
+	if (currentgamestate == 0)then
+		gui.update(dt)
+	elseif (currentgamestate == 1)then
 		turGame.update(dt)
 	elseif (currentgamestate == 4)then
 		gameOverEffect = gameOverEffect + dt
 	end
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
-	gui.update()
 end
 
 function love.draw()
@@ -59,20 +61,28 @@ function love.draw()
 	turGame.draw()
 
 	if(currentgamestate == 0) then --render main menu only
-		love.postshader.addEffect("blur", 2.0)
+		--love.postshader.addEffect("monochrom")
 		gui.drawMainMenu()
-		love.postshader.addEffect("scanlines")
-	elseif(currentgamestate==1) then --render game only
+		love.postshader.addEffect("scanlines", 4.0)
+	elseif(currentgamestate == 1) then --render game only
 		turGame.draw()
+		--gui.drawOverlay()
+		love.postshader.addEffect("scanlines")
 	elseif(currentgamestate == 4) then -- render game + "game over" message on top
 		turGame.draw()
-		gameOverLayer.draw()
 		if gameOverEffect < 0.75 then
 			local colorAberration1 = math.sin(love.timer.getTime() * 20.0) * (0.75 - gameOverEffect) * 4.0
 			local colorAberration2 = math.cos(love.timer.getTime() * 20.0) * (0.75 - gameOverEffect) * 4.0
 
 			love.postshader.addEffect("blur", 1.0, 1.0)
 			love.postshader.addEffect("chromatic", colorAberration1, colorAberration2, colorAberration2, -colorAberration1, colorAberration1, -colorAberration2)
+		else
+			G.setColor(0, 0, 0, 191)
+			G.setBlendMode("alpha")
+			G.rectangle("fill", 0, 0, W.getWidth(), W.getHeight())
+			love.postshader.addEffect("monochrom")
+			gameOverLayer.draw()
+			love.postshader.addEffect("scanlines", 4.0)
 		end
 	end
 	--currentgamestate =1 -- quick workaround, will be removed once the mouse buttons work correctly

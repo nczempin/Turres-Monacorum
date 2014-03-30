@@ -10,7 +10,7 @@ function getAllNodes(map)
 		for j = 0, h do
 
 			nodes[k]= {x=i,y=j,id=k}
-			k = k +1
+			k = k + 1
 		end
 	end
 	return nodes
@@ -33,7 +33,7 @@ function love.turris.newEnemy(img, map, x,y,baseX, baseY)
 		local path = aStar(start,goal,all_nodes)
 	
 		local wp = {{startX,startY},{goalX,goalY}}
-		for i=1, #path do
+		for i = 1, #path do
 			wp[i] ={path[i].x,path[i].y}
 		end
 		return wp
@@ -48,7 +48,7 @@ function love.turris.newEnemy(img, map, x,y,baseX, baseY)
 
 	-- TODO this depends on the type and not on the particular enemy
 	o.maxHealth = 100.0
-	o.speed = 0.5
+	o.speed = 1.0
 	-- type end
 
 	--o.shadow = {}

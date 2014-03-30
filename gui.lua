@@ -28,6 +28,8 @@ buttonNames = {"Start", "Load", "Settings", "Quit"}
 gui.imgLogo = love.graphics.newImage("resources/sprites/ui/logo.png")
 gui.imgBackground = love.graphics.newImage("resources/sprites/ui/menu_background.png")
 gui.imgMiddleground = love.graphics.newImage("resources/sprites/ui/menu_middleground.png")
+gui.imgOverlay = love.graphics.newImage("resources/sprites/ui/overlay.png")
+gui.timer = 0
 
 local activemenu = {
 	start = false,
@@ -65,8 +67,9 @@ end
 
 
 --Updates Everything in the GUI --TODO--  PLZ ADD ALL OTHER METHODS 
-function gui.update()
+function gui.update(dt)
 	gui.mouseMove()
+	gui.timer = gui.timer + dt
 end
 
 
@@ -147,8 +150,7 @@ function love.turris.checkleftclick(clickx,clicky)
 	elseif currentgstate == 1 then --ingame
 		--love.setgamestate(0)
 		local clickedfieldx,clickedfieldy=getclickedfield(clickx,clicky)
-		print(clickedfield)
-				turGame.addTower(clickedfieldx,clickedfieldy,1)
+		turGame.addTower(clickedfieldx,clickedfieldy,1)
 	elseif currentgstate == 4 then --game over
 		love.turris.gameoverstate()
 	end
@@ -163,7 +165,7 @@ end
 
 function love.turris.checkrightclick(clickx,clicky)
 	currentgstate=love.getgamestate()
-	if currentgamestate==1 then --ingame
+	if currentgamestate == 1 then --ingame
 		local clickedfieldx,clickedfieldy=getclickedfield(clickx,clicky)
 		turGame.removeTower(clickedfieldx,clickedfieldy)
 		--turMap.setState(clickedfieldx,clickedfieldy,0)
@@ -171,27 +173,18 @@ function love.turris.checkrightclick(clickx,clicky)
 	end
 end
 
-function gui.drawMainMenu()	
-	local buttonDistance = 30
-	love.graphics.setColor(255, 255, 255)
-
-	--love.graphics.setColor(0, 0, 0, 91)
-	--love.graphics.rectangle("fill", buttons[1].xPos - 16, buttons[1].yPos - 16, buttons[1].width + 32, buttons[1].height * 4 + 92)
-	local timer = math.sin(love.timer.getTime())
+function gui.drawMainMenu()
+	love.graphics.setColor(255, 255, 255, 207)
+	G.setBlendMode("alpha")
 	G.draw(gui.imgBackground)
+	love.graphics.setColor(255, 255, 255, 191 + math.sin(gui.timer) * 63)
+	G.setBlendMode("additive")
 	G.draw(gui.imgMiddleground)
-	G.draw(gui.imgLogo, gui.imgLogo:getWidth() * 0.5, gui.imgLogo:getHeight() * 0.5, timer * 0.1, 1, 1, gui.imgLogo:getWidth() * 0.5, gui.imgLogo:getHeight() * 0.5)
-	
+	love.graphics.setColor(255, 255, 255)
+	G.setBlendMode("alpha")
+	G.draw(gui.imgLogo, gui.imgLogo:getWidth() * 0.5, gui.imgLogo:getHeight() * 0.5, math.sin(gui.timer * 4) * 0.05 * math.max(0, 2 - gui.timer ^ 0.5), 1, 1, gui.imgLogo:getWidth() * 0.5, gui.imgLogo:getHeight() * 0.5)
+
 	for i = 1, #buttons do	
-		--G.setBlendMode("alpha")
-		--love.graphics.setColor(0, 0, 0, 91)
-		--love.graphics.setLineWidth(8)
-		--love.graphics.rectangle("line", buttons[i].xPos, buttons[i].yPos, buttons[i].width, buttons[i].height)
-		--G.setBlendMode("additive")
-		--love.graphics.setColor(0, 127, 255)
-		--love.graphics.setLineWidth(4)
-		--love.graphics.rectangle("line", buttons[i].xPos, buttons[i].yPos, buttons[i].width, buttons[i].height)
-		--startText
 		G.setBlendMode("alpha")
 		love.graphics.setColor(0, 0, 0, 91)
 		love.graphics.printf(buttons[i].name, buttons[i].xPos + 2,buttons[i].yPos + buttons[i].height / 3 + 2, buttons[i].width, "center")
@@ -199,15 +192,20 @@ function gui.drawMainMenu()
 		love.graphics.setColor(255, 127, 0)
 		love.graphics.printf(buttons[i].name, buttons[i].xPos,buttons[i].yPos + buttons[i].height / 3, buttons[i].width, "center")
 	end
+end
 
+function gui.drawOverlay()
+	G.setBlendMode("alpha")
+	love.graphics.setColor(255, 255, 255, 255)
+	G.draw(gui.imgOverlay)
 end
 
 function love.turris.mainmenubuttonpushed()
 
-	if(activemenu.start==true) then
+	if(activemenu.start == true) then
 		love.sounds.playSound("sounds/button_pressed.wav")
 		love.turris.startGame()
-	elseif(activemenu.load==true) then
+	elseif(activemenu.load == true) then
 		love.sounds.playSound("sounds/button_deactivated.wav")
 		love.turris.showLoadWindow()
 	elseif(activemenu.settings) then
@@ -226,6 +224,7 @@ end
 function love.turris.startGame()
 	love.setgamestate(1)
 end
+
 function love.turris.showLoadWindow() -- show list with all savestates or save files
 	print("Saving and loading the game is not yet implemented")
 	local savestates = {

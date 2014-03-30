@@ -90,7 +90,8 @@ love.postshader.addEffect = function(shader, ...)
 		love.graphics.draw(LOVE_POSTSHADER_BUFFER_RENDER)
 	elseif shader == "scanlines" then
 		-- Scanlines Shader
-		LOVE_POSTSHADER_SCANLINES:send("time", love.timer.getTime())
+		LOVE_POSTSHADER_SCANLINES:send("strength", args[1] or 2.0)
+		LOVE_POSTSHADER_SCANLINES:send("time", args[2] or love.timer.getTime())
 		love.graphics.setShader(LOVE_POSTSHADER_SCANLINES)
 		love.graphics.draw(LOVE_POSTSHADER_BUFFER_RENDER)
 	elseif shader == "tiltshift" then
