@@ -94,7 +94,7 @@ function love.turris.checkrightclick(clickx,clicky)
 		turMap.setstate(clickedfieldx,clickedfieldy,0)
 		--turrets will be removed
 	end
-end#
+end
 function gui.drawMainMenu()
 	love.graphics.setBackgroundColor(100,100,220)
 
