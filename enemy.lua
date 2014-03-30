@@ -8,7 +8,8 @@ function getAllNodes(map)
 	local k = 1
 	for i = 1, w do
 		for j = 1, h do
-			nodes[k]= {i,j}
+
+			nodes[k]= {x=i,y=j}
 			k = k +1
 		end
 	end
