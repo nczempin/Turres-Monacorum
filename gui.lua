@@ -75,7 +75,6 @@ end
 -- @param name The Name of the button
 
 function button(xPos, yPos, width, height, name)
-
 	local o = {}
 
 	--Attribute
@@ -103,17 +102,15 @@ end
 --Function to Create Buttons
 -- Usses The Array buttonNames to Crate The buttons
 function createButtons()
-
 	local startx = screenWidth / 2 - (buttonsizeh / 2)
-	local starty = (screenHeight / 5) - (buttonsizev / 2)
+	local starty = 128
 	local buttonDistance = screenHeight / 5 - (buttonsizev)
-	
+
 	--Creates the buttons and pushes it into the buttons array
 	for i = 1, #buttonNames do		
-		buttons[#buttons +1] = button(startx,starty,buttonsizeh,buttonsizev,buttonNames[i])
-		starty = starty + (buttonDistance + buttonsizev)
+		buttons[#buttons +1] = button(startx, starty, buttonsizeh, buttonsizev, buttonNames[i])
+		starty = starty + 80
 	end
-
 end
 
 function love.turris.checkleftclick(clickx,clicky)

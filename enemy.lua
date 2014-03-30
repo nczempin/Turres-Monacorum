@@ -15,6 +15,7 @@ function getAllNodes(map)
 	end
 	return nodes
 end
+
 function findNode(nodes, x, y)
 	for i = 1, #nodes do
 		if nodes[i].x == x and nodes[i].y == y then
@@ -22,6 +23,7 @@ function findNode(nodes, x, y)
 		end
 	end
 end
+
 function love.turris.newEnemy(img, map, x,y,baseX, baseY)
 	local o = {}
 	o.generateWaypoints = function(map, startX, startY, goalX, goalY)
@@ -81,6 +83,7 @@ function love.turris.normalize(x,y)
 	local m = math.max(math.abs(x),math.abs(y))
 	return x/m, y/m
 end
+
 function love.turris.updateEnemies(o,dt)
 	for i = 1, o.enemyCount do
 		local e = o.enemies[i]
