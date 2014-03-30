@@ -21,7 +21,6 @@ function love.turris.newEnemy(img, map, x,y,baseX, baseY)
 			end
 		end
 
-
 		-- expand in four compass directions
 		local neighbours ={{startX+1, startY},{startX-1, startY},{startX, startY+1},{startX, startY-1}}
 		for i = 1, #neighbours do
