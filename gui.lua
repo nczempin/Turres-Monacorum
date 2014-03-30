@@ -59,7 +59,9 @@ function love.turris.checkButtonPosition(clickx,clicky)
 		love.changegamestate(0)
 	--jumps back to the main menu at the moment
 	end
-	
+	elseif currentgstate == 4 then --game over
+		love.turris.gameoverstate()
+	end
 end
 
 function gui.drawMainMenu()
