@@ -20,14 +20,20 @@ function love.turris.newGame()
 		o.setMap(turMap.getMap())
 		o.map.setState(1, 1, 1)
 		o.map.setState(2, 12, 1)
-		local baseX = math.floor(o.map.width/2+0.5)
-		local baseY = math.floor(o.map.height/2+0.5)
-		o.map.setState(baseX, baseY, 2)
+		o.baseX = 4--math.floor(o.map.width/2+0.5)
+		o.baseY = math.floor(o.map.height/2+0.5)
+		o.map.setState(o.baseX, o.baseY, 2)
 	end
 	o.update = function(dt)
 		for i = 1, o.enemyCount do
 			o.enemies[i].x = o.enemies[i].x+o.enemies[i].xVel*dt
 			o.enemies[i].y = o.enemies[i].y+o.enemies[i].yVel*dt
+
+			local x = o.enemies[i].x
+			local y = o.enemies[i].y
+			if math.floor(x) == o.baseX and math.floor(y) == o.baseY then
+				io.write(x,", ",y,". ",o.baseX-x,", ", "\n")
+			end
 		end
 	end
 	o.drawMap = function()

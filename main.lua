@@ -29,7 +29,9 @@ function love.changegamestate(newgamestate)
 	currentgamestate = newgamestate
 end
 function love.update(dt)
-	turGame.update(dt)
+	if (currentgamestate==1)then
+		turGame.update(dt)
+	end
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
 end
 
