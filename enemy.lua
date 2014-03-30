@@ -7,13 +7,15 @@ function love.turris.newEnemy(img, map)
 	o.y = {}
 	o.xVel = 2.0
 	o.yVel = 0.0
-	
 	o.waypoints = {}
 	local wp = {1,map.baseY}
 	o.waypoints[1]= wp
 	wp = {2,map.baseY+1}
 	o.waypoints[2]= wp
 	o.currentWaypoint = 1
+	o.health = 100.0
+	o.maxHealth = 100.0
+
 	return o
 end
 function love.turris.updateEnemies(o,dt)
