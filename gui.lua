@@ -21,12 +21,13 @@ love.graphics.setFont(font)
 
 local screenWidth = love.window.getWidth()
 local screenHeight = love.window.getHeight()
-local buttonsizeh = 300
+local buttonsizeh = 200
 local buttonsizev = 100
 local buttons = {}
 buttonNames = {"Start", "Load", "Settings", "Quit"}
-
-
+gui.imgLogo = love.graphics.newImage("resources/sprites/ui/logo.png")
+gui.imgBackground = love.graphics.newImage("resources/sprites/ui/menu_background.png")
+gui.imgMiddleground = love.graphics.newImage("resources/sprites/ui/menu_middleground.png")
 
 local activemenu = {
 	start = false,
@@ -148,28 +149,30 @@ function love.turris.checkrightclick(clickx,clicky)
 end
 
 function gui.drawMainMenu()	
-	local buttonDistance = 40
-	love.graphics.setColor(255, 127, 0)
+	local buttonDistance = 30
+	love.graphics.setColor(255, 255, 255)
 
-	love.graphics.setColor(0, 0, 0, 91)
-	love.graphics.rectangle("fill", buttons[1].xPos - 16, buttons[1].yPos - 16, buttons[1].width + 32, buttons[1].height * 4 + 92)
+	--love.graphics.setColor(0, 0, 0, 91)
+	--love.graphics.rectangle("fill", buttons[1].xPos - 16, buttons[1].yPos - 16, buttons[1].width + 32, buttons[1].height * 4 + 92)
+	G.draw(gui.imgBackground)
+	G.draw(gui.imgMiddleground)
+	G.draw(gui.imgLogo)
 	
 	for i = 1, #buttons do	
-		
-		G.setBlendMode("alpha")
-		love.graphics.setColor(0, 0, 0, 91)
-		love.graphics.setLineWidth(8)
-		love.graphics.rectangle("line", buttons[i].xPos, buttons[i].yPos, buttons[i].width, buttons[i].height)
-		G.setBlendMode("additive")
-		love.graphics.setColor(0, 127, 255)
-		love.graphics.setLineWidth(4)
-		love.graphics.rectangle("line", buttons[i].xPos, buttons[i].yPos, buttons[i].width, buttons[i].height)
+		--G.setBlendMode("alpha")
+		--love.graphics.setColor(0, 0, 0, 91)
+		--love.graphics.setLineWidth(8)
+		--love.graphics.rectangle("line", buttons[i].xPos, buttons[i].yPos, buttons[i].width, buttons[i].height)
+		--G.setBlendMode("additive")
+		--love.graphics.setColor(0, 127, 255)
+		--love.graphics.setLineWidth(4)
+		--love.graphics.rectangle("line", buttons[i].xPos, buttons[i].yPos, buttons[i].width, buttons[i].height)
 		--startText
 		G.setBlendMode("alpha")
 		love.graphics.setColor(0, 0, 0, 91)
 		love.graphics.printf(buttons[i].name, buttons[i].xPos + 2,buttons[i].yPos + buttons[i].height / 3 + 2, buttons[i].width, "center")
 		G.setBlendMode("additive")
-		love.graphics.setColor(0, 127, 255)
+		love.graphics.setColor(255, 127, 0)
 		love.graphics.printf(buttons[i].name, buttons[i].xPos,buttons[i].yPos + buttons[i].height / 3, buttons[i].width, "center")
 	end
 
