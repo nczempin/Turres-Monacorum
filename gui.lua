@@ -18,8 +18,8 @@ love.graphics.setFont(font)
 guiScale = 2.0
 -- GameStates:0=MainMenu, 1=inGame, 2=Load, 3=Settings, 4=Game Over
 
-local width = love.window.getWidth()
-local height = love.window.getHeight()
+local screenWidth = love.window.getWidth()
+local screenHeight = love.window.getHeight()
 local buttonsizeh = 300
 local buttonsizev = 100
 local buttons = {}
@@ -46,26 +46,18 @@ function love.mousepressed(x, y, key)
 end
 
 function isinbutton(clickx,clicky)
-	if (width / 2)-(buttonsizeh / 2) * guiScale < clickx and (width / 2)+(buttonsizeh / 2) * guiScale > clickx then -- half horizontal screen -menu button <x or x>half horizontal screen + menu button
-		if clicky > (height / 5) - (buttonsizev / 2) * guiScale and (height / 5) + (buttonsizev / 2) * guiScale > clicky then
-			activemenu.start = true
-			return true
-		elseif clicky >(height*2 / 5) - (buttonsizev / 2) * guiScale and (height * 2 / 5) + (buttonsizev /2) * guiScale > clicky then
-			activemenu.load = true
-			return true
-		elseif clicky >(height*3 / 5) - (buttonsizev / 2) * guiScale and (height * 3 / 5) + (buttonsizev /2) * guiScale > clicky then
-			activemenu.settings = true
-			return true
-		elseif clicky >(height*4 / 5) - (buttonsizev / 2) * guiScale and (height * 4 / 5) + (buttonsizev /2) * guiScale > clicky then
-			activemenu.quit = true
-			return true
-		else
-			print("click not within y range")
-			return false
+	for i = 1, #buttons do
+		if buttons[i].isOverButton(clickx, clicky) == true  then
+			if buttons[i].name == "Start" then
+				activemenu.start 	= true
+			elseif buttons[i].name == "Load" then
+				activemenu.load 	= true
+			elseif buttons[i].name == "Settings" then
+				activemenu.settings = true
+			elseif buttons[i].name == "Quit" then
+				activemenu.quit 	= true
+			end
 		end
-	else
-		print("click not within x range")
-		return false
 	end
 end
 
@@ -90,8 +82,15 @@ function button(xPos, yPos, width, height, name)
 	o.name 		= name
 	o.status 	= false
  
-	function o.isOverButton(mouseX, mousey)
-		if mosueX > xPos and mouseX < xPos + width and mouseY > yPos and mouseY > yPos + height then
+	function o.isOverButton(mouseX, mouseY)
+		
+		print("ButtonName" .. name)
+		print("MouseX" .. mouseX)
+		print("MouseY" .. mouseY)
+		print("xPos Button" .. xPos)
+		print("yPos Button" .. yPos)
+	
+		if mouseX > xPos and mouseX < xPos + width and mouseY > yPos and mouseY < yPos + height then			
 			return true
 		else
 			return false
@@ -107,21 +106,16 @@ end
 -- Usses The Array buttonNames to Crate The buttons
 function createButtons()
 
-	
-
-	local startx = width / 2
-	local starty = (height / 5) - (buttonsizev / 2)
-	local buttonDistance = height / 5 - (buttonsizev)
-
+	local startx = screenWidth / 2 - (buttonsizeh / 2)
+	local starty = (screenHeight / 5) - (buttonsizev / 2)
+	local buttonDistance = screenHeight / 5 - (buttonsizev)
 	
 	--Creates the buttons and pushes it into the buttons array
 	for i = 1, #buttonNames do		
 		buttons[#buttons +1] = button(startx,starty,buttonsizeh,buttonsizev,buttonNames[i])
 		starty = starty + (buttonDistance + buttonsizev)
 	end
-	
-	
-	
+
 end
 
 function love.turris.checkleftclick(clickx,clicky)
@@ -133,19 +127,7 @@ function love.turris.checkleftclick(clickx,clicky)
 		--love.setgamestate(0)
 		local clickedfieldx,clickedfieldy=getclickedfield(clickx,clicky)
 		print(clickedfield)
-		--if not(clickedfield.x<0 or clickedfield.x>=turMap.width or clickedfield.y<0 or clickedfield.y>=turMap.height) then
-			--if turMap.getState(clickedfieldx,clickedfieldy)==0 then
-				--turMap.setstate(clickedfieldx,clickedfieldy,1)
 				turGame.addTower(clickedfieldx,clickedfieldy,1)
-				--print("Turret would have been placed at "..clickedfieldx..", "..clickedfieldy)
-			--elseif turMap.getstate(clickedfieldx,clickedfieldy) then
-				--print("Turret would have been removed at "..clickedfieldx..", "..clickedfieldy)
-			--end
-		--end
-	--love.setgamestate(0)
-	--love.turris.reinit()
-		--jumps back to the main menu at the moment
-
 	elseif currentgstate == 4 then --game over
 		love.turris.gameoverstate()
 	end
@@ -169,39 +151,26 @@ end
 
 
 
-function gui.drawMainMenu()
-	--love.graphics.setBackgroundColor(100,100,220)
-
-	local allbuttonspositionh = width/2/guiScale -- all buttons are equal in their vertical position as of yet
-	local startpositionv = height/5/guiScale
-	local loadpositionv = height*2/5/guiScale
-	local settingspositionv = height*3/5/guiScale
-	local quitpositionv = height*4/5/guiScale
-	
-	
+function gui.drawMainMenu()	
 	local buttonDistance = 40
-
-
 	love.graphics.setColor(255, 127, 0)
-	--startButton
-
+	
+	font = love.graphics.newFont(32)
+	love.graphics.setFont(font)
 	
 	for i = 1, #buttons do	
-	
-		font = love.graphics.newFont(32)
-		love.graphics.setFont(font)
 		
 		G.setBlendMode("alpha")
 		love.graphics.setColor(0, 0, 0, 63)
 		love.graphics.setLineWidth(4)
-		love.graphics.rectangle("line", buttons[i].xPos - (buttons[i].width / 2), buttons[i].yPos, buttons[i].width, buttons[i].height)
+		love.graphics.rectangle("line", buttons[i].xPos, buttons[i].yPos, buttons[i].width, buttons[i].height)
 		G.setBlendMode("additive")
 		love.graphics.setColor(0, 127, 255)
 		love.graphics.setLineWidth(4)
-		love.graphics.rectangle("line", buttons[i].xPos - (buttons[i].width / 2), buttons[i].yPos, buttons[i].width, buttons[i].height)
+		love.graphics.rectangle("line", buttons[i].xPos, buttons[i].yPos, buttons[i].width, buttons[i].height)
 		--startText
 		love.graphics.setColor(0, 127, 255)
-		love.graphics.printf(buttons[i].name, buttons[i].xPos - (buttons[i].width / 2) ,buttons[i].yPos + buttons[i].height / 3 ,buttons[i].width,"center")		
+		love.graphics.printf(buttons[i].name, buttons[i].xPos ,buttons[i].yPos + buttons[i].height / 3 ,buttons[i].width,"center")		
 	end
 end
 
