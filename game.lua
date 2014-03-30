@@ -38,7 +38,9 @@ function love.turris.newGame()
 		end
 	end
 	o.addTower = function(x,y,type)
-		if o.map.getState(x,y)==0 then
+		if not x or not y or not type then return end
+		local state = o.map.getState(x,y)
+		if state and state ==0 then
 			o.towerCount = o.towerCount +1 -- TODO this is unsafe
 			local t = {}
 			t.x = x
