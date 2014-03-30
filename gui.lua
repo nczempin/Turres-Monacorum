@@ -16,7 +16,7 @@ gui={}
 gui.current = nil
 buttonDetected=0
 font = love.graphics.newFont(16)
--- GameStates:0=MainMenu, 1=inGame, 2=Load, 3=Settings
+-- GameStates:0=MainMenu, 1=inGame, 2=Load, 3=Settings, 4=Game Over
 --currentgamestate = 0
 
 local width = love.window.getWidth()
@@ -55,8 +55,7 @@ function love.turris.checkButtonPosition(clickx,clicky)
 		else
 		print("click not within x range")
 		end
-	end
-	if(currentgstate==1) then --ingame
+	elseif (currentgstate==1) then --ingame
 		love.changegamestate(0)
 	--NYI
 	end

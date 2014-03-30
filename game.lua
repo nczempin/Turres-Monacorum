@@ -9,10 +9,10 @@ function love.turris.newGame()
 	o.enemyCount = 1
 	o.dayTime = 0
 	local creepImg = G.newImage("gfx/creep00_diffuse.png")
-	for i=1, o.enemyCount do
+	for i = 1, o.enemyCount do
 		o.enemies[i]= love.turris.newEnemy(creepImg)
-		o.enemies[i].x = (i-1)*60
-		o.enemies[i].y = 300
+		o.enemies[i].x = i - 2
+		o.enemies[i].y = 12
 	end
 	o.init = function()
 		o.newGround("gfx/ground01.png")
@@ -25,14 +25,25 @@ function love.turris.newGame()
 		o.map.setState(2, 3, 1)
 		o.map.setState(2, 9, 2)
 		o.map.setState(7, 3, 3)
-		local baseX = math.floor(o.map.width / 2 + 0.5)
-		local baseY = math.floor(o.map.height / 2 + 0.5)
-		o.map.setState(baseX, baseY, 4)
+		o.baseX = math.floor(o.map.width / 2 + 0.5)
+		o.baseY = math.floor(o.map.height / 2 + 0.5)
+		o.map.setState(o.baseX, o.baseY, 4)
 	end
 	o.update = function(dt)
 		o.dayTime = o.dayTime + dt * 0.2
 		for i = 1, o.enemyCount do
 			o.enemies[i].x = o.enemies[i].x+o.enemies[i].xVel*dt
+			o.enemies[i].y = o.enemies[i].y+o.enemies[i].yVel*dt
+
+			local x = o.enemies[i].x
+			local y = o.enemies[i].y
+			if math.abs(o.baseX - x) <1 and math.abs(y - o.baseY) < 1 then
+				-- Game Over!!! (for now)
+				-- TODO: destroy ship (explosion)
+				-- TODO: destroy base (explosion!)
+				-- TODO: after explosions have finished -> transition to game over state
+				love.changegamestate(4)
+			end
 		end
 	end
 	o.drawMap = function()
@@ -82,8 +93,7 @@ function love.turris.newGame()
 			local y = e.y
 			local img = e.img
 			G.setColor(255, 255, 255)
-			G.draw(img, x, y, 0, -1.0 / img:getWidth() * 40, 1.0 / img:getHeight() * 32)
-			-- G.circle("fill", o.enemies[i].x, o.enemies[i].y, 16, 16 )
+			G.draw(img, x*32+32, y*24, 0, -1.0 / img:getWidth() * 30, 1.0 / img:getHeight() * 24)
 		end
 	end
 	o.newGround = function(img)
