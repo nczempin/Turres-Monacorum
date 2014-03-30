@@ -46,6 +46,8 @@ function love.mousepressed(x, y, key)
 	end
 end
 
+
+
 function isinbutton(clickx,clicky)
 	for i = 1, #buttons do
 		if buttons[i].isOverButton(clickx, clicky) == true  then
@@ -83,14 +85,8 @@ function button(xPos, yPos, width, height, name)
 	o.name 		= name
 	o.status 	= false
  
+	--Returns true if the Position is inside an Button
 	function o.isOverButton(mouseX, mouseY)
-		
-		print("ButtonName" .. name)
-		print("MouseX" .. mouseX)
-		print("MouseY" .. mouseY)
-		print("xPos Button" .. xPos)
-		print("yPos Button" .. yPos)
-	
 		if mouseX > xPos and mouseX < xPos + width and mouseY > yPos and mouseY < yPos + height then			
 			return true
 		else
