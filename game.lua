@@ -22,15 +22,15 @@ function love.turris.newGame()
 		o.newTowerType("gfx/tower02")
 		o.newTowerType("gfx/tower03")
 		o.towerCount = 0 -- TODO: get the correct number of towers (and fill the tower array)
-		o.addTower(2,2,1)
+		o.addTower(2, 2,1)
 		o.addTower(11, 9, 1)
-		o.addTower(2, o.baseY, 1) --TODO debugging tower to block the path right away
+		--o.addTower(2, o.baseY, 1) --TODO debugging tower to block the path right away
 		o.addTower(2,o.baseY-1,1) --TODO another debugging tower
 		o.map.setState(2, 9, 4)
 		o.map.setState(7, 3, 3)
 		o.map.setState(o.baseX, o.baseY, 2)
 
-			o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
+		o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
 		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
 		for i = 1, o.enemyCount do
 			o.enemies[i]= love.turris.newEnemy(creepImg,o.map,1,o.baseY,o.baseX,o.baseY)
@@ -175,8 +175,8 @@ function love.turris.newGame()
 			local x = e.x
 			local y = e.y
 			local img = e.img
-			G.setColor(0, 0, 0, 127)
-			love.graphics.ellipse("fill", x * o.map.tileWidth - o.offsetX - 32, y * o.map.tileHeight + o.offsetY - 16, 24, 16, 0, 16)
+			G.setColor(15, 15, 31, 63 + math.sin(love.timer.getTime() * 2.0) * 31)
+			love.graphics.ellipse("fill", x * o.map.tileWidth - o.offsetX - 32, y * o.map.tileHeight + o.offsetY - 16, 12 + math.sin(love.timer.getTime() * 2.0) * 3, 8 + math.sin(love.timer.getTime() * 2.0) * 2, 0, 16)
 			G.setColor(255, 255, 255)
 			local directionAnim = (e.getDirection() + math.pi) / (math.pi * 0.25) - 1
 
