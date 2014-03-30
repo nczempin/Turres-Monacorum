@@ -23,8 +23,16 @@ function love.load()
 
 	bloomOn = true
 end
+
 function love.getgamestate()
 	return currentgamestate
+end
+
+function love.turris.reinit()
+	print("game reset")
+	turGame = love.turris.newGame()
+	turMap = love.turris.newMap(13, 13, 64, 48)
+	turGame.init()
 end
 
 function love.changegamestate(newgamestate)
@@ -78,4 +86,9 @@ function love.keypressed(key, code)
 		buttonDetected = 1
 		love.turris.checkButtonPosition(320, 96)
 	end
+end
+
+function love.turris.gameoverstate() -- this will be moved to gui.lua later
+	love.changegamestate(0)
+	love.turris.reinit()
 end
