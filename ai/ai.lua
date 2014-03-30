@@ -47,9 +47,7 @@ function reconstruct_path(came_from, current_node)
 		return current_node
 	end
 end
-function isContained(node, nodeSet)
-	return nodeSet[node]
-end
+
 function set (list)
 	local set = {}
 	for _, l in ipairs(list) do set[l] = true end
