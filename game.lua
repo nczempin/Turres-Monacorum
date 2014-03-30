@@ -69,6 +69,22 @@ function love.turris.newGame()
 			o.offsetChange = true
 		end
 
+		if love.mouse.getX() < 128 then
+			o.offsetX = o.offsetX + dt * (128 - love.mouse.getX()) ^ 1.25
+			o.offsetChange = true
+		elseif love.mouse.getX() > W.getWidth() - 128 then
+			o.offsetX = o.offsetX - dt * (128 - (W.getWidth() - love.mouse.getX())) ^ 1.25
+			o.offsetChange = true
+		end
+
+		if love.mouse.getY() < 128 then
+			o.offsetY = o.offsetY + dt * (128 - love.mouse.getY()) ^ 1.25
+			o.offsetChange = true
+		elseif love.mouse.getY() > W.getHeight() - 128 then
+			o.offsetY = o.offsetY - dt * (128 - (W.getHeight() - love.mouse.getY())) ^ 1.25
+			o.offsetChange = true
+		end
+
 		if o.offsetChange then
 			for i = 1, o.map.width do
 				for k = 1, o.map.height do
