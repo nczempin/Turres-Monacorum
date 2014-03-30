@@ -13,7 +13,7 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 			o.data[i][k].maxHealth = 100.0
 			o.data[i][k].health = o.data[i][k].maxHealth
 		end
-    end
+	end
 	o.shadow = {}
 	local img = love.graphics.newImage("gfx/ground01.png")
 	local normal = love.graphics.newImage("gfx/ground01_normal.png")
@@ -26,9 +26,13 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 			o.shadow[i + 1][k + 1].setNormalMap(normal)
 			o.shadow[i + 1][k + 1].setGlowMap(glow)
 		end
-    end
+	end
 	o.getState = function(x, y)
-		return o.data[x][y].id
+		if x and y and x>0 and y>0 then
+			return o.data[x][y].id
+		else
+			return nil
+		end
 	end
 	o.getHeight = function()
 		return o.height
