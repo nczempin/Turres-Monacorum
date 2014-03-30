@@ -5,7 +5,6 @@ function love.turris.newGame()
 	o.map = {}
 	o.ground = {}
 	o.towerType = {}
-	--o.towers = {}
 	o.towers = {} -- circular list
 	o.towers.maxamount = 0
 	o.towers.amount = 0
@@ -202,6 +201,7 @@ function love.turris.newGame()
 
 		local x, y = e.x, e.y
 		G.setColor(255, 0, 0)
+
 		for i = 1, o.towers.amount do
 			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
 			local t = o.towers[i]
