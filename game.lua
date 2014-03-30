@@ -22,7 +22,6 @@ function love.turris.newGame()
 		o.newTower("gfx/tower03")
 		o.towers = {}
 		o.towerCount = 0 -- TODO: get the correct number of towers (and fill the tower array)
-
 		o.addTower(2,2,1)
 		o.addTower(2,3,1)
 		o.addTower(11, 9, 1)
@@ -30,10 +29,13 @@ function love.turris.newGame()
 		o.map.setState(2, 9, 4)
 		o.map.setState(7, 3, 3)
 		o.map.setState(o.baseX, o.baseY, 2)
+
 		local creepImg = G.newImage("gfx/creep00_diffuse.png")
-		for i = 1, o.enemyCount do
-			o.enemies[i]= love.turris.newEnemy(creepImg,i-1,o.baseY)
-		end
+	for i = 1, o.enemyCount do
+		o.enemies[i]= love.turris.newEnemy(creepImg)
+		o.enemies[i].x = i - 2
+		o.enemies[i].y = o.baseY
+	end
 	end
 	o.addTower = function(x,y,type)
 		o.towerCount = o.towerCount +1 -- TODO this is unsafe
@@ -58,6 +60,7 @@ function love.turris.newGame()
 				-- TODO: destroy base (explosion!)
 				-- TODO: after explosions have finished -> transition to game over state
 				love.changegamestate(4)
+				gameOverEffect = 0
 			end
 		end
 
@@ -151,8 +154,7 @@ function love.turris.newGame()
 	end
 	-- draw a line in world coordinates
 	o.drawLine = function(x1,y1,x2,y2)
-		G.line((x1-0.5)*o.map.tileWidth, (y1-0.5)*o.map.tileHeight,(x2-0.5)*o.map.tileWidth, (y2-0.5)*o.map.tileHeight)
-
+		G.line((x1-0.5)*o.map.tileWidth + o.offsetX, (y1-0.5) * o.map.tileHeight + o.offsetY,(x2-0.5) * o.map.tileWidth + o.offsetX, (y2 - 0.5)*o.map.tileHeight + o.offsetY)
 	end
 	o.drawEnemies = function()
 		for i = 1, o.enemyCount do
@@ -161,8 +163,7 @@ function love.turris.newGame()
 			local y = e.y
 			local img = e.img
 			G.setColor(255, 255, 255)
-			G.draw(img, (x)*o.map.tileWidth, (y-1)*o.map.tileHeight, 0, -1.0 / img:getWidth() * o.map.tileWidth, 1.0 / img:getHeight() * o.map.tileHeight)
-			-- draw path to nearest base
+			G.draw(img, x * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY, 0, -1.0 / img:getWidth() * o.map.tileWidth, 1.0 / img:getHeight() * o.map.tileHeight)
 		end
 	end
 	o.newGround = function(img)
@@ -184,7 +185,7 @@ function love.turris.newGame()
 	font = G.newImageFont("gfx/font.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\"")
 	font:setFilter("nearest", "nearest")
 	G.setFont(font)
-
+	
 	-- create light world
 	lightWorld = love.light.newWorld()
 	lightWorld.setNormalInvert(true)
@@ -196,6 +197,7 @@ function love.turris.newGame()
 	--lightMouse.setGlowStrength(0.3)
 	--lightMouse.setSmooth(0.01)
 	lightMouse.setRange(300)
+	gameOverEffect = 0
 
 	return o
 end

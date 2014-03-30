@@ -23,24 +23,18 @@ function love.load()
 
 	bloomOn = true
 end
-
 function love.getgamestate()
 	return currentgamestate
-end
-
-function love.turris.reinit()
-	print("game reset")
-	turGame = love.turris.newGame()
-	turMap = love.turris.newMap(13, 13, 64, 48)
-	turGame.init()
 end
 
 function love.changegamestate(newgamestate)
 	currentgamestate = newgamestate
 end
 function love.update(dt)
-	if (currentgamestate==1)then
+	if (currentgamestate == 1)then
 		turGame.update(dt)
+	elseif (currentgamestate == 4)then
+		gameOverEffect = gameOverEffect + dt
 	end
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
 end
@@ -48,6 +42,8 @@ end
 function love.draw()
 	W.setTitle("FPS: " .. love.timer.getFPS())
 	love.postshader.setBuffer("render")
+	G.setColor(0, 0, 0)
+	G.rectangle("fill", 0, 0, W.getWidth(), W.getHeight())
 
 	turGame.draw()
 
@@ -57,9 +53,16 @@ function love.draw()
 		love.postshader.addEffect("scanlines")
 	elseif(currentgamestate==1) then --render game only
 		turGame.draw()
-		elseif(currentgamestate == 4) then -- render game + "game over" message on top
+	elseif(currentgamestate == 4) then -- render game + "game over" message on top
 		turGame.draw()
 		gameOverLayer.draw()
+		if gameOverEffect < 0.75 then
+			local colorAberration1 = math.sin(love.timer.getTime() * 20.0) * (0.75 - gameOverEffect) * 4.0
+			local colorAberration2 = math.cos(love.timer.getTime() * 20.0) * (0.75 - gameOverEffect) * 4.0
+
+			love.postshader.addEffect("blur", 1.0, 1.0)
+			love.postshader.addEffect("chromatic", colorAberration1, colorAberration2, colorAberration2, -colorAberration1, colorAberration1, -colorAberration2)
+		end
 	end
 	--currentgamestate =1 -- quick workaround, will be removed once the mouse buttons work correctly
 	if bloomOn then
@@ -86,9 +89,4 @@ function love.keypressed(key, code)
 		buttonDetected = 1
 		love.turris.checkButtonPosition(320, 96)
 	end
-end
-
-function love.turris.gameoverstate() -- this will be moved to gui.lua later
-	love.changegamestate(0)
-	love.turris.reinit()
 end
