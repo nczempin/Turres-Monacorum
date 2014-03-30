@@ -269,9 +269,9 @@ function love.turris.newGame()
 	end
 
 	-- set font
-	font = G.newImageFont("gfx/font.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\"")
-	font:setFilter("nearest", "nearest")
-	G.setFont(font)
+	--font = G.newImageFont("gfx/font.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\"")
+	--font:setFilter("nearest", "nearest")
+	--G.setFont(font)
 
 	-- create light world
 	lightWorld = love.light.newWorld()
