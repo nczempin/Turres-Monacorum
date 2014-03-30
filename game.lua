@@ -84,17 +84,23 @@ function love.turris.newGame()
 		end
 	end
 	o.removeTower = function(x,y) --can remove from a position
-		if (not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height) then return end
+		if (not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height) then 
+		print ("nothing will be removed here!"..x.." "..o.map.width.." "..y.." "..o.map.height)
+		return end
+		print("something might be removed..."..x.." "..o.map.width.." "..y.." "..o.map.height)
 		local state =o.map.getState(x,y)
-		if state and not(state==0) then
-			o.map.setState(0)
-			for i=1,o.towerCount do
+		if state and not(state==0) then -- TODO: don't let main tower be deleted!!!
+			--o.map.setState(x,y,0)
+			for i=1,o.towers.maxamount do
 				if o.towers[i] and o.towers[i].value and o.towers[i].value.x==x and o.towers[i].value.y==y then
+					turMap.setState(x,y,0)
 					o.towers[i] = nil
 				end
-				o.towerCount = o.towerCount-1
+				o.towers.amount = o.towers.amount-1
 				print("Tower was removed at "..x..", "..y)
+				return
 			end
+			print("Could not delete tower at "..x..", "..y)
 		end
 	end
 	o.update = function(dt)
