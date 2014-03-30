@@ -61,7 +61,7 @@ function love.turris.checkleftclick(clickx,clicky)
 	end
 	elseif currentgstate == 1 then --ingame
 		--love.setgamestate(0)
-		local clickedfield=getclickedfield(clickx,clicky)
+		local clickedfieldx,clickedfieldy=getclickedfield(clickx,clicky)
 		print(clickedfield)
 		--if not(clickedfield.x<0 or clickedfield.x>=turMap.width or clickedfield.y<0 or clickedfield.y>=turMap.height) then
 			--if turMap.getState(clickedfieldx,clickedfieldy)==0 then
@@ -90,8 +90,8 @@ end
 function love.turris.checkrightclick(clickx,clicky)
 	currentgstate=love.getgamestate()
 	if currentgamestate==1 then --ingame
-		clickedfield=getclickedfield(clickx,clicky)
-		turMap.setstate(clickedfield,0)
+		clickedfieldx,clickedfieldy=getclickedfield(clickx,clicky)
+		turMap.setState(clickedfieldx,clickedfieldy,0)
 		--turrets will be removed
 	end
 end
