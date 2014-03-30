@@ -34,8 +34,13 @@ function love.turris.newEnemy(img, map, x,y,baseX, baseY)
 						--empty, so it's okay
 						local d = distance(x,y,goalX,goalY)
 						print ("distance to goal: "..d)
+					else
+						visited[x][y]=true
+						print ("blocked")
 					end
 				end
+			else
+				print ("visited")
 			end
 		end
 
