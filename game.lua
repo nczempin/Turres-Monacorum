@@ -112,9 +112,9 @@ function love.turris.newGame()
 	end
 	o.draw = function()
 		o.drawMap()
-		o.drawEnemies()
 		o.drawShots()
 		o.drawPaths()
+		o.drawEnemies()
 	end
 	o.drawShots = function()
 		local e = o.enemies[1]		-- TODO this is a hack because I know there's only one creep for now
@@ -128,7 +128,7 @@ function love.turris.newGame()
 
 		end
 	end
-	
+
 	o.drawPaths = function()
 		--    for i = 1, o.entryCount do
 		--      local entry = enemyEntrances[i]
@@ -141,17 +141,18 @@ function love.turris.newGame()
 			local y = e.y
 			for i=1, #e.waypoints-1 do
 				local wpFrom = e.waypoints[i]
-			local wpTo = e.waypoints[i+1]
+				local wpTo = e.waypoints[i+1]
 				G.setColor(232, 118, 0)
 				o.drawLine(wpFrom[1],wpFrom[2],wpTo[1],wpTo[2])
 			end
 		end
 	end
-	
+
 	-- draw a line in world coordinates
 	o.drawLine = function(x1,y1,x2,y2)
 		G.line((x1-0.5)*o.map.tileWidth + o.offsetX, (y1-0.5) * o.map.tileHeight + o.offsetY,(x2-0.5) * o.map.tileWidth + o.offsetX, (y2 - 0.5)*o.map.tileHeight + o.offsetY)
 	end
+
 	o.drawEnemies = function()
 		for i = 1, o.enemyCount do
 			local e = o.enemies[i]
@@ -172,8 +173,15 @@ function love.turris.newGame()
 			if e.health > 0.0 then
 				e.health = e.health - 0.1
 			end
+
+			--debug: show travel direction
+			local ox, oy = e.getOrientation()
+			G.setColor(0, 63, 123)
+			o.drawLine(x,y,x+ox,y+oy)
+
 		end
 	end
+
 	o.newGround = function(img)
 		o.ground[#o.ground + 1] = G.newImage(img)
 		return o.ground[#o.ground]
