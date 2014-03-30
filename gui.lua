@@ -13,10 +13,11 @@
 gui={}
 gui.current = nil
 buttonDetected=0
-font = love.graphics.newFont(64)
-love.graphics.setFont(font)
 guiScale = 2.0
 -- GameStates:0=MainMenu, 1=inGame, 2=Load, 3=Settings, 4=Game Over
+
+font = love.graphics.newFont(32)
+love.graphics.setFont(font)
 
 local screenWidth = love.window.getWidth()
 local screenHeight = love.window.getHeight()
@@ -44,6 +45,8 @@ function love.mousepressed(x, y, key)
 		love.turris.checkrightclick(x,y)
 	end
 end
+
+
 
 function isinbutton(clickx,clicky)
 	for i = 1, #buttons do
@@ -82,14 +85,8 @@ function button(xPos, yPos, width, height, name)
 	o.name 		= name
 	o.status 	= false
  
+	--Returns true if the Position is inside an Button
 	function o.isOverButton(mouseX, mouseY)
-		
-		print("ButtonName" .. name)
-		print("MouseX" .. mouseX)
-		print("MouseY" .. mouseY)
-		print("xPos Button" .. xPos)
-		print("yPos Button" .. yPos)
-	
 		if mouseX > xPos and mouseX < xPos + width and mouseY > yPos and mouseY < yPos + height then			
 			return true
 		else
@@ -139,39 +136,43 @@ function getclickedfield(clickx,clicky)
 	print("clicked field "..x..", "..y)
 	return x,y
 end
+
 function love.turris.checkrightclick(clickx,clicky)
 	currentgstate=love.getgamestate()
 	if currentgamestate==1 then --ingame
 		clickedfieldx,clickedfieldy=getclickedfield(clickx,clicky)
-		turMap.setState(clickedfieldx,clickedfieldy,0)
+		turGame.removeTower(clickx,clicky)
+		--turMap.setState(clickedfieldx,clickedfieldy,0)
 		--turrets will be removed
 	end
 end
 
-
-
-
 function gui.drawMainMenu()	
 	local buttonDistance = 40
 	love.graphics.setColor(255, 127, 0)
-	
-	font = love.graphics.newFont(32)
-	love.graphics.setFont(font)
+
+	love.graphics.setColor(0, 0, 0, 91)
+	love.graphics.rectangle("fill", buttons[1].xPos - 16, buttons[1].yPos - 16, buttons[1].width + 32, buttons[1].height * 4 + 92)
 	
 	for i = 1, #buttons do	
 		
 		G.setBlendMode("alpha")
-		love.graphics.setColor(0, 0, 0, 63)
-		love.graphics.setLineWidth(4)
+		love.graphics.setColor(0, 0, 0, 91)
+		love.graphics.setLineWidth(8)
 		love.graphics.rectangle("line", buttons[i].xPos, buttons[i].yPos, buttons[i].width, buttons[i].height)
 		G.setBlendMode("additive")
 		love.graphics.setColor(0, 127, 255)
 		love.graphics.setLineWidth(4)
 		love.graphics.rectangle("line", buttons[i].xPos, buttons[i].yPos, buttons[i].width, buttons[i].height)
 		--startText
+		G.setBlendMode("alpha")
+		love.graphics.setColor(0, 0, 0, 91)
+		love.graphics.printf(buttons[i].name, buttons[i].xPos + 2,buttons[i].yPos + buttons[i].height / 3 + 2, buttons[i].width, "center")
+		G.setBlendMode("additive")
 		love.graphics.setColor(0, 127, 255)
-		love.graphics.printf(buttons[i].name, buttons[i].xPos ,buttons[i].yPos + buttons[i].height / 3 ,buttons[i].width,"center")		
+		love.graphics.printf(buttons[i].name, buttons[i].xPos,buttons[i].yPos + buttons[i].height / 3, buttons[i].width, "center")
 	end
+
 end
 
 function love.turris.mainmenubuttonpushed()
