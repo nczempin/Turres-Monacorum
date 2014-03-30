@@ -8,6 +8,7 @@ function love.turris.newGame()
 	o.towers = {} -- circular list
 	o.towers.maxamount = 0
 	o.towers.amount = 0
+	o.towerCount = 0
 	o.towers.next = 1
 	o.enemies = {}
 	o.enemyCount = 1
@@ -25,7 +26,6 @@ function love.turris.newGame()
 		o.newTowerType("gfx/tower01")
 		o.newTowerType("gfx/tower02")
 		o.newTowerType("gfx/tower03")
-		--o.towerCount = 0 -- NOT TO DO: get the correct number of towers (and fill the tower array)
 		o.addTower(2, 2,1)
 		o.addTower(11, 9, 1)
 		o.addTower(2, o.baseY, 1) --TODO debugging tower to block the path right away
@@ -52,7 +52,7 @@ function love.turris.newGame()
 		end
 	end
 	o.addTower = function(x,y,type)
-		if not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height or not type or not (o.towers.amount<o.towers.maxamount) then return end
+		if not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height or not type or not (o.towerCount<o.towers.maxamount) then return end
 		local state = o.map.getState(x,y)
 		if state and state ==0 then
 			--o.towerCount = o.towerCount +1 -- NOT TO DO this is unsafe
@@ -62,23 +62,25 @@ function love.turris.newGame()
 			t.type = type
 			o.map.setState(t.x, t.y, type)
 			--o.towers[o.towerCount] =t
-
 			--Playing Sound When Tower is Placed
 			if(currentgamestate ~= 0) then
 				love.sounds.playSound("sounds/tower_1.mp3")
 			end
-
-
-			if o.towers.next<o.towers.maxamount then
-				o.towers[o.towers.next] = {next = towers, value =t}
+			if o.towers.next<o.towers.maxamount and not o.towers.next then
+				o.towers[o.towers.next] = t --{next = towers, value =t}
 			else
-				while (o.towers) do
+				for i=1,o.towers.maxamount do
 					if(o.towers.next==o.towers.maxamount) then
 						o.towers.next=0
 					end
-					o.towers.next = o.towers.next+1
+					if not o.towers.next then
+					break
+					end
 				end
-				o.towers.amount = o.towers.amount+1
+				o.towers[o.towers.next] = t --{next = towers, value =t}
+					o.towers.next = o.towers.next+1
+				o.towerCount = o.towerCount+1
+				print(o.towerCount)
 				print("Tower was placed at "..x..", "..y)
 			end
 		end
@@ -93,10 +95,10 @@ function love.turris.newGame()
 		--o.map.setState(x,y,0)
 		for i=1,o.towers.maxamount do
 			if o.towers[i] and o.towers[i].value and o.towers[i].value.x==x and o.towers[i].value.y==y then
-				turMap.setState(x,y,0)
 				o.towers[i] = nil
 			end
-			o.towers.amount = o.towers.amount-1
+				turMap.setState(x,y,0)
+				o.towerCount = o.towerCount-1
 			print("Tower was removed at "..x..", "..y)
 			return
 	end
