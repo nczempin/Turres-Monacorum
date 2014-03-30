@@ -8,7 +8,7 @@ function love.turris.newEnemy(img, map)
 	o.waypoints = {{0,map.baseY},{1,map.baseY},{1,map.baseY-1},{3,map.baseY-1},{3,map.baseY},{map.baseX,map.baseY}}
 	o.currentWaypoint = 2
 	o.health = 100.0
-	
+
 	-- TODO this depends on the type and not on the particular enemy
 	o.maxHealth = 100.0
 	o.speed = 2
@@ -19,11 +19,16 @@ function love.turris.newEnemy(img, map)
 
 
 	o.getOrientation = function()
-		return o.xVel, o.yVel -- TODO normalize
+		local x,y = love.turris.normalize(o.xVel, o.yVel)
+		--print (x,y)
+		return x,y
 	end
 	return o
 end
-
+function love.turris.normalize(x,y)
+	local m = math.max(math.abs(x),math.abs(y))
+	return x/m, y/m
+end
 function love.turris.updateEnemies(o,dt)
 	for i = 1, o.enemyCount do
 		local e = o.enemies[i]
@@ -38,7 +43,8 @@ function love.turris.updateEnemies(o,dt)
 		local wp = e.waypoints[e.currentWaypoint]
 		if math.abs(wp[1]-x)<0.1 and math.abs(wp[2] -y)<0.1 then
 			-- waypoint reached
-				e.currentWaypoint = e.currentWaypoint + 1
+			local nextWp = e.currentWaypoint +1
+			e.currentWaypoint = nextWp
 			e.xVel = 0
 			e.yVel = -e.speed
 		end
