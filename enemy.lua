@@ -2,10 +2,15 @@ require "ai/ai"
 
 function love.turris.newEnemy(img, map)
 	local o = {}
+	o.generateWaypoints = function(map)
+		local wp = {{0,map.baseY},{1,map.baseY},{1,map.baseY-1},{3,map.baseY-1},{3,map.baseY},{map.baseX,map.baseY}}
+		return wp
+	end
 	o.img = img
 	o.x = {}
 	o.y = {}
-	o.waypoints = {{0,map.baseY},{1,map.baseY},{1,map.baseY-1},{3,map.baseY-1},{3,map.baseY},{map.baseX,map.baseY}}
+	o.waypoints = o.generateWaypoints(map)
+
 	o.currentWaypoint = 2
 	o.health = 100.0
 
@@ -14,15 +19,19 @@ function love.turris.newEnemy(img, map)
 	o.speed = 2
 	-- type end
 
-	o.xVel = o.speed
-	o.yVel = 0.0
 
+	o.updateVelocity = function(dirX,dirY)
+		o.xVel = dirX*o.speed
+		o.yVel = dirY*o.speed
+	end
 
+	o.updateVelocity(1,0)
 	o.getOrientation = function()
 		local x,y = love.turris.normalize(o.xVel, o.yVel)
 		--print (x,y)
 		return x,y
 	end
+
 	return o
 end
 function love.turris.normalize(x,y)
@@ -47,8 +56,7 @@ function love.turris.updateEnemies(o,dt)
 			e.currentWaypoint = nextWpIndex
 			local wpNext = e.waypoints[nextWpIndex]
 			local dirX,dirY = love.turris.normalize( wpNext[1]-wp[1], wpNext[2]-wp[2])
-			e.xVel = dirX*e.speed
-			e.yVel = dirY*e.speed
+			e.updateVelocity(dirX,dirY)
 		end
 
 		-- write back the changes
