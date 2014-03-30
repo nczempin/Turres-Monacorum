@@ -12,9 +12,13 @@ function love.turris.newEnemy(img, map)
 	o.health = 100.0
 	o.maxHealth = 100.0
 
+	o.getDirection = function()
+		return math.atan2(o.xVel, o.yVel)
+	end
 	o.getOrientation = function()
 		return o.xVel, o.yVel -- TODO normalize
 	end
+
 	return o
 end
 

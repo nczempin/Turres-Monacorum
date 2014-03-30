@@ -8,6 +8,7 @@ require "sound"
 require "TESound"
 require "gui"
 require "gameoverlayer"
+require "anim"
 
 function love.load()
 	G = love.graphics

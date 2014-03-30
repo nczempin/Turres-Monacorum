@@ -30,9 +30,10 @@ function love.turris.newGame()
 		o.map.setState(7, 3, 3)
 		o.map.setState(o.baseX, o.baseY, 2)
 
-		local creepImg = G.newImage("gfx/creep00_diffuse.png")
+		o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
+		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
 		for i = 1, o.enemyCount do
-			o.enemies[i]= love.turris.newEnemy(creepImg,o)
+			o.enemies[i]= love.turris.newEnemy(creepImg, o)
 			o.enemies[i].x = i - 2
 			o.enemies[i].y = o.baseY
 		end
@@ -40,7 +41,7 @@ function love.turris.newGame()
 	o.addTower = function(x,y,type)
 		if not x or not y or not type then return end
 		local state = o.map.getState(x,y)
-		if state and state ==0 then
+		if state and state == 0 then
 			o.towerCount = o.towerCount +1 -- TODO this is unsafe
 			local t = {}
 			t.x = x
@@ -81,6 +82,7 @@ function love.turris.newGame()
 			end
 			o.offsetChange = false
 		end
+		o.creepAnim:update(dt)
 	end
 	o.drawMap = function()
 		local dayTime = math.abs(math.sin(o.dayTime))
@@ -176,7 +178,9 @@ function love.turris.newGame()
 			local y = e.y
 			local img = e.img
 			G.setColor(255, 255, 255)
-			G.draw(img, x * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY, 0, -1.0 / img:getWidth() * o.map.tileWidth, 1.0 / img:getHeight() * o.map.tileHeight)
+			o.creepAnim:seek(math.floor(e.getDirection()))
+			o.creepAnim:draw(x * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY)
+			--G.draw(o.creepImg, o.creepQuad, x * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY, 0, -1.0 / o.creepImg:getWidth() * o.map.tileWidth, 1.0 / (o.creepImg:getHeight() / 8.0) * o.map.tileHeight)
 			-- health
 			if e.health < e.maxHealth then
 				G.setColor(0, 0, 0, 127)
@@ -191,6 +195,7 @@ function love.turris.newGame()
 			if e.health > 0.0 then
 				e.health = e.health - 0.1
 			end
+			--print(e.getDirection())
 
 			--debug: show travel direction
 			local ox, oy = e.getOrientation()
