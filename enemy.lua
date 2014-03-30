@@ -2,7 +2,7 @@ require "ai/ai"
 
 function love.turris.newEnemy(img, map, baseX, baseY)
 	local o = {}
-	o.generateWaypoints = function(map, startX, startY, goalX, goalY)
+		o.generateWaypoints = function(map, startX, startY, goalX, goalY)
 		local mapXmax = map.width
 		local mapYmax = map.height
 		print ("x: "..startX)
@@ -10,6 +10,7 @@ function love.turris.newEnemy(img, map, baseX, baseY)
 		--goal found
 		if (startX==goalX and startY==goalY)then
 			local wp = {{goalX,goalY}}
+
 			return wp
 		end
 		local visited = {}
@@ -62,7 +63,12 @@ function love.turris.newEnemy(img, map, baseX, baseY)
 		o.yVel = dirY*o.speed
 	end
 
+	o.getDirection = function()
+		return math.atan2(o.xVel, o.yVel)
+	end
+
 	o.updateVelocity(1,0) --TODO this should be determined from the current position to the next waypoint
+
 	o.getOrientation = function()
 		local x,y = love.turris.normalize(o.xVel, o.yVel)
 		return x,y
