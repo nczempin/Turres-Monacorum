@@ -4,7 +4,7 @@ function love.turris.newGame()
 	local o = {}
 	o.map = {}
 	o.ground = {}
-	o.tower = {}
+	o.towerType = {}
 	o.towers = {}
 	o.enemies = {}
 	o.enemyCount = 1
@@ -99,10 +99,26 @@ function love.turris.newGame()
 			lightWorld.drawShadow()
 			for i = 0, o.map.width - 1 do
 				for k = 0, o.map.height - 1 do
-					if o.map.map[i + 1][k + 1] > 0 then
-						local img = o.tower[o.map.map[i + 1][k + 1]].img
+					if o.map.data[i + 1][k + 1].id > 0 then
+						local img = o.towerType[o.map.data[i + 1][k + 1].id].img
 						G.setColor(255, 255, 255)
 						G.draw(img, i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight - (img:getHeight() - o.map.tileHeight) + o.offsetY)
+						-- health
+						local health = o.map.data[i + 1][k + 1].health
+						local maxHealth = o.towerType[o.map.data[i + 1][k + 1].id].maxHealth
+						if health < maxHealth then
+							G.setColor(0, 0, 0, 127)
+							G.rectangle("fill", i * o.map.tileWidth + o.offsetX - 2, k * o.map.tileHeight + o.offsetY - 16 - 2 - (img:getHeight() - o.map.tileHeight), 64 + 4, 8 + 4)
+							G.setColor(255 * math.min((1.0 - health / maxHealth) * 2.0, 1.0), 255 * math.min((health / maxHealth) * 1.5, 1.0), 0)
+							G.rectangle("fill", i * o.map.tileWidth + o.offsetX + 2, k * o.map.tileHeight + o.offsetY - 16 + 2 - (img:getHeight() - o.map.tileHeight), (64 - 4) * health / maxHealth, 8 - 4)
+							G.setLineWidth(1)
+							G.setColor(63, 255, 0)
+							G.rectangle("line", i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight + o.offsetY - 16 - (img:getHeight() - o.map.tileHeight), 64, 8)
+						end
+						-- test
+						if o.map.data[i + 1][k + 1].health > 0.0 then
+							o.map.data[i + 1][k + 1].health = health - 0.1
+						end
 					end
 				end
 			end
@@ -162,13 +178,15 @@ function love.turris.newGame()
 			G.setColor(255, 255, 255)
 			G.draw(img, x * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY, 0, -1.0 / img:getWidth() * o.map.tileWidth, 1.0 / img:getHeight() * o.map.tileHeight)
 			-- health
-			G.setColor(0, 0, 0, 127)
-			G.rectangle("fill", (x - 1) * o.map.tileWidth + o.offsetX - 2, (y - 1) * o.map.tileHeight + o.offsetY - 16 - 2, 64 + 4, 8 + 4)
-			G.setColor(255 * math.min((1.0 - e.health / e.maxHealth) * 2.0, 1.0), 255 * math.min((e.health / e.maxHealth) * 1.5, 1.0), 0)
-			G.rectangle("fill", (x - 1) * o.map.tileWidth + o.offsetX + 2, (y - 1) * o.map.tileHeight + o.offsetY - 16 + 2, (64 - 4) * e.health / e.maxHealth, 8 - 4)
-			G.setLineWidth(1)
-			G.setColor(255, 63, 0)
-			G.rectangle("line", (x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY - 16, 64, 8)
+			if e.health < e.maxHealth then
+				G.setColor(0, 0, 0, 127)
+				G.rectangle("fill", (x - 1) * o.map.tileWidth + o.offsetX - 2, (y - 1) * o.map.tileHeight + o.offsetY - 16 - 2, 64 + 4, 8 + 4)
+				G.setColor(255 * math.min((1.0 - e.health / e.maxHealth) * 2.0, 1.0), 255 * math.min((e.health / e.maxHealth) * 1.5, 1.0), 0)
+				G.rectangle("fill", (x - 1) * o.map.tileWidth + o.offsetX + 2, (y - 1) * o.map.tileHeight + o.offsetY - 16 + 2, (64 - 4) * e.health / e.maxHealth, 8 - 4)
+				G.setLineWidth(1)
+				G.setColor(255, 63, 0)
+				G.rectangle("line", (x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY - 16, 64, 8)
+			end
 			-- test
 			if e.health > 0.0 then
 				e.health = e.health - 0.1
@@ -187,11 +205,11 @@ function love.turris.newGame()
 		return o.ground[#o.ground]
 	end
 	o.newTowerType = function(img)
-		o.tower[#o.tower + 1] = love.turris.newTowerType(img)
-		return o.tower[#o.tower]
+		o.towerType[#o.towerType + 1] = love.turris.newTowerType(img)
+		return o.towerType[#o.towerType]
 	end
 	o.getTower = function(n)
-		return o.tower[n]
+		return o.towerType[n]
 	end
 	o.setMap = function(map)
 		o.map = map

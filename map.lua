@@ -4,11 +4,14 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 	o.height = height or 16
 	o.tileWidth = tileWidth or 64
 	o.tileHeight = tileHeight or 48
-	o.map = {}
+	o.data = {}
 	for i = 1, o.width do
-		o.map[i] = {}
+		o.data[i] = {}
 		for k = 1, o.height do
-			o.map[i][k] = 0
+			o.data[i][k] = {}
+			o.data[i][k].id = 0
+			o.data[i][k].maxHealth = 100.0
+			o.data[i][k].health = o.data[i][k].maxHealth
 		end
     end
 	o.shadow = {}
@@ -25,7 +28,7 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 		end
     end
 	o.getState = function(x, y)
-		return o.map[x][y]
+		return o.data[x][y].id
 	end
 	o.getHeight = function()
 		return o.height
@@ -37,18 +40,18 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 		return o.width
 	end
 	o.setState = function(x, y, n)
-		o.map[x][y] = n
+		o.data[x][y].id = n
 		if n > 0 then
 			if n == 4 then
 				o.shadow[x][y].setShadow(false)
 			else
 				o.shadow[x][y].setShadow(true)
 			end
-			o.shadow[x][y].setImage(turGame.tower[n].img)
-			o.shadow[x][y].setImageOffset(o.tileWidth * 0.5, o.tileHeight * 0.5 + (turGame.tower[n].img:getHeight() - o.tileHeight))
-			o.shadow[x][y].setNormalMap(turGame.tower[n].normal)
-			o.shadow[x][y].setNormalOffset(o.tileWidth * 0.5, o.tileHeight * 0.5 + (turGame.tower[n].img:getHeight() - o.tileHeight))
-			o.shadow[x][y].setGlowMap(turGame.tower[n].glow)
+			o.shadow[x][y].setImage(turGame.towerType[n].img)
+			o.shadow[x][y].setImageOffset(o.tileWidth * 0.5, o.tileHeight * 0.5 + (turGame.towerType[n].img:getHeight() - o.tileHeight))
+			o.shadow[x][y].setNormalMap(turGame.towerType[n].normal)
+			o.shadow[x][y].setNormalOffset(o.tileWidth * 0.5, o.tileHeight * 0.5 + (turGame.towerType[n].img:getHeight() - o.tileHeight))
+			o.shadow[x][y].setGlowMap(turGame.towerType[n].glow)
 		else
 			o.shadow[x][y].setShadow(false)
 		end
