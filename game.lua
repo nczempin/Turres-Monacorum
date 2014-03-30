@@ -29,7 +29,7 @@ function love.turris.newGame()
 		--o.towerCount = 0 -- NOT TO DO: get the correct number of towers (and fill the tower array)
 		o.addTower(2, 2,1)
 		o.addTower(11, 9, 1)
-		--o.addTower(2, o.baseY, 1) --TODO debugging tower to block the path right away
+		o.addTower(2, o.baseY, 1) --TODO debugging tower to block the path right away
 		o.addTower(2,o.baseY-1,1) --TODO another debugging tower
 		o.map.setState(2, 9, 4)
 		o.map.setState(7, 3, 3)
