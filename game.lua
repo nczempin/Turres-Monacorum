@@ -78,13 +78,21 @@ function love.turris.newGame()
 		o.drawMap()
 		o.drawEnemies()
 		o.drawPaths()
+		--o.drawShots()
 	end
 	o.drawPaths = function()
-	--    for i = 1, o.entryCount do
-	--      local entry = enemyEntrances[i]
-	--    end
-	--local mx, my = love.mouse.getPosition()  -- current position of the mouse
-	--G.line(0,300, mx, my)
+		--    for i = 1, o.entryCount do
+		--      local entry = enemyEntrances[i]
+		--    end
+		--local mx, my = love.mouse.getPosition()  -- current position of the mouse
+		--G.line(0,300, mx, my)
+		for i = 1, o.enemyCount do
+			local e = o.enemies[i]
+			local x = e.x
+			local y = e.y
+			G.setColor(232, 118, 0)
+			G.line((x-0.5)*o.map.tileWidth, (y-0.5)*o.map.tileHeight,(o.baseX-0.5)*o.map.tileWidth, (o.baseY-0.5)*o.map.tileHeight)
+		end
 	end
 	o.drawEnemies = function()
 		for i = 1, o.enemyCount do
@@ -95,8 +103,6 @@ function love.turris.newGame()
 			G.setColor(255, 255, 255)
 			G.draw(img, (x)*o.map.tileWidth, (y-1)*o.map.tileHeight, 0, -1.0 / img:getWidth() * o.map.tileWidth, 1.0 / img:getHeight() * o.map.tileHeight)
 			-- draw path to nearest base
-			G.setColor(255, 153, 0)
-			G.line((x-0.5)*o.map.tileWidth, (y-0.5)*o.map.tileHeight,(o.baseX-0.5)*o.map.tileWidth, (o.baseY-0.5)*o.map.tileHeight)
 		end
 	end
 	o.newGround = function(img)
