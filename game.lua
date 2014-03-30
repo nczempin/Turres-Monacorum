@@ -12,6 +12,9 @@ function love.turris.newGame()
 	o.offsetY = 0.0
 	o.offsetChange = false
 	o.init = function()
+		o.setMap(turMap.getMap())
+		o.baseX = math.floor(o.map.width / 2 + 0.5)
+		o.baseY = math.floor(o.map.height / 2 + 0.5)
 		o.newGround("gfx/ground01.png")
 		o.newTower("gfx/tower00")
 		o.newTower("gfx/tower01")
@@ -19,26 +22,27 @@ function love.turris.newGame()
 		o.newTower("gfx/tower03")
 		o.towers = {}
 		o.towerCount = 0 -- TODO: get the correct number of towers (and fill the tower array)
-		o.setMap(turMap.getMap())
-		o.map.setState(2, 2, 1)
-		local t = {}
-		t.x = 2
-		t.y = 2
-		o.towers[o.towerCount] =t
-		o.towerCount = o.towerCount +1
-		
-		o.map.setState(2, 3, 1)
-		o.map.setState(11, 9, 1)
+
+		o.addTower(2,2,1)
+		o.addTower(2,3,1)
+		o.addTower(11, 9, 1)
+		o.addTower(2, o.baseY, 1) --TODO debugging tower to block the path right away
 		o.map.setState(2, 9, 4)
 		o.map.setState(7, 3, 3)
-		o.baseX = math.floor(o.map.width / 2 + 0.5)
-		o.baseY = math.floor(o.map.height / 2 + 0.5)
 		o.map.setState(o.baseX, o.baseY, 2)
-		o.map.setState(2, o.baseY, 1)
 		local creepImg = G.newImage("gfx/creep00_diffuse.png")
 		for i = 1, o.enemyCount do
 			o.enemies[i]= love.turris.newEnemy(creepImg,i-1,o.baseY)
 		end
+	end
+	o.addTower = function(x,y,type)
+		local t = {}
+		t.x = x
+		t.y = y
+		o.map.setState(t.x, t.y, type)
+		o.towers[o.towerCount] =t
+		o.towerCount = o.towerCount +1 -- TODO this is unsafe
+
 	end
 	o.update = function(dt)
 		o.dayTime = o.dayTime + dt * 0.1
@@ -120,16 +124,15 @@ function love.turris.newGame()
 		o.drawShots()
 	end
 	o.drawShots = function()
-	local e = o.enemies[1]
-	local x, y = e.x, e.y
+		local e = o.enemies[1]		-- TODO this is a hack because I know there's only one creep for now
+
+		local x, y = e.x, e.y
 		G.setColor(255, 0, 0)
-	o.drawLine(2,2, x,y)
-		for i = 1, o.towerCount do
-			 -- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
-			 -- TODO this is a hack because I know there's only one creep for now
-			 local e = o.enemies[1]
-			 local t = o.towers[i]
-			 
+		for i = 1, o.towerCount-1 do
+			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
+			local t = o.towers[i]
+			o.drawLine(t.x,t.y, x,y) -- TODO use tower coordinates
+
 		end
 	end
 	o.drawPaths = function()
@@ -148,8 +151,8 @@ function love.turris.newGame()
 	end
 	-- draw a line in world coordinates
 	o.drawLine = function(x1,y1,x2,y2)
-				G.line((x1-0.5)*o.map.tileWidth, (y1-0.5)*o.map.tileHeight,(x2-0.5)*o.map.tileWidth, (y2-0.5)*o.map.tileHeight)
-	
+		G.line((x1-0.5)*o.map.tileWidth, (y1-0.5)*o.map.tileHeight,(x2-0.5)*o.map.tileWidth, (y2-0.5)*o.map.tileHeight)
+
 	end
 	o.drawEnemies = function()
 		for i = 1, o.enemyCount do
