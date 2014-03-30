@@ -30,6 +30,17 @@ function love.turris.newGame()
 		o.map.setState(7, 3, 3)
 		o.map.setState(o.baseX, o.baseY, 2)
 
+		o.imgLaser = G.newImage("gfx/laserbeam_blue.png")
+		o.imgLaser:setWrap("repeat", "repeat")
+		local vertices = {
+			{ 0, 0, 0, 0, 255, 0, 0,},
+			{ o.imgLaser:getWidth(), 0, 1, 0, 0, 255, 0 },
+			{ o.imgLaser:getWidth(), o.imgLaser:getHeight(), 1, 1, 0, 0, 255 },
+			{ 0, o.imgLaser:getHeight(), 0, 1, 255, 255, 0 },
+		}
+
+		o.mshLaser = love.graphics.newMesh(vertices, o.imgLaser, "fan")
+
 		o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
 		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
 		for i = 1, o.enemyCount do
@@ -156,8 +167,29 @@ function love.turris.newGame()
 		for i = 1, o.towerCount do
 			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
 			local t = o.towers[i]
-			o.drawLine(t.x,t.y, x,y) -- TODO use tower coordinates
-
+			--o.drawLine(t.x,t.y, x,y) -- TODO use tower coordinates
+			local tx = (t.x - 0.5) * o.map.tileWidth + o.offsetX
+			local ty = (t.y - 0.5) * o.map.tileHeight + o.offsetY
+			local ex = (e.x - 0.5) * o.map.tileWidth + o.offsetX
+			local ey = (e.y - 0.5) * o.map.tileHeight + o.offsetY
+			local direction = math.atan2(tx - ex, ey - ty) + math.pi * 0.5
+			local length = math.sqrt(math.pow(tx - ex, 2) + math.pow(ty - ey, 2))
+			local timer = -math.mod(love.timer.getTime() * 2.0, 1.0)
+			G.setBlendMode("additive")
+			--local vertices = {
+				--{ 0, 0, timer, 0, 255, 0, 0,},
+				--{ o.imgLaser:getWidth(), 0, timer + 1, 0, 0, 255, 0 },
+				--{ o.imgLaser:getWidth(), o.imgLaser:getHeight(), timer + 1, 1, 0, 0, 255 },
+				--{ 0, o.imgLaser:getHeight(), timer, 1, 255, 255, 0 },
+			--}
+			local vertices = {
+				{ 0, 0, timer, 0, 255, 127, 0 },
+				{ o.imgLaser:getWidth(), 0, timer + 1, 0, 0, 127, 255 },
+				{ o.imgLaser:getWidth(), o.imgLaser:getHeight(), timer + 1, 1, 0, 127, 255 },
+				{ 0, o.imgLaser:getHeight(), timer, 1, 255, 127, 0 },
+			}
+			o.mshLaser:setVertices(vertices)
+			G.draw(o.mshLaser, (t.x - 0.5) * o.map.tileWidth + o.offsetX, (t.y - 0.5) * o.map.tileHeight + o.offsetY, direction, length / o.imgLaser:getWidth(), 1, 0, 64)
 		end
 	end
 

@@ -140,6 +140,7 @@ function getclickedfield(clickx,clicky)
 	print("clicked field "..x..", "..y)
 	return x,y
 end
+
 function love.turris.checkrightclick(clickx,clicky)
 	currentgstate=love.getgamestate()
 	if currentgamestate==1 then --ingame
@@ -148,9 +149,6 @@ function love.turris.checkrightclick(clickx,clicky)
 		--turrets will be removed
 	end
 end
-
-
-
 
 function gui.drawMainMenu()	
 	local buttonDistance = 40
