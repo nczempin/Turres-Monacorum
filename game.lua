@@ -52,6 +52,12 @@ function love.turris.newGame()
 			t.type = type
 			o.map.setState(t.x, t.y, type)
 			--o.towers[o.towerCount] =t
+			
+			if(currentgamestate ~= 0) then
+				love.sounds.playSound("sounds/robo_stand_up.mp3")
+			end
+
+			
 			if o.towers.next<o.towers.maxamount then
 			o.towers[o.towers.next] = {next = towers, value =t}
 			else 
