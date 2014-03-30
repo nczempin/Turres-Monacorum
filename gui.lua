@@ -61,13 +61,13 @@ function love.turris.checkButtonPosition(clickx,clicky)
 		local clickedfieldy=((clicky-turGame.offsetY)-((clicky-turGame.offsetY)%turMap.tileHeight))/turMap.tileHeight+1
 		print("clicked field "..clickedfieldx..", "..clickedfieldy)
 		if not(clickedfieldx<0 or clickedfieldx>=turMap.width or clickedfieldy<0 or clickedfieldy>=turMap.height) then
-			if turMap.getState(clickedfieldx,clickedfieldy)==0 then
+			--if turMap.getState(clickedfieldx,clickedfieldy)==0 then
 				--turMap.setstate(clickedfieldx,clickedfieldy,1)
 				turGame.addTower(clickedfieldx,clickedfieldy,1)
-				print("Turret would have been placed at "..clickedfieldx..", "..clickedfieldy)
+				--print("Turret would have been placed at "..clickedfieldx..", "..clickedfieldy)
 			--elseif turMap.getstate(clickedfieldx,clickedfieldy) then
 				--print("Turret would have been removed at "..clickedfieldx..", "..clickedfieldy)
-			end
+			--end
 		end
 	--love.changegamestate(0)
 	--love.turris.reinit()
@@ -146,13 +146,18 @@ function gui.drawMainMenu()
 end
 
 function love.turris.mainmenubuttonpushed()
+
 	if(activemenu.start==true) then
+		love.sounds.playSound("sounds/button_pressed.wav")
 		love.turris.startGame()
 	elseif(activemenu.load==true) then
+		love.sounds.playSound("sounds/button_deactivated.wav")
 		love.turris.showLoadWindow()
 	elseif(activemenu.settings) then
+		love.sounds.playSound("sounds/button_deactivated.wav")
 		love.turris.openSettings()
 	elseif(activemenu.quit) then
+		love.sounds.playSound("sounds/button_pressed.wav")
 		love.turris.quitGame()
 	end
 	activemenu.start = false

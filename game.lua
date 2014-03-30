@@ -38,13 +38,15 @@ function love.turris.newGame()
 		end
 	end
 	o.addTower = function(x,y,type)
-		o.towerCount = o.towerCount +1 -- TODO this is unsafe
-		local t = {}
-		t.x = x
-		t.y = y
-		o.map.setState(t.x, t.y, type)
-		o.towers[o.towerCount] =t
-
+		if o.map.getState(x,y)==0 then
+			o.towerCount = o.towerCount +1 -- TODO this is unsafe
+			local t = {}
+			t.x = x
+			t.y = y
+			o.map.setState(t.x, t.y, type)
+			o.towers[o.towerCount] =t
+			print("Turret was placed at "..x..", "..y)
+		end
 	end
 	o.update = function(dt)
 		o.dayTime = o.dayTime + dt * 0.1
