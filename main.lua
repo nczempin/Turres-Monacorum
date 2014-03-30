@@ -27,9 +27,17 @@ function love.getgamestate()
 	return currentgamestate
 end
 
+
+function love.turris.reinit()
+	turGame = love.turris.newGame()
+	turMap = love.turris.newMap(13, 13, 64, 48)
+	turGame.init()
+end
+
 function love.changegamestate(newgamestate)
 	currentgamestate = newgamestate
 end
+
 function love.update(dt)
 	if (currentgamestate == 1)then
 		turGame.update(dt)
@@ -87,6 +95,10 @@ function love.keypressed(key, code)
 
 	if key == "escape" then
 		buttonDetected = 1
+		if not(love.getgamestate()==0) then
+			love.changegamestate(0)
+			love.turris.reinit()
+		end
 		love.turris.checkButtonPosition(320, 96)
 	end
 end

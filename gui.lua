@@ -56,7 +56,21 @@ function love.turris.checkButtonPosition(clickx,clicky)
 		print("click not within x range")
 	end
 	elseif currentgstate == 1 then --ingame
-		love.changegamestate(0)
+		--love.changegamestate(0)
+		local clickedfieldx=((clickx-turGame.offsetX)-((clickx-turGame.offsetX)%turMap.tileWidth))/turMap.tileWidth
+		local clickedfieldy=((clicky-turGame.offsetY)-((clicky-turGame.offsetY)%turMap.tileHeight))/turMap.tileHeight
+		print("clicked field "..clickedfieldx..", "..clickedfieldy)
+		if not(clickedfieldx<0 or clickedfieldx>=turMap.width or clickedfieldy<0 or clickedfieldy>=turMap.height) then
+			if turMap.getState(clickedfieldx,clickedfieldy)==0 then
+				--turMap.setstate(clickedfieldx,clickedfieldy,1)
+				turGame.addTower(clickedfieldx,clickedfieldy,1)
+				print("Turret would have been placed at "..clickedfieldx..", "..clickedfieldy)
+			--elseif turMap.getstate(clickedfieldx,clickedfieldy) then
+				--print("Turret would have been removed at "..clickedfieldx..", "..clickedfieldy)
+			end
+		end
+	--love.changegamestate(0)
+	--love.turris.reinit()
 		--jumps back to the main menu at the moment
 
 	elseif currentgstate == 4 then --game over
