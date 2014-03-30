@@ -48,7 +48,7 @@ function love.turris.newGame()
 		o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
 		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
 		for i = 1, o.enemyCount do
-			o.enemies[i]= love.turris.newEnemy(creepImg,o.map,1,1,o.baseX,o.baseY)
+			o.enemies[i]= love.turris.newEnemy(creepImg,o.map,1,o.baseY,o.baseX,o.baseY)
 		end
 	end
 	o.addTower = function(x,y,type)
@@ -152,6 +152,7 @@ function love.turris.newGame()
 		end
 		o.creepAnim:update(dt)
 	end
+	
 	o.drawMap = function()
 		local dayTime = math.abs(math.sin(o.dayTime))
 		lightWorld.setAmbientColor(dayTime * 239 + 15, dayTime * 191 + 31, dayTime * 143 + 63)

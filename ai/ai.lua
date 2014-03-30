@@ -5,10 +5,10 @@ function aStar(start, goal, all_nodes)
 
 	local valid_node_func = function ( node, neighbor )
 
---		local state = turMap.getState(neighbor.x, neighbor.y)
---		if state  ~= 0 then
---			return false
---		end
+		local state = turMap.getState(neighbor.x, neighbor.y)
+		if state  == 1 then
+			return false
+		end
 		local MAX_DIST = 1
 
 		if
