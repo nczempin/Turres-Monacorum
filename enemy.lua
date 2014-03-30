@@ -25,11 +25,10 @@ function love.turris.newEnemy(img, map)
 		o.yVel = dirY*o.speed
 	end
 
-	o.updateVelocity(1,0)
+	o.updateVelocity(1,0) --TODO this should be determined from the current position to the next waypoint
 	o.getOrientation = function()
 		local x,y = love.turris.normalize(o.xVel, o.yVel)
-		--print (x,y)
-		return x,y
+			return x,y
 	end
 
 	return o
@@ -48,7 +47,6 @@ function love.turris.updateEnemies(o,dt)
 		local y = e.y
 
 		-- check if waypoint reached
-
 		local wp = e.waypoints[e.currentWaypoint]
 		if math.abs(wp[1]-x)<0.1 and math.abs(wp[2] -y)<0.1 then
 			-- waypoint reached
