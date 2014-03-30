@@ -134,9 +134,7 @@ function gui.createButtons()
 
 	--Creates the buttons and pushes it into the buttons array
 	for i = 1, #buttonNames do		
-		buttons[#buttons +1] = gui.button(startx,starty,buttonsizeh,buttonsizev,buttonNames[i])
-		starty = starty + (buttonDistance + buttonsizev)
-		buttons[#buttons +1] = gui.button(startx, starty, buttonsizeh, buttonsizev, buttonNames[i])
+		buttons[#buttons + 1] = gui.button(startx, starty, buttonsizeh, buttonsizev, buttonNames[i])
 		starty = starty + 80
 	end
 end
