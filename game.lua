@@ -53,8 +53,9 @@ function love.turris.newGame()
 			o.map.setState(t.x, t.y, type)
 			--o.towers[o.towerCount] =t
 			
+			--Playing Sound When Tower is Placed
 			if(currentgamestate ~= 0) then
-				love.sounds.playSound("sounds/robo_stand_up.mp3")
+				love.sounds.playSound("sounds/tower_1.mp3")
 			end
 
 			
