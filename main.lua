@@ -34,7 +34,7 @@ function love.turris.reinit()
 	turGame.init()
 end
 
-function love.changegamestate(newgamestate)
+function love.setgamestate(newgamestate)
 	currentgamestate = newgamestate
 end
 
