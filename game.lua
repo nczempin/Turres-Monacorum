@@ -178,8 +178,9 @@ function love.turris.newGame()
 			local y = e.y
 			local img = e.img
 			G.setColor(255, 255, 255)
-			o.creepAnim:seek(math.floor(e.getDirection()))
-			o.creepAnim:draw(x * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY)
+			print(e.getDirection() / (math.pi * 0.5))
+			o.creepAnim:seek(e.getDirection() / (math.pi * 0.25) + 1)
+			o.creepAnim:draw(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY)
 			--G.draw(o.creepImg, o.creepQuad, x * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY, 0, -1.0 / o.creepImg:getWidth() * o.map.tileWidth, 1.0 / (o.creepImg:getHeight() / 8.0) * o.map.tileHeight)
 			-- health
 			if e.health < e.maxHealth then

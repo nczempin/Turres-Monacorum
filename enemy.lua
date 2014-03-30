@@ -4,6 +4,7 @@ function love.turris.newEnemy(img, map)
 	local o = {}
 	o.generateWaypoints = function(map)
 		local wp = {{0,map.baseY},{1,map.baseY},{1,map.baseY-1},{3,map.baseY-1},{3,map.baseY},{map.baseX,map.baseY}}
+
 		return wp
 	end
 	o.img = img
