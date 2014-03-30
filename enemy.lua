@@ -1,15 +1,32 @@
 require "ai/ai"
 
-function love.turris.newEnemy(img, map)
+function love.turris.newEnemy(img, map, baseX, baseY)
 	local o = {}
-	o.generateWaypoints = function(map)
-		local wp = {{0,map.baseY},{1,map.baseY},{1,map.baseY-1},{3,map.baseY-1},{3,map.baseY},{map.baseX,map.baseY}}
+	o.generateWaypoints = function(map, startX, startY, goalX, goalY)
+		local mapXmax = map.width
+		local mapYmax = map.height
+		print ("x: "..startX)
+		print ("y: "..startY)
+		--goal found
+		if (startX==goalX and startY==goalY)then
+			local wp = {{goalX,goalY}}
+			return wp
+		end
+		local visited = {}
+		for i = 1, map.width do
+			for j = 1, 20 do
+				visited[j]=false
+				visited[i]=visited[j]
+			end
+		end
+
+		local wp = {{startX,startY},{goalX,goalY}}
 		return wp
 	end
 	o.img = img
 	o.x = {}
 	o.y = {}
-	o.waypoints = o.generateWaypoints(map)
+	o.waypoints = o.generateWaypoints(map,0,baseY,baseX,baseY)
 
 	o.currentWaypoint = 2
 	o.health = 100.0
@@ -28,7 +45,7 @@ function love.turris.newEnemy(img, map)
 	o.updateVelocity(1,0) --TODO this should be determined from the current position to the next waypoint
 	o.getOrientation = function()
 		local x,y = love.turris.normalize(o.xVel, o.yVel)
-			return x,y
+		return x,y
 	end
 
 	return o
