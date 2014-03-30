@@ -42,6 +42,8 @@ end
 function love.draw()
 	W.setTitle("FPS: " .. love.timer.getFPS())
 	love.postshader.setBuffer("render")
+	G.setColor(0, 0, 0)
+	G.rectangle("fill", 0, 0, W.getWidth(), W.getHeight())
 
 	turGame.draw()
 
