@@ -12,24 +12,31 @@ function love.turris.newEnemy(img, map)
 	o.health = 100.0
 	o.maxHealth = 100.0
 
+	o.getOrientation = function()
+		return o.xVel, o.yVel -- TODO normalize
+	end
 	return o
 end
 
 function love.turris.updateEnemies(o,dt)
-		for i = 1, o.enemyCount do
-			o.enemies[i].x = o.enemies[i].x+o.enemies[i].xVel*dt
-			o.enemies[i].y = o.enemies[i].y+o.enemies[i].yVel*dt
+	for i = 1, o.enemyCount do
+		o.enemies[i].x = o.enemies[i].x+o.enemies[i].xVel*dt
+		o.enemies[i].y = o.enemies[i].y+o.enemies[i].yVel*dt
 
-			local x = o.enemies[i].x
-			local y = o.enemies[i].y
-			if math.abs(o.baseX - x) <1 and math.abs(y - o.baseY) < 1 then
-				-- Game Over!!! (for now)
-				-- TODO: destroy ship (explosion)
-				-- TODO: destroy base (explosion!)
-				-- TODO: after explosions have finished -> transition to game over state
-				love.sounds.playSound("sounds/main_base_explosion.wav")
-				love.setgamestate(4)
-				gameOverEffect = 0
-			end
+		local x = o.enemies[i].x
+		local y = o.enemies[i].y
+		
+		-- check if waypoint reached
+		
+		-- check for and handle game over
+		if math.abs(o.baseX - x) <1 and math.abs(y - o.baseY) < 1 then
+			-- Game Over!!! (for now)
+			-- TODO: destroy ship (explosion)
+			-- TODO: destroy base (explosion!)
+			-- TODO: after explosions have finished -> transition to game over state
+			love.sounds.playSound("sounds/main_base_explosion.wav")
+			love.setgamestate(4)
+			gameOverEffect = 0
 		end
+	end
 end
