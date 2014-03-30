@@ -21,6 +21,7 @@ function love.load()
 	turMap = love.turris.newMap(13, 13, 64, 48)
 	turGame.init()
 	gameOverLayer = love.turris.newGameOverLayer()
+	createButtons()
 
 	bloomOn = true
 end
@@ -92,11 +93,9 @@ function love.keypressed(key, code)
 	end
 
 	if key == "escape" then
-		buttonDetected = 1
 		if not(love.getgamestate()==0) then
 			love.setgamestate(0)
 			love.turris.reinit()
 		end
-		love.turris.checkButtonPosition(320, 96)
 	end
 end

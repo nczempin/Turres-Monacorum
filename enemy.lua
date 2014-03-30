@@ -61,6 +61,9 @@ function love.turris.newEnemy(img, map, x,y,baseX, baseY)
 	o.speed = 2
 	-- type end
 
+	--o.shadow = {}
+	--o.shadow = lightWorld.newImage(o.img)
+	--o.shadow.setShadowType("image",32,32, 1.0)
 
 	o.updateVelocity = function(dirX,dirY)
 		o.xVel = dirX*o.speed

@@ -131,6 +131,7 @@ function love.light.newWorld()
 								love.graphics.polygon("fill", unpack(LOVE_LIGHT_BODY[k].data))
 							end
 						end
+
 						if LOVE_LIGHT_BODY[k].shadowType == "image" and LOVE_LIGHT_BODY[k].img then
 							love.graphics.setBlendMode("alpha")
 							local length = 1.0
