@@ -46,9 +46,31 @@ function love.mousepressed(x, y, key)
 	end
 end
 
+--Function to look if Mousbutton is over an button
+function gui.mouseMove()
+	local mouseXPos = love.mouse.getX()
+	local mouseYPos = love.mouse.getX()
+	
+	--Check if Mouse is over an button
+	for i = 1, #buttons do
+		--Check if mouse is over Button
+		if buttons[i].isOverButton(mouseXPos,mouseYPos) then
+			buttons[i].hover = true
+		else
+			buttons[i].hover = false
+		end
+	end
+end
 
 
-function isinbutton(clickx,clicky)
+--Updates Everything in the GUI --TODO--  PLZ ADD ALL OTHER METHODS 
+function gui.update()
+	gui.mouseMove()
+end
+
+
+
+function gui.isinbutton(clickx,clicky)
 	for i = 1, #buttons do
 		if buttons[i].isOverButton(clickx, clicky) == true  then
 			if buttons[i].name == "Start" then
@@ -73,7 +95,7 @@ end
 -- @param height 
 -- @param name The Name of the button
 
-function button(xPos, yPos, width, height, name)
+function gui.button(xPos, yPos, width, height, name)
 
 	local o = {}
 
@@ -84,6 +106,7 @@ function button(xPos, yPos, width, height, name)
 	o.height 	= height
 	o.name 		= name
 	o.status 	= false
+	o.hover 	= false
  
 	--Returns true if the Position is inside an Button
 	function o.isOverButton(mouseX, mouseY)
@@ -101,7 +124,7 @@ end
 
 --Function to Create Buttons
 -- Usses The Array buttonNames to Crate The buttons
-function createButtons()
+function gui.createButtons()
 
 	local startx = screenWidth / 2 - (buttonsizeh / 2)
 	local starty = (screenHeight / 5) - (buttonsizev / 2)
@@ -109,7 +132,7 @@ function createButtons()
 	
 	--Creates the buttons and pushes it into the buttons array
 	for i = 1, #buttonNames do		
-		buttons[#buttons +1] = button(startx,starty,buttonsizeh,buttonsizev,buttonNames[i])
+		buttons[#buttons +1] = gui.button(startx,starty,buttonsizeh,buttonsizev,buttonNames[i])
 		starty = starty + (buttonDistance + buttonsizev)
 	end
 
@@ -118,7 +141,7 @@ end
 function love.turris.checkleftclick(clickx,clicky)
 	currentgstate=love.getgamestate()
 	if currentgstate == 0 then--MainMenu
-		isinbutton(clickx,clicky)
+		gui.isinbutton(clickx,clicky)
 		love.turris.mainmenubuttonpushed()
 	elseif currentgstate == 1 then --ingame
 		--love.setgamestate(0)

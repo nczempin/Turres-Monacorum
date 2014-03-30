@@ -21,7 +21,7 @@ function love.load()
 	turMap = love.turris.newMap(13, 13, 64, 48)
 	turGame.init()
 	gameOverLayer = love.turris.newGameOverLayer()
-	createButtons()
+	gui.createButtons()
 
 	bloomOn = true
 end
@@ -47,6 +47,7 @@ function love.update(dt)
 		gameOverEffect = gameOverEffect + dt
 	end
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
+	gui.update()
 end
 
 function love.draw()
