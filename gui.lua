@@ -32,11 +32,15 @@ local activemenu = {
 function love.mousepressed(x, y, key)
 	if(key=="l") then
 		buttonDetected=1
-		love.turris.checkButtonPosition(x,y)
+		love.turris.checkleftclick(x,y)
+	end
+	if(key=="r") then
+		buttonDetected=2
+		love.turris.checkrightclick(x,y)
 	end
 end
 
-function love.turris.checkButtonPosition(clickx,clicky)
+function love.turris.checkleftclick(clickx,clicky)
 	currentgstate=love.getgamestate()
 	if currentgstate == 0 then--MainMenu
 		if (width / 2)-(buttonsizeh / 2) * guiScale < clickx and (width / 2)+(buttonsizeh / 2) * guiScale > clickx then -- half horizontal screen -menu button <x or x>half horizontal screen + menu button
@@ -56,20 +60,19 @@ function love.turris.checkButtonPosition(clickx,clicky)
 		print("click not within x range")
 	end
 	elseif currentgstate == 1 then --ingame
-		--love.changegamestate(0)
-		local clickedfieldx=((clickx-turGame.offsetX)-((clickx-turGame.offsetX)%turMap.tileWidth))/turMap.tileWidth
-		local clickedfieldy=((clicky-turGame.offsetY)-((clicky-turGame.offsetY)%turMap.tileHeight))/turMap.tileHeight
-		print("clicked field "..clickedfieldx..", "..clickedfieldy)
-		if not(clickedfieldx<0 or clickedfieldx>=turMap.width or clickedfieldy<0 or clickedfieldy>=turMap.height) then
-			if turMap.getState(clickedfieldx,clickedfieldy)==0 then
+		--love.setgamestate(0)
+		local clickedfieldx,clickedfieldy=getclickedfield(clickx,clicky)
+		print(clickedfield)
+		--if not(clickedfield.x<0 or clickedfield.x>=turMap.width or clickedfield.y<0 or clickedfield.y>=turMap.height) then
+			--if turMap.getState(clickedfieldx,clickedfieldy)==0 then
 				--turMap.setstate(clickedfieldx,clickedfieldy,1)
 				turGame.addTower(clickedfieldx,clickedfieldy,1)
-				print("Turret would have been placed at "..clickedfieldx..", "..clickedfieldy)
+				--print("Turret would have been placed at "..clickedfieldx..", "..clickedfieldy)
 			--elseif turMap.getstate(clickedfieldx,clickedfieldy) then
 				--print("Turret would have been removed at "..clickedfieldx..", "..clickedfieldy)
-			end
-		end
-	--love.changegamestate(0)
+			--end
+		--end
+	--love.setgamestate(0)
 	--love.turris.reinit()
 		--jumps back to the main menu at the moment
 
@@ -78,6 +81,20 @@ function love.turris.checkButtonPosition(clickx,clicky)
 	end
 end
 
+function getclickedfield(clickx,clicky)
+	local x=((clickx-turGame.offsetX)-((clickx-turGame.offsetX)%turMap.tileWidth))/turMap.tileWidth+1
+	local y=((clicky-turGame.offsetY)-((clicky-turGame.offsetY)%turMap.tileHeight))/turMap.tileHeight+1
+	print("clicked field "..x..", "..y)
+	return x,y
+end
+function love.turris.checkrightclick(clickx,clicky)
+	currentgstate=love.getgamestate()
+	if currentgamestate==1 then --ingame
+		clickedfieldx,clickedfieldy=getclickedfield(clickx,clicky)
+		turMap.setState(clickedfieldx,clickedfieldy,0)
+		--turrets will be removed
+	end
+end
 function gui.drawMainMenu()
 	love.graphics.setBackgroundColor(100,100,220)
 
@@ -146,13 +163,18 @@ function gui.drawMainMenu()
 end
 
 function love.turris.mainmenubuttonpushed()
+
 	if(activemenu.start==true) then
+		love.sounds.playSound("sounds/button_pressed.wav")
 		love.turris.startGame()
 	elseif(activemenu.load==true) then
+		love.sounds.playSound("sounds/button_deactivated.wav")
 		love.turris.showLoadWindow()
 	elseif(activemenu.settings) then
+		love.sounds.playSound("sounds/button_deactivated.wav")
 		love.turris.openSettings()
 	elseif(activemenu.quit) then
+		love.sounds.playSound("sounds/button_pressed.wav")
 		love.turris.quitGame()
 	end
 	activemenu.start = false
@@ -162,7 +184,7 @@ function love.turris.mainmenubuttonpushed()
 end
 
 function love.turris.startGame()
-	love.changegamestate(1)
+	love.setgamestate(1)
 end
 function love.turris.showLoadWindow() -- show list with all savestates or save files
 	print("Saving and loading the game is not yet implemented")
