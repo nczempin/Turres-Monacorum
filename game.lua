@@ -27,7 +27,7 @@ function love.turris.newGame()
 		local creepImg = G.newImage("gfx/creep00_diffuse.png")
 	for i = 1, o.enemyCount do
 		o.enemies[i]= love.turris.newEnemy(creepImg)
-		o.enemies[i].x = i - 2
+		o.enemies[i].x = i - 1
 		o.enemies[i].y = o.baseY
 	end
 	end
