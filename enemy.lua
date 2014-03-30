@@ -142,7 +142,7 @@ function love.turris.updateEnemies(o,dt)
 			-- TODO: destroy ship (explosion)
 			-- TODO: destroy base (explosion!)
 			-- TODO: after explosions have finished -> transition to game over state
-			love.sounds.playSound("sounds/main_base_explosion.wav")
+			love.sounds.playSound("sounds/einschlag.mp3")
 			love.setgamestate(4)
 			gameOverEffect = 0
 		end

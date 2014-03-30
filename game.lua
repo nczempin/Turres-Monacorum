@@ -5,7 +5,6 @@ function love.turris.newGame()
 	o.map = {}
 	o.ground = {}
 	o.towerType = {}
-	--o.towers = {}
 	o.towers = {} -- circular list
 	o.towers.maxamount = 0
 	o.towers.amount = 0
@@ -71,31 +70,31 @@ function love.turris.newGame()
 
 			
 			if o.towers.next<o.towers.maxamount then
-			o.towers[o.towers.next] = {next = towers, value =t}
-			else 
-			while (o.towers) do
-				if(o.towers.next==o.towers.maxamount) then 
-				o.towers.next=0
+				o.towers[o.towers.next] = {next = towers, value =t}
+			else
+				while (o.towers) do
+					if(o.towers.next==o.towers.maxamount) then 
+						o.towers.next=0
+					end
+					o.towers.next = o.towers.next+1
 				end
-				o.towers.next = o.towers.next+1
+				o.towers.amount = o.towers.amount+1
+				print("Tower was placed at "..x..", "..y)
 			end
-			o.towers.amount = o.towers.amount+1
-			print("Tower was placed at "..x..", "..y)
 		end
 	end
 	o.removeTower = function(x,y) --can remove from a position
-		if (not x or not y) then return end
-		--[[local state =o.map.getState(x,y)
+		if (not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height) then return end
+		local state =o.map.getState(x,y)
 		if state and not(state==0) then
 			o.map.setState(0)
 			for i=1,o.towerCount do
-			--o.towers[o.towerCount]
-			if o.towers[i] and o.towers[i].value and o.towers[i].value.x==x and o.towers[i].value.y==y then
-				o.towers[i] == nil
+				if o.towers[i] and o.towers[i].value and o.towers[i].value.x==x and o.towers[i].value.y==y then
+					o.towers[i] = nil
+				end
+				o.towerCount = o.towerCount-1
+				print("Tower was removed at "..x..", "..y)
 			end
-			o.towerCount = o.towerCount-1
-			print("Tower was removed at "..x..", "..y)
-			--]]
 		end
 	end
 	o.update = function(dt)
@@ -202,6 +201,7 @@ function love.turris.newGame()
 
 		local x, y = e.x, e.y
 		G.setColor(255, 0, 0)
+
 		for i = 1, o.towers.amount do
 			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
 			local t = o.towers[i]
