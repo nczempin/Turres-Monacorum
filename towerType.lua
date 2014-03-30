@@ -1,4 +1,4 @@
-function love.turris.newTower(img)
+function love.turris.newTowerType(img)
 	local o = {}
 	o.img = G.newImage(img .. "_diffuse.png")
 	o.normal = G.newImage(img .. "_normal.png")
