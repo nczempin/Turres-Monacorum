@@ -5,7 +5,11 @@ function love.turris.newGame()
 	o.map = {}
 	o.ground = {}
 	o.towerType = {}
-	o.towers = {}
+	--o.towers = {}
+	o.towers = {} -- circular list
+	o.towers.maxamount = 0
+	o.towers.amount = 0
+	o.towers.next = 1
 	o.enemies = {}
 	o.enemyCount = 1
 	o.dayTime = 90
@@ -16,12 +20,13 @@ function love.turris.newGame()
 		o.setMap(turMap.getMap())
 		o.baseX = math.floor(o.map.width / 2 + 0.5)
 		o.baseY = math.floor(o.map.height / 2 + 0.5)
+		o.towers.maxamount = o.map.width*o.map.height+2
 		o.newGround("gfx/ground01.png")
 		o.newTowerType("gfx/tower00")
 		o.newTowerType("gfx/tower01")
 		o.newTowerType("gfx/tower02")
 		o.newTowerType("gfx/tower03")
-		o.towerCount = 0 -- TODO: get the correct number of towers (and fill the tower array)
+		--o.towerCount = 0 -- NOT TO DO: get the correct number of towers (and fill the tower array)
 		o.addTower(2, 2,1)
 		o.addTower(11, 9, 1)
 		--o.addTower(2, o.baseY, 1) --TODO debugging tower to block the path right away
@@ -48,16 +53,49 @@ function love.turris.newGame()
 		end
 	end
 	o.addTower = function(x,y,type)
-		if not x or not y or not type then return end
+		if not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height or not type or not (o.towers.amount<o.towers.maxamount) then return end
 		local state = o.map.getState(x,y)
 		if state and state ==0 then
-			o.towerCount = o.towerCount +1 -- TODO this is unsafe
+			--o.towerCount = o.towerCount +1 -- NOT TO DO this is unsafe
 			local t = {}
 			t.x = x
 			t.y = y
+			t.type = type
 			o.map.setState(t.x, t.y, type)
-			o.towers[o.towerCount] =t
-			print("Turret was placed at "..x..", "..y)
+			--o.towers[o.towerCount] =t
+			
+			--Playing Sound When Tower is Placed
+			if(currentgamestate ~= 0) then
+				love.sounds.playSound("sounds/tower_1.mp3")
+			end
+
+			
+			if o.towers.next<o.towers.maxamount then
+			o.towers[o.towers.next] = {next = towers, value =t}
+			else 
+			while (o.towers) do
+				if(o.towers.next==o.towers.maxamount) then 
+				o.towers.next=0
+				end
+				o.towers.next = o.towers.next+1
+			end
+			o.towers.amount = o.towers.amount+1
+			print("Tower was placed at "..x..", "..y)
+		end
+	end
+	o.removeTower = function(x,y) --can remove from a position
+		if (not x or not y) then return end
+		--[[local state =o.map.getState(x,y)
+		if state and not(state==0) then
+			o.map.setState(0)
+			for i=1,o.towerCount do
+			--o.towers[o.towerCount]
+			if o.towers[i] and o.towers[i].value and o.towers[i].value.x==x and o.towers[i].value.y==y then
+				o.towers[i] == nil
+			end
+			o.towerCount = o.towerCount-1
+			print("Tower was removed at "..x..", "..y)
+			--]]
 		end
 	end
 	o.update = function(dt)
@@ -164,7 +202,7 @@ function love.turris.newGame()
 
 		local x, y = e.x, e.y
 		G.setColor(255, 0, 0)
-		for i = 1, o.towerCount do
+		for i = 1, o.towers.amount do
 			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
 			local t = o.towers[i]
 			--o.drawLine(t.x,t.y, x,y) -- TODO use tower coordinates
@@ -268,6 +306,11 @@ function love.turris.newGame()
 	o.setMap = function(map)
 		o.map = map
 	end
+
+	-- set font
+	--font = G.newImageFont("gfx/font.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\"")
+	--font:setFilter("nearest", "nearest")
+	--G.setFont(font)
 
 	-- create light world
 	lightWorld = love.light.newWorld()
