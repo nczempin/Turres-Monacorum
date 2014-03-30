@@ -165,6 +165,18 @@ function love.turris.newGame()
 			local img = e.img
 			G.setColor(255, 255, 255)
 			G.draw(img, x * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY, 0, -1.0 / img:getWidth() * o.map.tileWidth, 1.0 / img:getHeight() * o.map.tileHeight)
+			-- health
+			G.setColor(0, 0, 0, 127)
+			G.rectangle("fill", (x - 1) * o.map.tileWidth + o.offsetX - 2, (y - 1) * o.map.tileHeight + o.offsetY - 16 - 2, 64 + 4, 8 + 4)
+			G.setColor(255 * math.min((1.0 - e.health / e.maxHealth) * 2.0, 1.0), 255 * math.min((e.health / e.maxHealth) * 1.5, 1.0), 0)
+			G.rectangle("fill", (x - 1) * o.map.tileWidth + o.offsetX + 2, (y - 1) * o.map.tileHeight + o.offsetY - 16 + 2, (64 - 4) * e.health / e.maxHealth, 8 - 4)
+			G.setLineWidth(1)
+			G.setColor(255, 63, 0)
+			G.rectangle("line", (x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY - 16, 64, 8)
+			-- test
+			if e.health > 0.0 then
+				e.health = e.health - 0.1
+			end
 		end
 	end
 	o.newGround = function(img)

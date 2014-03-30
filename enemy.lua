@@ -5,6 +5,8 @@ function love.turris.newEnemy(img)
 	o.y = {}
 	o.xVel = 2.0
 	o.yVel = 0.0
+	o.health = 100.0
+	o.maxHealth = 100.0
 	return o
 end
 function love.turris.updateEnemies(o,dt)
