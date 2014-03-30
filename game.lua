@@ -170,8 +170,8 @@ function love.turris.newGame()
 		o.ground[#o.ground + 1] = G.newImage(img)
 		return o.ground[#o.ground]
 	end
-	o.newTower = function(img)
-		o.tower[#o.tower + 1] = love.turris.newTower(img)
+	o.newTowerType = function(img)
+		o.tower[#o.tower + 1] = love.turris.newTowerType(img)
 		return o.tower[#o.tower]
 	end
 	o.getTower = function(n)
