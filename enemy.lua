@@ -1,8 +1,8 @@
 require "ai/ai"
 
-function love.turris.newEnemy(img, map, baseX, baseY)
+function love.turris.newEnemy(img, map, x,y,baseX, baseY)
 	local o = {}
-		o.generateWaypoints = function(map, startX, startY, goalX, goalY)
+	o.generateWaypoints = function(map, startX, startY, goalX, goalY)
 		local mapXmax = map.width
 		local mapYmax = map.height
 		print ("x: "..startX)
@@ -45,9 +45,9 @@ function love.turris.newEnemy(img, map, baseX, baseY)
 		return wp
 	end
 	o.img = img
-	o.x = {}
-	o.y = {}
-	o.waypoints = o.generateWaypoints(map,0,baseY,baseX,baseY)
+	o.x = x
+	o.y = y
+	o.waypoints = o.generateWaypoints(map,x,y,baseX,baseY)
 
 	o.currentWaypoint = 2
 	o.health = 100.0
