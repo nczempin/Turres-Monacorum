@@ -17,6 +17,7 @@ function love.turris.newGame()
 		o.newTower("gfx/tower01")
 		o.newTower("gfx/tower02")
 		o.newTower("gfx/tower03")
+		o.towerCount = 0 -- TODO: get the correct number of towers (and fill the tower array)
 		o.setMap(turMap.getMap())
 		o.map.setState(2, 2, 1)
 		o.map.setState(2, 3, 1)
@@ -112,13 +113,35 @@ function love.turris.newGame()
 		o.drawMap()
 		o.drawEnemies()
 		o.drawPaths()
+		o.drawShots()
+	end
+	o.drawShots = function()
+		for i = 1, o.towerCount do
+			 -- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
+			 -- TODO this is a hack because I know there's only one creep for now
+			 local e = o.enemies[1]
+			 local t = o.towers[i]
+			 G.line((e.x-0.5))
+		end
 	end
 	o.drawPaths = function()
-	--    for i = 1, o.entryCount do
-	--      local entry = enemyEntrances[i]
-	--    end
-	--local mx, my = love.mouse.getPosition()  -- current position of the mouse
-	--G.line(0,300, mx, my)
+		--    for i = 1, o.entryCount do
+		--      local entry = enemyEntrances[i]
+		--    end
+		--local mx, my = love.mouse.getPosition()  -- current position of the mouse
+		--G.line(0,300, mx, my)
+		for i = 1, o.enemyCount do
+			local e = o.enemies[i]
+			local x = e.x
+			local y = e.y
+			G.setColor(232, 118, 0)
+			o.drawLine(x,y,o.baseX,o.baseY)
+		end
+	end
+	-- draw a line in world coordinates
+	o.drawLine = function(x1,y1,x2,y2)
+				G.line((x1-0.5)*o.map.tileWidth, (y1-0.5)*o.map.tileHeight,(x2-0.5)*o.map.tileWidth, (y2-0.5)*o.map.tileHeight)
+	
 	end
 	o.drawEnemies = function()
 		for i = 1, o.enemyCount do
