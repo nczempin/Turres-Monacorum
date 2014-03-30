@@ -9,21 +9,28 @@ function getAllNodes(map)
 	for i = 1, w do
 		for j = 1, h do
 
-			nodes[k]= {x=i,y=j}
+			nodes[k]= {x=i,y=j,id=k}
 			k = k +1
 		end
 	end
 	return nodes
 end
-
+function findNode(nodes, x, y)
+	for i = 1, #nodes do
+		if nodes[i].x == x and nodes[i].y == y then
+			return nodes[i]
+		end
+	end
+end
 function love.turris.newEnemy(img, map, x,y,baseX, baseY)
 	local o = {}
 	o.generateWaypoints = function(map, startX, startY, goalX, goalY)
-		local start = {x=startX, y=startY}
 		local goal = {x=goalX,y=goalY}
 		local all_nodes = getAllNodes(map)
+		local start = findNode(all_nodes, startX, startY)
+		local goal = findNode(all_nodes, goalX, goalY)
 		local path = aStar(start,goal,all_nodes)
-		print (path)
+		--print (path)
 		--		local mapXmax = map.width
 		--		local mapYmax = map.height
 		--		print ("x: "..startX)

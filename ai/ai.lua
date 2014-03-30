@@ -1,32 +1,33 @@
 require "ai/a-star"
 
 function aStar(start, goal, all_nodes)
-	--	print (#all_nodes)
-	--	for i=1, #all_nodes do
-	--		print (all_nodes[i].x, all_nodes[i].y)
-	--	end
-	-- this function determines which neighbors are valid (e.g., within range)
+	print (start.x,start.y, goal.x,goal.y)
+
 	local valid_node_func = function ( node, neighbor )
 
-		local MAX_DIST = 30000
+		local state = turMap.getState(neighbor.x, neighbor.y)
+		if state  ~= 0 then
+			return false
+		end
+		local MAX_DIST = 1
 
-		-- helper function in the a-star module, returns distance between points
-		if node.x and node.y and neighbor.x and neighbor.y and distance ( node.x, node.y, neighbor.x, neighbor.y ) < MAX_DIST then
-			--print "hello"
+		if
+			distance ( node.x, node.y, neighbor.x, neighbor.y ) <= MAX_DIST then
 			return true
 		end
 		return false
 	end
 
-	local ignore = true -- ignore cached paths
+	--local path = astar.path ( all_nodes [ 2 ], all_nodes [ 100 ], all_nodes, true, valid_node_func )
+	local path = astar.path ( start, goal, all_nodes, true, valid_node_func )
 
-	local path = astar.path ( start, goal, all_nodes, ignore, valid_node_func )
-
-	if path then
-		print "wurst"
-		-- do something with path (a lua table of ordered nodes from start to end)
+	if not path then
+		print ( "No valid path found" )
 	else
-		print "hurznot"
+		for i, node in ipairs ( path ) do
+			print ( "Step " .. i .. " >> " .. node.x..", "..node.y )
+		end
+		return path
 	end
 end
 
