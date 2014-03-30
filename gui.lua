@@ -151,9 +151,10 @@ function gui.drawMainMenu()
 
 	--love.graphics.setColor(0, 0, 0, 91)
 	--love.graphics.rectangle("fill", buttons[1].xPos - 16, buttons[1].yPos - 16, buttons[1].width + 32, buttons[1].height * 4 + 92)
+	local timer = math.sin(love.timer.getTime())
 	G.draw(gui.imgBackground)
 	G.draw(gui.imgMiddleground)
-	G.draw(gui.imgLogo)
+	G.draw(gui.imgLogo, gui.imgLogo:getWidth() * 0.5, gui.imgLogo:getHeight() * 0.5, timer * 0.1, 1, 1, gui.imgLogo:getWidth() * 0.5, gui.imgLogo:getHeight() * 0.5)
 	
 	for i = 1, #buttons do	
 		--G.setBlendMode("alpha")
