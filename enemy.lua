@@ -1,15 +1,53 @@
 require "ai/ai"
 
-function love.turris.newEnemy(img, map)
+function love.turris.newEnemy(img, map, x,y,baseX, baseY)
 	local o = {}
-	o.generateWaypoints = function(map)
-		local wp = {{0,map.baseY},{1,map.baseY},{1,map.baseY-1},{3,map.baseY-1},{3,map.baseY},{map.baseX,map.baseY}}
+	o.generateWaypoints = function(map, startX, startY, goalX, goalY)
+		local mapXmax = map.width
+		local mapYmax = map.height
+		print ("x: "..startX)
+		print ("y: "..startY)
+		--goal found
+		if (startX==goalX and startY==goalY)then
+			local wp = {{goalX,goalY}}
+
+			return wp
+		end
+		local visited = {}
+		for i = 1, map.width do
+			visited[i]={}
+			for j = 1, 20 do
+				visited[i][j]=false
+			end
+		end
+
+
+		-- expand in four compass directions
+		local neighbours ={{startX+1, startY},{startX-1, startY},{startX, startY+1},{startX, startY-1}}
+		for i = 1, #neighbours do
+			local n = neighbours[i]
+			local x, y = n[1],n[2]
+			print (x,y)
+			if x>0 and  y> 0 then
+				if not visited[x][y]then
+					local state = map.getState(x,y)
+					if (state==0)then
+						--empty, so it's okay
+						local d = distance(x,y,goalX,goalY)
+						print ("distance to goal: "..d)
+					end
+				end
+			end
+		end
+
+
+		local wp = {{startX,startY},{goalX,goalY}}
 		return wp
 	end
 	o.img = img
-	o.x = {}
-	o.y = {}
-	o.waypoints = o.generateWaypoints(map)
+	o.x = x
+	o.y = y
+	o.waypoints = o.generateWaypoints(map,x,y,baseX,baseY)
 
 	o.currentWaypoint = 2
 	o.health = 100.0
@@ -33,11 +71,17 @@ function love.turris.newEnemy(img, map)
 
 	o.getOrientation = function()
 		local x,y = love.turris.normalize(o.xVel, o.yVel)
-			return x,y
+		return x,y
 	end
 
 	return o
 end
+
+function distance(x1,y1,x2,y2) --TODO let's not leave this global
+	-- manhattan is sufficient for now
+	return math.abs(x1-x2)+math.abs(y1-y2)
+end
+
 function love.turris.normalize(x,y)
 	local m = math.max(math.abs(x),math.abs(y))
 	return x/m, y/m
