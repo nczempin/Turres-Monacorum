@@ -10,7 +10,7 @@ function love.turris.newGame()
 	local creepImg = G.newImage("gfx/creep00_diffuse.png")
 	for i=1, o.enemyCount do
 		o.enemies[i]= love.turris.newEnemy(creepImg)
-		o.enemies[i].x = i-1
+		o.enemies[i].x = i-2
 		o.enemies[i].y = 12
 	end
 	o.init = function()
@@ -27,6 +27,7 @@ function love.turris.newGame()
 	o.update = function(dt)
 		for i = 1, o.enemyCount do
 			o.enemies[i].x = o.enemies[i].x+o.enemies[i].xVel*dt
+			o.enemies[i].y = o.enemies[i].y+o.enemies[i].yVel*dt
 		end
 	end
 	o.drawMap = function()
