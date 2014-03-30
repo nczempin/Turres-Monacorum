@@ -91,7 +91,16 @@ function love.turris.newGame()
 				print("Tower was placed at "..x..", "..y)
 				--for i = 1, o.enemyCount do
 				local e = o.enemies[1]
-				e.waypoints = e.generateWaypoints(o.map,math.floor(e.x),math.floor(e.y),o.baseX,o.baseY)
+				e.waypoints = e.generateWaypoints(o.map,math.floor(e.x+0.5),math.floor(e.y+0.5),o.baseX,o.baseY)
+				e.currentWaypoint = 1
+				local wpNext = e.waypoints[e.currentWaypoint]
+				local dirX,dirY = love.turris.normalize( wpNext[1]-e.x, wpNext[2]-e.y)
+				print ("dir: ",dirX, dirY)
+				if dir ~= dirX or dirY ~= dirY then
+					print ("NaN")
+				else
+					e.updateVelocity(dirX,dirY)
+				end
 				--end
 
 			end
@@ -298,6 +307,7 @@ function love.turris.newGame()
 			local directionAnim = (e.getDirection() + math.pi) / (math.pi * 0.25) - 1
 
 			o.creepAnim:seek(directionAnim)
+
 			o.creepAnim:draw(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 16 + math.sin(love.timer.getTime() * 2.0) * 4.0)
 			--e.shadow.setPosition(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 32)
 			-- health
@@ -318,8 +328,9 @@ function love.turris.newGame()
 
 			--debug: show travel direction
 			local ox, oy = e.getOrientation()
-			G.setColor(0, 63, 123)
-			o.drawLine(x,y,x+ox,y+oy)
+			local wp = e.waypoints[e.currentWaypoint]
+			G.setColor(255, 63, 123)
+			o.drawLine(x,y,wp[1],wp[2])
 		end
 	end
 
