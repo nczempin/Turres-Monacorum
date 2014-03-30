@@ -1,11 +1,18 @@
 require "ai/ai"
 
 function getAllNodes(map)
-  local w = map.width
-  local h = map.height
-  local nodes = {}
-  
-  return nodes
+	local w = map.width
+	local h = map.height
+	local nodes = {}
+
+	local k = 1
+	for i = 1, w do
+		for j = 1, h do
+			nodes[k]= {i,j}
+			k = k +1
+		end
+	end
+	return nodes
 end
 
 function love.turris.newEnemy(img, map, x,y,baseX, baseY)

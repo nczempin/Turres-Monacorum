@@ -1,13 +1,15 @@
 require "ai/a-star"
 
 function aStar(start, goal, all_nodes)
+print (#all_nodes)
 	-- this function determines which neighbors are valid (e.g., within range)
 	local valid_node_func = function ( node, neighbor )
 
 		local MAX_DIST = 300
 
 		-- helper function in the a-star module, returns distance between points
-		if astar.distance ( node.x, node.y, neighbor.x, neighbor.y ) < MAX_DIST then
+		if node.x and node.y and neighbor.x and neighbor.y and distance ( node.x, node.y, neighbor.x, neighbor.y ) < MAX_DIST then
+		print "hello"
 			return true
 		end
 		return false
@@ -18,6 +20,7 @@ function aStar(start, goal, all_nodes)
 	local path = astar.path ( start, goal, all_nodes, ignore, valid_node_func )
 
 	if path then
+	print "wurst"
 	-- do something with path (a lua table of ordered nodes from start to end)
 	end
 end
