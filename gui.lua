@@ -185,24 +185,28 @@ function gui.drawMainMenu()
 	love.graphics.setColor(255, 127, 0)
 	--startButton
 
-	
+	love.graphics.setColor(0, 0, 0, 91)
+	love.graphics.rectangle("fill", buttons[1].xPos - (buttons[1].width / 2) - 16, buttons[1].yPos - 16, buttons[1].width + 32, buttons[1].height * 4 + 92)
+
 	for i = 1, #buttons do	
-	
 		font = love.graphics.newFont(32)
 		love.graphics.setFont(font)
-		
+
 		G.setBlendMode("alpha")
-		love.graphics.setColor(0, 0, 0, 63)
-		love.graphics.setLineWidth(4)
+		love.graphics.setColor(0, 0, 0, 91)
+		love.graphics.setLineWidth(8)
 		love.graphics.rectangle("line", buttons[i].xPos - (buttons[i].width / 2), buttons[i].yPos, buttons[i].width, buttons[i].height)
 		G.setBlendMode("additive")
 		love.graphics.setColor(0, 127, 255)
 		love.graphics.setLineWidth(4)
 		love.graphics.rectangle("line", buttons[i].xPos - (buttons[i].width / 2), buttons[i].yPos, buttons[i].width, buttons[i].height)
 		--startText
+		G.setBlendMode("alpha")
+		love.graphics.setColor(0, 0, 0, 91)
+		love.graphics.printf(buttons[i].name, buttons[i].xPos - (buttons[i].width / 2) + 2,buttons[i].yPos + buttons[i].height / 3 + 2, buttons[i].width, "center")
+		G.setBlendMode("additive")
 		love.graphics.setColor(0, 127, 255)
-		love.graphics.printf(buttons[i].name, buttons[i].xPos - (buttons[i].width / 2) ,buttons[i].yPos + buttons[i].height / 3 ,buttons[i].width,"center")		
-	end
+		love.graphics.printf(buttons[i].name, buttons[i].xPos - (buttons[i].width / 2),buttons[i].yPos + buttons[i].height / 3, buttons[i].width, "center")	end
 end
 
 function love.turris.mainmenubuttonpushed()
