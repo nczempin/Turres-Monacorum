@@ -23,13 +23,11 @@ function love.turris.newGame()
 		o.baseX = math.floor(o.map.width / 2 + 0.5)
 		o.baseY = math.floor(o.map.height / 2 + 0.5)
 		o.map.setState(o.baseX, o.baseY, 2)
-			o.map.setState(2, o.baseY, 1)
+		o.map.setState(2, o.baseY, 1)
 		local creepImg = G.newImage("gfx/creep00_diffuse.png")
-	for i = 1, o.enemyCount do
-		o.enemies[i]= love.turris.newEnemy(creepImg)
-		o.enemies[i].x = i - 1
-		o.enemies[i].y = o.baseY
-	end
+		for i = 1, o.enemyCount do
+			o.enemies[i]= love.turris.newEnemy(creepImg,i-1,o.baseY)
+		end
 	end
 	o.update = function(dt)
 		o.dayTime = o.dayTime + dt * 0.1
@@ -120,7 +118,7 @@ function love.turris.newGame()
 	font = G.newImageFont("gfx/font.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\"")
 	font:setFilter("nearest", "nearest")
 	G.setFont(font)
-	
+
 	-- create light world
 	lightWorld = love.light.newWorld()
 	lightWorld.setNormalInvert(true)
