@@ -3,7 +3,7 @@ function love.turris.newEnemy(img)
 	o.img = img
 	o.x = {}
 	o.y = {}
-	o.xVel = 2
-	o.yVel = 0
+	o.xVel = 0.1
+	o.yVel = 0.0
 	return o
 end

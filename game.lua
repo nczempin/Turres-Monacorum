@@ -8,6 +8,9 @@ function love.turris.newGame()
 	o.enemies = {}
 	o.enemyCount = 1
 	o.dayTime = 90
+	o.offsetX = 0.0
+	o.offsetY = 0.0
+	o.offsetChange = false
 	o.init = function()
 		o.newGround("gfx/ground01.png")
 		o.newTower("gfx/tower00")
@@ -47,6 +50,34 @@ function love.turris.newGame()
 				love.changegamestate(4)
 			end
 		end
+
+		if love.keyboard.isDown("left") then
+			o.offsetX = o.offsetX + dt * 200.0
+			o.offsetChange = true
+		elseif love.keyboard.isDown("right") then
+			o.offsetX = o.offsetX - dt * 200.0
+			o.offsetChange = true
+		end
+
+		if love.keyboard.isDown("up") then
+			o.offsetY = o.offsetY + dt * 200.0
+			o.offsetChange = true
+		elseif love.keyboard.isDown("down") then
+			o.offsetY = o.offsetY - dt * 200.0
+			o.offsetChange = true
+		end
+
+		if o.offsetChange then
+			for i = 1, o.map.width do
+				for k = 1, o.map.height do
+					o.map.shadow[i][k].setPosition(i * o.map.tileWidth - o.map.tileWidth * 0.5 + o.offsetX, k * o.map.tileHeight - o.map.tileHeight * 0.5 + o.offsetY)
+					--o.map.shadow[i][k].setImageOffset(i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight + o.offsetY)
+					--o.map.shadow[i][k].setImageOffset(i * o.map.tileWidth + o.map.tileWidth * 0.5 - o.offsetX, k * o.map.tileHeight * 0.5 + (o.tower[1].img:getHeight() - o.map.tileHeight) - o.offsetY)
+					--o.map.shadow[i][k].setNormalOffset(i * o.map.tileWidth + o.map.tileWidth * 0.5 - o.offsetX, k * o.map.tileHeight * 0.5 + (o.tower[1].img:getHeight() - o.map.tileHeight) - o.offsetY)
+				end
+			end
+			o.offsetChange = false
+		end
 	end
 	o.drawMap = function()
 		local dayTime = math.abs(math.sin(o.dayTime))
@@ -59,7 +90,7 @@ function love.turris.newGame()
 			for i = 0, o.map.width - 1 do
 				for k = 0, o.map.height - 1 do
 					G.setColor(255, 255, 255)
-					G.draw(o.ground[1], i * o.map.tileWidth, k * o.map.tileHeight)
+					G.draw(o.ground[1], i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight + o.offsetY)
 				end
 			end
 			lightWorld.drawShadow()
@@ -68,7 +99,7 @@ function love.turris.newGame()
 					if o.map.map[i + 1][k + 1] > 0 then
 						local img = o.tower[o.map.map[i + 1][k + 1]].img
 						G.setColor(255, 255, 255)
-						G.draw(img, i * o.map.tileWidth, k * o.map.tileHeight - (img:getHeight() - o.map.tileHeight))
+						G.draw(img, i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight - (img:getHeight() - o.map.tileHeight) + o.offsetY)
 					end
 				end
 			end

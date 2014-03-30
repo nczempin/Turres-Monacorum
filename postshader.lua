@@ -93,7 +93,7 @@ love.postshader.addEffect = function(shader, ...)
 		LOVE_POSTSHADER_SCANLINES:send("time", love.timer.getTime())
 		love.graphics.setShader(LOVE_POSTSHADER_SCANLINES)
 		love.graphics.draw(LOVE_POSTSHADER_BUFFER_RENDER)
-	elseif shader == "tiltshiftNOT" then
+	elseif shader == "tiltshift" then
 		-- Blur Shader
 		LOVE_POSTSHADER_BLURV:send("steps", args[1] or 2.0)
 		LOVE_POSTSHADER_BLURH:send("steps", args[1] or 2.0)

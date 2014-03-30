@@ -18,7 +18,7 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 	for i = 0, o.width - 1 do
 		o.shadow[i + 1] = {}
 		for k = 0, o.height - 1 do
-			o.shadow[i + 1][k + 1] = lightWorld.newImage(img, (i + 1) * tileWidth - tileWidth * 0.5, (k + 1) * tileHeight - tileHeight * 0.5, tileWidth, tileHeight)
+			o.shadow[i + 1][k + 1] = lightWorld.newImage(img, i * tileWidth + tileWidth * 0.5, k * tileHeight + tileHeight * 0.5, tileWidth, tileHeight)
 			o.shadow[i + 1][k + 1].setShadow(false)
 			o.shadow[i + 1][k + 1].setNormalMap(normal)
 			o.shadow[i + 1][k + 1].setGlowMap(glow)
