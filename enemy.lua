@@ -34,7 +34,7 @@ function love.turris.newEnemy(img, map)
 
 	o.getOrientation = function()
 		local x,y = love.turris.normalize(o.xVel, o.yVel)
-			return x,y
+		return x,y
 	end
 
 	return o
