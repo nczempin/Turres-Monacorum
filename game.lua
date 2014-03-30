@@ -17,9 +17,16 @@ function love.turris.newGame()
 		o.newTower("gfx/tower01")
 		o.newTower("gfx/tower02")
 		o.newTower("gfx/tower03")
+		o.towers = {}
 		o.towerCount = 0 -- TODO: get the correct number of towers (and fill the tower array)
 		o.setMap(turMap.getMap())
 		o.map.setState(2, 2, 1)
+		local t = {}
+		t.x = 2
+		t.y = 2
+		o.towers[o.towerCount] =t
+		o.towerCount = o.towerCount +1
+		
 		o.map.setState(2, 3, 1)
 		o.map.setState(11, 9, 1)
 		o.map.setState(2, 9, 4)
@@ -113,12 +120,16 @@ function love.turris.newGame()
 		o.drawShots()
 	end
 	o.drawShots = function()
+	local e = o.enemies[1]
+	local x, y = e.x, e.y
+		G.setColor(255, 0, 0)
+	o.drawLine(2,2, x,y)
 		for i = 1, o.towerCount do
 			 -- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
 			 -- TODO this is a hack because I know there's only one creep for now
 			 local e = o.enemies[1]
 			 local t = o.towers[i]
-			 G.line((e.x-0.5))
+			 
 		end
 	end
 	o.drawPaths = function()
