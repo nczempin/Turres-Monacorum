@@ -43,10 +43,12 @@ function love.turris.updateEnemies(o,dt)
 		local wp = e.waypoints[e.currentWaypoint]
 		if math.abs(wp[1]-x)<0.1 and math.abs(wp[2] -y)<0.1 then
 			-- waypoint reached
-			local nextWp = e.currentWaypoint +1
-			e.currentWaypoint = nextWp
-			e.xVel = 0
-			e.yVel = -e.speed
+			local nextWpIndex = e.currentWaypoint +1
+			e.currentWaypoint = nextWpIndex
+			local wpNext = e.waypoints[nextWpIndex]
+			local dirX,dirY = love.turris.normalize( wpNext[1]-wp[1], wpNext[2]-wp[2])
+			e.xVel = dirX*e.speed
+			e.yVel = dirY*e.speed
 		end
 
 		-- write back the changes
