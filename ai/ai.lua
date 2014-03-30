@@ -16,26 +16,33 @@ function aStar(start,goal)
 			return reconstruct_path(came_from, goal)
 		end
 		--
-		--        remove current from openset
-		--        add current to closedset
-		--        for each neighbor in neighbor_nodes(current)
-		--            if neighbor in closedset
-		--                continue
-		--            tentative_g_score := g_score[current] + dist_between(current,neighbor)
-		--
-		--            if neighbor not in openset or tentative_g_score < g_score[neighbor]
-		--                came_from[neighbor] := current
-		--                g_score[neighbor] := tentative_g_score
-		--                f_score[neighbor] := g_score[neighbor] + heuristic_cost_estimate(neighbor, goal)
-		--                if neighbor not in openset
-		--                    add neighbor to openset
+		openset[current]=false
+		closedset[current]=true
+		local nn = neighbor_nodes(current)
+		for  neighbor in nn do
+
+			if closedset[neighbor]then
+			--                continue
+			else
+				local tentative_g_score = g_score[current] + distance(current.x,current.y,neighbor.x,neighbor.y)
+				--
+				if not openset[neighbor] or tentative_g_score < g_score[neighbor]then
+					came_from[neighbor] = current
+					g_score[neighbor] = tentative_g_score
+					f_score[neighbor] = g_score[neighbor] + distance(neighbor.x,neighbor.y,goal.x,goal.y)
+					if not openset[neighbor] then
+						openset[neighbor] = true
+					end
+				end
+			end
+		end
 	end
 	return nil
 end
 function reconstruct_path(came_from, current_node)
-	if isContained(current_node,came_from) then
+	if came_from[current_node] then
 		local p = reconstruct_path(came_from, came_from[current_node])
-		return (p + current_node)
+		return (p + current_node) --TODO find out lua way of adding a node to a list
 	else
 		return current_node
 	end
