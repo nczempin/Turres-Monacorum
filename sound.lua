@@ -3,14 +3,9 @@ LOVE_SOUND_SOUNDVOLUME		= 0.8
 
 love.sounds = {}
 
-
+local startTime = 0
 	
 --Functions for playing sounds
-
-function love.sounds.init()
-	love.sounds.playBackground("sounds/background.ogg")
-end
-
 -- Adds an BackgroundMusic
 -- @param filepath to BackgroundMusicFile
 function love.sounds.playBackground(backgroundFile)
@@ -25,8 +20,15 @@ end
 
 -- Plays an Sound Once
 -- @param Filepath to the Soundfile
-function love.sounds.playSound(soundPath)
-	TEsound.play(soundPath,"sound",LOVE_SOUND_SOUNDVOLUME,nil,nil)
+-- @param  Time to Wait to Play the Sound in Milliseconds
+function love.sounds.playSound(soundPath, timeInMilliSeconds)
+	if timeInMilliSeconds ~= nil then
+		startTime = love.timer.getTime()
+	else
+		TEsound.play(soundPath,"sound",LOVE_SOUND_SOUNDVOLUME,nil,nil)
+	end
+	
+	
 end
 
 --Sets the Background Volume
