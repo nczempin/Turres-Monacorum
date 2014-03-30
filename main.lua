@@ -27,9 +27,17 @@ function love.getgamestate()
 	return currentgamestate
 end
 
-function love.changegamestate(newgamestate)
+
+function love.turris.reinit()
+	turGame = love.turris.newGame()
+	turMap = love.turris.newMap(13, 13, 64, 48)
+	turGame.init()
+end
+
+function love.setgamestate(newgamestate)
 	currentgamestate = newgamestate
 end
+
 function love.update(dt)
 	if (currentgamestate == 1)then
 		turGame.update(dt)
@@ -71,15 +79,12 @@ function love.draw()
 	love.postshader.draw()
 end
 
-function love.keypressed(key, code)
-	--Start Sound
-	if key == "1" then
-		love.sounds.playSound("sounds/Explosion.wav")
-	end
+function love.turris.gameoverstate()
+	love.setgamestate(0)
+	love.turris.reinit()
+end
 
-	if key == "2" then
-		love.sounds.background("sounds/Explosion.wav")
-	end
+function love.keypressed(key, code)
 
 	if key == "b" then
 		bloomOn = not bloomOn
@@ -87,6 +92,10 @@ function love.keypressed(key, code)
 
 	if key == "escape" then
 		buttonDetected = 1
+		if not(love.getgamestate()==0) then
+			love.setgamestate(0)
+			love.turris.reinit()
+		end
 		love.turris.checkButtonPosition(320, 96)
 	end
 end

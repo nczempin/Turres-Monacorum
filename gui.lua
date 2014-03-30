@@ -32,31 +32,58 @@ local activemenu = {
 function love.mousepressed(x, y, key)
 	if(key=="l") then
 		buttonDetected=1
-		love.turris.checkButtonPosition(x,y)
+		love.turris.checkleftclick(x,y)
+	end
+	if(key=="r") then
+		buttonDetected=2
+		love.turris.checkrightclick(x,y)
 	end
 end
 
-function love.turris.checkButtonPosition(clickx,clicky)
-	currentgstate=love.getgamestate()
-	if currentgstate == 0 then--MainMenu
-		if (width / 2)-(buttonsizeh / 2) * guiScale < clickx and (width / 2)+(buttonsizeh / 2) * guiScale > clickx then -- half horizontal screen -menu button <x or x>half horizontal screen + menu button
-			if clicky > (height / 5) - (buttonsizev / 2) * guiScale and (height / 5) + (buttonsizev / 2) * guiScale > clicky then
-				activemenu.start = true
+function isinbutton(clickx,clicky)
+	if (width / 2)-(buttonsizeh / 2) * guiScale < clickx and (width / 2)+(buttonsizeh / 2) * guiScale > clickx then -- half horizontal screen -menu button <x or x>half horizontal screen + menu button
+		if clicky > (height / 5) - (buttonsizev / 2) * guiScale and (height / 5) + (buttonsizev / 2) * guiScale > clicky then
+			activemenu.start = true
+			return true
 		elseif clicky >(height*2 / 5) - (buttonsizev / 2) * guiScale and (height * 2 / 5) + (buttonsizev /2) * guiScale > clicky then
 			activemenu.load = true
+			return true
 		elseif clicky >(height*3 / 5) - (buttonsizev / 2) * guiScale and (height * 3 / 5) + (buttonsizev /2) * guiScale > clicky then
 			activemenu.settings = true
+			return true
 		elseif clicky >(height*4 / 5) - (buttonsizev / 2) * guiScale and (height * 4 / 5) + (buttonsizev /2) * guiScale > clicky then
 			activemenu.quit = true
+			return true
 		else
 			print("click not within y range")
+			return false
 		end
-		love.turris.mainmenubuttonpushed()
 	else
 		print("click not within x range")
+		return false
 	end
+end
+
+function love.turris.checkleftclick(clickx,clicky)
+	currentgstate=love.getgamestate()
+	if currentgstate == 0 then--MainMenu
+		isinbutton(clickx,clicky)
+		love.turris.mainmenubuttonpushed()
 	elseif currentgstate == 1 then --ingame
-		love.changegamestate(0)
+		--love.setgamestate(0)
+		local clickedfieldx,clickedfieldy=getclickedfield(clickx,clicky)
+		print(clickedfield)
+		--if not(clickedfield.x<0 or clickedfield.x>=turMap.width or clickedfield.y<0 or clickedfield.y>=turMap.height) then
+			--if turMap.getState(clickedfieldx,clickedfieldy)==0 then
+				--turMap.setstate(clickedfieldx,clickedfieldy,1)
+				turGame.addTower(clickedfieldx,clickedfieldy,1)
+				--print("Turret would have been placed at "..clickedfieldx..", "..clickedfieldy)
+			--elseif turMap.getstate(clickedfieldx,clickedfieldy) then
+				--print("Turret would have been removed at "..clickedfieldx..", "..clickedfieldy)
+			--end
+		--end
+	--love.setgamestate(0)
+	--love.turris.reinit()
 		--jumps back to the main menu at the moment
 
 	elseif currentgstate == 4 then --game over
@@ -64,6 +91,20 @@ function love.turris.checkButtonPosition(clickx,clicky)
 	end
 end
 
+function getclickedfield(clickx,clicky)
+	local x=((clickx-turGame.offsetX)-((clickx-turGame.offsetX)%turMap.tileWidth))/turMap.tileWidth+1
+	local y=((clicky-turGame.offsetY)-((clicky-turGame.offsetY)%turMap.tileHeight))/turMap.tileHeight+1
+	print("clicked field "..x..", "..y)
+	return x,y
+end
+function love.turris.checkrightclick(clickx,clicky)
+	currentgstate=love.getgamestate()
+	if currentgamestate==1 then --ingame
+		clickedfieldx,clickedfieldy=getclickedfield(clickx,clicky)
+		turMap.setState(clickedfieldx,clickedfieldy,0)
+		--turrets will be removed
+	end
+end
 function gui.drawMainMenu()
 	love.graphics.setBackgroundColor(100,100,220)
 
@@ -132,13 +173,18 @@ function gui.drawMainMenu()
 end
 
 function love.turris.mainmenubuttonpushed()
+
 	if(activemenu.start==true) then
+		love.sounds.playSound("sounds/button_pressed.wav")
 		love.turris.startGame()
 	elseif(activemenu.load==true) then
+		love.sounds.playSound("sounds/button_deactivated.wav")
 		love.turris.showLoadWindow()
 	elseif(activemenu.settings) then
+		love.sounds.playSound("sounds/button_deactivated.wav")
 		love.turris.openSettings()
 	elseif(activemenu.quit) then
+		love.sounds.playSound("sounds/button_pressed.wav")
 		love.turris.quitGame()
 	end
 	activemenu.start = false
@@ -148,7 +194,7 @@ function love.turris.mainmenubuttonpushed()
 end
 
 function love.turris.startGame()
-	love.changegamestate(1)
+	love.setgamestate(1)
 end
 function love.turris.showLoadWindow() -- show list with all savestates or save files
 	print("Saving and loading the game is not yet implemented")

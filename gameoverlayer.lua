@@ -6,7 +6,7 @@ function love.turris.newGameOverLayer()
 		G.setColor(0, 255, 0, 255)
     G.print("Game Over.", 10, 200)
 	G.print("Click to go to the main menu",10,230)
-	love.changegamestate(4)
+	love.setgamestate(4)
 	end
 	
 	return o

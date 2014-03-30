@@ -5,6 +5,7 @@ function love.turris.newGame()
 	o.map = {}
 	o.ground = {}
 	o.tower = {}
+	o.towers = {}
 	o.enemies = {}
 	o.enemyCount = 1
 	o.dayTime = 90
@@ -20,7 +21,6 @@ function love.turris.newGame()
 		o.newTowerType("gfx/tower01")
 		o.newTowerType("gfx/tower02")
 		o.newTowerType("gfx/tower03")
-		o.towers = {}
 		o.towerCount = 0 -- TODO: get the correct number of towers (and fill the tower array)
 		o.addTower(2,2,1)
 		o.addTower(2,3,1)
@@ -31,38 +31,28 @@ function love.turris.newGame()
 		o.map.setState(o.baseX, o.baseY, 2)
 
 		local creepImg = G.newImage("gfx/creep00_diffuse.png")
-	for i = 1, o.enemyCount do
-		o.enemies[i]= love.turris.newEnemy(creepImg)
-		o.enemies[i].x = i - 2
-		o.enemies[i].y = o.baseY
-	end
+		for i = 1, o.enemyCount do
+			o.enemies[i]= love.turris.newEnemy(creepImg,o)
+			o.enemies[i].x = i - 2
+			o.enemies[i].y = o.baseY
+		end
 	end
 	o.addTower = function(x,y,type)
-		o.towerCount = o.towerCount +1 -- TODO this is unsafe
-		local t = {}
-		t.x = x
-		t.y = y
-		o.map.setState(t.x, t.y, type)
-		o.towers[o.towerCount] =t
-
+		if not x or not y or not type then return end
+		local state = o.map.getState(x,y)
+		if state and state ==0 then
+			o.towerCount = o.towerCount +1 -- TODO this is unsafe
+			local t = {}
+			t.x = x
+			t.y = y
+			o.map.setState(t.x, t.y, type)
+			o.towers[o.towerCount] =t
+			print("Turret was placed at "..x..", "..y)
+		end
 	end
 	o.update = function(dt)
 		o.dayTime = o.dayTime + dt * 0.1
-		for i = 1, o.enemyCount do
-			o.enemies[i].x = o.enemies[i].x+o.enemies[i].xVel*dt
-			o.enemies[i].y = o.enemies[i].y+o.enemies[i].yVel*dt
-
-			local x = o.enemies[i].x
-			local y = o.enemies[i].y
-			if math.abs(o.baseX - x) <1 and math.abs(y - o.baseY) < 1 then
-				-- Game Over!!! (for now)
-				-- TODO: destroy ship (explosion)
-				-- TODO: destroy base (explosion!)
-				-- TODO: after explosions have finished -> transition to game over state
-				love.changegamestate(4)
-				gameOverEffect = 0
-			end
-		end
+		T.updateEnemies(o,dt)
 
 		if love.keyboard.isDown("left") then
 			o.offsetX = o.offsetX + dt * 200.0
@@ -123,8 +113,8 @@ function love.turris.newGame()
 	o.draw = function()
 		o.drawMap()
 		o.drawEnemies()
-		o.drawPaths()
 		o.drawShots()
+		o.drawPaths()
 	end
 	o.drawShots = function()
 		local e = o.enemies[1]		-- TODO this is a hack because I know there's only one creep for now
@@ -148,8 +138,9 @@ function love.turris.newGame()
 			local e = o.enemies[i]
 			local x = e.x
 			local y = e.y
+			local wp = e.waypoints[e.currentWaypoint]
 			G.setColor(232, 118, 0)
-			o.drawLine(x,y,o.baseX,o.baseY)
+			o.drawLine(x,y,wp[1],wp[2])
 		end
 	end
 	-- draw a line in world coordinates
@@ -164,6 +155,18 @@ function love.turris.newGame()
 			local img = e.img
 			G.setColor(255, 255, 255)
 			G.draw(img, x * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY, 0, -1.0 / img:getWidth() * o.map.tileWidth, 1.0 / img:getHeight() * o.map.tileHeight)
+			-- health
+			G.setColor(0, 0, 0, 127)
+			G.rectangle("fill", (x - 1) * o.map.tileWidth + o.offsetX - 2, (y - 1) * o.map.tileHeight + o.offsetY - 16 - 2, 64 + 4, 8 + 4)
+			G.setColor(255 * math.min((1.0 - e.health / e.maxHealth) * 2.0, 1.0), 255 * math.min((e.health / e.maxHealth) * 1.5, 1.0), 0)
+			G.rectangle("fill", (x - 1) * o.map.tileWidth + o.offsetX + 2, (y - 1) * o.map.tileHeight + o.offsetY - 16 + 2, (64 - 4) * e.health / e.maxHealth, 8 - 4)
+			G.setLineWidth(1)
+			G.setColor(255, 63, 0)
+			G.rectangle("line", (x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY - 16, 64, 8)
+			-- test
+			if e.health > 0.0 then
+				e.health = e.health - 0.1
+			end
 		end
 	end
 	o.newGround = function(img)
@@ -185,7 +188,7 @@ function love.turris.newGame()
 	font = G.newImageFont("gfx/font.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\"")
 	font:setFilter("nearest", "nearest")
 	G.setFont(font)
-	
+
 	-- create light world
 	lightWorld = love.light.newWorld()
 	lightWorld.setNormalInvert(true)

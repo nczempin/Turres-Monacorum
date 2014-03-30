@@ -1,5 +1,5 @@
 LOVE_SOUND_BGMUSICVOLUME 	= 0.5
-LOVE_SOUND_SOUNDVOLLUME		= 0.1
+LOVE_SOUND_SOUNDVOLUME		= 0.8
 
 love.sounds = {}
 
@@ -26,7 +26,7 @@ end
 -- Plays an Sound Once
 -- @param Filepath to the Soundfile
 function love.sounds.playSound(soundPath)
-	TEsound.play(soundPath,"sound",LOVE_SOUND_SOUNDVOLLUME,nil,nil)
+	TEsound.play(soundPath,"sound",LOVE_SOUND_SOUNDVOLUME,nil,nil)
 end
 
 --Sets the Background Volume
@@ -39,7 +39,7 @@ end
 
 --Sets the Volume for sounds
 function love.sounds.setSoundVolume(volume)
-	LOVE_SOUND_SOUNDVOLLUME	= volume
+	LOVE_SOUND_SOUNDVOLUME	= volume
 	TEsound.volume("sound", volume)
 end
 
