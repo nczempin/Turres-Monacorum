@@ -118,7 +118,7 @@ function love.turris.updateEnemies(o,dt)
 		-- write back the changes
 		o.enemies[i]= e
 		-- check for and handle game over
-		if math.abs(o.baseX - x) <1 and math.abs(y - o.baseY) < 1 then
+		if distance(o.baseX, o.baseY,x,y) < 1 then
 			-- Game Over!!! (for now)
 			-- TODO: destroy ship (explosion)
 			-- TODO: destroy base (explosion!)
