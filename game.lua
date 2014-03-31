@@ -119,28 +119,29 @@ function love.turris.newGame()
 	end
 
 	o.removeTower = function(x,y) --can remove from a position
+		if true then return end --TODO temporarily deactivated this function, see issue #25
 		if (not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height) then
 			print ("nothing will be removed here!"..x.." "..o.map.width.." "..y.." "..o.map.height)
 			return
-	end
+		end
 
-	print("something might be removed..."..x.." "..o.map.width.." "..y.." "..o.map.height)
-	local state =o.map.getState(x,y)
-	if state and not(state==0) then -- TODO: don't let main tower be deleted!!!
-		--o.map.setState(x,y,0)
-		for i=1,o.towers.maxamount do
-			if o.towers[i] and o.towers[i].value and o.towers[i].value.x==x and o.towers[i].value.y==y then
-				o.towers[i] = nil
-			end
-			turMap.setState(x,y,0)
-			if(o.towerCount>0) then
-				o.towerCount = o.towerCount-1
-			end
-			print("Tower was removed at "..x..", "..y)
-			return
-	end
-	print("Could not delete tower at "..x..", "..y)
-	end
+		print("something might be removed..."..x.." "..o.map.width.." "..y.." "..o.map.height)
+		local state =o.map.getState(x,y)
+		if state and not(state==0) then -- TODO: don't let main tower be deleted!!!
+			--o.map.setState(x,y,0)
+			for i=1,o.towers.maxamount do
+				if o.towers[i] and o.towers[i].value and o.towers[i].value.x==x and o.towers[i].value.y==y then
+					o.towers[i] = nil
+				end
+				turMap.setState(x,y,0)
+				if(o.towerCount>0) then
+					o.towerCount = o.towerCount-1
+				end
+				print("Tower was removed at "..x..", "..y)
+				return
+		end
+		print("Could not delete tower at "..x..", "..y)
+		end
 	end
 
 	o.update = function(dt)
@@ -247,9 +248,9 @@ function love.turris.newGame()
 							G.rectangle("line", i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight + o.offsetY - 16 - (img:getHeight() - o.map.tileHeight), 64, 8)
 						end
 						-- test
---						if o.map.data[i + 1][k + 1].health > 0.0 then
---							o.map.data[i + 1][k + 1].health = health - 0.1
---						end
+						--						if o.map.data[i + 1][k + 1].health > 0.0 then
+						--							o.map.data[i + 1][k + 1].health = health - 0.1
+						--						end
 					end
 				end
 			end
