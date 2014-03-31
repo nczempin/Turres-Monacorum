@@ -79,11 +79,11 @@ function love.draw()
 		love.postshader.addEffect("scanlines")
 	elseif(currentgamestate == 4) then -- render game + "game over" message on top
 		turGame.draw()
-		if gameOverEffect < 0.75 then
-			local colorAberration1 = math.sin(love.timer.getTime() * 20.0) * (0.75 - gameOverEffect) * 4.0
-			local colorAberration2 = math.cos(love.timer.getTime() * 20.0) * (0.75 - gameOverEffect) * 4.0
+		if gameOverEffect < 1.0 then
+			local colorAberration1 = math.sin(love.timer.getTime() * 20.0) * (1.0 - gameOverEffect) * 4.0
+			local colorAberration2 = math.cos(love.timer.getTime() * 20.0) * (1.0 - gameOverEffect) * 4.0
 
-			love.postshader.addEffect("blur", 1.0, 1.0)
+			love.postshader.addEffect("blur", 2.0, 2.0)
 			love.postshader.addEffect("chromatic", colorAberration1, colorAberration2, colorAberration2, -colorAberration1, colorAberration1, -colorAberration2)
 			love.postshader.addEffect("scanlines")
 		else
