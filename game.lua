@@ -143,11 +143,7 @@ function love.turris.newGame()
 		print("Could not delete tower at "..x..", "..y)
 		end
 	end
-
-	o.update = function(dt)
-		o.dayTime = o.dayTime + dt * 0.1
-		T.updateEnemies(o,dt)
-
+	o.updateCamera=function(dt)
 		if love.mouse.isDown("m") then
 			if holdOffset then
 				o.offsetX = o.offsetX - (holdOffsetX - love.mouse.getX())
@@ -203,6 +199,14 @@ function love.turris.newGame()
 			o.offsetY = W.getHeight() - turMap.getHeight() * turMap.getTileHeight()
 		end
 
+	end
+	
+	o.update = function(dt)
+		o.dayTime = o.dayTime + dt * 0.1
+		T.updateEnemies(o,dt)
+
+		o.updateCamera(dt)
+		
 		if o.offsetChange then
 			o.map.shadowGround.setPosition(o.map.width * o.map.tileWidth * 0.5 + o.offsetX, o.map.height * o.map.tileHeight * 0.5 + o.offsetY)
 			for i = 1, o.map.width do
