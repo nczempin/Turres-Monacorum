@@ -24,7 +24,7 @@ local screenHeight = love.window.getHeight()
 local buttonsizeh = 200
 local buttonsizev = 100
 local buttons = {}
-buttonNames = {"Start", "Load", "Settings", "Quit"}
+buttonNames = {"Start", "Configure", "Credits", "Quit"}
 gui.imgLogo = love.graphics.newImage("resources/sprites/ui/logo.png")
 gui.imgBackground = love.graphics.newImage("resources/sprites/ui/menu_background.png")
 gui.imgMiddleground = love.graphics.newImage("resources/sprites/ui/menu_middleground.png")
@@ -36,6 +36,7 @@ local activemenu = {
 	start = false,
 	load = false,
 	settings = false,
+	credits = false,
 	quit = false
 }
 
@@ -61,7 +62,7 @@ end
 function gui.mouseMove()
 	local mouseXPos = love.mouse.getX()
 	local mouseYPos = love.mouse.getX()
-	
+
 	--Check if Mouse is over an button
 	for i = 1, #buttons do
 		--Check if mouse is over Button
@@ -74,7 +75,7 @@ function gui.mouseMove()
 end
 
 
---Updates Everything in the GUI --TODO--  PLZ ADD ALL OTHER METHODS 
+--Updates Everything in the GUI --TODO--  PLZ ADD ALL OTHER METHODS
 function gui.update(dt)
 	gui.mouseMove()
 	gui.timer = gui.timer + dt
@@ -89,8 +90,10 @@ function gui.isinbutton(clickx,clicky)
 				activemenu.start 	= true
 			elseif buttons[i].name == "Load" then
 				activemenu.load 	= true
-			elseif buttons[i].name == "Settings" then
+			elseif buttons[i].name == "Configure" then
 				activemenu.settings = true
+			elseif buttons[i].name == "Credits" then
+				activemenu.credits = true
 			elseif buttons[i].name == "Quit" then
 				activemenu.quit 	= true
 			end
@@ -101,10 +104,10 @@ end
 
 --Button class
 -- This Class is a Button with all its Attributes
--- @param xPos  
--- @param yPos 
--- @param width 
--- @param height 
+-- @param xPos
+-- @param yPos
+-- @param width
+-- @param height
 -- @param name The Name of the button
 
 
@@ -119,16 +122,16 @@ function gui.button(xPos, yPos, width, height, name)
 	o.name 		= name
 	o.status 	= false
 	o.hover 	= false
- 
+
 	--Returns true if the Position is inside an Button
 	function o.isOverButton(mouseX, mouseY)
-		if mouseX > xPos and mouseX < xPos + width and mouseY > yPos and mouseY < yPos + height then			
+		if mouseX > xPos and mouseX < xPos + width and mouseY > yPos and mouseY < yPos + height then
 			return true
 		else
 			return false
 		end
 	end
-	
+
 	return o
 end
 
@@ -144,7 +147,7 @@ function gui.createButtons()
 	local buttonDistance = screenHeight / 5 - (buttonsizev)
 
 	--Creates the buttons and pushes it into the buttons array
-	for i = 1, #buttonNames do		
+	for i = 1, #buttonNames do
 		buttons[#buttons + 1] = gui.button(startx, starty, buttonsizeh, buttonsizev, buttonNames[i])
 		starty = starty + 80
 	end
@@ -192,7 +195,7 @@ function gui.drawMainMenu()
 	G.setBlendMode("alpha")
 	G.draw(gui.imgLogo, gui.imgLogo:getWidth() * 0.5, gui.imgLogo:getHeight() * 0.5, math.sin(gui.timer * 4) * 0.05 * math.max(0, 2 - gui.timer ^ 0.5), 1, 1, gui.imgLogo:getWidth() * 0.5, gui.imgLogo:getHeight() * 0.5)
 
-	for i = 1, #buttons do	
+	for i = 1, #buttons do
 		G.setBlendMode("alpha")
 		love.graphics.setColor(0, 0, 0, 91)
 		love.graphics.printf(buttons[i].name, buttons[i].xPos + 2,buttons[i].yPos + buttons[i].height / 3 + 2, buttons[i].width, "center")
@@ -210,15 +213,18 @@ end
 
 function love.turris.mainmenubuttonpushed()
 
-	if(activemenu.start == true) then
+	if(activemenu.start) then
 		love.sounds.playSound("sounds/button_pressed.wav")
 		love.turris.startGame()
-	elseif(activemenu.load == true) then
+	elseif(activemenu.load) then
 		love.sounds.playSound("sounds/button_deactivated.wav")
 		love.turris.showLoadWindow()
 	elseif(activemenu.settings) then
 		love.sounds.playSound("sounds/button_deactivated.wav")
 		love.turris.openSettings()
+	elseif(activemenu.credits) then
+		love.sounds.playSound("sounds/button_pressed.wav")
+		love.turris.gotoCredits()
 	elseif(activemenu.quit) then
 		love.sounds.playSound("sounds/button_pressed.wav")
 		love.turris.quitGame()
@@ -227,6 +233,7 @@ function love.turris.mainmenubuttonpushed()
 	activemenu.load = false
 	activemenu.settings = false
 	activemenu.quit = false
+	activemenu.credits = false
 end
 
 function love.turris.startGame()
@@ -244,6 +251,10 @@ end
 
 function love.turris.openSettings()
 	print("settings are not yet implemented")
+	--reload main screen, recalculate button positions!!
+end
+function love.turris.gotoCredits()
+	print("credits are not yet implemented")
 	--reload main screen, recalculate button positions!!
 end
 
