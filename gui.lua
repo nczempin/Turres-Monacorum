@@ -14,7 +14,7 @@ gui={}
 gui.current = nil
 buttonDetected=0
 guiScale = 2.0
--- GameStates:0=MainMenu, 1=inGame, 2=Load, 3=Settings, 4=Game Over
+-- GameStates:0=MainMenu, 1=inGame, 2=Load, 3=Settings, 4=Game Over, 5 = Credits
 
 font = love.graphics.newFont(32)
 love.graphics.setFont(font)
