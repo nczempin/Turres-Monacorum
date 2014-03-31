@@ -5,7 +5,7 @@ Copyright (c) 2014
 Aldo Brießmann (Code)
 Elena Reinertz (Graphics)
 Marcus Ihde (Code)
-"meriland" (Music, Sound)
+Meral Leyla (Music, Sound)
 "namenodreamz" (Code, Sound)
 Nicolai Czempin (Code)
 Robin Kocaurek (Graphics)
