@@ -247,9 +247,9 @@ function love.turris.newGame()
 							G.rectangle("line", i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight + o.offsetY - 16 - (img:getHeight() - o.map.tileHeight), 64, 8)
 						end
 						-- test
-						if o.map.data[i + 1][k + 1].health > 0.0 then
-							o.map.data[i + 1][k + 1].health = health - 0.1
-						end
+--						if o.map.data[i + 1][k + 1].health > 0.0 then
+--							o.map.data[i + 1][k + 1].health = health - 0.1
+--						end
 					end
 				end
 			end
