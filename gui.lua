@@ -113,7 +113,7 @@ end
 
 
 function gui.button(xPos, yPos, width, height, name, imagePath)
-	
+
 	local o = {}
 
 	--Attribute
@@ -125,7 +125,7 @@ function gui.button(xPos, yPos, width, height, name, imagePath)
 	o.status 	= false
 	o.hover 	= false
 	o.imagePath = imagePath
-	
+
 	--Returns true if the Position is inside an Button
 	function o.isOverButton(mouseX, mouseY)
 		if mouseX > xPos and mouseX < xPos + width and mouseY > yPos and mouseY < yPos + height then
@@ -167,6 +167,8 @@ function love.turris.checkleftclick(clickx,clicky)
 		turGame.addTower(clickedfieldx,clickedfieldy,1)
 	elseif currentgstate == 4 then --game over
 		love.turris.gameoverstate()
+	elseif currentgstate == 5 then --credits
+		love.setgamestate(0)
 	end
 end
 
