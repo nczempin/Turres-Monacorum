@@ -1,6 +1,14 @@
 The MIT License (MIT)
 
-Copyright (c) 2014 Marcus Ihde
+Copyright (c) 2014
+
+Aldo Brießmann (Code)
+Elena Reinertz (Graphics)
+Marcus Ihde (Code)
+"meriland" (Music, Sound)
+"namenodreamz" (Code, Sound)
+Nicolai Czempin (Code)
+Robin Kocaurek (Graphics)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
