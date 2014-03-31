@@ -102,7 +102,7 @@ function love.draw()
 			G.setColor(31, 31, 31, 191)
 			G.setBlendMode("alpha")
 			G.rectangle("fill", 0, 0, W.getWidth(), W.getHeight())
-			love.postshader.addEffect("monochrom")
+			love.postshader.addEffect("greenochrome")
 			gameOverLayer.draw()
 			love.postshader.addEffect("scanlines", 4.0)
 		end

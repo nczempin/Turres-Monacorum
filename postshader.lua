@@ -88,6 +88,13 @@ love.postshader.addEffect = function(shader, ...)
 		LOVE_POSTSHADER_MONOCHROM:send("time", love.timer.getTime())
 		love.graphics.setShader(LOVE_POSTSHADER_MONOCHROM)
 		love.graphics.draw(LOVE_POSTSHADER_BUFFER_RENDER)
+	elseif shader == "greenochrome" then
+		-- Monochrom Shader
+		LOVE_POSTSHADER_MONOCHROM:send("time", love.timer.getTime())
+		LOVE_POSTSHADER_MONOCHROM:send("c",{0.0,1.0,0.0})
+		LOVE_POSTSHADER_MONOCHROM:send("fudge", 0.2)
+		love.graphics.setShader(LOVE_POSTSHADER_MONOCHROM)
+		love.graphics.draw(LOVE_POSTSHADER_BUFFER_RENDER)
 	elseif shader == "scanlines" then
 		-- Scanlines Shader
 		LOVE_POSTSHADER_SCANLINES:send("strength", args[1] or 2.0)
