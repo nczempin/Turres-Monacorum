@@ -8,7 +8,7 @@ require "sound"
 require "TESound"
 require "gui"
 require "gameoverlayer"
-require "anim"
+require "external/anim"
 require "credits"
 
 function love.load()

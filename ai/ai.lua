@@ -1,4 +1,4 @@
-require "ai/a-star"
+require "external/a-star"
 
 function aStar(start, goal, all_nodes)
 	--print (start.x,start.y, goal.x,goal.y)
