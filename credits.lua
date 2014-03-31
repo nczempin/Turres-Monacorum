@@ -1,5 +1,5 @@
 function love.turris.drawCredits()
-	local names = {"Aldo Brießmann", "Elena Reinertz", "Marcus Ihde","Meral Leyla", "Nicolai Czempin","Robin Kocaurek",   "nonamedreamz"}
+	local names = {"Aldo Brießmann", "Elena Reinertz", "Marcus Ihde","Meral Leyla", "Michael Steidl", "Nicolai Czempin","Robin Kocaurek"}
 	for i= 1, #names do
 		local r = math.random(0,255)
 		local g = math.random(0,255)
