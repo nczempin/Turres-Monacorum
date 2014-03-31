@@ -1,4 +1,5 @@
 require "enemy"
+require "tower"
 
 function love.turris.newGame()
 	local o = {}
@@ -34,6 +35,8 @@ function love.turris.newGame()
 		o.newTowerType("gfx/tower02")
 		o.newTowerType("gfx/tower03")
 
+
+		print ("adding main base", o.baseX, o.baseY)
 		o.addTower(o.baseX, o.baseY, 2) --main base
 
 
@@ -63,20 +66,14 @@ function love.turris.newGame()
 	-- gameplay
 
 	o.addTower = function(x,y,type)
+		--print ("addTower:", x, y, type,o.map)
 		if not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height or not type or not (o.towerCount<o.towers.maxamount) then return end
 		local state = o.map.getState(x,y)
 		if state and state ==0 then
-			--o.towerCount = o.towerCount +1 -- NOT TO DO this is unsafe
-			local t = {}
-			t.x = x
-			t.y = y
-			t.type = type
+			--print ("x, y:",x,y)
+			local t = love.turris.newTower(type, x, y)
+			--print ("tower: ",t, t.x, t.y)
 			o.map.setState(t.x, t.y, type)
-			--o.towers[o.towerCount] =t
-			--Playing Sound When Tower is Placed
-			if(currentgamestate ~= 0) then
-				love.sounds.playSound("sounds/tower_1.mp3")
-			end
 			if o.towers.next<o.towers.maxamount and not o.towers.next then
 				o.towers[o.towers.next] = t --{next = towers, value =t}
 			else
@@ -91,6 +88,10 @@ function love.turris.newGame()
 				o.towers[o.towers.next] = t --{next = towers, value =t}
 				o.towers.next = o.towers.next+1
 				o.towerCount = o.towerCount+1
+				--Playing Sound When Tower is Placed
+				if(currentgamestate == 1) then
+					love.sounds.playSound("sounds/tower_1.mp3")
+				end
 				print(o.towerCount)
 				print("Tower was placed at "..x..", "..y)
 
@@ -103,15 +104,15 @@ function love.turris.newGame()
 				local wpNext = e.waypoints[e.currentWaypoint]
 				local deltaX = wpNext[1]-e.x
 				local deltaY = wpNext[2]-e.y
-				print ("delta: ", deltaX, deltaY)
+				--print ("delta: ", deltaX, deltaY)
 				local dirX,dirY = love.turris.normalize(deltaX , deltaY)
 
 				if dirX ~= dirX or dirY ~= dirY then
-					print ("NaN")
+					--print ("NaN")
 				else
 					dirX = math.floor(dirX)
 					dirY= math.floor(dirY)
-					print ("dir: ",dirX, dirY)
+					--print ("dir: ",dirX, dirY)
 					e.updateVelocity(dirX,dirY)
 				end
 				--end

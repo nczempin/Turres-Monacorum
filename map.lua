@@ -55,7 +55,9 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 		return o.width
 	end
 	o.setState = function(x, y, n)
-		o.data[x][y].id = n
+		print(x, y, n)
+		local d = o.data[x][y]
+		d.id = n
 		if n > 0 then
 			o.shadow[x][y].setImage(turGame.towerType[n].img)
 			o.shadow[x][y].setImageOffset(o.tileWidth * 0.5, o.tileHeight * 0.5 + (turGame.towerType[n].img:getHeight() - o.tileHeight))
