@@ -60,10 +60,8 @@ function love.draw()
 	G.setColor(0, 0, 0)
 	G.rectangle("fill", 0, 0, W.getWidth(), W.getHeight())
 
-	--turGame.draw()
-
 	if(currentgamestate == 0) then --render main menu only
-		--love.postshader.addEffect("monochrom")
+		turGame.draw()
 		gui.drawMainMenu()
 		if math.random(0, love.timer.getFPS() * 5) == 0 then
 			gameOverEffect = 0
