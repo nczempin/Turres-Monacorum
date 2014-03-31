@@ -48,7 +48,7 @@ function love.setgamestate(newgamestate)
 	--Starting Sounds
 	--Credits
 	if currentgamestate == 5 then
-		love.sounds.playBackground("sounds/music/distortion_rock_highscore.mp3","gameover")
+		love.sounds.playBackground("sounds/music/highscore.mp3","gameover")
 	end
 
 	gui.timer = 0
