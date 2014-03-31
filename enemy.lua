@@ -31,7 +31,7 @@ function love.turris.newEnemy(img, map, x,y,baseX, baseY)
 		local start = findNode(all_nodes, startX, startY)
 		local goal = findNode(all_nodes, goalX, goalY)
 		local path = aStar(start,goal,all_nodes)
-	
+
 		local wp = {{startX,startY},{goalX,goalY}}
 		for i = 1, #path do
 			wp[i] ={path[i].x,path[i].y}
@@ -81,7 +81,16 @@ end
 
 function love.turris.normalize(x,y)
 	local m = math.max(math.abs(x),math.abs(y))
-	return x/m, y/m
+	--print ("normalize: ", x, y, m)
+	local xRet = x/m
+	local yRet = y/m
+	if (xRet ~= xRet) then
+		print ("xRet NaN: ",xRet)
+	end
+	if (yRet ~= yRet) then
+		print ("yRet NaN: ",yRet)
+	end
+	return xRet, yRet
 end
 
 function love.turris.updateEnemies(o,dt)

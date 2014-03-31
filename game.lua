@@ -95,11 +95,17 @@ function love.turris.newGame()
 				e.waypoints = e.generateWaypoints(o.map,math.floor(e.x+0.5),math.floor(e.y+0.5),o.baseX,o.baseY)
 				e.currentWaypoint = 1
 				local wpNext = e.waypoints[e.currentWaypoint]
-				local dirX,dirY = love.turris.normalize( wpNext[1]-e.x, wpNext[2]-e.y)
-				print ("dir: ",dirX, dirY)
-				if dir ~= dirX or dirY ~= dirY then
+				local deltaX = wpNext[1]-e.x
+				local deltaY = wpNext[2]-e.y
+				print ("delta: ", deltaX, deltaY)
+				local dirX,dirY = love.turris.normalize(deltaX , deltaY)
+
+				if dirX ~= dirX or dirY ~= dirY then
 					print ("NaN")
 				else
+					dirX = math.floor(dirX)
+					dirY= math.floor(dirY)
+					print ("dir: ",dirX, dirY)
 					e.updateVelocity(dirX,dirY)
 				end
 				--end
@@ -112,25 +118,25 @@ function love.turris.newGame()
 		if (not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height) then
 			print ("nothing will be removed here!"..x.." "..o.map.width.." "..y.." "..o.map.height)
 			return
-		end
+	end
 
-		print("something might be removed..."..x.." "..o.map.width.." "..y.." "..o.map.height)
-		local state =o.map.getState(x,y)
-		if state and not(state==0) then -- TODO: don't let main tower be deleted!!!
-			--o.map.setState(x,y,0)
-			for i=1,o.towers.maxamount do
-				if o.towers[i] and o.towers[i].value and o.towers[i].value.x==x and o.towers[i].value.y==y then
-					o.towers[i] = nil
-				end
-				turMap.setState(x,y,0)
-				if(o.towerCount>0) then
-					o.towerCount = o.towerCount-1
-				end
-				print("Tower was removed at "..x..", "..y)
-				return
+	print("something might be removed..."..x.." "..o.map.width.." "..y.." "..o.map.height)
+	local state =o.map.getState(x,y)
+	if state and not(state==0) then -- TODO: don't let main tower be deleted!!!
+		--o.map.setState(x,y,0)
+		for i=1,o.towers.maxamount do
+			if o.towers[i] and o.towers[i].value and o.towers[i].value.x==x and o.towers[i].value.y==y then
+				o.towers[i] = nil
 			end
-			print("Could not delete tower at "..x..", "..y)
-		end
+			turMap.setState(x,y,0)
+			if(o.towerCount>0) then
+				o.towerCount = o.towerCount-1
+			end
+			print("Tower was removed at "..x..", "..y)
+			return
+	end
+	print("Could not delete tower at "..x..", "..y)
+	end
 	end
 
 	o.update = function(dt)
