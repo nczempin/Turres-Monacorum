@@ -90,6 +90,9 @@ function love.turris.newGame()
 				o.towerCount = o.towerCount+1
 				print(o.towerCount)
 				print("Tower was placed at "..x..", "..y)
+				
+				
+				--Recalculate paths. TODO: factor this out into its own function, then add it to the tower removal code
 				--for i = 1, o.enemyCount do
 				local e = o.enemies[1]
 				e.waypoints = e.generateWaypoints(o.map,math.floor(e.x+0.5),math.floor(e.y+0.5),o.baseX,o.baseY)
