@@ -33,14 +33,15 @@ function love.turris.newGame()
 		o.newTowerType("gfx/tower01")
 		o.newTowerType("gfx/tower02")
 		o.newTowerType("gfx/tower03")
+
+		o.addTower(o.baseX, o.baseY, 2) --main base
+
+
 		o.addTower(2, 2,1)
 		o.addTower(11, 2, 4)
 		o.addTower(5, 3, 3)
-		o.addTower(2, o.baseY, 1) --TODO debugging tower to block the path right away
 		o.addTower(2,o.baseY-1,1) --TODO another debugging tower
-		o.addTower(o.baseX, o.baseY, 2)
 		o.addTower(2,o.baseY+1,1) --TODO another debugging tower
-		o.addTower(o.baseX-1,o.baseY+1,1) --TODO another debugging tower
 		o.addTower(o.baseX-1,o.baseY,1) --TODO another debugging tower
 		o.addTower(o.baseX-1,o.baseY-1,1) --TODO another debugging tower
 
@@ -90,8 +91,8 @@ function love.turris.newGame()
 				o.towerCount = o.towerCount+1
 				print(o.towerCount)
 				print("Tower was placed at "..x..", "..y)
-				
-				
+
+
 				--Recalculate paths. TODO: factor this out into its own function, then add it to the tower removal code
 				--for i = 1, o.enemyCount do
 				local e = o.enemies[1]
@@ -338,7 +339,7 @@ function love.turris.newGame()
 			if directionAnim == 0 then
 				directionAnim = 8
 			end
-			
+
 			o.creepAnim:seek(directionAnim)
 
 			o.creepAnim:draw(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 16 + math.sin(love.timer.getTime() * 2.0) * 4.0)
