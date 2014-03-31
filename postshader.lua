@@ -9,7 +9,7 @@ LOVE_POSTSHADER_CHROMATIC_ABERRATION = love.graphics.newShader("shader/chromatic
 LOVE_POSTSHADER_FOUR_COLOR = love.graphics.newShader("shader/four_colors.glsl")
 LOVE_POSTSHADER_MONOCHROM = love.graphics.newShader("shader/monochrom.glsl")
 LOVE_POSTSHADER_SCANLINES = love.graphics.newShader("shader/scanlines.glsl")
---LOVE_POSTSHADER_TILT_SHIFT = love.graphics.newShader("shader/tilt_shift.glsl")
+LOVE_POSTSHADER_TILT_SHIFT = love.graphics.newShader("shader/tilt_shift.glsl")
 
 LOVE_POSTSHADER_BLURV:send("screen", {love.window.getWidth(), love.window.getHeight()})
 LOVE_POSTSHADER_BLURH:send("screen", {love.window.getWidth(), love.window.getHeight()})
@@ -105,7 +105,7 @@ love.postshader.addEffect = function(shader, ...)
 		love.graphics.setShader(LOVE_POSTSHADER_BLURH)
 		love.graphics.draw(LOVE_POSTSHADER_BUFFER_BACK)
 
-		LOVE_POSTSHADER_TILT_SHIFT:send("buffer", LOVE_POSTSHADER_BUFFER_RENDER)
+		LOVE_POSTSHADER_TILT_SHIFT:send("imgBuffer", LOVE_POSTSHADER_BUFFER_RENDER)
 		love.graphics.setShader(LOVE_POSTSHADER_TILT_SHIFT)
 		love.graphics.draw(LOVE_POSTSHADER_BUFFER_BACK)
 	end
