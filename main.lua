@@ -73,7 +73,7 @@ function love.draw()
 	G.rectangle("fill", 0, 0, W.getWidth(), W.getHeight())
 
 	if(currentgamestate == 0) then --render main menu only
-		turGame.draw()
+		--turGame.draw()
 		gui.drawMainMenu()
 		if math.random(0, love.timer.getFPS() * 5) == 0 then
 			gameOverEffect = 0
