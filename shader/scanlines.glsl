@@ -6,7 +6,7 @@ vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 pixel_coords){
 	vec2 pSize = 1.0 / screenHeight;
 	float brightness = 1.0;
 	float offsetX = sin(texture_coords.y * 10.0 + time * strength) * pSize.x;
-	float corner = 200.0;
+	float corner = 500.0;
 
 	if(texture_coords.x < 0.5) {
 		if(texture_coords.y < 0.5) {

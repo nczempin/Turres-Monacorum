@@ -17,6 +17,9 @@ function love.turris.newGame()
 	o.offsetY = 0.0
 	o.offsetChange = false
 	o.timer = 0
+	o.holdOffset = false
+	o.holdOffsetX = 0
+	o.holdOffsetY = 0
 	o.init = function()
 		o.setMap(turMap.getMap())
 		o.baseX = math.floor(o.map.width / 2 + 0.5)
@@ -25,7 +28,7 @@ function love.turris.newGame()
 		for i = 1, o.enemyCount do
 			o.enemies[i]= love.turris.newEnemy(creepImg,o.map,0,o.baseY,o.baseX,o.baseY)
 		end
-		o.newGround("gfx/ground01.png")
+		o.newGround("gfx/ground_diffuse001.png")
 		o.newTowerType("gfx/tower00")
 		o.newTowerType("gfx/tower01")
 		o.newTowerType("gfx/tower02")
@@ -136,50 +139,74 @@ function love.turris.newGame()
 		o.dayTime = o.dayTime + dt * 0.1
 		T.updateEnemies(o,dt)
 
-		if o.offsetX < 0 and love.keyboard.isDown("left") then
-			o.offsetX = o.offsetX + dt * 200.0
+		if love.mouse.isDown("m") then
+			if holdOffset then
+				o.offsetX = o.offsetX - (holdOffsetX - love.mouse.getX())
+				o.offsetY = o.offsetY - (holdOffsetY - love.mouse.getY())
+			else
+				holdOffset = true
+			end
+
 			o.offsetChange = true
-		elseif o.offsetX > W.getWidth() - turMap.getWidth() * turMap.getTileWidth() and love.keyboard.isDown("right") then
-			o.offsetX = o.offsetX - dt * 200.0
-			o.offsetChange = true
+		else
+			if love.keyboard.isDown("left") then
+				o.offsetX = o.offsetX + dt * 200.0
+				o.offsetChange = true
+			elseif love.keyboard.isDown("right") then
+				o.offsetX = o.offsetX - dt * 200.0
+				o.offsetChange = true
+			end
+
+			if love.keyboard.isDown("up") then
+				o.offsetY = o.offsetY + dt * 200.0
+				o.offsetChange = true
+			elseif love.keyboard.isDown("down") then
+				o.offsetY = o.offsetY - dt * 200.0
+				o.offsetChange = true
+			end
+
+			if love.mouse.getX() < 128 then
+				o.offsetX = o.offsetX + dt * (128 - love.mouse.getX()) ^ 1.25
+				o.offsetChange = true
+			elseif love.mouse.getX() > W.getWidth() - 128 then
+				o.offsetX = o.offsetX - dt * (128 - (W.getWidth() - love.mouse.getX())) ^ 1.25
+				o.offsetChange = true
+			end
+
+			if love.mouse.getY() < 128 then
+				o.offsetY = o.offsetY + dt * (128 - love.mouse.getY()) ^ 1.25
+				o.offsetChange = true
+			elseif love.mouse.getY() > W.getHeight() - 128 then
+				o.offsetY = o.offsetY - dt * (128 - (W.getHeight() - love.mouse.getY())) ^ 1.25
+				o.offsetChange = true
+			end
 		end
 
-		if o.offsetY < 0 and love.keyboard.isDown("up") then
-			o.offsetY = o.offsetY + dt * 200.0
-			o.offsetChange = true
-		elseif o.offsetY > W.getHeight() - turMap.getHeight() * turMap.getTileHeight() and love.keyboard.isDown("down") then
-			o.offsetY = o.offsetY - dt * 200.0
-			o.offsetChange = true
+		if o.offsetX > 0 then
+			o.offsetX = 0
+		elseif o.offsetX < W.getWidth() - turMap.getWidth() * turMap.getTileWidth() then
+			o.offsetX = W.getWidth() - turMap.getWidth() * turMap.getTileWidth()
 		end
 
-		if o.offsetX < 0 and love.mouse.getX() < 128 then
-			o.offsetX = o.offsetX + dt * (128 - love.mouse.getX()) ^ 1.25
-			o.offsetChange = true
-		elseif o.offsetX > W.getWidth() - turMap.getWidth() * turMap.getTileWidth() and love.mouse.getX() > W.getWidth() - 128 then
-			o.offsetX = o.offsetX - dt * (128 - (W.getWidth() - love.mouse.getX())) ^ 1.25
-			o.offsetChange = true
-		end
-
-		if o.offsetY < 0 and love.mouse.getY() < 128 then
-			o.offsetY = o.offsetY + dt * (128 - love.mouse.getY()) ^ 1.25
-			o.offsetChange = true
-		elseif o.offsetY > W.getHeight() - turMap.getHeight() * turMap.getTileHeight() and love.mouse.getY() > W.getHeight() - 128 then
-			o.offsetY = o.offsetY - dt * (128 - (W.getHeight() - love.mouse.getY())) ^ 1.25
-			o.offsetChange = true
+		if o.offsetY > 0 then
+			o.offsetY = 0
+		elseif o.offsetY < W.getHeight() - turMap.getHeight() * turMap.getTileHeight() then
+			o.offsetY = W.getHeight() - turMap.getHeight() * turMap.getTileHeight()
 		end
 
 		if o.offsetChange then
+			o.map.shadowGround.setPosition(o.map.width * o.map.tileWidth * 0.5 + o.offsetX, o.map.height * o.map.tileHeight * 0.5 + o.offsetY)
 			for i = 1, o.map.width do
 				for k = 1, o.map.height do
 					o.map.shadow[i][k].setPosition(i * o.map.tileWidth - o.map.tileWidth * 0.5 + o.offsetX, k * o.map.tileHeight - o.map.tileHeight * 0.5 + o.offsetY)
-					--o.map.shadow[i][k].setImageOffset(i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight + o.offsetY)
-					--o.map.shadow[i][k].setImageOffset(i * o.map.tileWidth + o.map.tileWidth * 0.5 - o.offsetX, k * o.map.tileHeight * 0.5 + (o.tower[1].img:getHeight() - o.map.tileHeight) - o.offsetY)
-					--o.map.shadow[i][k].setNormalOffset(i * o.map.tileWidth + o.map.tileWidth * 0.5 - o.offsetX, k * o.map.tileHeight * 0.5 + (o.tower[1].img:getHeight() - o.map.tileHeight) - o.offsetY)
 				end
 			end
 			o.offsetChange = false
 		end
 		o.creepAnim:update(dt)
+
+		holdOffsetX = love.mouse.getX()
+		holdOffsetY = love.mouse.getY()
 	end
 
 	o.drawMap = function()
@@ -190,12 +217,8 @@ function love.turris.newGame()
 		lightWorld.update()
 
 		if o.map and o.map.width and o.map.height then
-			for i = 0, o.map.width - 1 do
-				for k = 0, o.map.height - 1 do
-					G.setColor(255, 255, 255)
-					G.draw(o.ground[1], i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight + o.offsetY)
-				end
-			end
+			G.setColor(255, 255, 255)
+			G.draw(o.mshGround, o.offsetX, o.offsetY)
 			lightWorld.drawShadow()
 			for i = 0, o.map.width - 1 do
 				for k = 0, o.map.height - 1 do
@@ -335,7 +358,18 @@ function love.turris.newGame()
 	end
 
 	o.newGround = function(img)
-		o.ground[#o.ground + 1] = G.newImage(img)
+		img = G.newImage(img)
+		img:setWrap("repeat", "repeat")
+		o.ground[#o.ground + 1] = img
+
+		local vertices = {
+			{ 0, 0, 0, 0, 50, 80, 120 },
+			{ o.map.getWidth() * o.map.getTileWidth(), 0, (o.map.getWidth() * o.map.getTileWidth()) / img:getWidth(), 0, 50, 80, 120 },
+			{ o.map.getWidth() * o.map.getTileWidth(), o.map.getHeight() * o.map.getTileHeight(), (o.map.getWidth() * o.map.getTileWidth()) / img:getWidth(), (o.map.getHeight() * o.map.getTileHeight()) / img:getHeight(), 100, 80, 120 },
+			{ 0, o.map.getHeight() * o.map.getTileHeight(), 0, (o.map.getHeight() * o.map.getTileHeight()) / img:getHeight(), 100, 80, 120 },
+		}
+
+		o.mshGround = love.graphics.newMesh(vertices, img, "fan")
 		return o.ground[#o.ground]
 	end
 

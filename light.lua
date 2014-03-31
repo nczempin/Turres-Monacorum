@@ -207,9 +207,9 @@ function love.light.newWorld()
 		love.graphics.setShader()
 		love.graphics.setCanvas(o.normalMap)
 		for i = 1, #o.body do
-			if o.body[i].type == "image" and o.body[i].normal then
+			if o.body[i].type == "image" and o.body[i].normalMesh then
 				love.graphics.setColor(255, 255, 255)
-				love.graphics.draw(o.body[i].normal, o.body[i].x - o.body[i].nx + LOVE_LIGHT_TRANSLATE_X, o.body[i].y - o.body[i].ny + LOVE_LIGHT_TRANSLATE_Y)
+				love.graphics.draw(o.body[i].normalMesh, o.body[i].x - o.body[i].nx + LOVE_LIGHT_TRANSLATE_X, o.body[i].y - o.body[i].ny + LOVE_LIGHT_TRANSLATE_Y)
 			end
 		end
 		love.graphics.setColor(255, 255, 255)
@@ -826,6 +826,13 @@ function love.light.newBody(p, type, ...)
 			o.height = args[5] or o.imgHeight
 			o.ix = o.imgWidth * 0.5
 			o.iy = o.imgHeight * 0.5
+			o.vert = {
+				{ 0.0, 0.0, 0.0, 0.0 },
+				{ o.width, 0.0, 1.0, 0.0 },
+				{ o.width, o.height, 1.0, 1.0 },
+				{ 0.0, o.height, 0.0, 1.0 },
+			}
+			o.msh = love.graphics.newMesh(o.vert, o.img, "fan")
 		else
 			o.width = args[4] or 64
 			o.height = args[5] or 64
@@ -1101,13 +1108,23 @@ function love.light.newBody(p, type, ...)
 		end
 	end
 	-- set normal
-	o.setNormalMap = function(normal)
+	o.setNormalMap = function(normal, width, height, nx, ny)
 		if normal then
 			o.normal = normal
-			o.normalWidth = o.normal:getWidth()
-			o.normalHeight = o.normal:getHeight()
-			o.nx = o.normalWidth * 0.5
-			o.ny = o.normalHeight * 0.5
+			o.normal:setWrap("repeat", "repeat")
+			o.normalWidth = width or o.normal:getWidth()
+			o.normalHeight = height or o.normal:getHeight()
+			o.nx = nx or o.normalWidth * 0.5
+			o.ny = ny or o.normalHeight * 0.5
+			o.normalVert = {
+				{0.0, 0.0, 0.0, 0.0},
+				{o.normalWidth, 0.0, o.normalWidth / o.normal:getWidth(), 0.0},
+				{o.normalWidth, o.normalHeight, o.normalWidth / o.normal:getWidth(), o.normalHeight / o.normal:getHeight()},
+				{0.0, o.normalHeight, 0.0, o.normalHeight / o.normal:getHeight()}
+			}
+			o.normalMesh = love.graphics.newMesh(o.normalVert, o.normal, "fan")
+		else
+			o.normalMesh = nil
 		end
 	end
 	-- set height map

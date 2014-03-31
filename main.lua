@@ -43,6 +43,7 @@ end
 
 function love.update(dt)
 	if (currentgamestate == 0)then
+		gameOverEffect = gameOverEffect + dt
 		gui.update(dt)
 	elseif (currentgamestate == 1)then
 		turGame.update(dt)
@@ -63,6 +64,15 @@ function love.draw()
 	if(currentgamestate == 0) then --render main menu only
 		--love.postshader.addEffect("monochrom")
 		gui.drawMainMenu()
+		if math.random(0, love.timer.getFPS() * 5) == 0 then
+			gameOverEffect = 0
+		end
+		if gameOverEffect < 0.75 then
+			local colorAberration1 = math.sin(love.timer.getTime() * 10.0) * (0.75 - gameOverEffect) * 2.0
+			local colorAberration2 = math.cos(love.timer.getTime() * 10.0) * (0.75 - gameOverEffect) * 2.0
+
+			love.postshader.addEffect("chromatic", colorAberration1, colorAberration2, colorAberration2, -colorAberration1, colorAberration1, -colorAberration2)
+		end
 		love.postshader.addEffect("scanlines", 4.0)
 	elseif(currentgamestate == 1) then --render game only
 		turGame.draw()
@@ -76,8 +86,9 @@ function love.draw()
 
 			love.postshader.addEffect("blur", 1.0, 1.0)
 			love.postshader.addEffect("chromatic", colorAberration1, colorAberration2, colorAberration2, -colorAberration1, colorAberration1, -colorAberration2)
+			love.postshader.addEffect("scanlines")
 		else
-			G.setColor(0, 0, 0, 191)
+			G.setColor(31, 31, 31, 191)
 			G.setBlendMode("alpha")
 			G.rectangle("fill", 0, 0, W.getWidth(), W.getHeight())
 			love.postshader.addEffect("monochrom")

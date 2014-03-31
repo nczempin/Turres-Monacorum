@@ -18,13 +18,18 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 	local img = love.graphics.newImage("gfx/ground01.png")
 	local normal = love.graphics.newImage("gfx/ground01_normal.png")
 	local glow = love.graphics.newImage("gfx/ground01_glow.png")
+	o.shadowGround = lightWorld.newImage(img, o.width * o.tileWidth, o.height * o.tileHeight, o.width * o.tileWidth * 0.5, o.height * o.tileHeight * 0.5)
+	o.shadowGround.setNormalMap(normal, o.width * o.tileWidth, o.height * o.tileHeight)
+	o.shadowGround.setPosition(o.width * o.tileWidth * 0.5, o.height * o.tileHeight * 0.5)
+	--o.shadowGround.setGlowMap(glow)
+	o.shadowGround.setShadow(false)
 	for i = 0, o.width - 1 do
 		o.shadow[i + 1] = {}
 		for k = 0, o.height - 1 do
-			o.shadow[i + 1][k + 1] = lightWorld.newImage(img, i * tileWidth + tileWidth * 0.5, k * tileHeight + tileHeight * 0.5, tileWidth, tileHeight)
+			o.shadow[i + 1][k + 1] = lightWorld.newImage(img, i * o.tileWidth + o.tileWidth * 0.5, k * o.tileHeight + o.tileHeight * 0.5, o.tileWidth, o.tileHeight)
 			o.shadow[i + 1][k + 1].setShadow(false)
-			o.shadow[i + 1][k + 1].setNormalMap(normal)
-			o.shadow[i + 1][k + 1].setGlowMap(glow)
+			--o.shadow[i + 1][k + 1].setNormalMap(normal)
+			--o.shadow[i + 1][k + 1].setGlowMap(glow)
 		end
 	end
 	o.getState = function(x, y)
@@ -59,8 +64,8 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 			o.shadow[x][y].setGlowMap(turGame.towerType[n].glow)
 			o.shadow[x][y].setShadow(true)
 		else
-			o.shadow[x][y].setNormalMap(normal)
-			o.shadow[x][y].setGlowMap(glow)
+			o.shadow[x][y].setNormalMap(nil)
+			o.shadow[x][y].setGlowMap(nil)
 			o.shadow[x][y].setShadow(false)
 		end
 	end

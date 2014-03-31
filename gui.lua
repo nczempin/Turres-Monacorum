@@ -31,6 +31,7 @@ gui.imgMiddleground = love.graphics.newImage("resources/sprites/ui/menu_middlegr
 gui.imgOverlay = love.graphics.newImage("resources/sprites/ui/overlay.png")
 gui.timer = 0
 
+
 local activemenu = {
 	start = false,
 	load = false,
@@ -40,13 +41,20 @@ local activemenu = {
 
 function love.mousepressed(x, y, key)
 	if(key=="l") then
-		buttonDetected=1
+		buttonDetected = 1
 		love.turris.checkleftclick(x,y)
 	end
+	if(key=="m") then
+		buttonDetected = 3
+	end
 	if(key=="r") then
-		buttonDetected=2
+		buttonDetected = 2
 		love.turris.checkrightclick(x,y)
 	end
+end
+
+function love.mousereleased(x, y, key)
+	buttonDetected = 0
 end
 
 --Function to look if Mousbutton is over an button
@@ -174,10 +182,10 @@ function love.turris.checkrightclick(clickx,clicky)
 end
 
 function gui.drawMainMenu()
-	love.graphics.setColor(255, 255, 255, 207)
+	love.graphics.setColor(255, 255, 255, 223)
 	G.setBlendMode("alpha")
 	G.draw(gui.imgBackground)
-	love.graphics.setColor(255, 255, 255, 191 + math.sin(gui.timer) * 63)
+	love.graphics.setColor(95 + math.sin(gui.timer * 0.1) * 63, 191 + math.cos(gui.timer) * 31, 223 + math.sin(gui.timer) * 31, 255)
 	G.setBlendMode("additive")
 	G.draw(gui.imgMiddleground)
 	love.graphics.setColor(255, 255, 255)
