@@ -18,9 +18,7 @@ function love.load()
 	S = love.sounds
 	currentgamestate = 0  -- 0=GameOver 1=gameonly 4= game+gameover message 
 	-- create game world
-	turGame = love.turris.newGame()
-	turMap = love.turris.newMap(20, 20, 64, 48)
-	turGame.init()
+	love.turris.reinit()
 	gameOverLayer = love.turris.newGameOverLayer()
 	gui.createButtons()
 
