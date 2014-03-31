@@ -33,8 +33,10 @@ function love.turris.newEnemy(img, map, x,y,baseX, baseY)
 		local path = aStar(start,goal,all_nodes)
 
 		local wp = {{startX,startY},{goalX,goalY}}
-		for i = 1, #path do
-			wp[i] ={path[i].x,path[i].y}
+		if path then
+			for i = 1, #path do
+				wp[i] ={path[i].x,path[i].y}
+			end
 		end
 		return wp
 	end
