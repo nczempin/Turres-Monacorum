@@ -34,7 +34,8 @@ function love.turris.newGame()
 		o.newTowerType("gfx/tower02")
 		o.newTowerType("gfx/tower03")
 		o.addTower(2, 2,1)
-		o.addTower(11, 9, 1)
+		o.addTower(11, 2, 4)
+		o.addTower(5, 3, 3)
 		o.addTower(2, o.baseY, 1) --TODO debugging tower to block the path right away
 		o.addTower(2,o.baseY-1,1) --TODO another debugging tower
 		o.addTower(o.baseX, o.baseY, 2)
@@ -42,9 +43,6 @@ function love.turris.newGame()
 		o.addTower(o.baseX-1,o.baseY+1,1) --TODO another debugging tower
 		o.addTower(o.baseX-1,o.baseY,1) --TODO another debugging tower
 		o.addTower(o.baseX-1,o.baseY-1,1) --TODO another debugging tower
-		o.map.setState(2, 9, 4)
-		o.map.setState(7, 3, 3)
-		o.map.setState(o.baseX, o.baseY, 2)
 
 		o.imgLaser = G.newImage("gfx/laserbeam_blue.png")
 		o.imgLaser:setWrap("repeat", "repeat")
