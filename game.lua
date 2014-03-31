@@ -60,6 +60,8 @@ function love.turris.newGame()
 		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
 	end
 
+	-- gameplay
+
 	o.addTower = function(x,y,type)
 		if not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height or not type or not (o.towerCount<o.towers.maxamount) then return end
 		local state = o.map.getState(x,y)
@@ -143,7 +145,8 @@ function love.turris.newGame()
 		print("Could not delete tower at "..x..", "..y)
 		end
 	end
-	o.updateCamera=function(dt)
+
+	o.updateCamera = function(dt)
 		if love.mouse.isDown("m") then
 			if holdOffset then
 				o.offsetX = o.offsetX - (holdOffsetX - love.mouse.getX())
@@ -198,6 +201,8 @@ function love.turris.newGame()
 		elseif o.offsetY < W.getHeight() - turMap.getHeight() * turMap.getTileHeight() then
 			o.offsetY = W.getHeight() - turMap.getHeight() * turMap.getTileHeight()
 		end
+		holdOffsetX = love.mouse.getX()
+		holdOffsetY = love.mouse.getY()
 
 	end
 
@@ -207,6 +212,7 @@ function love.turris.newGame()
 
 		o.updateCamera(dt)
 
+		-- update shadows
 		if o.offsetChange then
 			o.map.shadowGround.setPosition(o.map.width * o.map.tileWidth * 0.5 + o.offsetX, o.map.height * o.map.tileHeight * 0.5 + o.offsetY)
 			for i = 1, o.map.width do
@@ -216,11 +222,12 @@ function love.turris.newGame()
 			end
 			o.offsetChange = false
 		end
+
+		-- update animations
 		o.creepAnim:update(dt)
 
-		holdOffsetX = love.mouse.getX()
-		holdOffsetY = love.mouse.getY()
 	end
+	--------------------- drawing starts here
 
 	o.drawMap = function()
 		local dayTime = math.abs(math.sin(o.dayTime))
@@ -266,7 +273,6 @@ function love.turris.newGame()
 			lightWorld.drawGlow()
 		end
 	end
-
 	o.draw = function()
 		o.drawMap()
 		o.drawShots()
