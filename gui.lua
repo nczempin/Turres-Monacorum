@@ -254,8 +254,7 @@ function love.turris.openSettings()
 	--reload main screen, recalculate button positions!!
 end
 function love.turris.gotoCredits()
-	print("credits are not yet implemented")
-	--reload main screen, recalculate button positions!!
+	love.setgamestate(5)
 end
 
 function love.turris.quitGame()

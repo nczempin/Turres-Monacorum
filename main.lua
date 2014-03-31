@@ -9,6 +9,7 @@ require "TESound"
 require "gui"
 require "gameoverlayer"
 require "anim"
+require "credits"
 
 function love.load()
 	G = love.graphics
@@ -95,8 +96,9 @@ function love.draw()
 			gameOverLayer.draw()
 			love.postshader.addEffect("scanlines", 4.0)
 		end
+	elseif currentgamestate == 5 then
+		love.turris.drawCredits()
 	end
-	--currentgamestate =1 -- quick workaround, will be removed once the mouse buttons work correctly
 	if bloomOn then
 		love.postshader.addEffect("bloom")
 	end
