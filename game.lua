@@ -332,7 +332,10 @@ function love.turris.newGame()
 			love.graphics.ellipse("fill", x * o.map.tileWidth - o.offsetX - 32, y * o.map.tileHeight + o.offsetY - 16, 12 + math.sin(love.timer.getTime() * 2.0) * 3, 8 + math.sin(love.timer.getTime() * 2.0) * 2, 0, 16)
 			G.setColor(255, 255, 255)
 			local directionAnim = (e.getDirection() + math.pi) / (math.pi * 0.25) - 1
-
+			if directionAnim == 0 then
+				directionAnim = 8
+			end
+			
 			o.creepAnim:seek(directionAnim)
 
 			o.creepAnim:draw(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 16 + math.sin(love.timer.getTime() * 2.0) * 4.0)
