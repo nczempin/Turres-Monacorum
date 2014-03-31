@@ -200,13 +200,13 @@ function love.turris.newGame()
 		end
 
 	end
-	
+
 	o.update = function(dt)
 		o.dayTime = o.dayTime + dt * 0.1
 		T.updateEnemies(o,dt)
 
 		o.updateCamera(dt)
-		
+
 		if o.offsetChange then
 			o.map.shadowGround.setPosition(o.map.width * o.map.tileWidth * 0.5 + o.offsetX, o.map.height * o.map.tileHeight * 0.5 + o.offsetY)
 			for i = 1, o.map.width do
@@ -235,14 +235,18 @@ function love.turris.newGame()
 			lightWorld.drawShadow()
 			for i = 0, o.map.width - 1 do
 				for k = 0, o.map.height - 1 do
-					if o.map.data[i + 1][k + 1].id > 0 then
-						local img = o.towerType[o.map.data[i + 1][k + 1].id].img
+					local tile = o.map.data[i + 1][k + 1]
+					local id = tile.id
+					if id > 0 then
+						local img = o.towerType[id].img
+						-- tile
 						G.setColor(255, 255, 255)
 						G.draw(img, i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight - (img:getHeight() - o.map.tileHeight) + o.offsetY)
 						-- health
-						local health = o.map.data[i + 1][k + 1].health
-						local maxHealth = o.towerType[o.map.data[i + 1][k + 1].id].maxHealth
+						local health = tile.health
+						local maxHealth = tile.maxHealth
 						if health < maxHealth then
+							--draw health bar
 							G.setColor(0, 0, 0, 127)
 							G.rectangle("fill", i * o.map.tileWidth + o.offsetX - 2, k * o.map.tileHeight + o.offsetY - 16 - 2 - (img:getHeight() - o.map.tileHeight), 64 + 4, 8 + 4)
 							G.setColor(255 * math.min((1.0 - health / maxHealth) * 2.0, 1.0), 255 * math.min((health / maxHealth) * 1.5, 1.0), 0)
