@@ -94,8 +94,9 @@ function love.draw()
 			gameOverLayer.draw()
 			love.postshader.addEffect("scanlines", 4.0)
 		end
-	elseif currentgamestate == 5 then
+	elseif currentgamestate == 5 then --credits screen
 		love.turris.drawCredits()
+		love.postshader.addEffect("scanlines", 4.0)
 	end
 	if bloomOn then
 		love.postshader.addEffect("bloom")
