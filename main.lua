@@ -16,7 +16,7 @@ function love.load()
 	W = love.window
 	T = love.turris
 	S = love.sounds
-	currentgamestate = 0
+	currentgamestate = 0  -- 0=GameOver 1=gameonly 4= game+gameover message 
 	-- create game world
 	turGame = love.turris.newGame()
 	turMap = love.turris.newMap(20, 20, 64, 48)
@@ -38,7 +38,21 @@ function love.turris.reinit()
 end
 
 function love.setgamestate(newgamestate)
+	
+	--End Sounds
+	--Credits
+	if currentgamestate == 5 then
+		love.sounds.stopSound("gameover")
+	end
+	
 	currentgamestate = newgamestate
+	
+	--Starting Sounds
+	--Credits
+	if currentgamestate == 5 then
+		love.sounds.playBackground("sounds/music/distortion_rock_highscore.mp3","gameover")
+	end
+
 	gui.timer = 0
 end
 
@@ -115,7 +129,7 @@ function love.keypressed(key, code)
 		bloomOn = not bloomOn
 	end
 
-	if key == "escape" then
+	if key == "escape" then	
 		if not(love.getgamestate()==0) then
 			love.setgamestate(0)
 			love.turris.reinit()
