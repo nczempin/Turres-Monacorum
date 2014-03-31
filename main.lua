@@ -59,7 +59,7 @@ function love.draw()
 	G.setColor(0, 0, 0)
 	G.rectangle("fill", 0, 0, W.getWidth(), W.getHeight())
 
-	turGame.draw()
+	--turGame.draw()
 
 	if(currentgamestate == 0) then --render main menu only
 		--love.postshader.addEffect("monochrom")
