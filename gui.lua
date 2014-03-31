@@ -109,9 +109,11 @@ end
 -- @param width
 -- @param height
 -- @param name The Name of the button
+-- @param path for an Image
 
 
-function gui.button(xPos, yPos, width, height, name)
+function gui.button(xPos, yPos, width, height, name, imagePath)
+	
 	local o = {}
 
 	--Attribute
@@ -122,7 +124,8 @@ function gui.button(xPos, yPos, width, height, name)
 	o.name 		= name
 	o.status 	= false
 	o.hover 	= false
-
+	o.imagePath = imagePath
+	
 	--Returns true if the Position is inside an Button
 	function o.isOverButton(mouseX, mouseY)
 		if mouseX > xPos and mouseX < xPos + width and mouseY > yPos and mouseY < yPos + height then
