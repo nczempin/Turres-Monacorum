@@ -5,6 +5,8 @@ function love.turris.newTowerType(img)
 	o.glow = G.newImage(img .. "_glow.png")
 	o.maxHealth = 100.0
 
+	o.range = 2
+
 	o.getMaxHealth = function(health)
 		return o.maxHealth
 	end

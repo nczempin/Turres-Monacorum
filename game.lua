@@ -71,7 +71,7 @@ function love.turris.newGame()
 		local state = o.map.getState(x,y)
 		if state and state ==0 then
 			--print ("x, y:",x,y)
-			local t = love.turris.newTower(type, x, y)
+			local t = love.turris.newTower(o.towerType[type], x, y)
 			--print ("tower: ",t, t.x, t.y)
 			o.map.setState(t.x, t.y, type)
 			if o.towers.next<o.towers.maxamount and not o.towers.next then
@@ -108,7 +108,7 @@ function love.turris.newGame()
 				local dirX,dirY = love.turris.normalize(deltaX , deltaY)
 
 				if dirX ~= dirX or dirY ~= dirY then
-					--print ("NaN")
+				--print ("NaN")
 				else
 					dirX = math.floor(dirX)
 					dirY= math.floor(dirY)
@@ -274,6 +274,7 @@ function love.turris.newGame()
 			lightWorld.drawGlow()
 		end
 	end
+
 	o.draw = function()
 		o.drawMap()
 		o.drawShots()
@@ -282,21 +283,24 @@ function love.turris.newGame()
 	end
 
 	o.drawShots = function()
-		local e = o.enemies[1]		-- TODO this is a hack because I know there's only one creep for now
 
-		local x, y = e.x, e.y
 		G.setColor(255, 0, 0)
 
 		for i = 1, o.towerCount do
 			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
 			local t = o.towers[i]
-			local tx = (t.x - 0.5) * o.map.tileWidth + o.offsetX
-			local ty = (t.y - 0.5) * o.map.tileHeight + o.offsetY
-			local ex = (e.x - 0.5) * o.map.tileWidth + o.offsetX
-			local ey = (e.y - 0.5) * o.map.tileHeight + o.offsetY
-			local direction = math.atan2(tx - ex, ey - ty) + math.pi * 0.5
-			local length = math.sqrt(math.pow(tx - ex, 2) + math.pow(ty - ey, 2))
-			if (length < 150)then
+			local e = t.determineTarget(o.enemies,distance_euclid)
+
+			if e then
+				local x, y = e.x, e.y
+
+				local tx = (t.x - 0.5) * o.map.tileWidth + o.offsetX
+				local ty = (t.y - 0.5) * o.map.tileHeight + o.offsetY
+				local ex = (e.x - 0.5) * o.map.tileWidth + o.offsetX
+				local ey = (e.y - 0.5) * o.map.tileHeight + o.offsetY
+				local direction = math.atan2(tx - ex, ey - ty) + math.pi * 0.5
+				local length = math.sqrt(math.pow(tx - ex, 2) + math.pow(ty - ey, 2))
+				--			if (length < 150)then
 				local timer = -math.mod(love.timer.getTime() * 2.0, 1.0)
 				G.setBlendMode("additive")
 				--local vertices = {
@@ -313,6 +317,7 @@ function love.turris.newGame()
 				}
 				o.mshLaser:setVertices(vertices)
 				G.draw(o.mshLaser, (t.x - 0.5) * o.map.tileWidth + o.offsetX, (t.y - 0.5) * o.map.tileHeight + o.offsetY, direction, length / o.imgLaser:getWidth(), 1, 0, 64)
+				--		end
 			end
 		end
 	end
@@ -346,42 +351,44 @@ function love.turris.newGame()
 	o.drawEnemies = function()
 		for i = 1, o.enemyCount do
 			local e = o.enemies[i]
-			local x = e.x
-			local y = e.y
-			local img = e.img
-			G.setColor(15, 15, 31, 63 + math.sin(love.timer.getTime() * 2.0) * 31)
-			love.graphics.ellipse("fill", x * o.map.tileWidth - o.offsetX - 32, y * o.map.tileHeight + o.offsetY - 16, 12 + math.sin(love.timer.getTime() * 2.0) * 3, 8 + math.sin(love.timer.getTime() * 2.0) * 2, 0, 16)
-			G.setColor(255, 255, 255)
-			local directionAnim = (e.getDirection() + math.pi) / (math.pi * 0.25) - 1
-			if directionAnim == 0 then
-				directionAnim = 8
-			end
+			if e and not e.dead then
+				local x = e.x
+				local y = e.y
+				local img = e.img
+				G.setColor(15, 15, 31, 63 + math.sin(love.timer.getTime() * 2.0) * 31)
+				love.graphics.ellipse("fill", x * o.map.tileWidth - o.offsetX - 32, y * o.map.tileHeight + o.offsetY - 16, 12 + math.sin(love.timer.getTime() * 2.0) * 3, 8 + math.sin(love.timer.getTime() * 2.0) * 2, 0, 16)
+				G.setColor(255, 255, 255)
+				local directionAnim = (e.getDirection() + math.pi) / (math.pi * 0.25) - 1
+				if directionAnim == 0 then
+					directionAnim = 8
+				end
 
-			o.creepAnim:seek(directionAnim)
+				o.creepAnim:seek(directionAnim)
 
-			o.creepAnim:draw(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 16 + math.sin(love.timer.getTime() * 2.0) * 4.0)
-			--e.shadow.setPosition(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 32)
-			-- health
-			if e.health < e.maxHealth then
-				G.setColor(0, 0, 0, 127)
-				G.rectangle("fill", (x - 1) * o.map.tileWidth + o.offsetX - 2, (y - 1) * o.map.tileHeight + o.offsetY - 16 - 2, 64 + 4, 8 + 4)
-				G.setColor(255 * math.min((1.0 - e.health / e.maxHealth) * 2.0, 1.0), 255 * math.min((e.health / e.maxHealth) * 1.5, 1.0), 0)
-				G.rectangle("fill", (x - 1) * o.map.tileWidth + o.offsetX + 2, (y - 1) * o.map.tileHeight + o.offsetY - 16 + 2, (64 - 4) * e.health / e.maxHealth, 8 - 4)
-				G.setLineWidth(1)
-				G.setColor(255, 63, 0)
-				G.rectangle("line", (x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY - 16, 64, 8)
-			end
-			-- test
-			if e.health > 0.0 then
-				e.health = e.health - 0.1
-			end
-			--print(e.getDirection())
+				o.creepAnim:draw(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 16 + math.sin(love.timer.getTime() * 2.0) * 4.0)
+				--e.shadow.setPosition(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 32)
+				-- health
+				if e.health < e.maxHealth then
+					G.setColor(0, 0, 0, 127)
+					G.rectangle("fill", (x - 1) * o.map.tileWidth + o.offsetX - 2, (y - 1) * o.map.tileHeight + o.offsetY - 16 - 2, 64 + 4, 8 + 4)
+					G.setColor(255 * math.min((1.0 - e.health / e.maxHealth) * 2.0, 1.0), 255 * math.min((e.health / e.maxHealth) * 1.5, 1.0), 0)
+					G.rectangle("fill", (x - 1) * o.map.tileWidth + o.offsetX + 2, (y - 1) * o.map.tileHeight + o.offsetY - 16 + 2, (64 - 4) * e.health / e.maxHealth, 8 - 4)
+					G.setLineWidth(1)
+					G.setColor(255, 63, 0)
+					G.rectangle("line", (x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY - 16, 64, 8)
+				end
+				-- test
+				if e.health > 0.0 then
+					e.health = e.health - 0.1
+				end
+				--print(e.getDirection())
 
-			--debug: show travel direction
-			local ox, oy = e.getOrientation()
-			local wp = e.waypoints[e.currentWaypoint]
-			G.setColor(255, 63, 123)
-			o.drawLine(x,y,wp[1],wp[2])
+				--debug: show travel direction
+				local ox, oy = e.getOrientation()
+				local wp = e.waypoints[e.currentWaypoint]
+				G.setColor(255, 63, 123)
+				o.drawLine(x,y,wp[1],wp[2])
+			end
 		end
 	end
 
