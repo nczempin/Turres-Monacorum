@@ -22,7 +22,7 @@ function love.load()
 
 	FONT = G.newFont(32)
 
-	currentgamestate = 0  -- 0=GameOver 1=gameonly 4= game+gameover message
+	currentgamestate = 0  -- 0=Main Menu 1=gameonly 4= game+gameover message
 	love.turris.reinit()
 
 	stateMainMenu = require("state/main_menu")

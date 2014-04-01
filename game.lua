@@ -14,6 +14,7 @@ function love.turris.newGame()
 	o.towers.next = 1
 	o.enemies = {}
 	o.enemyCount = 5
+	o.enemyTypes =  {}
 	o.dayTime = 90
 	o.effectTimer = 99
 	o.offsetX = 0.0
@@ -34,8 +35,13 @@ function love.turris.newGame()
 				o.towers[x*o.map.height+y]=nil
 			end
 		end
+		local img -- TODO
+
+		local et1 = love.turris.newEnemyType(img, 100, 1.0)
+		local et2 = love.turris.newEnemyType(img, 100, 1.0)
+		o.enemyTypes = {et1, et2}
 		for i = 1, o.enemyCount do
-			o.enemies[i]= love.turris.newEnemy(creepImg, o.map, i, o.baseY, o.baseX, o.baseY)
+			o.enemies[i]= love.turris.newEnemy(o.enemyTypes[i%2+1], o.map, i, o.baseY, o.baseX, o.baseY)
 		end
 		o.newGround("gfx/ground_diffuse001.png")
 		laserTower = o.newTowerType("gfx/tower00")
@@ -312,7 +318,7 @@ function love.turris.newGame()
 		lightWorld.setBuffer("render")
 
 		lightWorld.drawGlow()
-		
+
 		if o.effectTimer < 0.75 then
 			local colorAberration1 = math.sin(love.timer.getTime() * 20.0) * (0.75 - o.effectTimer) * 4.0
 			local colorAberration2 = math.cos(love.timer.getTime() * 20.0) * (0.75 - o.effectTimer) * 4.0
