@@ -65,6 +65,9 @@ function love.turris.newGame()
 
 		o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
 		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
+
+		o.layerHud = require("layer/hud")
+		o.layerGameOver = require("layer/gameover")
 	end
 
 	-- gameplay
@@ -220,6 +223,9 @@ function love.turris.newGame()
 		-- update animations
 		o.creepAnim:update(dt)
 
+		-- test
+		o.layerHud.addMass(0.0037)
+		o.layerHud.addEnergy(0.13)
 	end
 	--------------------- drawing starts here
 
@@ -273,6 +279,7 @@ function love.turris.newGame()
 		o.drawShots()
 		o.drawPaths()
 		o.drawEnemies()
+		o.layerHud.draw()
 	end
 
 	o.drawShots = function()

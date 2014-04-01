@@ -24,7 +24,7 @@ function findNode(nodes, x, y)
 	end
 end
 
-function love.turris.newEnemy(img, map, x,y,baseX, baseY)
+function love.turris.newEnemy(img, map, x, y, baseX, baseY)
 	local o = {}
 	o.generateWaypoints = function(map, startX, startY, goalX, goalY)
 		local all_nodes = getAllNodes(map)
@@ -72,6 +72,27 @@ function love.turris.newEnemy(img, map, x,y,baseX, baseY)
 	o.getOrientation = function()
 		local x,y = love.turris.normalize(o.xVel, o.yVel)
 		return x,y
+	end
+
+	o.addHealth = function(health)
+		o.health = o.health + health
+	end
+
+	o.setPosition = function(x, y)
+		o.x = x
+		o.y = y
+	end
+
+	o.setMaxHealth = function(health)
+		o.maxHealth = health
+	end
+
+	o.setHealth = function(health)
+		o.health = health
+	end
+
+	o.setSpeed = function(speed)
+		o.speed = speed
 	end
 
 	return o

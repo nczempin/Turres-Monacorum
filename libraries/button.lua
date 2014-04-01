@@ -16,13 +16,15 @@ function love.gui.newButton(x, y, width, height, text, imagePath)
 	o.width 		= width or 64
 	o.height 		= height or 16
 	o.text 			= text
-	o.status 		= false
+	o.enabled 		= true
+	o.visible 		= true
 	o.hover 		= false
 	o.hit			= false
 	o.down			= true
 	o.imagePath		= imagePath
-	o.colorNormal	= {255, 127, 0}
-	o.colorHover	= {0, 127, 255}
+	o.colorNormal	= {255, 127, 0, 255}
+	o.colorHover	= {0, 127, 255, 255}
+	o.colorDisabled	= {255, 255, 255, 63}
 
 	--Update button
 	o.update = function(dt)
@@ -31,24 +33,34 @@ function love.gui.newButton(x, y, width, height, text, imagePath)
 
 	--Draw button
 	o.draw = function(dt)
-		if o.hover then
-			G.setBlendMode("alpha")
-			love.graphics.setColor(0, 0, 0, 31)
-			love.graphics.rectangle("fill", o.x, o.y, o.width, o.height)
-			love.graphics.setColor(0, 0, 0, 95)
-			love.graphics.printf(o.text, o.x + 2, o.y + 6, o.width, "center")
-			G.setBlendMode("additive")
-			love.graphics.setColor(o.colorHover[1], o.colorHover[2], o.colorHover[3])
-			love.graphics.printf(o.text, o.x, o.y + 4, o.width, "center")
-		else
-			G.setBlendMode("alpha")
-			love.graphics.setColor(0, 0, 0, 31)
-			love.graphics.rectangle("fill", o.x, o.y, o.width, o.height)
-			love.graphics.setColor(0, 0, 0, 95)
-			love.graphics.printf(o.text, o.x + 2, o.y + 6, o.width, "center")
-			G.setBlendMode("additive")
-			love.graphics.setColor(o.colorNormal[1], o.colorNormal[2], o.colorNormal[3])
-			love.graphics.printf(o.text, o.x, o.y + 4, o.width, "center")
+		if o.visible then
+			if o.enabled then
+				if o.hover then
+					G.setBlendMode("alpha")
+					love.graphics.setColor(0, 0, 0, 31)
+					love.graphics.rectangle("fill", o.x, o.y, o.width, o.height)
+					love.graphics.setColor(0, 0, 0, 95)
+					love.graphics.printf(o.text, o.x + 2, o.y + 6, o.width, "center")
+					G.setBlendMode("additive")
+					love.graphics.setColor(o.colorHover[1], o.colorHover[2], o.colorHover[3], o.colorHover[4])
+					love.graphics.printf(o.text, o.x, o.y + 4, o.width, "center")
+				else
+					G.setBlendMode("alpha")
+					love.graphics.setColor(0, 0, 0, 31)
+					love.graphics.rectangle("fill", o.x, o.y, o.width, o.height)
+					love.graphics.setColor(0, 0, 0, 95)
+					love.graphics.printf(o.text, o.x + 2, o.y + 6, o.width, "center")
+					G.setBlendMode("additive")
+					love.graphics.setColor(o.colorNormal[1], o.colorNormal[2], o.colorNormal[3], o.colorHover[4])
+					love.graphics.printf(o.text, o.x, o.y + 4, o.width, "center")
+				end
+			else
+				G.setBlendMode("alpha")
+				love.graphics.setColor(0, 0, 0, 31)
+				love.graphics.rectangle("fill", o.x, o.y, o.width, o.height)
+				love.graphics.setColor(o.colorDisabled[1], o.colorDisabled[2], o.colorDisabled[3], o.colorDisabled[4])
+				love.graphics.printf(o.text, o.x, o.y + 4, o.width, "center")
+			end
 		end
 	end
 
@@ -125,6 +137,26 @@ function love.gui.newButton(x, y, width, height, text, imagePath)
 	-- @param height
 	o.setHeight = function(height)
 		o.height = height
+	end
+
+	--Enable
+	o.enable = function()
+		o.enabled = true
+	end
+
+	--Disable
+	o.disable = function()
+		o.enabled = false
+	end
+
+	--Show
+	o.show = function()
+		o.visible = true
+	end
+
+	--Hide
+	o.hide = function()
+		o.visible = false
 	end
 
 	return o

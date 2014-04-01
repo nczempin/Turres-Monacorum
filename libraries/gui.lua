@@ -92,7 +92,6 @@ function love.gui.newGui()
 	o.flushMouse = function()
 		o.hit = false
 		o.down = true
-		print("flush")
 	end
 
 	return o

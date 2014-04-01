@@ -4,11 +4,13 @@ local startx = W.getWidth() * 0.5 - 176 * 0.5
 local starty = 160
 
 o.imgLogo			= love.graphics.newImage("resources/sprites/ui/logo.png")
-o.imgBackground	= love.graphics.newImage("resources/sprites/ui/menu_background.png")
+o.imgBackground		= love.graphics.newImage("resources/sprites/ui/menu_background.png")
 o.imgMiddleground	= love.graphics.newImage("resources/sprites/ui/menu_middleground.png")
 o.imgOverlay		= love.graphics.newImage("resources/sprites/ui/overlay.png")
+o.imgScreen			= love.graphics.newImage("gfx/screen00.png")
 
 o.effectTimer = 0
+o.chromaticEffect = 0
 
 o.guiMenu		= love.gui.newGui()
 o.btnStart		= o.guiMenu.newButton(startx, starty + 80 * 0, 176, 48, "Start")
@@ -16,8 +18,11 @@ o.btnConfigure	= o.guiMenu.newButton(startx, starty + 80 * 1, 176, 48, "Configur
 o.btnCredits	= o.guiMenu.newButton(startx, starty + 80 * 2, 176, 48, "Credits")
 o.btnQuit		= o.guiMenu.newButton(startx, starty + 80 * 3, 176, 48, "Quit")
 
+o.btnConfigure.disable()
+
 o.update = function(dt)
 	o.effectTimer = o.effectTimer + dt
+	o.chromaticEffect = o.chromaticEffect + dt
 
 	o.guiMenu.update(dt)
 
@@ -42,8 +47,10 @@ o.update = function(dt)
 end
 
 o.draw = function()
-	love.graphics.setColor(255, 255, 255, 223)
 	G.setBlendMode("alpha")
+	love.graphics.setColor(255, 255, 255)
+	G.draw(o.imgScreen)
+	love.graphics.setColor(255, 255, 255, 223)
 	G.draw(o.imgBackground)
 	love.graphics.setColor(95 + math.sin(o.effectTimer * 0.1) * 63, 191 + math.cos(o.effectTimer) * 31, 223 + math.sin(o.effectTimer) * 31, 255)
 	G.setBlendMode("additive")
@@ -53,6 +60,17 @@ o.draw = function()
 	G.draw(o.imgLogo, W.getWidth() * 0.5, o.imgLogo:getHeight() * 0.5, math.sin(o.effectTimer * 4) * 0.05 * math.max(0, 2 - o.effectTimer ^ 0.5), 1, 1, o.imgLogo:getWidth() * 0.5, o.imgLogo:getHeight() * 0.5)
 
 	o.guiMenu.draw()
+
+	if math.random(0, love.timer.getFPS() * 5) == 0 then
+		o.chromaticEffect = 0
+	end
+	if o.chromaticEffect < 0.75 then
+		local colorAberration1 = math.sin(love.timer.getTime() * 10.0) * (0.75 - o.chromaticEffect) * 2.0
+		local colorAberration2 = math.cos(love.timer.getTime() * 10.0) * (0.75 - o.chromaticEffect) * 2.0
+
+		love.postshader.addEffect("chromatic", colorAberration1, colorAberration2, colorAberration2, -colorAberration1, colorAberration1, -colorAberration2)
+	end
+	love.postshader.addEffect("scanlines", 4.0)
 end
 
 return o
