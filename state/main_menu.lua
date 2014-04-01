@@ -71,12 +71,12 @@ o.draw = function()
 	G.print(o.version, W.getWidth() - 64, W.getHeight() - 32)
 
 	if math.random(0, love.timer.getFPS() * 5) == 0 then
-		o.chromaticEffect = 0
+		o.chromaticEffect = math.random(0, 5) * 0.1
 	end
 
-	if o.chromaticEffect < 0.75 then
-		local colorAberration1 = math.sin(love.timer.getTime() * 10.0) * (0.75 - o.chromaticEffect) * 2.0
-		local colorAberration2 = math.cos(love.timer.getTime() * 10.0) * (0.75 - o.chromaticEffect) * 2.0
+	if o.chromaticEffect < 1.0 then
+		local colorAberration1 = math.sin(love.timer.getTime() * 10.0) * (1.0 - o.chromaticEffect) * 2.0
+		local colorAberration2 = math.cos(love.timer.getTime() * 10.0) * (1.0 - o.chromaticEffect) * 2.0
 
 		love.postshader.addEffect("chromatic", colorAberration1, colorAberration2, colorAberration2, -colorAberration1, colorAberration1, -colorAberration2)
 	end
