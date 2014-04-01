@@ -22,8 +22,6 @@ function love.turris.newGame()
 	o.holdOffset = false
 	o.holdOffsetX = 0
 	o.holdOffsetY = 0
-	o.player = love.turris.newPlayer()
-	o.layerHud = love.turris.newHudLayer(o.player)
 
 	o.init = function()
 		o.setMap(turMap.getMap())
@@ -71,7 +69,8 @@ function love.turris.newGame()
 		o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
 		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
 
-		o.layerHud = require("layer/hud")
+		o.player = love.turris.newPlayer()
+		o.layerHud = love.turris.newHudLayer(o.player)
 		o.layerGameOver = require("layer/gameover")
 	end
 
