@@ -25,7 +25,7 @@ function love.turris.newGame()
 		o.baseX = math.floor(o.map.width / 2 + 0.5)
 		o.baseY = math.floor(o.map.height / 2 + 0.5)
 		o.towers.maxamount = o.map.width*o.map.height
-        for x=1,o.map.height do
+		for x=1,o.map.height do
 			for y=1,o.map.width do
 				o.towers[x*o.map.height+y]=nil
 			end
@@ -70,6 +70,26 @@ function love.turris.newGame()
 		o.layerGameOver = require("layer/gameover")
 	end
 
+	o.recalculatePaths = function()
+		local e = o.enemies[1]
+		e.waypoints = e.generateWaypoints(o.map,math.floor(e.x+0.5),math.floor(e.y+0.5),o.baseX,o.baseY)
+		e.currentWaypoint = 1
+		local wpNext = e.waypoints[e.currentWaypoint]
+		local deltaX = wpNext[1]-e.x
+		local deltaY = wpNext[2]-e.y
+		--print ("delta: ", deltaX, deltaY)
+		local dirX,dirY = love.turris.normalize(deltaX , deltaY)
+
+		if dirX ~= dirX or dirY ~= dirY then
+		--print ("NaN")
+		else
+			dirX = math.floor(dirX)
+			dirY= math.floor(dirY)
+			--print ("dir: ",dirX, dirY)
+			e.updateVelocity(dirX,dirY)
+		end
+	end
+
 	-- gameplay
 
 	o.addTower = function(x,y,type)
@@ -81,57 +101,39 @@ function love.turris.newGame()
 			local t = love.turris.newTower(o.towerType[type], x, y)
 			--print ("tower: ",t, t.x, t.y)
 			o.map.setState(t.x, t.y, type)
-			--o.towers[o.towerCount] =t
 			--Playing Sound When Tower is Placed
-			if currentgamestate == 1 then
-			love.sounds.playSound("sounds/tower_1.mp3")
+			if currentgamestate == 1 then --TODO we should make sure that towers can never be _placed_ in any other state
+				love.sounds.playSound("sounds/tower_1.mp3")
 			end
 			o.towers[x*o.map.height+y] = t
 			o.towerCount = o.towerCount+1
-			--Recalculate paths. TODO: factor this out into its own function, then add it to the tower removal code
-			local e = o.enemies[1]
-			e.waypoints = e.generateWaypoints(o.map,math.floor(e.x+0.5),math.floor(e.y+0.5),o.baseX,o.baseY)
-			e.currentWaypoint = 1
-			local wpNext = e.waypoints[e.currentWaypoint]
-			local deltaX = wpNext[1]-e.x
-			local deltaY = wpNext[2]-e.y
-			--print ("delta: ", deltaX, deltaY)
-			local dirX,dirY = love.turris.normalize(deltaX , deltaY)
-
-			if dirX ~= dirX or dirY ~= dirY then
-			--print ("NaN")
-			else
-				dirX = math.floor(dirX)
-				dirY= math.floor(dirY)
-				--print ("dir: ",dirX, dirY)
-				e.updateVelocity(dirX,dirY)
-			end
+			o.recalculatePaths()
 		end
 	end
 
 	o.removeTower = function(x,y) --can remove from a position
-		--if true then return end --TODO temporarily deactivated this function, see issue #25 --issue #25 seems to be fixed
 		if (not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height) then
 			print ("nothing will be removed here!"..x.." "..o.map.width.." "..y.." "..o.map.height)
 			return
-		end
-		print("will try to remove tower at "..x..", "..y)
-		local state =o.map.getState(x,y)
-		if state and state==1 then -- TODO: let towers other than type 1 be deleted
-			o.towerCount = o.towerCount-1
-			o.towers[x*o.map.height+y] = nil
-			turMap.setState(x,y,0)
-			print(o.towers[x*o.map.height+y])
-		else
-			print("Could not delete tower at "..x..", "..y)
-		end
+	end
+	print("will try to remove tower at "..x..", "..y)
+	local state =o.map.getState(x,y)
+	if state and state==1 then -- TODO: let towers other than type 1 be deleted
+		o.towerCount = o.towerCount-1
+		o.towers[x*o.map.height+y] = nil
+		turMap.setState(x,y,0)
+		print(o.towers[x*o.map.height+y])
+		o.recalculatePaths()
+	else
+		print("Could not delete tower at "..x..", "..y)
+	end
 	end
 
 	-- returns tower at given coordinates or nil
 	o.gettowerAt = function(x,y)
 		return o.towers[x*o.map.height+y]
 	end
-	
+
 	-- returns tower at given position or the next tower or nil
 	o.getnextTower = function(arrayPos)
 		for i=arrayPos,o.towers.maxamount do
@@ -262,10 +264,6 @@ function love.turris.newGame()
 							G.setColor(63, 255, 0)
 							G.rectangle("line", i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight + o.offsetY - 16 - (img:getHeight() - o.map.tileHeight), 64, 8)
 						end
-						-- test
-						--						if o.map.data[i + 1][k + 1].health > 0.0 then
-						--							o.map.data[i + 1][k + 1].health = health - 0.1
-						--						end
 					end
 				end
 			end
@@ -324,11 +322,6 @@ function love.turris.newGame()
 	end
 
 	o.drawPaths = function()
-		--    for i = 1, o.entryCount do
-		--      local entry = enemyEntrances[i]
-		--    end
-		--local mx, my = love.mouse.getPosition()  -- current position of the mouse
-		--G.line(0,300, mx, my)
 		for i = 1, o.enemyCount do
 			local e = o.enemies[i]
 			local x = e.x
@@ -384,11 +377,11 @@ function love.turris.newGame()
 				end
 				--print(e.getDirection())
 
-				--debug: show travel direction
-				local ox, oy = e.getOrientation()
-				local wp = e.waypoints[e.currentWaypoint]
-				G.setColor(255, 63, 123)
-				o.drawLine(x,y,wp[1],wp[2])
+--				--debug: show travel direction
+--				local ox, oy = e.getOrientation()
+--				local wp = e.waypoints[e.currentWaypoint]
+--				G.setColor(255, 63, 123)
+--				o.drawLine(x,y,wp[1],wp[2])
 			end
 		end
 	end

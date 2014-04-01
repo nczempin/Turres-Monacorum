@@ -9,6 +9,10 @@ o.imgMiddleground	= love.graphics.newImage("resources/sprites/ui/menu_middlegrou
 o.imgOverlay		= love.graphics.newImage("resources/sprites/ui/overlay.png")
 o.imgScreen			= love.graphics.newImage("gfx/screen00.png")
 
+o.fontMenu = G.newFont(32)
+o.fontVersion = G.newFont(16)
+
+o.version = "0.0.0"
 o.effectTimer = 0
 o.chromaticEffect = 0
 
@@ -47,30 +51,41 @@ o.update = function(dt)
 end
 
 o.draw = function()
+	G.setFont(o.fontMenu)
 	G.setBlendMode("alpha")
-	love.graphics.setColor(255, 255, 255)
+	G.setColor(255, 255, 255)
 	G.draw(o.imgScreen)
-	love.graphics.setColor(255, 255, 255, 223)
+	G.setColor(255, 255, 255, 223)
 	G.draw(o.imgBackground)
-	love.graphics.setColor(95 + math.sin(o.effectTimer * 0.1) * 63, 191 + math.cos(o.effectTimer) * 31, 223 + math.sin(o.effectTimer) * 31, 255)
+	G.setColor(95 + math.sin(o.effectTimer * 0.1) * 63, 191 + math.cos(o.effectTimer) * 31, 223 + math.sin(o.effectTimer) * 31, 255)
 	G.setBlendMode("additive")
 	G.draw(o.imgMiddleground,(W.getWidth()-o.imgMiddleground:getWidth())*0.5,0)
-	love.graphics.setColor(255, 255, 255)
+	G.setColor(255, 255, 255)
 	G.setBlendMode("alpha")
 	G.draw(o.imgLogo, W.getWidth() * 0.5, o.imgLogo:getHeight() * 0.5, math.sin(o.effectTimer * 4) * 0.05 * math.max(0, 2 - o.effectTimer ^ 0.5), 1, 1, o.imgLogo:getWidth() * 0.5, o.imgLogo:getHeight() * 0.5)
 
 	o.guiMenu.draw()
 
+	G.setFont(o.fontVersion)
+	G.setColor(95 + math.sin(o.effectTimer * 0.1) * 63, 191 + math.cos(o.effectTimer) * 31, 223 + math.sin(o.effectTimer) * 31, 255)
+	G.print(o.version, W.getWidth() - 64, W.getHeight() - 32)
+
 	if math.random(0, love.timer.getFPS() * 5) == 0 then
 		o.chromaticEffect = 0
 	end
+
 	if o.chromaticEffect < 0.75 then
 		local colorAberration1 = math.sin(love.timer.getTime() * 10.0) * (0.75 - o.chromaticEffect) * 2.0
 		local colorAberration2 = math.cos(love.timer.getTime() * 10.0) * (0.75 - o.chromaticEffect) * 2.0
 
 		love.postshader.addEffect("chromatic", colorAberration1, colorAberration2, colorAberration2, -colorAberration1, colorAberration1, -colorAberration2)
 	end
+
 	love.postshader.addEffect("scanlines", 4.0)
+end
+
+o.setVersion = function(version)
+	o.version = version
 end
 
 return o

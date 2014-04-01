@@ -1,14 +1,21 @@
-require "external/postshader"
-require "external/light"
-require "external/anim"
-require "external/TESound"
 require "world"
 require "game"
 require "map"
 require "towerType"
 require "sound"
+
+require "util"
+
+require "gameoverlayer"
+require "hudLayer"
+
 require "libraries/gui"
+
+require "external/postshader"
+require "external/light"
+
 require "external/anim"
+require "external/TESound"
 
 function love.load()
 	G = love.graphics
@@ -16,13 +23,15 @@ function love.load()
 	T = love.turris
 	S = love.sounds
 
-	love.graphics.setFont(love.graphics.newFont(32))
+	FONT = G.newFont(32)
 
-	currentgamestate = 0  -- 0=GameOver 1=gameonly 4= game+gameover message 
+	currentgamestate = 0  -- 0=GameOver 1=gameonly 4= game+gameover message
 	love.turris.reinit()
 
 	stateMainMenu = require("state/main_menu")
 	stateCredits = require("state/credits")
+
+	stateMainMenu.setVersion("0.4.1")
 
 	bloomOn = true
 end
@@ -70,6 +79,7 @@ function love.update(dt)
 end
 
 function love.draw()
+	G.setFont(FONT)
 	W.setTitle("FPS: " .. love.timer.getFPS())
 	love.postshader.setBuffer("render")
 	G.setColor(0, 0, 0)
