@@ -38,8 +38,8 @@ function love.gui.newGui()
 			o.hit = false
 			o.down = false
 		end
-		
-		--Check if Mouse is over an button
+
+		--Check if Mouse is over an element
 		for i = 1, #o.elements do
 			o.elements[i].update(dt)
 
@@ -86,6 +86,13 @@ function love.gui.newGui()
 	--Return true when down
 	o.isDown = function()
 		return o.down
+	end
+
+	--Flush Mouse stats
+	o.flushMouse = function()
+		o.hit = false
+		o.down = true
+		print("flush")
 	end
 
 	return o

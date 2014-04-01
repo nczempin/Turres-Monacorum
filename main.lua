@@ -130,7 +130,7 @@ function love.keypressed(key, code)
 	end
 
 	if key == "escape" then
-		if not(love.getgamestate()==0) then
+		if love.getgamestate()==1 then
 			love.setgamestate(0)
 			love.turris.reinit()
 		end

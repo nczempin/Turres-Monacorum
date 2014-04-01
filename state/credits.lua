@@ -14,8 +14,10 @@ o.guiCredits = love.gui.newGui()
 o.update = function(dt)
 	o.guiCredits.update(dt)
 
-	if o.guiCredits.isHit() then
+	if o.guiCredits.isHit() or love.keyboard.isDown("escape") then
+		o.guiCredits.flushMouse()
 		love.setgamestate(0)
+		love.turris.reinit()
 	end
 end
 
