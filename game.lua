@@ -69,6 +69,17 @@ function love.turris.newGame()
 
 		o.mshLaser = love.graphics.newMesh(vertices, o.imgLaser, "fan")
 
+		o.imgPath = G.newImage("gfx/path_arrow.png")
+		o.imgPath:setWrap("repeat", "repeat")
+		vertices = {
+			{ 0, 0, 0, 0, 255, 0, 0,},
+			{ o.imgPath:getWidth(), 0, 1, 0, 0, 255, 0 },
+			{ o.imgPath:getWidth(), o.imgPath:getHeight(), 1, 1, 0, 0, 255 },
+			{ 0, o.imgPath:getHeight(), 0, 1, 255, 255, 0 },
+		}
+
+		o.mshPath = love.graphics.newMesh(vertices, o.imgPath, "fan")
+
 		o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
 		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
 
@@ -299,13 +310,13 @@ function love.turris.newGame()
 
 	o.draw = function()
 		o.drawMap()
-		o.drawPaths()
 		lightWorld.update()
 		lightWorld.drawPixelShadow()
 		o.drawTowerHealth()
 		o.drawEnemiesHealth()
 
 		lightWorld.setBuffer("glow")
+		o.drawPaths()
 		o.drawShots()
 		o.drawEnemies()
 		o.layerHud.draw()
@@ -392,6 +403,7 @@ function love.turris.newGame()
 	end
 
 	o.drawPaths = function()
+		G.setBlendMode("alpha")
 		for i = 1, o.enemyCount do
 			local e = o.enemies[i]
 			local x = e.x
@@ -400,7 +412,19 @@ function love.turris.newGame()
 				local wpFrom = e.waypoints[i]
 				local wpTo = e.waypoints[i+1]
 				G.setColor(232, 118, 0)
-				o.drawLine(wpFrom[1],wpFrom[2],wpTo[1],wpTo[2])
+				--o.drawLine(wpFrom[1],wpFrom[2],wpTo[1],wpTo[2])
+
+				local direction = math.atan2(wpFrom[1] - wpTo[1], wpTo[2] - wpFrom[2]) + math.pi * 0.5
+				local length = math.sqrt(math.pow(wpFrom[1] * o.map.tileWidth - wpTo[1] * o.map.tileWidth, 2) + math.pow(wpFrom[2] * o.map.tileHeight - wpTo[2] * o.map.tileHeight, 2))
+				local timer = -math.mod(love.timer.getTime() * 2.0, 1.0)
+				local vertices = {
+					{ 0, 0, timer, 0, 127, 0, 0 },
+					{ o.imgPath:getWidth(), 0, timer + length / o.imgPath:getWidth(), 0, 127, 0, 0 },
+					{ o.imgPath:getWidth(), o.imgPath:getHeight(), timer + length / o.imgPath:getWidth(), 1, 127, 63, 0 },
+					{ 0, o.imgPath:getHeight(), timer, 1, 127, 63, 0 },
+				}
+				o.mshPath:setVertices(vertices)
+				G.draw(o.mshPath, (wpFrom[1] - 0.5) * o.map.tileWidth + o.offsetX, (wpFrom[2] - 0.5) * o.map.tileHeight + o.offsetY, direction, (length) / o.imgPath:getWidth(), 1, 0, o.imgPath:getHeight() * 0.5)
 			end
 		end
 	end
@@ -408,7 +432,7 @@ function love.turris.newGame()
 	-- draw a line in world coordinates
 	o.drawLine = function(x1,y1,x2,y2)
 		if x1 and y1 and x2 and y2 then
-			G.line((x1-0.5)*o.map.tileWidth + o.offsetX, (y1-0.5) * o.map.tileHeight + o.offsetY,(x2-0.5) * o.map.tileWidth + o.offsetX, (y2 - 0.5)*o.map.tileHeight + o.offsetY)
+			G.line((x1 - 0.5) * o.map.tileWidth + o.offsetX, (y1 - 0.5) * o.map.tileHeight + o.offsetY,(x2 - 0.5) * o.map.tileWidth + o.offsetX, (y2 - 0.5) * o.map.tileHeight + o.offsetY)
 		end
 	end
 

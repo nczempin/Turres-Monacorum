@@ -12,7 +12,7 @@ require "external/postshader"
 require "external/light"
 
 require "external/anim"
-require "external/TESound"
+require "external/TEsound"
 
 function love.load()
 	G = love.graphics
