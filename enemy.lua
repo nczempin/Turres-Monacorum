@@ -50,7 +50,7 @@ function love.turris.newEnemy(img, map, x, y, baseX, baseY)
 
 	-- TODO this depends on the type and not on the particular enemy
 	o.maxHealth = 100.0
-	o.speed = 10.0
+	o.speed = 1.0
 	-- type end
 
 	--o.shadow = {}
@@ -111,38 +111,46 @@ function love.turris.normalize(x,y)
 	return xRet, yRet
 end
 
-function love.turris.updateEnemies(o,dt)
+function love.turris.updateEnemies(o, dt)
 	for i = 1, o.enemyCount do
 		local e = o.enemies[i]
-		e.x = e.x+e.xVel*dt
-		e.y = e.y+e.yVel*dt
 
-		local x = e.x
-		local y = e.y
+		if not e.dead then
+			e.x = e.x+e.xVel*dt
+			e.y = e.y+e.yVel*dt
 
-		-- check if waypoint reached
-		local wp = e.waypoints[e.currentWaypoint]
-		if math.abs(wp[1]-x)<0.1 and math.abs(wp[2] -y)<0.1 then
-			-- waypoint reached
-			local nextWpIndex = e.currentWaypoint +1
-			e.currentWaypoint = nextWpIndex
-			local wpNext = e.waypoints[nextWpIndex]
-			local dirX,dirY = love.turris.normalize( wpNext[1]-wp[1], wpNext[2]-wp[2])
-			e.updateVelocity(dirX,dirY)
-		end
+			local x = e.x
+			local y = e.y
 
-		-- write back the changes
-		o.enemies[i]= e
-		-- check for and handle game over
-		if distance_manhattan(o.baseX, o.baseY,x,y) < 1 then
-			e.dead = true
-			-- Game Over!!! (for now)
-			-- TODO: destroy ship (explosion)
-			-- TODO: destroy base (explosion!)
-			-- TODO: after explosions have finished -> transition to game over state
-			love.sounds.playSound("sounds/einschlag.mp3")
-			love.setgamestate(4)
-			gameOverEffect = 0
+			-- check if waypoint reached
+			local wp = e.waypoints[e.currentWaypoint]
+			if math.abs(wp[1]-x)<0.1 and math.abs(wp[2] -y)<0.1 then
+				-- waypoint reached
+				local nextWpIndex = e.currentWaypoint +1
+				e.currentWaypoint = nextWpIndex
+				local wpNext = e.waypoints[nextWpIndex]
+				local dirX,dirY = love.turris.normalize( wpNext[1]-wp[1], wpNext[2]-wp[2])
+				e.updateVelocity(dirX,dirY)
+			end
+
+			-- write back the changes
+			o.enemies[i]= e
+			-- check for and handle game over
+			if distance_manhattan(o.baseX, o.baseY, x, y) < 1 then
+				e.dead = true
+				-- Game Over!!! (for now)
+				-- TODO: destroy ship (explosion)
+				-- TODO: destroy base (explosion!)
+				-- TODO: after explosions have finished -> transition to game over state
+				love.sounds.playSound("sounds/einschlag.mp3")
+				turMap.data[o.baseX][o.baseY].addHealth(-40)
+				if turMap.data[o.baseX][o.baseY].health <= 0 then
+					love.setgamestate(4)
+				else
+					turGame.effectTimer = 0
+				end
+				gameOverEffect = 0
+			end
 		end
 	end
 end

@@ -12,6 +12,12 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 			o.data[i][k].id = 0
 			o.data[i][k].maxHealth = 100.0
 			o.data[i][k].health = o.data[i][k].maxHealth
+			o.data[i][k].addHealth = function(health)
+				o.data[i][k].health = o.data[i][k].health + health
+				if o.data[i][k].health < 0 then
+					o.data[i][k].health = 0
+				end
+			end
 		end
 	end
 	o.shadow = {}

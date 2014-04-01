@@ -11,8 +11,9 @@ function love.turris.newGame()
 	o.towerCount = 0
 	o.towers.next = 1
 	o.enemies = {}
-	o.enemyCount = 1
+	o.enemyCount = 3
 	o.dayTime = 90
+	o.effectTimer = 99
 	o.offsetX = 0.0
 	o.offsetY = 0.0
 	o.offsetChange = false
@@ -31,7 +32,7 @@ function love.turris.newGame()
 			end
 		end
 		for i = 1, o.enemyCount do
-			o.enemies[i]= love.turris.newEnemy(creepImg,o.map,0,o.baseY,o.baseX,o.baseY)
+			o.enemies[i]= love.turris.newEnemy(creepImg, o.map, i * 2, o.baseY, o.baseX, o.baseY)
 		end
 		o.newGround("gfx/ground_diffuse001.png")
 		o.newTowerType("gfx/tower00")
@@ -71,22 +72,24 @@ function love.turris.newGame()
 	end
 
 	o.recalculatePaths = function()
-		local e = o.enemies[1]
-		e.waypoints = e.generateWaypoints(o.map,math.floor(e.x+0.5),math.floor(e.y+0.5),o.baseX,o.baseY)
-		e.currentWaypoint = 1
-		local wpNext = e.waypoints[e.currentWaypoint]
-		local deltaX = wpNext[1]-e.x
-		local deltaY = wpNext[2]-e.y
-		--print ("delta: ", deltaX, deltaY)
-		local dirX,dirY = love.turris.normalize(deltaX , deltaY)
+		for i = 1, o.enemyCount do
+			local e = o.enemies[i]
+			e.waypoints = e.generateWaypoints(o.map, math.floor(e.x + 0.5), math.floor(e.y + 0.5), o.baseX, o.baseY)
+			e.currentWaypoint = 1
+			local wpNext = e.waypoints[e.currentWaypoint]
+			local deltaX = wpNext[1] - e.x
+			local deltaY = wpNext[2] - e.y
+			--print ("delta: ", deltaX, deltaY)
+			local dirX,dirY = love.turris.normalize(deltaX , deltaY)
 
-		if dirX ~= dirX or dirY ~= dirY then
-		--print ("NaN")
-		else
-			dirX = math.floor(dirX)
-			dirY= math.floor(dirY)
-			--print ("dir: ",dirX, dirY)
-			e.updateVelocity(dirX,dirY)
+			if dirX ~= dirX or dirY ~= dirY then
+			--print ("NaN")
+			else
+				dirX = math.floor(dirX)
+				dirY= math.floor(dirY)
+				--print ("dir: ",dirX, dirY)
+				e.updateVelocity(dirX,dirY)
+			end
 		end
 	end
 
@@ -206,6 +209,7 @@ function love.turris.newGame()
 	end
 
 	o.update = function(dt)
+		o.effectTimer = o.effectTimer +dt
 		o.dayTime = o.dayTime + dt * 0.1
 		T.updateEnemies(o,dt)
 
@@ -278,6 +282,15 @@ function love.turris.newGame()
 		o.drawPaths()
 		o.drawEnemies()
 		o.layerHud.draw()
+		
+		if o.effectTimer < 0.75 then
+			local colorAberration1 = math.sin(love.timer.getTime() * 20.0) * (0.75 - o.effectTimer) * 4.0
+			local colorAberration2 = math.cos(love.timer.getTime() * 20.0) * (0.75 - o.effectTimer) * 4.0
+
+			love.postshader.addEffect("blur", 2.0, 2.0)
+			love.postshader.addEffect("chromatic", colorAberration1, colorAberration2, colorAberration2, -colorAberration1, colorAberration1, -colorAberration2)
+			love.postshader.addEffect("scanlines")
+		end
 	end
 
 	o.drawShots = function()
@@ -343,6 +356,7 @@ function love.turris.newGame()
 	end
 
 	o.drawEnemies = function()
+		G.setBlendMode("alpha")
 		for i = 1, o.enemyCount do
 			local e = o.enemies[i]
 			if e and not e.dead then
@@ -350,7 +364,7 @@ function love.turris.newGame()
 				local y = e.y
 				local img = e.img
 				G.setColor(15, 15, 31, 63 + math.sin(love.timer.getTime() * 2.0) * 31)
-				love.graphics.ellipse("fill", x * o.map.tileWidth - o.offsetX - 32, y * o.map.tileHeight + o.offsetY - 16, 12 + math.sin(love.timer.getTime() * 2.0) * 3, 8 + math.sin(love.timer.getTime() * 2.0) * 2, 0, 16)
+				love.graphics.ellipse("fill", x * o.map.tileWidth + o.offsetX - 32, y * o.map.tileHeight + o.offsetY - 16, 12 + math.sin(love.timer.getTime() * 2.0) * 3, 8 + math.sin(love.timer.getTime() * 2.0) * 2, 0, 16)
 				G.setColor(255, 255, 255)
 				local directionAnim = (e.getDirection() + math.pi) / (math.pi * 0.25) - 1
 				if directionAnim == 0 then
