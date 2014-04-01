@@ -12,7 +12,7 @@ function aStar(start, goal, all_nodes)
 		local MAX_DIST = 1
 
 		if
-			distance ( node.x, node.y, neighbor.x, neighbor.y ) <= MAX_DIST then
+			distance_manhattan ( node.x, node.y, neighbor.x, neighbor.y ) <= MAX_DIST then
 			return true
 		end
 		return false

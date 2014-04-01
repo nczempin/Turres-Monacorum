@@ -9,6 +9,8 @@ require "towerType"
 require "sound"
 require "gameoverlayer"
 require "libraries/gui"
+require "hudLayer"
+require "external/anim"
 
 function love.load()
 	G = love.graphics
@@ -19,10 +21,9 @@ function love.load()
 	love.graphics.setFont(love.graphics.newFont(32))
 
 	currentgamestate = 0  -- 0=GameOver 1=gameonly 4= game+gameover message 
-	-- create game world
 	love.turris.reinit()
 	gameOverLayer = love.turris.newGameOverLayer()
-	--gui.createButtons()
+	hudLayer = love.turris.newHudLayer()
 
 	stateMainMenu = require("state/main_menu")
 	stateCredits = require("state/credits")
@@ -35,14 +36,13 @@ function love.getgamestate()
 end
 
 function love.turris.reinit()
+	-- create game world
 	turGame = love.turris.newGame()
 	turMap = love.turris.newMap(20, 20, 64, 48)
 	turGame.init()
 end
 
 function love.setgamestate(newgamestate)
-	--Change Sounds
-	--Credits
 	if newgamestate == 0 then
 		stateMainMenu.effectTimer = 0
 	end
@@ -79,6 +79,7 @@ function love.draw()
 	if(currentgamestate == 0) then --render main menu only
 		turGame.draw()
 		stateMainMenu.draw()
+
 		if math.random(0, love.timer.getFPS() * 5) == 0 then
 			gameOverEffect = 0
 		end
@@ -93,6 +94,7 @@ function love.draw()
 		turGame.draw()
 		--gui.drawOverlay()
 		love.postshader.addEffect("scanlines")
+		hudLayer.draw(100)
 	elseif(currentgamestate == 4) then -- render game + "game over" message on top
 		turGame.draw()
 		if gameOverEffect < 1.0 then
@@ -127,7 +129,7 @@ function love.keypressed(key, code)
 		bloomOn = not bloomOn
 	end
 
-	if key == "escape" then	
+	if key == "escape" then
 		if not(love.getgamestate()==0) then
 			love.setgamestate(0)
 			love.turris.reinit()

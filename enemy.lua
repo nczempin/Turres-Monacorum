@@ -43,6 +43,7 @@ function love.turris.newEnemy(img, map, x,y,baseX, baseY)
 	o.img = img
 	o.x = x
 	o.y = y
+	o.dead = false
 	o.waypoints = o.generateWaypoints(map,x,y,baseX,baseY)
 
 	o.currentWaypoint = 2
@@ -76,11 +77,15 @@ function love.turris.newEnemy(img, map, x,y,baseX, baseY)
 	return o
 end
 
-function distance(x1,y1,x2,y2) --TODO let's not leave this global
+function distance_manhattan(x1,y1,x2,y2) --TODO let's not leave this global
 	-- manhattan is sufficient for now
 	return math.abs(x1-x2)+math.abs(y1-y2)
 end
-
+function distance_euclid(x1,y1,x2,y2)
+	local x = x1-x2
+	local y = y1-y2
+	return math.sqrt(x*x+y*y)
+end
 function love.turris.normalize(x,y)
 	local m = math.max(math.abs(x),math.abs(y))
 	--print ("normalize: ", x, y, m)
@@ -118,7 +123,8 @@ function love.turris.updateEnemies(o,dt)
 		-- write back the changes
 		o.enemies[i]= e
 		-- check for and handle game over
-		if distance(o.baseX, o.baseY,x,y) < 1 then
+		if distance_manhattan(o.baseX, o.baseY,x,y) < 1 then
+			e.dead = true
 			-- Game Over!!! (for now)
 			-- TODO: destroy ship (explosion)
 			-- TODO: destroy base (explosion!)

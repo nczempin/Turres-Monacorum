@@ -1,4 +1,5 @@
 require "enemy"
+require "tower"
 
 function love.turris.newGame()
 	local o = {}
@@ -34,6 +35,8 @@ function love.turris.newGame()
 		o.newTowerType("gfx/tower02")
 		o.newTowerType("gfx/tower03")
 
+
+		print ("adding main base", o.baseX, o.baseY)
 		o.addTower(o.baseX, o.baseY, 2) --main base
 
 
@@ -60,21 +63,17 @@ function love.turris.newGame()
 		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
 	end
 
+	-- gameplay
+
 	o.addTower = function(x,y,type)
+		--print ("addTower:", x, y, type,o.map)
 		if not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height or not type or not (o.towerCount<o.towers.maxamount) then return end
 		local state = o.map.getState(x,y)
 		if state and state ==0 then
-			--o.towerCount = o.towerCount +1 -- NOT TO DO this is unsafe
-			local t = {}
-			t.x = x
-			t.y = y
-			t.type = type
+			--print ("x, y:",x,y)
+			local t = love.turris.newTower(o.towerType[type], x, y)
+			--print ("tower: ",t, t.x, t.y)
 			o.map.setState(t.x, t.y, type)
-			--o.towers[o.towerCount] =t
-			--Playing Sound When Tower is Placed
-			if(currentgamestate ~= 0) then
-				love.sounds.playSound("sounds/tower_1.mp3")
-			end
 			if o.towers.next<o.towers.maxamount and not o.towers.next then
 				o.towers[o.towers.next] = t --{next = towers, value =t}
 			else
@@ -89,6 +88,10 @@ function love.turris.newGame()
 				o.towers[o.towers.next] = t --{next = towers, value =t}
 				o.towers.next = o.towers.next+1
 				o.towerCount = o.towerCount+1
+				--Playing Sound When Tower is Placed
+				if(currentgamestate == 1) then
+					love.sounds.playSound("sounds/tower_1.mp3")
+				end
 				print(o.towerCount)
 				print("Tower was placed at "..x..", "..y)
 
@@ -101,15 +104,15 @@ function love.turris.newGame()
 				local wpNext = e.waypoints[e.currentWaypoint]
 				local deltaX = wpNext[1]-e.x
 				local deltaY = wpNext[2]-e.y
-				print ("delta: ", deltaX, deltaY)
+				--print ("delta: ", deltaX, deltaY)
 				local dirX,dirY = love.turris.normalize(deltaX , deltaY)
 
 				if dirX ~= dirX or dirY ~= dirY then
-					print ("NaN")
+				--print ("NaN")
 				else
 					dirX = math.floor(dirX)
 					dirY= math.floor(dirY)
-					print ("dir: ",dirX, dirY)
+					--print ("dir: ",dirX, dirY)
 					e.updateVelocity(dirX,dirY)
 				end
 				--end
@@ -143,7 +146,8 @@ function love.turris.newGame()
 		print("Could not delete tower at "..x..", "..y)
 		end
 	end
-	o.updateCamera=function(dt)
+
+	o.updateCamera = function(dt)
 		if love.mouse.isDown("m") then
 			if holdOffset then
 				o.offsetX = o.offsetX - (holdOffsetX - love.mouse.getX())
@@ -198,6 +202,8 @@ function love.turris.newGame()
 		elseif o.offsetY < W.getHeight() - turMap.getHeight() * turMap.getTileHeight() then
 			o.offsetY = W.getHeight() - turMap.getHeight() * turMap.getTileHeight()
 		end
+		holdOffsetX = love.mouse.getX()
+		holdOffsetY = love.mouse.getY()
 
 	end
 
@@ -207,6 +213,7 @@ function love.turris.newGame()
 
 		o.updateCamera(dt)
 
+		-- update shadows
 		if o.offsetChange then
 			o.map.shadowGround.setPosition(o.map.width * o.map.tileWidth * 0.5 + o.offsetX, o.map.height * o.map.tileHeight * 0.5 + o.offsetY)
 			for i = 1, o.map.width do
@@ -216,11 +223,12 @@ function love.turris.newGame()
 			end
 			o.offsetChange = false
 		end
+
+		-- update animations
 		o.creepAnim:update(dt)
 
-		holdOffsetX = love.mouse.getX()
-		holdOffsetY = love.mouse.getY()
 	end
+	--------------------- drawing starts here
 
 	o.drawMap = function()
 		local dayTime = math.abs(math.sin(o.dayTime))
@@ -275,21 +283,24 @@ function love.turris.newGame()
 	end
 
 	o.drawShots = function()
-		local e = o.enemies[1]		-- TODO this is a hack because I know there's only one creep for now
 
-		local x, y = e.x, e.y
 		G.setColor(255, 0, 0)
 
 		for i = 1, o.towerCount do
 			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
 			local t = o.towers[i]
-			local tx = (t.x - 0.5) * o.map.tileWidth + o.offsetX
-			local ty = (t.y - 0.5) * o.map.tileHeight + o.offsetY
-			local ex = (e.x - 0.5) * o.map.tileWidth + o.offsetX
-			local ey = (e.y - 0.5) * o.map.tileHeight + o.offsetY
-			local direction = math.atan2(tx - ex, ey - ty) + math.pi * 0.5
-			local length = math.sqrt(math.pow(tx - ex, 2) + math.pow(ty - ey, 2))
-			if (length < 150)then
+			local e = t.determineTarget(o.enemies,distance_euclid)
+
+			if e then
+				local x, y = e.x, e.y
+
+				local tx = (t.x - 0.5) * o.map.tileWidth + o.offsetX
+				local ty = (t.y - 0.5) * o.map.tileHeight + o.offsetY
+				local ex = (e.x - 0.5) * o.map.tileWidth + o.offsetX
+				local ey = (e.y - 0.5) * o.map.tileHeight + o.offsetY
+				local direction = math.atan2(tx - ex, ey - ty) + math.pi * 0.5
+				local length = math.sqrt(math.pow(tx - ex, 2) + math.pow(ty - ey, 2))
+				--			if (length < 150)then
 				local timer = -math.mod(love.timer.getTime() * 2.0, 1.0)
 				G.setBlendMode("additive")
 				--local vertices = {
@@ -306,6 +317,7 @@ function love.turris.newGame()
 				}
 				o.mshLaser:setVertices(vertices)
 				G.draw(o.mshLaser, (t.x - 0.5) * o.map.tileWidth + o.offsetX, (t.y - 0.5) * o.map.tileHeight + o.offsetY, direction, length / o.imgLaser:getWidth(), 1, 0, 64)
+				--		end
 			end
 		end
 	end
@@ -339,42 +351,44 @@ function love.turris.newGame()
 	o.drawEnemies = function()
 		for i = 1, o.enemyCount do
 			local e = o.enemies[i]
-			local x = e.x
-			local y = e.y
-			local img = e.img
-			G.setColor(15, 15, 31, 63 + math.sin(love.timer.getTime() * 2.0) * 31)
-			love.graphics.ellipse("fill", x * o.map.tileWidth - o.offsetX - 32, y * o.map.tileHeight + o.offsetY - 16, 12 + math.sin(love.timer.getTime() * 2.0) * 3, 8 + math.sin(love.timer.getTime() * 2.0) * 2, 0, 16)
-			G.setColor(255, 255, 255)
-			local directionAnim = (e.getDirection() + math.pi) / (math.pi * 0.25) - 1
-			if directionAnim == 0 then
-				directionAnim = 8
-			end
+			if e and not e.dead then
+				local x = e.x
+				local y = e.y
+				local img = e.img
+				G.setColor(15, 15, 31, 63 + math.sin(love.timer.getTime() * 2.0) * 31)
+				love.graphics.ellipse("fill", x * o.map.tileWidth - o.offsetX - 32, y * o.map.tileHeight + o.offsetY - 16, 12 + math.sin(love.timer.getTime() * 2.0) * 3, 8 + math.sin(love.timer.getTime() * 2.0) * 2, 0, 16)
+				G.setColor(255, 255, 255)
+				local directionAnim = (e.getDirection() + math.pi) / (math.pi * 0.25) - 1
+				if directionAnim == 0 then
+					directionAnim = 8
+				end
 
-			o.creepAnim:seek(directionAnim)
+				o.creepAnim:seek(directionAnim)
 
-			o.creepAnim:draw(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 16 + math.sin(love.timer.getTime() * 2.0) * 4.0)
-			--e.shadow.setPosition(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 32)
-			-- health
-			if e.health < e.maxHealth then
-				G.setColor(0, 0, 0, 127)
-				G.rectangle("fill", (x - 1) * o.map.tileWidth + o.offsetX - 2, (y - 1) * o.map.tileHeight + o.offsetY - 16 - 2, 64 + 4, 8 + 4)
-				G.setColor(255 * math.min((1.0 - e.health / e.maxHealth) * 2.0, 1.0), 255 * math.min((e.health / e.maxHealth) * 1.5, 1.0), 0)
-				G.rectangle("fill", (x - 1) * o.map.tileWidth + o.offsetX + 2, (y - 1) * o.map.tileHeight + o.offsetY - 16 + 2, (64 - 4) * e.health / e.maxHealth, 8 - 4)
-				G.setLineWidth(1)
-				G.setColor(255, 63, 0)
-				G.rectangle("line", (x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY - 16, 64, 8)
-			end
-			-- test
-			if e.health > 0.0 then
-				e.health = e.health - 0.1
-			end
-			--print(e.getDirection())
+				o.creepAnim:draw(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 16 + math.sin(love.timer.getTime() * 2.0) * 4.0)
+				--e.shadow.setPosition(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 32)
+				-- health
+				if e.health < e.maxHealth then
+					G.setColor(0, 0, 0, 127)
+					G.rectangle("fill", (x - 1) * o.map.tileWidth + o.offsetX - 2, (y - 1) * o.map.tileHeight + o.offsetY - 16 - 2, 64 + 4, 8 + 4)
+					G.setColor(255 * math.min((1.0 - e.health / e.maxHealth) * 2.0, 1.0), 255 * math.min((e.health / e.maxHealth) * 1.5, 1.0), 0)
+					G.rectangle("fill", (x - 1) * o.map.tileWidth + o.offsetX + 2, (y - 1) * o.map.tileHeight + o.offsetY - 16 + 2, (64 - 4) * e.health / e.maxHealth, 8 - 4)
+					G.setLineWidth(1)
+					G.setColor(255, 63, 0)
+					G.rectangle("line", (x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY - 16, 64, 8)
+				end
+				-- test
+				if e.health > 0.0 then
+					e.health = e.health - 0.1
+				end
+				--print(e.getDirection())
 
-			--debug: show travel direction
-			local ox, oy = e.getOrientation()
-			local wp = e.waypoints[e.currentWaypoint]
-			G.setColor(255, 63, 123)
-			o.drawLine(x,y,wp[1],wp[2])
+				--debug: show travel direction
+				local ox, oy = e.getOrientation()
+				local wp = e.waypoints[e.currentWaypoint]
+				G.setColor(255, 63, 123)
+				o.drawLine(x,y,wp[1],wp[2])
+			end
 		end
 	end
 
