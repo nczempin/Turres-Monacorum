@@ -24,9 +24,9 @@ function aStar(start, goal, all_nodes)
 	if not path then
 		print ( "No valid path found" )
 	else
-		for i, node in ipairs ( path ) do
-			print ( "Step " .. i .. " >> " .. node.x..", "..node.y )
-		end
+--		for i, node in ipairs ( path ) do
+--			print ( "Step " .. i .. " >> " .. node.x..", "..node.y )
+--		end
 		return path
 	end
 end
