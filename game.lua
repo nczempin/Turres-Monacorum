@@ -123,6 +123,7 @@ function love.turris.newGame()
 		o.towers[x*o.map.height+y] = nil
 		turMap.setState(x,y,0)
 		print(o.towers[x*o.map.height+y])
+		o.recalculatePaths()
 	else
 		print("Could not delete tower at "..x..", "..y)
 	end
