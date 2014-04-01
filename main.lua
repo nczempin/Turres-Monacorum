@@ -8,6 +8,7 @@ require "sound"
 require "external/TESound"
 require "gui"
 require "gameoverlayer"
+require "hudLayer"
 require "external/anim"
 require "credits"
 
@@ -16,10 +17,10 @@ function love.load()
 	W = love.window
 	T = love.turris
 	S = love.sounds
-	currentgamestate = 0  -- 0=GameOver 1=gameonly 4= game+gameover message 
-	-- create game world
+	currentgamestate = 0  -- 0=GameOver 1=gameonly 4= game+gameover message
 	love.turris.reinit()
 	gameOverLayer = love.turris.newGameOverLayer()
+	hudLayer = love.turris.newHudLayer()
 	gui.createButtons()
 
 	bloomOn = true
@@ -30,21 +31,22 @@ end
 
 
 function love.turris.reinit()
+	-- create game world
 	turGame = love.turris.newGame()
 	turMap = love.turris.newMap(20, 20, 64, 48)
 	turGame.init()
 end
 
 function love.setgamestate(newgamestate)
-	
+
 	--End Sounds
 	--Credits
 	if currentgamestate == 5 then
 		love.sounds.stopSound("gameover")
 	end
-	
+
 	currentgamestate = newgamestate
-	
+
 	--Starting Sounds
 	--Credits
 	if currentgamestate == 5 then
@@ -89,6 +91,7 @@ function love.draw()
 		turGame.draw()
 		--gui.drawOverlay()
 		love.postshader.addEffect("scanlines")
+		hudLayer.draw(100)
 	elseif(currentgamestate == 4) then -- render game + "game over" message on top
 		turGame.draw()
 		if gameOverEffect < 1.0 then
@@ -127,7 +130,7 @@ function love.keypressed(key, code)
 		bloomOn = not bloomOn
 	end
 
-	if key == "escape" then	
+	if key == "escape" then
 		if not(love.getgamestate()==0) then
 			love.setgamestate(0)
 			love.turris.reinit()
