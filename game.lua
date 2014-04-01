@@ -226,8 +226,8 @@ function love.turris.newGame()
 		o.creepAnim:update(dt)
 
 		-- test
-		o.layerHud.addMass(0.0037)
-		o.layerHud.addEnergy(0.13)
+		o.layerHud.addMass(dt*2)
+		o.layerHud.addEnergy(dt*10)
 	end
 	--------------------- drawing starts here
 
@@ -377,11 +377,11 @@ function love.turris.newGame()
 				end
 				--print(e.getDirection())
 
---				--debug: show travel direction
---				local ox, oy = e.getOrientation()
---				local wp = e.waypoints[e.currentWaypoint]
---				G.setColor(255, 63, 123)
---				o.drawLine(x,y,wp[1],wp[2])
+				--				--debug: show travel direction
+				--				local ox, oy = e.getOrientation()
+				--				local wp = e.waypoints[e.currentWaypoint]
+				--				G.setColor(255, 63, 123)
+				--				o.drawLine(x,y,wp[1],wp[2])
 			end
 		end
 	end
