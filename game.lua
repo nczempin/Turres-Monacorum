@@ -361,7 +361,7 @@ function love.turris.newGame()
 					local ex = (e.x - 0.5) * o.map.tileWidth + o.offsetX
 					local ey = (e.y - 0.5) * o.map.tileHeight + o.offsetY
 					local direction = math.atan2(tx - ex, ey - ty) + math.pi * 0.5
-					local length = math.sqrt(math.pow(tx - ex, 2) + math.pow(ty - ey, 2))
+					local length = math.sqrt(math.pow(tx - ex, 2) + math.pow((ty) - ey, 2))
 					--			if (length < 150)then
 					local timer = -math.mod(love.timer.getTime() * 2.0, 1.0)
 					--local vertices = {
@@ -372,8 +372,8 @@ function love.turris.newGame()
 					--}
 					local vertices = {
 						{ 0, 0, timer, 0, 255, 127, 0 },
-						{ o.imgLaser:getWidth(), 0, timer + 1, 0, 0, 127, 255 },
-						{ o.imgLaser:getWidth(), o.imgLaser:getHeight(), timer + 1, 1, 0, 127, 255 },
+						{ o.imgLaser:getWidth(), 0, timer + length / o.imgLaser:getWidth(), 0, 0, 127, 255 },
+						{ o.imgLaser:getWidth(), o.imgLaser:getHeight(), timer + length / o.imgLaser:getWidth(), 1, 0, 127, 255 },
 						{ 0, o.imgLaser:getHeight(), timer, 1, 255, 127, 0 },
 					}
 					o.mshLaser:setVertices(vertices)
