@@ -84,6 +84,11 @@ function love.gui.newGui()
 	o.flushMouse = function()
 		o.hit = false
 		o.down = true
+
+		for i = 1, #o.elements do
+			o.elements[i].hit = false
+			o.elements[i].down = true
+		end
 	end
 
 	return o

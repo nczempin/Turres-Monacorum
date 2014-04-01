@@ -6,9 +6,6 @@ require "sound"
 
 require "util"
 
-require "gameoverlayer"
-require "hudLayer"
-
 require "libraries/gui"
 
 require "external/postshader"
@@ -104,6 +101,7 @@ end
 function love.turris.gameoverstate()
 	love.setgamestate(0)
 	love.turris.reinit()
+	stateMainMenu.reset()
 end
 
 function love.keypressed(key, code)

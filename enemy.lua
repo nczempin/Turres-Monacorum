@@ -50,7 +50,7 @@ function love.turris.newEnemy(img, map, x, y, baseX, baseY)
 
 	-- TODO this depends on the type and not on the particular enemy
 	o.maxHealth = 100.0
-	o.speed = 1.0
+	o.speed = 10.0
 	-- type end
 
 	--o.shadow = {}

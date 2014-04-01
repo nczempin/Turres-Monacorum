@@ -24,6 +24,10 @@ o.btnQuit		= o.guiMenu.newButton(startx, starty + 80 * 3, 176, 48, "Quit")
 
 o.btnConfigure.disable()
 
+o.reset = function()
+	o.guiMenu.flushMouse()
+end
+
 o.update = function(dt)
 	o.effectTimer = o.effectTimer + dt
 	o.chromaticEffect = o.chromaticEffect + dt
