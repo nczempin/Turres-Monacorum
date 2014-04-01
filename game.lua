@@ -98,7 +98,6 @@ function love.turris.newGame()
 			local t = love.turris.newTower(o.towerType[type], x, y)
 			--print ("tower: ",t, t.x, t.y)
 			o.map.setState(t.x, t.y, type)
-			--o.towers[o.towerCount] =t
 			--Playing Sound When Tower is Placed
 			if currentgamestate == 1 then --TODO we should make sure that towers can never be _placed_ in any other state
 				love.sounds.playSound("sounds/tower_1.mp3")
@@ -106,12 +105,10 @@ function love.turris.newGame()
 			o.towers[x*o.map.height+y] = t
 			o.towerCount = o.towerCount+1
 			o.recalculatePaths()
-			--Recalculate paths. TODO: factor this out into its own function, then add it to the tower removal code
 		end
 	end
 
 	o.removeTower = function(x,y) --can remove from a position
-		--if true then return end --TODO temporarily deactivated this function, see issue #25 --issue #25 seems to be fixed
 		if (not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height) then
 			print ("nothing will be removed here!"..x.." "..o.map.width.." "..y.." "..o.map.height)
 			return
@@ -261,10 +258,6 @@ function love.turris.newGame()
 							G.setColor(63, 255, 0)
 							G.rectangle("line", i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight + o.offsetY - 16 - (img:getHeight() - o.map.tileHeight), 64, 8)
 						end
-						-- test
-						--						if o.map.data[i + 1][k + 1].health > 0.0 then
-						--							o.map.data[i + 1][k + 1].health = health - 0.1
-						--						end
 					end
 				end
 			end
@@ -322,11 +315,6 @@ function love.turris.newGame()
 	end
 
 	o.drawPaths = function()
-		--    for i = 1, o.entryCount do
-		--      local entry = enemyEntrances[i]
-		--    end
-		--local mx, my = love.mouse.getPosition()  -- current position of the mouse
-		--G.line(0,300, mx, my)
 		for i = 1, o.enemyCount do
 			local e = o.enemies[i]
 			local x = e.x
@@ -382,11 +370,11 @@ function love.turris.newGame()
 				end
 				--print(e.getDirection())
 
-				--debug: show travel direction
-				local ox, oy = e.getOrientation()
-				local wp = e.waypoints[e.currentWaypoint]
-				G.setColor(255, 63, 123)
-				o.drawLine(x,y,wp[1],wp[2])
+--				--debug: show travel direction
+--				local ox, oy = e.getOrientation()
+--				local wp = e.waypoints[e.currentWaypoint]
+--				G.setColor(255, 63, 123)
+--				o.drawLine(x,y,wp[1],wp[2])
 			end
 		end
 	end
