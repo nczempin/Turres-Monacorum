@@ -1,6 +1,7 @@
 require "enemy"
 require "tower"
 require "player"
+require "layer/hud"
 
 function love.turris.newGame()
 	local o = {}
@@ -22,6 +23,7 @@ function love.turris.newGame()
 	o.holdOffsetX = 0
 	o.holdOffsetY = 0
 	o.player = love.turris.newPlayer()
+	o.layerHud = love.turris.newHudLayer(o.player)
 
 	o.init = function()
 		o.setMap(turMap.getMap())
@@ -280,7 +282,7 @@ function love.turris.newGame()
 		o.drawShots()
 		o.drawPaths()
 		o.drawEnemies()
-		o.layerHud.draw(o.player)
+		o.layerHud.draw()
 	end
 
 	o.drawShots = function()
