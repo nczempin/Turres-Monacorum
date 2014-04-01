@@ -34,7 +34,7 @@ o.draw = function()
 
 	for i = 1, #o.otherText do
 		local x = 32
-		local y = 576 - i * 32
+		local y = W.getHeight() - (i+1) * 32
 		love.graphics.setColor(75, 75, 75, 255)
 		love.graphics.print(o.otherText[i], x, y)
 	end
