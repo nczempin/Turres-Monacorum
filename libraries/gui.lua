@@ -1,12 +1,4 @@
---Button class
--- This Class is a Button with all its Attributes
--- @param x
--- @param y
--- @param width
--- @param height
--- @param name The Name of the button
--- @param path for an Image
-
+--GUI class
 love.gui = {}
 
 require "libraries/button"
