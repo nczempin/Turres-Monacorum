@@ -26,10 +26,10 @@ o.draw = function()
 		local r = 127 + math.sin(love.timer.getTime() * 5 - i + 90) * 127
 		local g = 127 + math.sin(love.timer.getTime() * 5 - i + 180) * 127
 		local b = 127 + math.sin(love.timer.getTime() * 5 - i + 270) * 127
-		local x = 256
+		local x = 0
 		local y = 72 + i * 32
 		love.graphics.setColor(r, g, b, 255)
-		love.graphics.print(o.names[i], x, y)
+		love.graphics.printf(o.names[i], x, y, W.getWidth(),"center")
 	end
 
 	for i = 1, #o.otherText do
