@@ -95,7 +95,7 @@ function love.draw()
 		turGame.draw()
 		--gui.drawOverlay()
 		love.postshader.addEffect("scanlines")
-		hudLayer.draw(100)
+		hudLayer.draw(turGame.energy)
 	elseif(currentgamestate == 4) then -- render game + "game over" message on top
 		turGame.draw()
 		if gameOverEffect < 1.0 then

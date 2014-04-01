@@ -20,6 +20,9 @@ function love.turris.newGame()
 	o.holdOffset = false
 	o.holdOffsetX = 0
 	o.holdOffsetY = 0
+	
+	o.energy = 98
+	
 	o.init = function()
 		o.setMap(turMap.getMap())
 		o.baseX = math.floor(o.map.width / 2 + 0.5)
