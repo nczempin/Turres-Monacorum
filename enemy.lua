@@ -49,8 +49,10 @@ function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 	o.health = 100.0
 
 	-- TODO this depends on the type and not on the particular enemy
+	o.enemyType = enemyType
 	o.maxHealth = enemyType.maxHealth
 	o.speed =  enemyType.baseSpeed
+	o.sheet = enemyType.sheet
 	-- type end
 
 	--o.shadow = {}

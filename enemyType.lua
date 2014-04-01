@@ -1,6 +1,6 @@
-function love.turris.newEnemyType(img, maxHealth, baseSpeed)
+function love.turris.newEnemyType(sheet, maxHealth, baseSpeed)
 	local o = {}
-	o.img = img
+	o.sheet = sheet
 	o.maxHealth = maxHealth
 	o.baseSpeed = baseSpeed
 	return o

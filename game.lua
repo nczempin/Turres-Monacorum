@@ -36,12 +36,15 @@ function love.turris.newGame()
 				o.towers[x*o.map.height+y]=nil
 			end
 		end
-		o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
-		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
+		o.creepImg1 = G.newImage("gfx/creep00_diffuse_sheet.png")
+		o.creepAnim1 = newAnimation(o.creepImg1, o.creepImg1:getWidth(), o.creepImg1:getHeight() / 8.0, 0, 0)
+		o.creepImg2 = G.newImage("gfx/creep01_diffuse_sheet.png")
+		o.creepAnim2 = newAnimation(o.creepImg2, o.creepImg2:getWidth(), o.creepImg2:getHeight() / 8.0, 0, 0)
 		local img -- TODO
 
-		local et1 = love.turris.newEnemyType(img, 100, 1.0)
-		local et2 = love.turris.newEnemyType(img, 100, 1.0)
+		local et1 = love.turris.newEnemyType(o.creepAnim1, 100, 1.0)
+		local et2 = love.turris.newEnemyType(o.creepAnim2, 200, 0.5)
+
 		o.enemyTypes = {et1, et2}
 		for i = 1, o.enemyCount do
 			o.enemies[i]= love.turris.newEnemy(o.enemyTypes[i%2+1], o.map, i, o.baseY, o.baseX, o.baseY)
@@ -250,7 +253,7 @@ function love.turris.newGame()
 		end
 
 		-- update animations
-		o.creepAnim:update(dt)
+		--o.creepAnim:update(dt)
 
 		-- test
 		o.player.addMass(dt*2)
@@ -449,16 +452,17 @@ function love.turris.newGame()
 			if e and not e.dead then
 				local x = e.x
 				local y = e.y
-				local img = e.img
+
+
 				G.setColor(255, 255, 255)
 				local directionAnim = (e.getDirection() + math.pi) / (math.pi * 0.25) - 1
 				if directionAnim == 0 then
 					directionAnim = 8
 				end
+				local ca = e.sheet
+				ca:seek(directionAnim)
 
-				o.creepAnim:seek(directionAnim)
-
-				o.creepAnim:draw(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 16 + math.sin(love.timer.getTime() * 2.0) * 4.0)
+				ca:draw(x * o.map.tileWidth - (ca.fw * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (ca.fh / 8.0 * 0.5) + o.offsetY + 16 + math.sin(love.timer.getTime() * 2.0) * 4.0)
 				--e.shadow.setPosition(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 32)
 
 				--print(e.getDirection())
