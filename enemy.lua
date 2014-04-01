@@ -102,12 +102,12 @@ function love.turris.normalize(x,y)
 	--print ("normalize: ", x, y, m)
 	local xRet = x/m
 	local yRet = y/m
-	if (xRet ~= xRet) then
-		print ("xRet NaN: ",xRet)
-	end
-	if (yRet ~= yRet) then
-		print ("yRet NaN: ",yRet)
-	end
+--	if (xRet ~= xRet) then
+--		print ("xRet NaN: ",xRet)
+--	end
+--	if (yRet ~= yRet) then
+--		print ("yRet NaN: ",yRet)
+--	end
 	return xRet, yRet
 end
 
