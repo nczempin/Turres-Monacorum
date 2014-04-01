@@ -102,12 +102,12 @@ function love.turris.normalize(x,y)
 	--print ("normalize: ", x, y, m)
 	local xRet = x/m
 	local yRet = y/m
-	if (xRet ~= xRet) then
-		print ("xRet NaN: ",xRet)
-	end
-	if (yRet ~= yRet) then
-		print ("yRet NaN: ",yRet)
-	end
+--	if (xRet ~= xRet) then
+--		print ("xRet NaN: ",xRet)
+--	end
+--	if (yRet ~= yRet) then
+--		print ("yRet NaN: ",yRet)
+--	end
 	return xRet, yRet
 end
 
@@ -136,7 +136,7 @@ function love.turris.updateEnemies(o, dt)
 			-- write back the changes
 			o.enemies[i]= e
 			-- check for and handle game over
-			if distance_manhattan(o.baseX, o.baseY, x, y) < 1 then
+			if distance_manhattan(o.baseX, o.baseY, x, y) < 0.5 then
 				e.dead = true
 				-- Game Over!!! (for now)
 				-- TODO: destroy ship (explosion)
