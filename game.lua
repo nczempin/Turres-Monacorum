@@ -426,16 +426,17 @@ function love.turris.newGame()
 			if e and not e.dead then
 				local x = e.x
 				local y = e.y
-				local img = e.img
+
+
 				G.setColor(255, 255, 255)
 				local directionAnim = (e.getDirection() + math.pi) / (math.pi * 0.25) - 1
 				if directionAnim == 0 then
 					directionAnim = 8
 				end
+				local ca = o.creepAnim
+				ca:seek(directionAnim)
 
-				o.creepAnim:seek(directionAnim)
-
-				o.creepAnim:draw(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 16 + math.sin(love.timer.getTime() * 2.0) * 4.0)
+				ca:draw(x * o.map.tileWidth - (ca.fw * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (ca.fh / 8.0 * 0.5) + o.offsetY + 16 + math.sin(love.timer.getTime() * 2.0) * 4.0)
 				--e.shadow.setPosition(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 32)
 
 				--print(e.getDirection())
