@@ -1,5 +1,5 @@
 extern float time = 0.0;
-extern vec3 c = vec3(1.0,1.0,1.0);
+extern vec3 tint = vec3(1.0, 1.0, 1.0);
 extern float fudge = 0.1;
 
 float rand(vec2 position, float seed) {
@@ -9,6 +9,5 @@ float rand(vec2 position, float seed) {
 vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 pixel_coords){
 	vec4 pixel = Texel(texture, texture_coords);
 	float intensity = (pixel.r + pixel.g + pixel.b) / 3.0 + (rand(texture_coords, time) - 0.5) * fudge;
-	vec3 tint = vec3(intensity * c.r, intensity * c.g, intensity * c.b);
-	return vec4(tint, 1.0);
+	return vec4(intensity * tint.r, intensity * tint.g, intensity * tint.b, 1.0);
 }

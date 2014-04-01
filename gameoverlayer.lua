@@ -11,4 +11,3 @@ function love.turris.newGameOverLayer()
 
 	return o
 end
-

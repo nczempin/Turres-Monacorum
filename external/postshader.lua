@@ -1,3 +1,27 @@
+--[[
+The MIT License (MIT)
+
+Copyright (c) 2014 Marcus Ihde, Nicolai Czempin
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+]]
+
 LOVE_POSTSHADER_BUFFER_RENDER = love.graphics.newCanvas()
 LOVE_POSTSHADER_BUFFER_BACK = love.graphics.newCanvas()
 LOVE_POSTSHADER_LAST_BUFFER = nil
@@ -85,14 +109,14 @@ love.postshader.addEffect = function(shader, ...)
 		love.graphics.draw(LOVE_POSTSHADER_BUFFER_RENDER)
 	elseif shader == "monochrom" then
 		-- Monochrom Shader
-		LOVE_POSTSHADER_MONOCHROM:send("time", love.timer.getTime())
-		love.graphics.setShader(LOVE_POSTSHADER_MONOCHROM)
-		love.graphics.draw(LOVE_POSTSHADER_BUFFER_RENDER)
-	elseif shader == "greenochrome" then
-		-- Monochrom Shader
-		LOVE_POSTSHADER_MONOCHROM:send("time", love.timer.getTime())
-		LOVE_POSTSHADER_MONOCHROM:send("c",{0.0,1.0,0.0})
-		LOVE_POSTSHADER_MONOCHROM:send("fudge", 0.2)
+		for i = 1, 3 do
+			if args[i] then
+				args[i] = args[i] / 255.0
+			end
+		end
+		LOVE_POSTSHADER_MONOCHROM:send("tint", {args[1] or 1.0, args[2] or 1.0, args[3] or 1.0})
+		LOVE_POSTSHADER_MONOCHROM:send("fudge", args[4] or 0.1)
+		LOVE_POSTSHADER_MONOCHROM:send("time", args[5] or love.timer.getTime())
 		love.graphics.setShader(LOVE_POSTSHADER_MONOCHROM)
 		love.graphics.draw(LOVE_POSTSHADER_BUFFER_RENDER)
 	elseif shader == "scanlines" then

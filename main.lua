@@ -1,33 +1,38 @@
-require "postshader"
-require "light"
+require "external/postshader"
+require "external/light"
+require "external/anim"
+require "external/TESound"
 require "world"
 require "game"
 require "map"
 require "towerType"
 require "sound"
-require "external/TESound"
-require "gui"
 require "gameoverlayer"
-require "external/anim"
-require "credits"
+require "libraries/gui"
 
 function love.load()
 	G = love.graphics
 	W = love.window
 	T = love.turris
 	S = love.sounds
+
+	love.graphics.setFont(love.graphics.newFont(32))
+
 	currentgamestate = 0  -- 0=GameOver 1=gameonly 4= game+gameover message 
 	-- create game world
 	love.turris.reinit()
 	gameOverLayer = love.turris.newGameOverLayer()
-	gui.createButtons()
+	--gui.createButtons()
+
+	stateMainMenu = require("state/main_menu")
+	stateCredits = require("state/credits")
 
 	bloomOn = true
 end
+
 function love.getgamestate()
 	return currentgamestate
 end
-
 
 function love.turris.reinit()
 	turGame = love.turris.newGame()
@@ -36,32 +41,31 @@ function love.turris.reinit()
 end
 
 function love.setgamestate(newgamestate)
-	
-	--End Sounds
+	--Change Sounds
 	--Credits
-	if currentgamestate == 5 then
-		love.sounds.stopSound("gameover")
-	end
-	
-	currentgamestate = newgamestate
-	
-	--Starting Sounds
-	--Credits
-	if currentgamestate == 5 then
-		love.sounds.playBackground("sounds/music/highscore.mp3","gameover")
+	if newgamestate == 0 then
+		stateMainMenu.effectTimer = 0
 	end
 
-	gui.timer = 0
+	if currentgamestate == 5 then
+		love.sounds.stopSound("gameover")
+	elseif newgamestate == 5 then
+		love.sounds.playBackground("sounds/music/highscore.mp3", "gameover")
+	end
+
+	currentgamestate = newgamestate
 end
 
 function love.update(dt)
 	if (currentgamestate == 0)then
 		gameOverEffect = gameOverEffect + dt
-		gui.update(dt)
+		stateMainMenu.update(dt)
 	elseif (currentgamestate == 1)then
 		turGame.update(dt)
 	elseif (currentgamestate == 4)then
 		gameOverEffect = gameOverEffect + dt
+	elseif (currentgamestate == 5)then
+		stateCredits.update(dt)
 	end
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
 end
@@ -74,7 +78,7 @@ function love.draw()
 
 	if(currentgamestate == 0) then --render main menu only
 		turGame.draw()
-		gui.drawMainMenu()
+		stateMainMenu.draw()
 		if math.random(0, love.timer.getFPS() * 5) == 0 then
 			gameOverEffect = 0
 		end
@@ -99,15 +103,12 @@ function love.draw()
 			love.postshader.addEffect("chromatic", colorAberration1, colorAberration2, colorAberration2, -colorAberration1, colorAberration1, -colorAberration2)
 			love.postshader.addEffect("scanlines")
 		else
-			G.setColor(31, 31, 31, 191)
-			G.setBlendMode("alpha")
-			G.rectangle("fill", 0, 0, W.getWidth(), W.getHeight())
-			love.postshader.addEffect("greenochrome")
+			love.postshader.addEffect("monochrom", 127, 255, 191, 0.2)
 			gameOverLayer.draw()
 			love.postshader.addEffect("scanlines", 4.0)
 		end
 	elseif currentgamestate == 5 then --credits screen
-		love.turris.drawCredits()
+		stateCredits.draw()
 		love.postshader.addEffect("scanlines", 4.0)
 	end
 	if bloomOn then
@@ -122,7 +123,6 @@ function love.turris.gameoverstate()
 end
 
 function love.keypressed(key, code)
-
 	if key == "b" then
 		bloomOn = not bloomOn
 	end
@@ -133,4 +133,22 @@ function love.keypressed(key, code)
 			love.turris.reinit()
 		end
 	end
+end
+
+function love.mousepressed(x, y, key)
+	if(key=="l") then
+		buttonDetected = 1
+		love.turris.checkleftclick(x,y)
+	end
+	if(key=="m") then
+		buttonDetected = 3
+	end
+	if(key=="r") then
+		buttonDetected = 2
+		love.turris.checkrightclick(x,y)
+	end
+end
+
+function love.mousereleased(x, y, key)
+	buttonDetected = 0
 end
