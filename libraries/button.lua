@@ -39,6 +39,7 @@ function love.gui.newButton(x, y, width, height, text, imagePath)
 			love.graphics.printf(o.text, o.x + 2, o.y + 6, o.width, "center")
 			G.setBlendMode("additive")
 			love.graphics.setColor(o.colorHover[1], o.colorHover[2], o.colorHover[3])
+			G.setFont(G.newFont(32))
 			love.graphics.printf(o.text, o.x, o.y + 4, o.width, "center")
 		else
 			G.setBlendMode("alpha")
@@ -48,6 +49,7 @@ function love.gui.newButton(x, y, width, height, text, imagePath)
 			love.graphics.printf(o.text, o.x + 2, o.y + 6, o.width, "center")
 			G.setBlendMode("additive")
 			love.graphics.setColor(o.colorNormal[1], o.colorNormal[2], o.colorNormal[3])
+			G.setFont(G.newFont(32))
 			love.graphics.printf(o.text, o.x, o.y + 4, o.width, "center")
 		end
 	end

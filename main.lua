@@ -21,8 +21,6 @@ function love.load()
 	T = love.turris
 	S = love.sounds
 
-	love.graphics.setFont(love.graphics.newFont(32))
-
 	currentgamestate = 0  -- 0=GameOver 1=gameonly 4= game+gameover message
 	love.turris.reinit()
 	gameOverLayer = love.turris.newGameOverLayer()

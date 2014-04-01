@@ -1,3 +1,9 @@
+
+local mainContributorsFontSize = 32
+local mainContributorsFont = G.newFont(mainContributorsFontSize)
+local externalLibsFontSize = 10
+local externalLibsFont = G.newFont(externalLibsFontSize)
+
 local o = {}
 
 o.names = { "Aldo Brießmann", "Elena Reinertz", "Marcus Ihde", "Meral Leyla", "Michael Steidl", "Nicolai Czempin", "Robin Kocaurek" }
@@ -5,8 +11,10 @@ o.names = { "Aldo Brießmann", "Elena Reinertz", "Marcus Ihde", "Meral Leyla", "
 o.otherText = {
 	"Latin help: Pavel Czempin",
 	"TESound lib: Ensayia & Taehl",
+	"Postshader lib: Marcus Ihde",
 	"Animation lib: Bart Bes",
 	"A* Search lib: RapidFire Studio",
+
 }
 
 o.guiCredits = love.gui.newGui()
@@ -22,6 +30,9 @@ o.update = function(dt)
 end
 
 o.draw = function()
+
+	--main contributors
+	G.setFont(mainContributorsFont)
 	for i = 1, #o.names do
 		local r = 127 + math.sin(love.timer.getTime() * 5 - i + 90) * 127
 		local g = 127 + math.sin(love.timer.getTime() * 5 - i + 180) * 127
@@ -32,9 +43,12 @@ o.draw = function()
 		love.graphics.printf(o.names[i], x, y, W.getWidth(),"center")
 	end
 
+	--external libraries and other
+	local fontSize = 10
+	G.setFont(externalLibsFont)
 	for i = 1, #o.otherText do
-		local x = 32
-		local y = W.getHeight() - (i+1) * 32
+		local x = W.getWidth()/2
+		local y = W.getHeight() - (i+2) * fontSize
 		love.graphics.setColor(75, 75, 75, 255)
 		love.graphics.print(o.otherText[i], x, y)
 	end
