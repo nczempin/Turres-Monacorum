@@ -1,5 +1,6 @@
 require "enemy"
 require "tower"
+require "player"
 
 function love.turris.newGame()
 	local o = {}
@@ -20,6 +21,8 @@ function love.turris.newGame()
 	o.holdOffset = false
 	o.holdOffsetX = 0
 	o.holdOffsetY = 0
+	o.player = love.turris.newPlayer()
+
 	o.init = function()
 		o.setMap(turMap.getMap())
 		o.baseX = math.floor(o.map.width / 2 + 0.5)
@@ -226,8 +229,8 @@ function love.turris.newGame()
 		o.creepAnim:update(dt)
 
 		-- test
-		o.layerHud.addMass(dt*2)
-		o.layerHud.addEnergy(dt*10)
+		o.player.addMass(dt*2)
+		o.player.addEnergy(dt*10)
 	end
 	--------------------- drawing starts here
 
@@ -277,7 +280,7 @@ function love.turris.newGame()
 		o.drawShots()
 		o.drawPaths()
 		o.drawEnemies()
-		o.layerHud.draw()
+		o.layerHud.draw(o.player)
 	end
 
 	o.drawShots = function()
