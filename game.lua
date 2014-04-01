@@ -2,6 +2,7 @@ require "enemy"
 require "tower"
 require "player"
 require "layer/hud"
+require "graphics"
 
 function love.turris.newGame()
 	local o = {}
@@ -14,6 +15,7 @@ function love.turris.newGame()
 	o.towers.next = 1
 	o.enemies = {}
 	o.enemyCount = 5
+	o.enemyTypes =  {}
 	o.dayTime = 90
 	o.effectTimer = 99
 	o.offsetX = 0.0
@@ -34,8 +36,15 @@ function love.turris.newGame()
 				o.towers[x*o.map.height+y]=nil
 			end
 		end
+		o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
+		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
+		local img -- TODO
+
+		local et1 = love.turris.newEnemyType(img, 100, 1.0)
+		local et2 = love.turris.newEnemyType(img, 100, 1.0)
+		o.enemyTypes = {et1, et2}
 		for i = 1, o.enemyCount do
-			o.enemies[i]= love.turris.newEnemy(creepImg, o.map, i, o.baseY, o.baseX, o.baseY)
+			o.enemies[i]= love.turris.newEnemy(o.enemyTypes[i%2+1], o.map, i, o.baseY, o.baseX, o.baseY)
 		end
 		o.newGround("gfx/ground_diffuse001.png")
 		laserTower = o.newTowerType("gfx/tower00")
@@ -79,9 +88,6 @@ function love.turris.newGame()
 		}
 
 		o.mshPath = love.graphics.newMesh(vertices, o.imgPath, "fan")
-
-		o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
-		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
 
 		o.player = love.turris.newPlayer()
 		o.layerHud = love.turris.newHudLayer(o.player)
@@ -323,7 +329,7 @@ function love.turris.newGame()
 		lightWorld.setBuffer("render")
 
 		lightWorld.drawGlow()
-		
+
 		if o.effectTimer < 0.75 then
 			local colorAberration1 = math.sin(love.timer.getTime() * 20.0) * (0.75 - o.effectTimer) * 4.0
 			local colorAberration2 = math.cos(love.timer.getTime() * 20.0) * (0.75 - o.effectTimer) * 4.0
@@ -537,30 +543,4 @@ function love.turris.newGame()
 	gameOverEffect = 0
 
 	return o
-end
-
-function love.graphics.ellipse(mode, x, y, a, b, phi, points)
-	phi = phi or 0
-	points = points or 10
-	if points <= 0 then points = 1 end
-
-	local two_pi = math.pi*2
-	local angle_shift = two_pi/points
-	local theta = 0
-	local sin_phi = math.sin(phi)
-	local cos_phi = math.cos(phi)
-
-	local coords = {}
-	for i = 1, points do
-		theta = theta + angle_shift
-		coords[2*i-1] = x + a * math.cos(theta) * cos_phi
-			- b * math.sin(theta) * sin_phi
-		coords[2*i] = y + a * math.cos(theta) * sin_phi
-			+ b * math.sin(theta) * cos_phi
-	end
-
-	coords[2*points+1] = coords[1]
-	coords[2*points+2] = coords[2]
-
-	love.graphics.polygon(mode, coords)
 end

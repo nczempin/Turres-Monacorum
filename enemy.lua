@@ -1,4 +1,5 @@
 require "ai/ai"
+require "enemyType"
 
 function getAllNodes(map)
 	local w = map.width
@@ -23,7 +24,7 @@ function findNode(nodes, x, y)
 	end
 end
 
-function love.turris.newEnemy(img, map, x, y, baseX, baseY)
+function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 	local o = {}
 	o.generateWaypoints = function(map, startX, startY, goalX, goalY)
 		local all_nodes = getAllNodes(map)
@@ -39,7 +40,6 @@ function love.turris.newEnemy(img, map, x, y, baseX, baseY)
 		end
 		return wp
 	end
-	o.img = img
 	o.x = x
 	o.y = y
 	o.dead = false
@@ -49,8 +49,8 @@ function love.turris.newEnemy(img, map, x, y, baseX, baseY)
 	o.health = 100.0
 
 	-- TODO this depends on the type and not on the particular enemy
-	o.maxHealth = 100.0
-	o.speed = 1.0
+	o.maxHealth = enemyType.maxHealth
+	o.speed =  enemyType.baseSpeed
 	-- type end
 
 	--o.shadow = {}
@@ -102,12 +102,12 @@ function love.turris.normalize(x,y)
 	--print ("normalize: ", x, y, m)
 	local xRet = x/m
 	local yRet = y/m
---	if (xRet ~= xRet) then
---		print ("xRet NaN: ",xRet)
---	end
---	if (yRet ~= yRet) then
---		print ("yRet NaN: ",yRet)
---	end
+	--	if (xRet ~= xRet) then
+	--		print ("xRet NaN: ",xRet)
+	--	end
+	--	if (yRet ~= yRet) then
+	--		print ("yRet NaN: ",yRet)
+	--	end
 	return xRet, yRet
 end
 
