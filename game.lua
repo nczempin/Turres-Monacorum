@@ -36,6 +36,8 @@ function love.turris.newGame()
 				o.towers[x*o.map.height+y]=nil
 			end
 		end
+		o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
+		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
 		local img -- TODO
 
 		local et1 = love.turris.newEnemyType(img, 100, 1.0)
@@ -76,8 +78,6 @@ function love.turris.newGame()
 
 		o.mshLaser = love.graphics.newMesh(vertices, o.imgLaser, "fan")
 
-		o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
-		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
 
 		o.player = love.turris.newPlayer()
 		o.layerHud = love.turris.newHudLayer(o.player)
