@@ -20,9 +20,9 @@ function love.turris.newGame()
 	o.holdOffset = false
 	o.holdOffsetX = 0
 	o.holdOffsetY = 0
-	
-	o.energy = 98
-	
+
+	o.energy = 100 --TODO. eventually we may want a separate "player" module
+
 	o.init = function()
 		o.setMap(turMap.getMap())
 		o.baseX = math.floor(o.map.width / 2 + 0.5)
@@ -93,6 +93,8 @@ function love.turris.newGame()
 	-- gameplay
 
 	o.addTower = function(x,y,type)
+		local energyCost = 10 --TODO: make this depend on tower type
+		if o.energy < energyCost then return end
 		--print ("addTower:", x, y, type,o.map)
 		if not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height or not type or not (o.towerCount<o.towers.maxamount) then return end
 		local state = o.map.getState(x,y)
@@ -105,8 +107,11 @@ function love.turris.newGame()
 			if currentgamestate == 1 then --TODO we should make sure that towers can never be _placed_ in any other state
 				love.sounds.playSound("sounds/tower_1.mp3")
 			end
+
+
 			o.towers[x*o.map.height+y] = t
 			o.towerCount = o.towerCount+1
+			o.energy = o.energy - energyCost
 			o.recalculatePaths()
 		end
 	end
@@ -123,6 +128,7 @@ function love.turris.newGame()
 		o.towers[x*o.map.height+y] = nil
 		turMap.setState(x,y,0)
 		print(o.towers[x*o.map.height+y])
+		o.energy = o.energy + 7 --TODO: get this from the tower type
 		o.recalculatePaths()
 	else
 		print("Could not delete tower at "..x..", "..y)
@@ -373,11 +379,11 @@ function love.turris.newGame()
 				end
 				--print(e.getDirection())
 
---				--debug: show travel direction
---				local ox, oy = e.getOrientation()
---				local wp = e.waypoints[e.currentWaypoint]
---				G.setColor(255, 63, 123)
---				o.drawLine(x,y,wp[1],wp[2])
+				--				--debug: show travel direction
+				--				local ox, oy = e.getOrientation()
+				--				local wp = e.waypoints[e.currentWaypoint]
+				--				G.setColor(255, 63, 123)
+				--				o.drawLine(x,y,wp[1],wp[2])
 			end
 		end
 	end
