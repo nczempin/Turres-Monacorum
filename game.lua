@@ -36,7 +36,7 @@ function love.turris.newGame()
 				o.towers[x*o.map.height+y]=nil
 			end
 		end
-		o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
+		o.creepImg = G.newImage("gfx/creep01_diffuse_sheet.png")
 		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
 		local img -- TODO
 
