@@ -327,11 +327,12 @@ function love.turris.newGame()
 		lightWorld.setBuffer("glow")
 		o.drawPaths()
 		o.drawShots()
-		o.drawEnemies()
 		o.layerHud.draw()
 		lightWorld.setBuffer("render")
 
 		lightWorld.drawGlow()
+
+		o.drawEnemies()
 
 		if o.effectTimer < 0.75 then
 			local colorAberration1 = math.sin(love.timer.getTime() * 20.0) * (0.75 - o.effectTimer) * 4.0
@@ -462,7 +463,7 @@ function love.turris.newGame()
 				local ca = e.sheet
 				ca:seek(directionAnim)
 
-				ca:draw(x * o.map.tileWidth - (ca.fw * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (ca.fh / 8.0 * 0.5) + o.offsetY + 16 + math.sin(love.timer.getTime() * 2.0) * 4.0)
+				ca:draw(x * o.map.tileWidth - (ca.fw * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (ca.fh / 8.0 * 0.5) + o.offsetY - 24 + math.sin(love.timer.getTime() * 2.0) * 4.0)
 				--e.shadow.setPosition(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 32)
 
 				--print(e.getDirection())
