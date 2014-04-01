@@ -42,8 +42,6 @@ function love.turris.reinit()
 	turGame = love.turris.newGame()
 	turMap = love.turris.newMap(20, 20, 64, 48)
 	turGame.init()
-	turGame.layerHud.setMass(20)
-	turGame.layerHud.setEnergy(100)
 end
 
 function love.setgamestate(newgamestate)

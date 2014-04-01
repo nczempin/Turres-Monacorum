@@ -8,7 +8,6 @@ o.externalLibsFont = G.newFont(o.externalLibsFontSize)
 o.names = { "Aldo Brießmann", "Elena Reinertz", "Marcus Ihde", "Meral Leyla", "Michael Steidl", "Nicolai Czempin", "Robin Kocaurek" }
 
 o.otherText = {
-	"Latin help: Pavel Czempin",
 	"TESound lib: Ensayia & Taehl",
 	"Light/Shadow lib: Marcus Ihde",
 	"Postshader lib: Marcus Ihde",

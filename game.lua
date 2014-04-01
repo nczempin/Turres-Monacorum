@@ -1,5 +1,7 @@
 require "enemy"
 require "tower"
+require "player"
+require "layer/hud"
 
 function love.turris.newGame()
 	local o = {}
@@ -21,6 +23,7 @@ function love.turris.newGame()
 	o.holdOffset = false
 	o.holdOffsetX = 0
 	o.holdOffsetY = 0
+
 	o.init = function()
 		o.setMap(turMap.getMap())
 		o.baseX = math.floor(o.map.width / 2 + 0.5)
@@ -67,7 +70,8 @@ function love.turris.newGame()
 		o.creepImg = G.newImage("gfx/creep00_diffuse_sheet.png")
 		o.creepAnim = newAnimation(o.creepImg, o.creepImg:getWidth(), o.creepImg:getHeight() / 8.0, 0, 0)
 
-		o.layerHud = require("layer/hud")
+		o.player = love.turris.newPlayer()
+		o.layerHud = love.turris.newHudLayer(o.player)
 		o.layerGameOver = require("layer/gameover")
 	end
 
@@ -230,8 +234,8 @@ function love.turris.newGame()
 		o.creepAnim:update(dt)
 
 		-- test
-		o.layerHud.addMass(dt*2)
-		o.layerHud.addEnergy(dt*10)
+		o.player.addMass(dt*2)
+		o.player.addEnergy(dt*10)
 	end
 	--------------------- drawing starts here
 
