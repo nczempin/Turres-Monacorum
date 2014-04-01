@@ -29,6 +29,10 @@ o.update = function(dt)
 end
 
 o.draw = function()
+	lightWorld.glowMap:clear()
+	
+	lightWorld.setBuffer("glow")
+
 	--main contributors
 	G.setFont(o.mainContributorsFont)
 	for i = 1, #o.names do
@@ -49,6 +53,10 @@ o.draw = function()
 		G.setColor(75, 75, 75, 255)
 		G.print(o.otherText[i], x, y)
 	end
+
+	lightWorld.setBuffer("render")
+
+	lightWorld.drawGlow()
 end
 
 return o

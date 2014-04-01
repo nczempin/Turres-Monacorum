@@ -1,8 +1,10 @@
-function love.turris.newTowerType(img)
+function love.turris.newTowerType(path)
 	local o = {}
-	o.img = G.newImage(img .. "_diffuse.png")
-	o.normal = G.newImage(img .. "_normal.png")
-	o.glow = G.newImage(img .. "_glow.png")
+	o.path = path
+	o.img = G.newImage(o.path .. "_diffuse.png")
+	o.normal = G.newImage(o.path .. "_normal.png")
+	o.glow = G.newImage(o.path .. "_glow.png")
+	o.upper = nil
 	o.maxHealth = 100.0
 
 	o.range = 2
@@ -10,8 +12,17 @@ function love.turris.newTowerType(img)
 	o.getMaxHealth = function(health)
 		return o.maxHealth
 	end
+
 	o.setMaxHealth = function(health)
 		o.maxHealth = health
+	end
+
+	o.setUpperImage = function(upper)
+		if upper then
+			o.upper = G.newImage(o.path .. "_upper.png")
+		else
+			o.upper = nil
+		end
 	end
 
 	return o

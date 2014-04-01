@@ -1,8 +1,9 @@
 require "towerType"
 
-function love.turris.newTower(type, x, y)
+function love.turris.newTower(type, x, y, id)
 	print ("new tower:", type, x, y)
 	local o = {}
+	o.id = id
 	o.x = x
 	o.y = y
 	o.type = type
