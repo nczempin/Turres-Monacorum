@@ -104,7 +104,7 @@ function love.turris.newGame()
 			local wpCurrent = e.waypoints[e.currentWaypoint]
 			print ("REPATHING ",i)
 			e.waypoints = e.generateWaypoints(o.map, math.floor(e.x + 0.5), math.floor(e.y + 0.5), o.baseX, o.baseY,wpCurrent)
-			printWaypoints(e)
+			--printWaypoints(e)
 			e.currentWaypoint = 1
 			local wpNext = e.waypoints[e.currentWaypoint]
 			local deltaX = wpNext[1] - e.x
