@@ -287,9 +287,8 @@ function love.turris.newGame()
 					--{ 0, o.imgLaser:getHeight(), timer, 1, 255, 255, 0 },
 					--}
 
-					-- test (towers shooting)
 					if e.health > 0.0 then
-						e.health = e.health - 50*dt
+						e.health = e.health - t.type.damage*dt
 						if e.health <= 0 then
 							e.dead = true
 						end
