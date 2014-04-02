@@ -166,8 +166,8 @@ function love.turris.updateEnemies(o, dt)
 				print("dists: ",distX,distY)
 				local dirX,dirY = 0,0
 				--TODO: handle the case in which wpNext == currentWp => dist = (0,0) in WAYPOINT GENERATION rather than here
-				if distX ~=0 and distY ~=0 then
-					love.turris.normalize( distX, distY)
+				if distX ~=0 or distY ~=0 then
+					dirX, dirY= love.turris.normalize( distX, distY)
 				end
 				e.updateVelocity(dirX,dirY)
 			end
