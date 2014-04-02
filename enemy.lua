@@ -23,10 +23,20 @@ function findNode(nodes, x, y)
 		end
 	end
 end
+printWaypoints = function(e)
+	print ("waypoints:")
+	for i=1, #e.waypoints do
+		print (i, e.waypoints[i][1], e.waypoints[i][2])
+	end
+
+end
 
 function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 	local o = {}
-	o.generateWaypoints = function(map, startX, startY, goalX, goalY)
+
+
+	o.generateWaypoints = function(map, startX, startY, goalX, goalY,wpCurrent)
+		print ("generate:",startX,startY,goalX,goalY)
 		local all_nodes = getAllNodes(map)
 		local start = findNode(all_nodes, startX, startY)
 		local goal = findNode(all_nodes, goalX, goalY)
@@ -34,16 +44,29 @@ function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 
 		local wp = {{startX,startY},{goalX,goalY}}
 		if path then
-			for i = 1, #path do
-				wp[i] ={path[i].x,path[i].y}
+			print ("path: yes")
+
+			if (wpCurrent and wpCurrent.x and wpCurrent.y) then
+				print ("wpCurrent: ",wpCurrent.x, wpCurrent.y)
+				wp ={wpCurrent}
+			else
+				wp = {}
 			end
+			local fudge = #wp
+			print "copying path to waypoints"
+			for i = 1, #path do
+				print ("path: ", i, path[i].x, path[i].y)
+				wp[i+fudge] ={path[i].x,path[i].y}
+				print ("wp: ",wp[i+fudge][1], wp[i+fudge][2])
+			end
+
 		end
 		return wp
 	end
 	o.x = x
 	o.y = y
 	o.dead = false
-	o.waypoints = o.generateWaypoints(map,x,y,baseX,baseY)
+	o.waypoints = o.generateWaypoints(map,x,y,baseX,baseY,nil)
 
 	o.currentWaypoint = 2
 
@@ -64,6 +87,8 @@ function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 	o.updateVelocity = function(dirX,dirY)
 		o.xVel = dirX*o.speed
 		o.yVel = dirY*o.speed
+		if o.xVel ~=o.xVel then print ("dirX: ",dirX)end
+		if o.yVel ~=o.yVel then print ("dirY: ",dirY)end
 	end
 
 	o.getDirection = function()
@@ -128,12 +153,24 @@ function love.turris.updateEnemies(o, dt)
 
 			-- check if waypoint reached
 			local wp = e.waypoints[e.currentWaypoint]
-			if math.abs(wp[1]-x)<0.1 and math.abs(wp[2] -y)<0.1 then
+			if math.abs(wp[1]-x)<0.1 and math.abs(wp[2] -y)<0.1 then --TODO use existing distance function
 				-- waypoint reached
+				printWaypoints(e)
+				print("wp: ",wp[1],wp[2])
 				local nextWpIndex = e.currentWaypoint +1
+				print("nextWpIndex: ",nextWpIndex)
+
 				e.currentWaypoint = nextWpIndex
 				local wpNext = e.waypoints[nextWpIndex]
-				local dirX,dirY = love.turris.normalize( wpNext[1]-wp[1], wpNext[2]-wp[2])
+				print("wpNext: ",wpNext[1],wpNext[2])
+				local distX = wpNext[1]-wp[1]
+				local distY = wpNext[2]-wp[2]
+				print("dists: ",distX,distY)
+				local dirX,dirY = 0,0
+				--TODO: handle the case in which wpNext == currentWp => dist = (0,0) in WAYPOINT GENERATION rather than here
+				if distX ~=0 or distY ~=0 then
+					dirX, dirY= love.turris.normalize( distX, distY)
+				end
 				e.updateVelocity(dirX,dirY)
 			end
 
