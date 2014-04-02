@@ -18,10 +18,7 @@ o.chkFullscreen			= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, true
 o.chkLarge		= o.guiMenu.newCheckbox(startx, starty + 64 * 1, 191, 32, false, "Large")
 o.btnBack			= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 32, "Back")
 
-o.optionBloom = true
-o.optionScanlines = true
-o.optionShadow = true
-o.optionGlow = true
+o.optionLarge = small
 
 o.reset = function()
 	o.guiMenu.flushMouse()
@@ -40,7 +37,16 @@ o.update = function(dt)
 
 	if o.chkLarge.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
-		--o.optionScanlines = o.chkScanlines.isChecked()
+		local success
+		o.optionLarge = o.chkLarge.isChecked()
+		if o.optionLarge then
+			success = love.window.setMode( 1280, 720)
+		else
+			success = love.window.setMode( 800, 600 )
+		end
+		if not success then
+		--do something
+		end
 	end
 
 
