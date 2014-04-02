@@ -34,6 +34,7 @@ o.update = function(dt)
 	if o.btnStart.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
 		love.setgamestate(1)
+		o.guiMenu.flushMouse()
 	end
 
 	if o.btnConfigure.isHit() then
@@ -45,6 +46,7 @@ o.update = function(dt)
 	if o.btnCredits.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
 		love.setgamestate(5)
+		o.guiMenu.flushMouse()
 	end
 
 	if o.btnQuit.isHit() then

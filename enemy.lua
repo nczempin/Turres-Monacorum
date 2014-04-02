@@ -141,6 +141,18 @@ function love.turris.normalize(x,y)
 end
 
 function love.turris.updateEnemies(o, dt)
+	local won = true
+	for i = 1, o.enemyCount do
+		--we won. TODO: wave handling
+		if not o.enemies[i].dead then
+			won = false
+			break
+		end
+	end
+	if won then
+		love.setgamestate(4) --TODO. A message indicating we won would be nice
+		return
+	end
 	for i = 1, o.enemyCount do
 		local e = o.enemies[i]
 
