@@ -59,6 +59,11 @@ o.update = function(dt)
 	if o.chkGlow.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
 		lightWorld.optionGlow = o.chkGlow.isChecked()
+--		if lightWorld.optionGlow then
+--			love.window.setMode( 800, 600 )
+--		else
+--			love.window.setMode( 1280, 720)
+--		end
 	end
 
 	if o.btnBack.isHit() or love.keyboard.isDown("escape") then
