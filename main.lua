@@ -32,7 +32,7 @@ function love.load()
 	stateSettingsVideoShaders = require("state/settings_video_shaders")
 	stateSettingsVideoDisplay = require("state/settings_video_display")
 
-	stateMainMenu.setVersion("v0.5.1")
+	stateMainMenu.setVersion("v0.5.2")
 end
 
 function love.getgamestate()
