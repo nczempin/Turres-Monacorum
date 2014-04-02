@@ -171,6 +171,7 @@ function love.turris.updateEnemies(o, dt)
 				if distX ~=0 or distY ~=0 then
 					dirX, dirY= love.turris.normalize( distX, distY)
 				end
+				--TODO diagonal moves should not be allowed. See issue #35
 				e.updateVelocity(dirX,dirY)
 			end
 
