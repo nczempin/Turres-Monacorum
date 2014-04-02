@@ -1,25 +1,30 @@
 local o = {}
 
-local startx = W.getWidth() * 0.5 - 176 * 0.5
-local starty = 160
+local startx = W.getWidth() * 0.5 - 191 * 0.5
+local starty = 80
 
-o.imgLogo			= love.graphics.newImage("resources/sprites/ui/logo.png")
 o.imgBackground		= love.graphics.newImage("resources/sprites/ui/menu_background.png")
 o.imgMiddleground	= love.graphics.newImage("resources/sprites/ui/menu_middleground.png")
 o.imgScreen			= love.graphics.newImage("gfx/screen00.png")
 
 o.fontMenu = G.newFont(32)
-o.fontVersion = G.newFont(16)
+o.fontOption = G.newFont(24)
 
-o.version = "0.0.0"
 o.effectTimer = 0
 o.chromaticEffect = 0
 
-o.guiMenu		= love.gui.newGui()
-o.btnStart		= o.guiMenu.newButton(startx, starty + 80 * 0, 176, 48, "Start")
-o.btnConfigure	= o.guiMenu.newButton(startx, starty + 80 * 1, 176, 48, "Settings")
-o.btnCredits	= o.guiMenu.newButton(startx, starty + 80 * 2, 176, 48, "Credits")
-o.btnQuit		= o.guiMenu.newButton(startx, starty + 80 * 3, 176, 48, "Quit")
+o.guiMenu			= love.gui.newGui()
+o.chkBloom			= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, true, "Bloom")
+o.chkScanlines		= o.guiMenu.newCheckbox(startx, starty + 64 * 1, 191, 32, true, "Scanlines")
+o.chkShadow			= o.guiMenu.newCheckbox(startx, starty + 64 * 2, 191, 32, true, "Shadow")
+o.chkSelfShadow		= o.guiMenu.newCheckbox(startx, starty + 64 * 3, 191, 32, true, "Self Shadow")
+o.chkGlow			= o.guiMenu.newCheckbox(startx, starty + 64 * 4, 191, 32, true, "Glow")
+o.btnBack			= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 32, "Back")
+
+o.optionBloom = true
+o.optionScanlines = true
+o.optionShadow = true
+o.optionGlow = true
 
 o.reset = function()
 	o.guiMenu.flushMouse()
@@ -31,25 +36,35 @@ o.update = function(dt)
 
 	o.guiMenu.update(dt)
 
-	if o.btnStart.isHit() then
+	if o.chkBloom.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
-		love.setgamestate(1)
+		o.optionBloom = o.chkBloom.isChecked()
 	end
 
-	if o.btnConfigure.isHit() then
+	if o.chkScanlines.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
-		love.setgamestate(6)
+		o.optionScanlines = o.chkScanlines.isChecked()
+	end
+
+	if o.chkShadow.isHit() then
+		love.sounds.playSound("sounds/button_pressed.wav")
+		lightWorld.optionShadows = o.chkShadow.isChecked()
+	end
+
+	if o.chkSelfShadow.isHit() then
+		love.sounds.playSound("sounds/button_pressed.wav")
+		lightWorld.optionPixelShadows = o.chkSelfShadow.isChecked()
+	end
+
+	if o.chkGlow.isHit() then
+		love.sounds.playSound("sounds/button_pressed.wav")
+		lightWorld.optionGlow = o.chkGlow.isChecked()
+	end
+
+	if o.btnBack.isHit() or love.keyboard.isDown("escape") then
+		love.sounds.playSound("sounds/button_pressed.wav")
+		love.setgamestate(0)
 		o.guiMenu.flushMouse()
-	end
-
-	if o.btnCredits.isHit() then
-		love.sounds.playSound("sounds/button_pressed.wav")
-		love.setgamestate(5)
-	end
-
-	if o.btnQuit.isHit() then
-		love.sounds.playSound("sounds/button_pressed.wav")
-		love.event.quit()
 	end
 end
 
@@ -63,15 +78,16 @@ o.draw = function()
 	G.setColor(95 + math.sin(o.effectTimer * 0.1) * 63, 191 + math.cos(o.effectTimer) * 31, 223 + math.sin(o.effectTimer) * 31, 255)
 	G.setBlendMode("additive")
 	G.draw(o.imgMiddleground,(W.getWidth()-o.imgMiddleground:getWidth())*0.5,0)
-	G.setColor(255, 255, 255)
+
 	G.setBlendMode("alpha")
-	G.draw(o.imgLogo, W.getWidth() * 0.5, o.imgLogo:getHeight() * 0.5, math.sin(o.effectTimer * 4) * 0.05 * math.max(0, 2 - o.effectTimer ^ 0.5), 1, 1, o.imgLogo:getWidth() * 0.5, o.imgLogo:getHeight() * 0.5)
+	G.setColor(0, 0, 0, 95)
+	G.printf("Settings", 4, 24 + 4, W.getWidth(), "center")
+	G.setColor(255, 127, 0)
+	G.setBlendMode("additive")
+	G.printf("Settings", 0, 24, W.getWidth(), "center")
 
+	G.setFont(o.fontOption)
 	o.guiMenu.draw()
-
-	G.setFont(o.fontVersion)
-	G.setColor(95 + math.sin(o.effectTimer * 0.1) * 63, 191 + math.cos(o.effectTimer) * 31, 223 + math.sin(o.effectTimer) * 31, 255)
-	G.print(o.version, W.getWidth() - 64, W.getHeight() - 32)
 
 	if math.random(0, love.timer.getFPS() * 5) == 0 then
 		o.chromaticEffect = math.random(0, 5) * 0.1
@@ -83,10 +99,6 @@ o.draw = function()
 
 		love.postshader.addEffect("chromatic", colorAberration1, colorAberration2, colorAberration2, -colorAberration1, colorAberration1, -colorAberration2)
 	end
-end
-
-o.setVersion = function(version)
-	o.version = version
 end
 
 return o

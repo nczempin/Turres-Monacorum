@@ -83,6 +83,7 @@ function love.turris.newGame()
 
 		o.imgPath = G.newImage("gfx/path_arrow.png")
 		o.imgPath:setWrap("repeat", "repeat")
+		o.imgPath:setFilter("nearest", "nearest")
 		vertices = {
 			{ 0, 0, 0, 0, 255, 0, 0,},
 			{ o.imgPath:getWidth(), 0, 1, 0, 0, 255, 0 },
@@ -319,18 +320,27 @@ function love.turris.newGame()
 
 	o.draw = function()
 		o.drawMap()
+		--if lightWorld.optionShadows or lightWorld.optionGlow then
 		lightWorld.update()
+		--end
 		lightWorld.drawPixelShadow()
+
 		o.drawTowerHealth()
 		o.drawEnemiesHealth()
 
-		lightWorld.setBuffer("glow")
-		o.drawPaths()
-		o.drawShots()
-		o.layerHud.draw()
-		lightWorld.setBuffer("render")
+		if lightWorld.optionGlow then
+			lightWorld.setBuffer("glow")
+			o.drawPaths()
+			o.drawShots()
+			o.layerHud.draw()
+			lightWorld.setBuffer("render")
 
-		lightWorld.drawGlow()
+			lightWorld.drawGlow()
+		else
+			o.drawPaths()
+			o.drawShots()
+			o.layerHud.draw()
+		end
 
 		o.drawEnemies()
 
@@ -402,7 +412,11 @@ function love.turris.newGame()
 					if id > 0 then
 						local tower = o.towerType[id]
 						-- tile
-						G.setColor(255, 255, 255)
+						if lightWorld.optionGlow then
+							G.setColor(0, 0, 0)
+						else
+							G.setColor(255, 255, 255)
+						end
 						if tower.upper then
 							G.draw(tower.upper, i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
 						end
@@ -427,12 +441,22 @@ function love.turris.newGame()
 				local direction = math.atan2(wpFrom[1] - wpTo[1], wpTo[2] - wpFrom[2]) + math.pi * 0.5
 				local length = math.sqrt(math.pow(wpFrom[1] * o.map.tileWidth - wpTo[1] * o.map.tileWidth, 2) + math.pow(wpFrom[2] * o.map.tileHeight - wpTo[2] * o.map.tileHeight, 2))
 				local timer = -math.mod(love.timer.getTime() * 2.0, 1.0)
-				local vertices = {
-					{ 0, 0, timer, 0, 127, 0, 0 },
-					{ o.imgPath:getWidth(), 0, timer + length / o.imgPath:getWidth(), 0, 127, 0, 0 },
-					{ o.imgPath:getWidth(), o.imgPath:getHeight(), timer + length / o.imgPath:getWidth(), 1, 127, 63, 0 },
-					{ 0, o.imgPath:getHeight(), timer, 1, 127, 63, 0 },
-				}
+				local vertices = {}
+				if lightWorld.optionGlow then
+					vertices = {
+						{ 0, 0, timer, 0, 127, 0, 0 },
+						{ o.imgPath:getWidth(), 0, timer + length / o.imgPath:getWidth(), 0, 127, 0, 0 },
+						{ o.imgPath:getWidth(), o.imgPath:getHeight(), timer + length / o.imgPath:getWidth(), 1, 63, 63, 0 },
+						{ 0, o.imgPath:getHeight(), timer, 1, 63, 63, 0 },
+					}
+				else
+					vertices = {
+						{ 0, 0, timer, 0, 255, 0, 0 },
+						{ o.imgPath:getWidth(), 0, timer + length / o.imgPath:getWidth(), 0, 255, 0, 0 },
+						{ o.imgPath:getWidth(), o.imgPath:getHeight(), timer + length / o.imgPath:getWidth(), 1, 127, 127, 0 },
+						{ 0, o.imgPath:getHeight(), timer, 1, 127, 127, 0 },
+					}
+				end
 				o.mshPath:setVertices(vertices)
 				G.draw(o.mshPath, (wpFrom[1] - 0.5) * o.map.tileWidth + o.offsetX, (wpFrom[2] - 0.5) * o.map.tileHeight + o.offsetY, direction, (length) / o.imgPath:getWidth(), 1, 0, o.imgPath:getHeight() * 0.5)
 			end
@@ -533,18 +557,6 @@ function love.turris.newGame()
 		o.timer = 0
 	end
 
-	-- create light world
-	lightWorld = love.light.newWorld()
-	lightWorld.setNormalInvert(true)
-	lightWorld.setAmbientColor(15, 15, 31)
-	lightWorld.setRefractionStrength(32.0)
-	lightWorld.setGlowStrength(4.0)
-
-	-- create light
-	lightMouse = lightWorld.newLight(0, 0, 31, 191, 63, 300)
-	--lightMouse.setGlowStrength(0.3)
-	--lightMouse.setSmooth(0.01)
-	lightMouse.setRange(300)
 	gameOverEffect = 0
 
 	return o

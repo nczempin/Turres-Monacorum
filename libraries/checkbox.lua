@@ -1,17 +1,17 @@
---Button class
--- This Class is a Button with all its Attributes
+--Checkbox class
+-- This Class is a Checkbox with all its Attributes
 -- @param x
 -- @param y
 -- @param width
 -- @param height
--- @param name The Name of the button
--- @param path for an Image
+-- @param checked
+-- @param text
 
-function love.gui.newButton(x, y, width, height, text, imagePath)
+function love.gui.newCheckbox(x, y, width, height, checked, text)
 	local o = {}
 
 	--Attribute
-	o.type			= "button"
+	o.type			= "checkbox"
 	o.x				= x or 0
 	o.y				= y or 0
 	o.width 		= width or 64
@@ -22,7 +22,7 @@ function love.gui.newButton(x, y, width, height, text, imagePath)
 	o.hover 		= false
 	o.hit			= false
 	o.down			= true
-	o.imagePath		= imagePath
+	o.checked		= checked
 	o.colorNormal	= {255, 127, 0, 255}
 	o.colorHover	= {0, 127, 255, 255}
 	o.colorDisabled	= {255, 255, 255, 63}
@@ -35,42 +35,35 @@ function love.gui.newButton(x, y, width, height, text, imagePath)
 	--Draw button
 	o.draw = function(dt)
 		if o.visible then
+			G.setBlendMode("alpha")
+			G.setColor(0, 0, 0, 31)
+			G.rectangle("fill", o.x + o.width - o.height, o.y, o.height, o.height)
+
 			if o.enabled then
+				G.setColor(0, 0, 0, 95)
+				G.printf(o.text, o.x + 2, o.y + 6, o.width, "left")
+				G.setLineWidth(4)
+				G.rectangle("line", o.x + o.width - o.height, o.y, o.height, o.height)
+				G.setBlendMode("additive")
+
 				if o.hover then
-					G.setBlendMode("alpha")
-					G.setColor(0, 0, 0, 31)
-					G.rectangle("fill", o.x, o.y, o.width, o.height)
-					G.setColor(0, 0, 0, 95)
-					G.printf(o.text, o.x + 2, o.y + 6, o.width, "center")
-					G.setLineWidth(4)
-					G.rectangle("line", o.x, o.y, o.width, o.height)
-					G.setBlendMode("additive")
 					G.setColor(o.colorHover[1], o.colorHover[2], o.colorHover[3], o.colorHover[4])
-					G.printf(o.text, o.x, o.y + 4, o.width, "center")
-					G.setLineWidth(2)
-					G.rectangle("line", o.x, o.y, o.width, o.height)
 				else
-					G.setBlendMode("alpha")
-					G.setColor(0, 0, 0, 31)
-					G.rectangle("fill", o.x, o.y, o.width, o.height)
-					G.setColor(0, 0, 0, 95)
-					G.printf(o.text, o.x + 2, o.y + 6, o.width, "center")
-					G.setLineWidth(4)
-					G.rectangle("line", o.x, o.y, o.width, o.height)
-					G.setBlendMode("additive")
 					G.setColor(o.colorNormal[1], o.colorNormal[2], o.colorNormal[3], o.colorHover[4])
-					G.printf(o.text, o.x, o.y + 4, o.width, "center")
-					G.setLineWidth(2)
-					G.rectangle("line", o.x, o.y, o.width, o.height)
 				end
 			else
 				G.setBlendMode("alpha")
 				G.setColor(0, 0, 0, 31)
-				G.rectangle("fill", o.x, o.y, o.width, o.height)
+				G.rectangle("fill", o.x + o.width - o.height, o.y, o.height, o.height)
 				G.setColor(o.colorDisabled[1], o.colorDisabled[2], o.colorDisabled[3], o.colorDisabled[4])
-				G.printf(o.text, o.x, o.y + 4, o.width, "center")
-				G.setLineWidth(2)
-				G.rectangle("line", o.x, o.y, o.width, o.height)
+			end
+
+			G.printf(o.text, o.x, o.y + 4, o.width, "left")
+			G.setLineWidth(2)
+			G.rectangle("line", o.x + o.width - o.height, o.y, o.height, o.height)
+
+			if o.checked then
+				G.rectangle("fill", o.x + o.width - o.height + 4, o.y + 4, o.height - 8, o.height - 8)
 			end
 		end
 	end
@@ -85,9 +78,14 @@ function love.gui.newButton(x, y, width, height, text, imagePath)
 		return o.down
 	end
 
+	--Return true when checked
+	o.isChecked = function()
+		return o.checked
+	end
+
 	--Return type
 	o.getType = function()
-		return "button"
+		return "checkbox"
 	end
 
 	--Return x position

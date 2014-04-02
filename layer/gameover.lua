@@ -13,7 +13,6 @@ o.draw = function()
 
 		love.postshader.addEffect("blur", 2.0, 2.0)
 		love.postshader.addEffect("chromatic", colorAberration1, colorAberration2, colorAberration2, -colorAberration1, colorAberration1, -colorAberration2)
-		love.postshader.addEffect("scanlines")
 	else
 		love.postshader.addEffect("monochrom", 127, 255, 191, 0.2)
 		G.setColor(255, 0, 0, 127)
@@ -21,7 +20,6 @@ o.draw = function()
 		G.setColor(255, 255, 255, 127)
 		G.printf("Click to go to the main menu", 0, 320, W.getWidth(), "center")
 		love.setgamestate(4)
-		love.postshader.addEffect("scanlines", 4.0)
 	end
 end
 

@@ -1,11 +1,3 @@
-require "world"
-require "game"
-require "map"
-require "towerType"
-require "sound"
-
-require "util"
-
 require "libraries/gui"
 
 require "external/postshader"
@@ -13,6 +5,14 @@ require "external/light"
 
 require "external/anim"
 require "external/TEsound"
+
+require "world"
+require "game"
+require "map"
+require "towerType"
+require "sound"
+
+require "util"
 
 function love.load()
 	G = love.graphics
@@ -27,10 +27,9 @@ function love.load()
 
 	stateMainMenu = require("state/main_menu")
 	stateCredits = require("state/credits")
+	stateSettings = require("state/settings")
 
 	stateMainMenu.setVersion("0.4.1")
-
-	bloomOn = true
 end
 
 function love.getgamestate()
@@ -39,6 +38,7 @@ end
 
 function love.turris.reinit()
 	-- create game world
+	lightWorld.clearBodys()
 	turGame = love.turris.newGame()
 	turMap = love.turris.newMap(20, 20, 64, 48)
 	turGame.init()
@@ -69,11 +69,15 @@ function love.update(dt)
 		turGame.layerGameOver.update(dt)
 	elseif (currentgamestate == 5)then
 		stateCredits.update(dt)
+	elseif (currentgamestate == 6)then
+		stateSettings.update(dt)
 	end
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
 end
 
 function love.draw()
+	local scanlineStrength = 4.0
+
 	G.setFont(FONT)
 	W.setTitle("FPS: " .. love.timer.getFPS())
 	love.postshader.setBuffer("render")
@@ -84,17 +88,24 @@ function love.draw()
 		stateMainMenu.draw()
 	elseif(currentgamestate == 1) then --render game only
 		turGame.draw()
-		love.postshader.addEffect("scanlines")
+		scanlineStrength = 2.0
 	elseif(currentgamestate == 4) then -- render game + "game over" message on top
 		turGame.draw()
 		turGame.layerGameOver.draw()
 	elseif currentgamestate == 5 then --credits screen
 		stateCredits.draw()
-		love.postshader.addEffect("scanlines", 4.0)
+	elseif currentgamestate == 6 then --credits screen
+		stateSettings.draw()
 	end
-	if bloomOn then
+
+	if stateSettings.optionScanlines then
+		love.postshader.addEffect("scanlines", scanlineStrength)
+	end
+
+	if stateSettings.optionBloom then
 		love.postshader.addEffect("bloom")
 	end
+
 	love.postshader.draw()
 end
 
@@ -105,12 +116,9 @@ function love.turris.gameoverstate()
 end
 
 function love.keypressed(key, code)
-	if key == "b" then
-		bloomOn = not bloomOn
-	end
 
 	if key == "escape" then
-		if love.getgamestate()==1 then
+		if love.getgamestate() == 1 then
 			love.setgamestate(0)
 			love.turris.reinit()
 		end

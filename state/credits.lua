@@ -1,5 +1,7 @@
 local o = {}
 
+o.imgScreen	= love.graphics.newImage("gfx/screen00.png")
+
 o.mainContributorsFontSize = 32
 o.mainContributorsFont = G.newFont(o.mainContributorsFontSize)
 o.externalLibsFontSize = 16
@@ -24,14 +26,17 @@ o.update = function(dt)
 	if o.guiCredits.isHit() or love.keyboard.isDown("escape") then
 		o.guiCredits.flushMouse()
 		love.setgamestate(0)
-		love.turris.reinit()
 	end
 end
 
 o.draw = function()
-	lightWorld.glowMap:clear()
-	
-	lightWorld.setBuffer("glow")
+	if lightWorld.optionGlow then
+		lightWorld.glowMap:clear()
+		lightWorld.setBuffer("glow")
+	end
+
+	G.setColor(255, 255, 255, 31)
+	G.draw(o.imgScreen)
 
 	--main contributors
 	G.setFont(o.mainContributorsFont)
@@ -54,9 +59,13 @@ o.draw = function()
 		G.print(o.otherText[i], x, y)
 	end
 
-	lightWorld.setBuffer("render")
+	if lightWorld.optionGlow then
+		lightWorld.setBuffer("render")
+	end
 
-	lightWorld.drawGlow()
+	if lightWorld.optionGlow then
+		lightWorld.drawGlow()
+	end
 end
 
 return o

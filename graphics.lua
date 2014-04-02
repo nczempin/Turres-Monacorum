@@ -1,4 +1,3 @@
-
 function love.graphics.ellipse(mode, x, y, a, b, phi, points)
 	phi = phi or 0
 	points = points or 10
