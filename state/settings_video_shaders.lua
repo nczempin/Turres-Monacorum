@@ -19,7 +19,11 @@ o.chkScanlines		= o.guiMenu.newCheckbox(startx, starty + 64 * 1, 191, 32, true, 
 o.chkShadow			= o.guiMenu.newCheckbox(startx, starty + 64 * 2, 191, 32, true, "Shadow")
 o.chkSelfShadow		= o.guiMenu.newCheckbox(startx, starty + 64 * 3, 191, 32, true, "Self Shadow")
 o.chkGlow			= o.guiMenu.newCheckbox(startx, starty + 64 * 4, 191, 32, true, "Glow")
+<<<<<<< HEAD
 o.btnBack			= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 32, "Back")
+=======
+o.btnBack			= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 34, "Back")
+>>>>>>> master
 
 o.optionBloom = true
 o.optionScanlines = true

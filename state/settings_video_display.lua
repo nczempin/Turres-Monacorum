@@ -13,10 +13,17 @@ o.fontOption = G.newFont(24)
 o.effectTimer = 0
 o.chromaticEffect = 0
 
+<<<<<<< HEAD
 o.guiMenu			= love.gui.newGui()
 o.chkFullscreen			= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, false, "Fullscreen")
 o.chkLarge		= o.guiMenu.newCheckbox(startx, starty + 64 * 1, 191, 32, false, "Large")
 o.btnBack			= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 32, "Back")
+=======
+o.guiMenu		= love.gui.newGui()
+o.chkFullscreen	= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, false, "Fullscreen")
+o.chkLarge		= o.guiMenu.newCheckbox(startx, starty + 64 * 1, 191, 32, false, "Large")
+o.btnBack		= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 34, "Back")
+>>>>>>> master
 
 o.optionLarge = small
 

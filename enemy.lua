@@ -7,12 +7,14 @@ function getAllNodes(map)
 	local nodes = {}
 
 	local k = 1
+
 	for i = 0, w do
 		for j = 0, h do
-			nodes[k]= {x=i,y=j,id=k}
+			nodes[k]= { x = i, y = j, id = k }
 			k = k + 1
 		end
 	end
+
 	return nodes
 end
 
@@ -23,6 +25,7 @@ function findNode(nodes, x, y)
 		end
 	end
 end
+
 printWaypoints = function(e)
 	print ("waypoints:")
 	for i=1, #e.waypoints do
@@ -34,7 +37,6 @@ end
 function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 	local o = {}
 
-
 	o.generateWaypoints = function(map, startX, startY, goalX, goalY,wpCurrent)
 		print ("generate:",startX,startY,goalX,goalY)
 		local all_nodes = getAllNodes(map)
@@ -43,6 +45,7 @@ function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 		local path = aStar(start,goal,all_nodes)
 
 		local wp = {{startX,startY},{goalX,goalY}}
+
 		if path then
 			print ("path: yes")
 
@@ -56,7 +59,7 @@ function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 			print "copying path to waypoints"
 			for i = 1, #path do
 				--print ("path: ", i, path[i].x, path[i].y)
-				wp[i+fudge] ={path[i].x,path[i].y}
+				wp[i+fudge] ={ path[i].x, path[i].y }
 				--print ("wp: ",wp[i+fudge][1], wp[i+fudge][2])
 			end
 
@@ -66,7 +69,7 @@ function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 	o.x = x
 	o.y = y
 	o.dead = false
-	o.waypoints = o.generateWaypoints(map,x,y,baseX,baseY,nil)
+	o.waypoints = o.generateWaypoints(map, x, y, baseX, baseY, nil)
 
 	o.currentWaypoint = 2
 
@@ -79,16 +82,15 @@ function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 
 	o.health = o.maxHealth
 
-
 	--o.shadow = {}
 	--o.shadow = lightWorld.newImage(o.img)
 	--o.shadow.setShadowType("image",32,32, 1.0)
 
-	o.updateVelocity = function(dirX,dirY)
-		o.xVel = dirX*o.speed
-		o.yVel = dirY*o.speed
-		if o.xVel ~=o.xVel then print ("dirX: ",dirX)end
-		if o.yVel ~=o.yVel then print ("dirY: ",dirY)end
+	o.updateVelocity = function(dirX, dirY)
+		o.xVel = dirX * o.speed
+		o.yVel = dirY * o.speed
+		if o.xVel ~= o.xVel then print ("dirX: ", dirX)end
+		if o.yVel ~= o.yVel then print ("dirY: ", dirY)end
 	end
 
 	o.getDirection = function()
@@ -126,11 +128,11 @@ function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 	return o
 end
 
-function love.turris.normalize(x,y)
-	local m = math.max(math.abs(x),math.abs(y))
+function love.turris.normalize(x, y)
+	local m = math.max(math.abs(x), math.abs(y))
 	--print ("normalize: ", x, y, m)
-	local xRet = x/m
-	local yRet = y/m
+	local xRet = x / m
+	local yRet = y / m
 	--	if (xRet ~= xRet) then
 	--		print ("xRet NaN: ",xRet)
 	--	end
@@ -142,6 +144,7 @@ end
 
 function love.turris.updateEnemies(o, dt)
 	local won = true
+
 	for i = 1, o.enemyCount do
 		--we won. TODO: wave handling
 		if not o.enemies[i].dead then
@@ -149,46 +152,48 @@ function love.turris.updateEnemies(o, dt)
 			break
 		end
 	end
+
 	if won then
 		love.setgamestate(4) --TODO. A message indicating we won would be nice
 		return
 	end
+
 	for i = 1, o.enemyCount do
 		local e = o.enemies[i]
 
 		if not e.dead then
-			e.x = e.x+e.xVel*dt
-			e.y = e.y+e.yVel*dt
+			e.x = e.x + e.xVel * dt
+			e.y = e.y + e.yVel * dt
 
 			local x = e.x
 			local y = e.y
 
 			-- check if waypoint reached
 			local wp = e.waypoints[e.currentWaypoint]
-			if math.abs(wp[1]-x)<0.1 and math.abs(wp[2] -y)<0.1 then --TODO use existing distance function
+			if math.abs(wp[1] - x) < 0.1 and math.abs(wp[2] - y) < 0.1 then --TODO use existing distance function
 				-- waypoint reached
 				--printWaypoints(e)
-				print("wp: ",wp[1],wp[2])
-				local nextWpIndex = e.currentWaypoint +1
-				print("nextWpIndex: ",nextWpIndex)
+				print("wp: ", wp[1], wp[2])
+				local nextWpIndex = e.currentWaypoint + 1
+				print("nextWpIndex: ", nextWpIndex)
 
 				e.currentWaypoint = nextWpIndex
 				local wpNext = e.waypoints[nextWpIndex]
-				print("wpNext: ",wpNext[1],wpNext[2])
-				local distX = wpNext[1]-wp[1]
-				local distY = wpNext[2]-wp[2]
-				print("dists: ",distX,distY)
-				local dirX,dirY = 0,0
+				print("wpNext: ", wpNext[1], wpNext[2])
+				local distX = wpNext[1] - wp[1]
+				local distY = wpNext[2] - wp[2]
+				print("dists: ", distX, distY)
+				local dirX,dirY = 0, 0
 				--TODO: handle the case in which wpNext == currentWp => dist = (0,0) in WAYPOINT GENERATION rather than here
-				if distX ~=0 or distY ~=0 then
-					dirX, dirY= love.turris.normalize( distX, distY)
+				if distX ~= 0 or distY ~= 0 then
+					dirX, dirY = love.turris.normalize(distX, distY)
 				end
 				--TODO diagonal moves should not be allowed. See issue #31
-				e.updateVelocity(dirX,dirY)
+				e.updateVelocity(dirX, dirY)
 			end
 
 			-- write back the changes
-			o.enemies[i]= e
+			o.enemies[i] = e
 			-- check for and handle game over
 			if distance_manhattan(o.baseX, o.baseY, x, y) < 0.5 then
 				e.dead = true
