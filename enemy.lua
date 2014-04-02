@@ -26,7 +26,7 @@ end
 
 function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 	local o = {}
-	o.generateWaypoints = function(map, startX, startY, goalX, goalY)
+	o.generateWaypoints = function(map, startX, startY, goalX, goalY,wpCurrent)
 		local all_nodes = getAllNodes(map)
 		local start = findNode(all_nodes, startX, startY)
 		local goal = findNode(all_nodes, goalX, goalY)
@@ -34,8 +34,13 @@ function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 
 		local wp = {{startX,startY},{goalX,goalY}}
 		if path then
+			if (wpCurrent) then
+				wp ={wpCurrent}
+			else
+				wp = {}
+			end
 			for i = 1, #path do
-				wp[i] ={path[i].x,path[i].y}
+				wp[i+1] ={path[i].x,path[i].y}
 			end
 		end
 		return wp
@@ -43,7 +48,7 @@ function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 	o.x = x
 	o.y = y
 	o.dead = false
-	o.waypoints = o.generateWaypoints(map,x,y,baseX,baseY)
+	o.waypoints = o.generateWaypoints(map,x,y,baseX,baseY,nil)
 
 	o.currentWaypoint = 2
 	o.health = 100.0
@@ -62,6 +67,8 @@ function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 	o.updateVelocity = function(dirX,dirY)
 		o.xVel = dirX*o.speed
 		o.yVel = dirY*o.speed
+		if o.xVel ~=o.xVel then print ("dirX: ",dirX)end
+		if o.yVel ~=o.yVel then print ("dirY: ",dirY)end
 	end
 
 	o.getDirection = function()
@@ -131,7 +138,14 @@ function love.turris.updateEnemies(o, dt)
 				local nextWpIndex = e.currentWaypoint +1
 				e.currentWaypoint = nextWpIndex
 				local wpNext = e.waypoints[nextWpIndex]
-				local dirX,dirY = love.turris.normalize( wpNext[1]-wp[1], wpNext[2]-wp[2])
+				local distX = wpNext[1]-wp[1]
+				local distY = wpNext[2]-wp[2]
+				print("dists: ",distX,distY)
+				local dirX,dirY = 0,0
+					--TODO: handle the case in which wpNext == currentWp => dist = (0,0) in WAYPOINT GENERATION rather than here
+				if distX ~=0 and distY ~=0 then
+					love.turris.normalize( distX, distY)
+				end
 				e.updateVelocity(dirX,dirY)
 			end
 

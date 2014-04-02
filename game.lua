@@ -101,7 +101,8 @@ function love.turris.newGame()
 	o.recalculatePaths = function()
 		for i = 1, o.enemyCount do
 			local e = o.enemies[i]
-			e.waypoints = e.generateWaypoints(o.map, math.floor(e.x + 0.5), math.floor(e.y + 0.5), o.baseX, o.baseY)
+			local wpCurrent = e.waypoints[e.currentWaypoint]
+			e.waypoints = e.generateWaypoints(o.map, math.floor(e.x + 0.5), math.floor(e.y + 0.5), o.baseX, o.baseY,wpCurrent)
 			e.currentWaypoint = 1
 			local wpNext = e.waypoints[e.currentWaypoint]
 			local deltaX = wpNext[1] - e.x
@@ -480,14 +481,19 @@ function love.turris.newGame()
 
 
 				G.setColor(255, 255, 255)
-				local directionAnim = (e.getDirection() + math.pi) / (math.pi * 0.25) - 1
+				print ("vels: ",e.xVel,e.yVel)
+				local dir = e.getDirection()
+				print ("dir: ",dir)
+				local directionAnim = (dir + math.pi) / (math.pi * 0.25) - 1
 				if directionAnim == 0 then
 					directionAnim = 8
 				end
 				local ca = e.sheet
 				ca:seek(directionAnim)
-
-				ca:draw(x * o.map.tileWidth - (ca.fw * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (ca.fh / 8.0 * 0.5) + o.offsetY - 24 + math.sin(love.timer.getTime() * 2.0) * 4.0)
+				local tileOffsetX = (ca.fw * 0.5)
+				if not tileOffsetX then print (tileOffsetX) end
+				local xPos = x * o.map.tileWidth - tileOffsetX + o.offsetX - 32
+				ca:draw(xPos, (y - 1) * o.map.tileHeight - (ca.fh / 8.0 * 0.5) + o.offsetY - 24 + math.sin(love.timer.getTime() * 2.0) * 4.0)
 				--e.shadow.setPosition(x * o.map.tileWidth - (o.creepImg:getWidth() * 0.5) + o.offsetX - 32, (y - 1) * o.map.tileHeight - (o.creepImg:getHeight() / 8.0 * 0.5) + o.offsetY + 32)
 
 				--print(e.getDirection())
