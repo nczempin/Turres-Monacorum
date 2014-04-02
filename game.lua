@@ -70,14 +70,13 @@ function love.turris.newGame()
 		print ("adding main base", o.baseX, o.baseY)
 		o.addTower(o.baseX, o.baseY, 2) --main base
 
-		--		o.addTower(2, 2,1)
+		o.player.setMass(9999) -- enough to place the towers
+
 		o.addTower(11, 2, 4)
 		o.addTower(5, 3, 3)
 		o.addTower(7, 5, 5)
-		--		o.addTower(2,o.baseY-1,1) --TODO another debugging tower
-		--		o.addTower(2,o.baseY+1,1) --TODO another debugging tower
-		--		o.addTower(o.baseX-1,o.baseY,1) --TODO another debugging tower
-		--		o.addTower(o.baseX-1,o.baseY-1,1) --TODO another debugging tower
+
+		o.player.setMass(20)
 
 		o.imgLaser = G.newImage("gfx/laserbeam_blue.png")
 		o.imgLaser:setWrap("repeat", "repeat")
