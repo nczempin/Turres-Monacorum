@@ -14,12 +14,8 @@ o.effectTimer = 0
 o.chromaticEffect = 0
 
 o.guiMenu			= love.gui.newGui()
---o.chkBloom			= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, true, "Video")
---o.chkScanlines		= o.guiMenu.newCheckbox(startx, starty + 64 * 1, 191, 32, true, "Scanlines")
---o.chkShadow			= o.guiMenu.newCheckbox(startx, starty + 64 * 2, 191, 32, true, "Shadow")
---o.chkSelfShadow		= o.guiMenu.newCheckbox(startx, starty + 64 * 3, 191, 32, true, "Self Shadow")
---o.chkGlow			= o.guiMenu.newCheckbox(startx, starty + 64 * 4, 191, 32, true, "Glow")
-o.btnVideo			= o.guiMenu.newButton(startx + 8, starty + 64 * 0 + 8, 176, 32, "Video")
+o.btnDisplay			= o.guiMenu.newButton(startx + 8, starty + 64 * 0 + 8, 176, 32, "Display")
+o.btnShaders			= o.guiMenu.newButton(startx + 8, starty + 64 * 1 + 8, 176, 32, "Shaders")
 o.btnBack			= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 32, "Back")
 
 o.reset = function()
@@ -39,9 +35,14 @@ o.update = function(dt)
 		o.guiMenu.flushMouse()
 	end
 
-	if o.btnVideo.isHit() then
+	if o.btnDisplay.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
-		love.setgamestate(7)
+		love.setgamestate(9)
+		o.guiMenu.flushMouse()
+	end
+	if o.btnShaders.isHit() then
+		love.sounds.playSound("sounds/button_pressed.wav")
+		love.setgamestate(8)
 		o.guiMenu.flushMouse()
 	end
 end

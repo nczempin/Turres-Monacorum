@@ -14,13 +14,11 @@ o.effectTimer = 0
 o.chromaticEffect = 0
 
 o.guiMenu			= love.gui.newGui()
---o.chkBloom			= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, true, "Video")
---o.chkScanlines		= o.guiMenu.newCheckbox(startx, starty + 64 * 1, 191, 32, true, "Scanlines")
---o.chkShadow			= o.guiMenu.newCheckbox(startx, starty + 64 * 2, 191, 32, true, "Shadow")
---o.chkSelfShadow		= o.guiMenu.newCheckbox(startx, starty + 64 * 3, 191, 32, true, "Self Shadow")
---o.chkGlow			= o.guiMenu.newCheckbox(startx, starty + 64 * 4, 191, 32, true, "Glow")
-o.btnVideo			= o.guiMenu.newButton(startx + 8, starty + 64 * 0 + 8, 176, 32, "Video")
+o.chkFullscreen			= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, false, "Fullscreen")
+o.chkLarge		= o.guiMenu.newCheckbox(startx, starty + 64 * 1, 191, 32, false, "Large")
 o.btnBack			= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 32, "Back")
+
+o.optionLarge = small
 
 o.reset = function()
 	o.guiMenu.flushMouse()
@@ -32,14 +30,29 @@ o.update = function(dt)
 
 	o.guiMenu.update(dt)
 
-
-	if o.btnBack.isHit() or love.keyboard.isDown("escape") then
+	if o.chkFullscreen.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
-		love.setgamestate(0)
-		o.guiMenu.flushMouse()
+		o.optionFullscreen = o.chkFullscreen.isChecked()
+		local success = love.window.setFullscreen( o.optionFullscreen )
 	end
 
-	if o.btnVideo.isHit() then
+	if o.chkLarge.isHit() then
+		love.sounds.playSound("sounds/button_pressed.wav")
+		local success
+		o.optionLarge = o.chkLarge.isChecked()
+		o.optionFullscreen = o.chkFullscreen.isChecked()
+		if o.optionLarge then
+			success = love.window.setMode( 1280, 720, {fullscreen=o.optionFullscreen})
+		else
+			success = love.window.setMode( 800, 600 ,{fullscreen=o.optionFullscreen})
+		end
+		if not success then
+		--do something
+		end
+	end
+
+
+	if o.btnBack.isHit() or love.keyboard.isDown("escape") then
 		love.sounds.playSound("sounds/button_pressed.wav")
 		love.setgamestate(7)
 		o.guiMenu.flushMouse()
