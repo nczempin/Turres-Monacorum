@@ -11,7 +11,7 @@ function love.turris.newTowerType(path)
 	o.maxHealth = 100.0
 	o.buildCost = 10 --mass
 	o.scrapValue = 5 --mass
-	o.shotCost = 5 --energy per second
+	o.shotCost = 10 --energy per second
 	
 	o.damage = 100
 	o.range = 2

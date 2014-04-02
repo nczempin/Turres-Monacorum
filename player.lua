@@ -3,7 +3,7 @@ function love.turris.newPlayer()
 	local o = {}
 
 	o.mass = 20
-	o.energy = 100
+	o.energy = 20
 
 	o.addMass = function(mass)
 		o.mass = o.mass + mass
