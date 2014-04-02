@@ -481,9 +481,9 @@ function love.turris.newGame()
 
 
 				G.setColor(255, 255, 255)
-				print ("vels: ",e.xVel,e.yVel)
+				--print ("vels: ",e.xVel,e.yVel)
 				local dir = e.getDirection()
-				print ("dir: ",dir)
+				--print ("dir: ",dir)
 				local directionAnim = (dir + math.pi) / (math.pi * 0.25) - 1
 				if directionAnim == 0 then
 					directionAnim = 8

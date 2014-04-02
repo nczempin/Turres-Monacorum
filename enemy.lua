@@ -133,16 +133,24 @@ function love.turris.updateEnemies(o, dt)
 
 			-- check if waypoint reached
 			local wp = e.waypoints[e.currentWaypoint]
-			if math.abs(wp[1]-x)<0.1 and math.abs(wp[2] -y)<0.1 then
+			if math.abs(wp[1]-x)<0.1 and math.abs(wp[2] -y)<0.1 then --TODO use existing distance function
 				-- waypoint reached
+				print ("waypoints:")
+				for i=1, #e.waypoints do
+					print (i, e.waypoints[i].x, e.waypoints[i].y)
+				end
+				print("wp: ",wp.x,wp.y)
 				local nextWpIndex = e.currentWaypoint +1
+				print("nextWpIndex: ",nextWpIndex)
+
 				e.currentWaypoint = nextWpIndex
 				local wpNext = e.waypoints[nextWpIndex]
+				print("wpNext: ",wpNext.x,wpNext.y)
 				local distX = wpNext[1]-wp[1]
 				local distY = wpNext[2]-wp[2]
 				print("dists: ",distX,distY)
 				local dirX,dirY = 0,0
-					--TODO: handle the case in which wpNext == currentWp => dist = (0,0) in WAYPOINT GENERATION rather than here
+				--TODO: handle the case in which wpNext == currentWp => dist = (0,0) in WAYPOINT GENERATION rather than here
 				if distX ~=0 and distY ~=0 then
 					love.turris.normalize( distX, distY)
 				end
