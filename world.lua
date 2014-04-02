@@ -5,7 +5,7 @@ lightWorld = love.light.newWorld()
 lightWorld.setNormalInvert(true)
 lightWorld.setAmbientColor(15, 15, 31)
 lightWorld.setRefractionStrength(32.0)
-lightWorld.setGlowStrength(4.0)
+lightWorld.setGlowStrength(3.0)
 
 -- create light
 lightMouse = lightWorld.newLight(0, 0, 31, 191, 63, 300)
@@ -32,17 +32,17 @@ function love.turris.checkleftclick(clickx,clicky)
 end
 
 function getclickedfield(clickx,clicky)
-	local x=((clickx-turGame.offsetX)-((clickx-turGame.offsetX)%turMap.tileWidth))/turMap.tileWidth+1
-	local y=((clicky-turGame.offsetY)-((clicky-turGame.offsetY)%turMap.tileHeight))/turMap.tileHeight+1
-	print("clicked field "..x..", "..y)
-	return x,y
+	local x = ((clickx-turGame.offsetX) - ((clickx-turGame.offsetX) % turMap.tileWidth))/turMap.tileWidth + 1
+	local y = ((clicky-turGame.offsetY) - ((clicky-turGame.offsetY) % turMap.tileHeight))/turMap.tileHeight + 1
+	print("clicked field " .. x .. ", " .. y)
+	return x, y
 end
 
 function love.turris.checkrightclick(clickx,clicky)
-	currentgstate=love.getgamestate()
+	currentgstate = love.getgamestate()
 	if currentgamestate == 1 then --ingame
-		local clickedfieldx,clickedfieldy=getclickedfield(clickx,clicky)
-		turGame.removeTower(clickedfieldx,clickedfieldy)
+		local clickedfieldx, clickedfieldy = getclickedfield(clickx, clicky)
+		turGame.removeTower(clickedfieldx, clickedfieldy)
 		--turMap.setState(clickedfieldx,clickedfieldy,0)
 		--turrets will be removed
 	end

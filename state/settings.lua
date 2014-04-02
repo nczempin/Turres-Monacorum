@@ -14,13 +14,13 @@ o.effectTimer = 0
 o.chromaticEffect = 0
 
 o.guiMenu			= love.gui.newGui()
---o.chkBloom			= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, true, "Video")
---o.chkScanlines		= o.guiMenu.newCheckbox(startx, starty + 64 * 1, 191, 32, true, "Scanlines")
---o.chkShadow			= o.guiMenu.newCheckbox(startx, starty + 64 * 2, 191, 32, true, "Shadow")
---o.chkSelfShadow		= o.guiMenu.newCheckbox(startx, starty + 64 * 3, 191, 32, true, "Self Shadow")
+--o.chkBloom		= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, true, "Video")
+--o.chkScanlines	= o.guiMenu.newCheckbox(startx, starty + 64 * 1, 191, 32, true, "Scanlines")
+--o.chkShadow		= o.guiMenu.newCheckbox(startx, starty + 64 * 2, 191, 32, true, "Shadow")
+--o.chkSelfShadow	= o.guiMenu.newCheckbox(startx, starty + 64 * 3, 191, 32, true, "Self Shadow")
 --o.chkGlow			= o.guiMenu.newCheckbox(startx, starty + 64 * 4, 191, 32, true, "Glow")
-o.btnVideo			= o.guiMenu.newButton(startx + 8, starty + 64 * 0 + 8, 176, 32, "Video")
-o.btnBack			= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 32, "Back")
+o.btnVideo			= o.guiMenu.newButton(startx + 8, starty + 64 * 0 + 8, 176, 34, "Video")
+o.btnBack			= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 34, "Back")
 
 o.reset = function()
 	o.guiMenu.flushMouse()

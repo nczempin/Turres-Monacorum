@@ -113,11 +113,11 @@ function love.draw()
 		stateSettingsVideoDisplay.draw()
 	end
 
-	if stateSettings.optionScanlines then
+	if stateSettingsVideoShaders.optionScanlines then
 		love.postshader.addEffect("scanlines", scanlineStrength)
 	end
 
-	if stateSettings.optionBloom then
+	if stateSettingsVideoShaders.optionBloom then
 		love.postshader.addEffect("bloom")
 	end
 

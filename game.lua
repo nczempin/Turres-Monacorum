@@ -391,6 +391,7 @@ function love.turris.newGame()
 			lightWorld.drawGlow()
 		else
 			o.drawPaths()
+			o.drawMapCursor()
 			o.drawShots()
 			o.layerHud.draw()
 		end
@@ -450,7 +451,7 @@ function love.turris.newGame()
 		end
 
 		-- hide shots under tower edges
-		if o.map and o.map.width and o.map.height then
+		if o.map then
 			for i = 0, o.map.width - 1 do
 				for k = 0, o.map.height - 1 do
 					local tile = o.map.data[i + 1][k + 1]
@@ -487,24 +488,34 @@ function love.turris.newGame()
 				local direction = math.atan2(wpFrom[1] - wpTo[1], wpTo[2] - wpFrom[2]) + math.pi * 0.5
 				local length = math.sqrt(math.pow(wpFrom[1] * o.map.tileWidth - wpTo[1] * o.map.tileWidth, 2) + math.pow(wpFrom[2] * o.map.tileHeight - wpTo[2] * o.map.tileHeight, 2))
 				local timer = -math.mod(love.timer.getTime() * 2.0, 1.0)
-				local vertices = {}
-				if lightWorld.optionGlow then
-					vertices = {
-						{ 0, 0, timer, 0, 127, 0, 0 },
-						{ o.imgPath:getWidth(), 0, timer + length / o.imgPath:getWidth(), 0, 127, 0, 0 },
-						{ o.imgPath:getWidth(), o.imgPath:getHeight(), timer + length / o.imgPath:getWidth(), 1, 63, 63, 0 },
-						{ 0, o.imgPath:getHeight(), timer, 1, 63, 63, 0 },
-					}
-				else
-					vertices = {
-						{ 0, 0, timer, 0, 255, 0, 0 },
-						{ o.imgPath:getWidth(), 0, timer + length / o.imgPath:getWidth(), 0, 255, 0, 0 },
-						{ o.imgPath:getWidth(), o.imgPath:getHeight(), timer + length / o.imgPath:getWidth(), 1, 127, 127, 0 },
-						{ 0, o.imgPath:getHeight(), timer, 1, 127, 127, 0 },
-					}
-				end
+				local vertices = {
+					{ 0, 0, timer, 0, 255, 0, 0 },
+					{ o.imgPath:getWidth(), 0, timer + length / o.imgPath:getWidth(), 0, 255, 0, 0 },
+					{ o.imgPath:getWidth(), o.imgPath:getHeight(), timer + length / o.imgPath:getWidth(), 1, 127, 127, 0 },
+					{ 0, o.imgPath:getHeight(), timer, 1, 127, 127, 0 },
+				}
 				o.mshPath:setVertices(vertices)
 				G.draw(o.mshPath, (wpFrom[1] - 0.5) * o.map.tileWidth + o.offsetX, (wpFrom[2] - 0.5) * o.map.tileHeight + o.offsetY, direction, (length) / o.imgPath:getWidth(), 1, 0, o.imgPath:getHeight() * 0.5)
+			end
+		end
+
+		-- hide path under tower edges
+		if o.map then
+			for i = 0, o.map.width - 1 do
+				for k = 0, o.map.height - 1 do
+					local tile = o.map.data[i + 1][k + 1]
+					local id = tile.id
+					if id == 2 then
+						local tower = o.towerType[id]
+						-- tile
+						if lightWorld.optionGlow then
+							G.setColor(0, 0, 0)
+						else
+							G.setColor(255, 255, 255)
+						end
+						G.draw(tower.img, i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
+					end
+				end
 			end
 		end
 	end
@@ -538,7 +549,6 @@ function love.turris.newGame()
 			if e and not e.dead then
 				local x = e.x
 				local y = e.y
-
 
 				G.setColor(255, 255, 255)
 				--print ("vels: ",e.xVel,e.yVel)
