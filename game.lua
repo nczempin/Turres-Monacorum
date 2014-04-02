@@ -36,6 +36,8 @@ function love.turris.newGame()
 				o.towers[x*o.map.height+y]=nil
 			end
 		end
+		o.mapCursorNormal = G.newImage("gfx/map_cursor_normal.png")
+		o.mapCursorBlock = G.newImage("gfx/map_cursor_block.png")
 		o.creepImg1 = G.newImage("gfx/creep00_diffuse_sheet.png")
 		o.creepAnim1 = newAnimation(o.creepImg1, o.creepImg1:getWidth(), o.creepImg1:getHeight() / 8.0, 0, 0)
 		o.creepImg2 = G.newImage("gfx/creep01_diffuse_sheet.png")
@@ -249,7 +251,7 @@ function love.turris.newGame()
 	end
 
 	o.update = function(dt)
-		o.effectTimer = o.effectTimer +dt
+		o.effectTimer = o.effectTimer + dt
 		o.dayTime = o.dayTime + dt * 0.1
 		T.updateEnemies(o,dt)
 
@@ -381,6 +383,7 @@ function love.turris.newGame()
 		if lightWorld.optionGlow then
 			lightWorld.setBuffer("glow")
 			o.drawPaths()
+			o.drawMapCursor()
 			o.drawShots()
 			o.layerHud.draw()
 			lightWorld.setBuffer("render")
@@ -503,6 +506,21 @@ function love.turris.newGame()
 				o.mshPath:setVertices(vertices)
 				G.draw(o.mshPath, (wpFrom[1] - 0.5) * o.map.tileWidth + o.offsetX, (wpFrom[2] - 0.5) * o.map.tileHeight + o.offsetY, direction, (length) / o.imgPath:getWidth(), 1, 0, o.imgPath:getHeight() * 0.5)
 			end
+		end
+	end
+
+	o.drawMapCursor = function()
+		local mx = love.mouse.getX()
+		local my = love.mouse.getY()
+		local tileX = math.floor((mx - o.offsetX) / o.map.tileWidth)
+		local tileY = math.floor((my - o.offsetY) / o.map.tileHeight)
+
+		if o.map.data[tileX + 1][tileY + 1].id == 0 then
+			G.setColor(0, 127, 255)
+			G.draw(o.mapCursorNormal, tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight + o.offsetY)
+		else
+			G.setColor(255, 63, 0)
+			G.draw(o.mapCursorBlock, tileX * o.map.tileWidth + o.offsetX + o.map.tileWidth * 0.5, tileY * o.map.tileHeight + o.offsetY + o.map.tileHeight * 0.5, 0, 0.95 - math.sin(o.effectTimer * 5.0) * 0.05, 0.95 - math.sin(o.effectTimer * 5.0) * 0.05, o.map.tileWidth * 0.5, o.map.tileHeight * 0.5)
 		end
 	end
 
