@@ -78,7 +78,7 @@ end
 function love.draw()
 	local scanlineStrength = 4.0
 
-	G.setFont(FONT)
+	G.setFont(FONT) --TODO: this only needs to be done whenever the font changes, not every frame
 	W.setTitle("FPS: " .. love.timer.getFPS())
 	love.postshader.setBuffer("render")
 	G.setColor(0, 0, 0)
