@@ -27,6 +27,7 @@ function love.turris.newGame()
 	o.holdOffsetY = 0
 
 	o.init = function()
+		o.player = love.turris.newPlayer()
 		o.setMap(turMap.getMap())
 		o.baseX = math.floor(o.map.width / 2 + 0.5)
 		o.baseY = math.floor(o.map.height / 2 + 0.5)
@@ -101,7 +102,6 @@ function love.turris.newGame()
 
 		o.mshPath = love.graphics.newMesh(vertices, o.imgPath, "fan")
 
-		o.player = love.turris.newPlayer()
 		o.layerHud = love.turris.newHudLayer(o.player)
 		o.layerGameOver = require("layer/gameover")
 	end
@@ -143,7 +143,9 @@ function love.turris.newGame()
 		local state = o.map.getState(x,y)
 		if state and state ==0 then
 			--print ("x, y:",x,y)
-			local t = love.turris.newTower(o.towerType[type], x, y, type)
+			local tt = o.towerType[type]
+			if tt.buildCost > o.player.mass then return end
+			local t = love.turris.newTower(tt, x, y, type)
 			--print ("tower: ",t, t.x, t.y)
 			o.map.setState(t.x, t.y, type)
 			--Playing Sound When Tower is Placed
@@ -152,6 +154,7 @@ function love.turris.newGame()
 			end
 			o.towers[x*o.map.height+y] = t
 			o.towerCount = o.towerCount+1
+			o.player.addMass(-10)
 			o.recalculatePaths()
 		end
 	end
