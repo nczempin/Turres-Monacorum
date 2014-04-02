@@ -94,7 +94,7 @@ function love.draw()
 		turGame.layerGameOver.draw()
 	elseif currentgamestate == 5 then --credits screen
 		stateCredits.draw()
-	elseif currentgamestate == 6 then --credits screen
+	elseif currentgamestate == 6 then --settings screen
 		stateSettings.draw()
 	end
 
