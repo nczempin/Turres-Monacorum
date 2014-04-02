@@ -46,9 +46,15 @@ function love.turris.newGame()
 		local et2 = love.turris.newEnemyType(o.creepAnim2, 2000, 0.5)
 
 		o.enemyTypes = {et1, et2}
-		for i = 1, o.enemyCount do
-			o.enemies[i]= love.turris.newEnemy(o.enemyTypes[i%2+1], o.map, i, o.baseY, o.baseX, o.baseY)
-		end
+		o.enemyCount = 1
+		o.enemies[o.enemyCount]= love.turris.newEnemy(o.enemyTypes[2], o.map, 1, o.baseY, o.baseX, o.baseY)
+		o.enemyCount = o.enemyCount +1
+		o.enemies[o.enemyCount]= love.turris.newEnemy(o.enemyTypes[1], o.map, o.baseX, 1, o.baseX, o.baseY)
+		o.enemyCount = o.enemyCount +1
+		o.enemies[o.enemyCount]= love.turris.newEnemy(o.enemyTypes[1], o.map, o.map.width, o.baseY, o.baseX, o.baseY)
+		o.enemyCount = o.enemyCount +1
+		o.enemies[o.enemyCount]= love.turris.newEnemy(o.enemyTypes[2], o.map, o.baseX, o.map.height, o.baseX, o.baseY)
+
 		o.newGround("gfx/ground_diffuse001.png")
 		laserTower = o.newTowerType("gfx/tower00")
 		o.newTowerType("gfx/tower01")
