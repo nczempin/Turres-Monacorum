@@ -14,7 +14,7 @@ function love.turris.newGame()
 	o.towerCount = 0
 	o.towers.next = 1
 	o.enemies = {}
-	o.enemyCount = 5
+	o.enemyCount = 1
 	o.enemyTypes =  {}
 	o.dayTime = 90
 	o.effectTimer = 99
@@ -43,7 +43,7 @@ function love.turris.newGame()
 		local img -- TODO
 
 		local et1 = love.turris.newEnemyType(o.creepAnim1, 100, 1.0)
-		local et2 = love.turris.newEnemyType(o.creepAnim2, 200, 0.5)
+		local et2 = love.turris.newEnemyType(o.creepAnim2, 2000, 0.5)
 
 		o.enemyTypes = {et1, et2}
 		for i = 1, o.enemyCount do
@@ -61,14 +61,14 @@ function love.turris.newGame()
 		print ("adding main base", o.baseX, o.baseY)
 		o.addTower(o.baseX, o.baseY, 2) --main base
 
-		o.addTower(2, 2,1)
+		--		o.addTower(2, 2,1)
 		o.addTower(11, 2, 4)
 		o.addTower(5, 3, 3)
 		o.addTower(7, 5, 5)
-		o.addTower(2,o.baseY-1,1) --TODO another debugging tower
-		o.addTower(2,o.baseY+1,1) --TODO another debugging tower
-		o.addTower(o.baseX-1,o.baseY,1) --TODO another debugging tower
-		o.addTower(o.baseX-1,o.baseY-1,1) --TODO another debugging tower
+		--		o.addTower(2,o.baseY-1,1) --TODO another debugging tower
+		--		o.addTower(2,o.baseY+1,1) --TODO another debugging tower
+		--		o.addTower(o.baseX-1,o.baseY,1) --TODO another debugging tower
+		--		o.addTower(o.baseX-1,o.baseY-1,1) --TODO another debugging tower
 
 		o.imgLaser = G.newImage("gfx/laserbeam_blue.png")
 		o.imgLaser:setWrap("repeat", "repeat")
@@ -102,10 +102,14 @@ function love.turris.newGame()
 		for i = 1, o.enemyCount do
 			local e = o.enemies[i]
 			local wpCurrent = e.waypoints[e.currentWaypoint]
+			print ("wp before: ",wpCurrent[1],wpCurrent[2])
 			print ("REPATHING ",i)
-			e.waypoints = e.generateWaypoints(o.map, math.floor(e.x + 0.5), math.floor(e.y + 0.5), o.baseX, o.baseY,wpCurrent)
+			--e.waypoints = e.generateWaypoints(o.map, math.floor(e.x + 0.5), math.floor(e.y + 0.5), o.baseX, o.baseY,wpCurrent)
+			e.waypoints = e.generateWaypoints(o.map, wpCurrent[1],wpCurrent[2], o.baseX, o.baseY,wpCurrent)
 			--printWaypoints(e)
 			e.currentWaypoint = 1
+			wpCurrent =  e.waypoints[e.currentWaypoint]
+			print ("wp after: ",wpCurrent[1],wpCurrent[2])
 			local wpNext = e.waypoints[e.currentWaypoint]
 			local deltaX = wpNext[1] - e.x
 			local deltaY = wpNext[2] - e.y
