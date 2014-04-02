@@ -55,9 +55,9 @@ function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 			local fudge = #wp
 			print "copying path to waypoints"
 			for i = 1, #path do
-				print ("path: ", i, path[i].x, path[i].y)
+				--print ("path: ", i, path[i].x, path[i].y)
 				wp[i+fudge] ={path[i].x,path[i].y}
-				print ("wp: ",wp[i+fudge][1], wp[i+fudge][2])
+				--print ("wp: ",wp[i+fudge][1], wp[i+fudge][2])
 			end
 
 		end
@@ -155,7 +155,7 @@ function love.turris.updateEnemies(o, dt)
 			local wp = e.waypoints[e.currentWaypoint]
 			if math.abs(wp[1]-x)<0.1 and math.abs(wp[2] -y)<0.1 then --TODO use existing distance function
 				-- waypoint reached
-				printWaypoints(e)
+				--printWaypoints(e)
 				print("wp: ",wp[1],wp[2])
 				local nextWpIndex = e.currentWaypoint +1
 				print("nextWpIndex: ",nextWpIndex)
