@@ -14,7 +14,7 @@ function love.turris.newGame()
 	o.towerCount = 0
 	o.towers.next = 1
 	o.enemies = {}
-	o.enemyCount = 1
+	o.enemyCount = 5
 	o.enemyTypes =  {}
 	o.dayTime = 90
 	o.effectTimer = 99
