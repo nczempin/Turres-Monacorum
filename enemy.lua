@@ -23,10 +23,20 @@ function findNode(nodes, x, y)
 		end
 	end
 end
+printWaypoints = function(e)
+	print ("waypoints:")
+	for i=1, #e.waypoints do
+		print (i, e.waypoints[i].x, e.waypoints[i].y)
+	end
+
+end
 
 function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 	local o = {}
+
+
 	o.generateWaypoints = function(map, startX, startY, goalX, goalY,wpCurrent)
+		print ("generate:",startX,startY,goalX,goalY)
 		local all_nodes = getAllNodes(map)
 		local start = findNode(all_nodes, startX, startY)
 		local goal = findNode(all_nodes, goalX, goalY)
@@ -34,13 +44,18 @@ function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 
 		local wp = {{startX,startY},{goalX,goalY}}
 		if path then
+			print ("path: yes")
+
 			if (wpCurrent) then
+				print ("wpCurrent: yes")
 				wp ={wpCurrent}
 			else
 				wp = {}
 			end
+			local fudge = #wp
 			for i = 1, #path do
-				wp[i+1] ={path[i].x,path[i].y}
+				print (i, path[i].x, path[i].y)
+				wp[i+fudge] ={path[i].x,path[i].y}
 			end
 		end
 		return wp
@@ -135,10 +150,7 @@ function love.turris.updateEnemies(o, dt)
 			local wp = e.waypoints[e.currentWaypoint]
 			if math.abs(wp[1]-x)<0.1 and math.abs(wp[2] -y)<0.1 then --TODO use existing distance function
 				-- waypoint reached
-				print ("waypoints:")
-				for i=1, #e.waypoints do
-					print (i, e.waypoints[i].x, e.waypoints[i].y)
-				end
+				printWaypoints(e)
 				print("wp: ",wp.x,wp.y)
 				local nextWpIndex = e.currentWaypoint +1
 				print("nextWpIndex: ",nextWpIndex)
