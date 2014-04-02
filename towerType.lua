@@ -9,8 +9,10 @@ function love.turris.newTowerType(path)
 
 	--TODO: Of course these all have to differ depending on type
 	o.maxHealth = 100.0
-	o.buildCost = 10
-	o.scrapValue = 5
+	o.buildCost = 10 --mass
+	o.scrapValue = 5 --mass
+	o.shotCost = 5 --energy per second
+	
 	o.damage = 100
 	o.range = 2
 

@@ -166,14 +166,20 @@ function love.turris.newGame()
 	end
 	print("will try to remove tower at "..x..", "..y)
 	local state =o.map.getState(x,y)
-	if state and state==1 then -- TODO: let towers other than type 1 be deleted
-		o.towerCount = o.towerCount-1
-		o.towers[x*o.map.height+y] = nil
-		turMap.setState(x,y,0)
-		print(o.towers[x*o.map.height+y])
-		o.recalculatePaths()
-	else
-		print("Could not delete tower at "..x..", "..y)
+
+	if state then
+		if state==1 then -- TODO: let towers other than type 1 be deleted
+			local scrapValue = o.towerType[state].scrapValue
+			o.player.addMass(scrapValue)
+
+			o.towerCount = o.towerCount-1
+			o.towers[x*o.map.height+y] = nil
+			turMap.setState(x,y,0)
+			--print(o.towers[x*o.map.height+y])
+			o.recalculatePaths()
+		else
+			print("Could not delete tower at "..x..", "..y)
+		end
 	end
 	end
 
