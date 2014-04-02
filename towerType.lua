@@ -5,7 +5,14 @@ function love.turris.newTowerType(path)
 	o.normal = G.newImage(o.path .. "_normal.png")
 	o.glow = G.newImage(o.path .. "_glow.png")
 	o.upper = nil
+
+
+	--TODO: Of course these all have to differ depending on type
 	o.maxHealth = 100.0
+	o.buildCost = 10 --mass
+	o.scrapValue = 5 --mass
+	o.shotCost = 10 --energy per second
+	
 	o.damage = 100
 	o.range = 2
 

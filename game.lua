@@ -27,6 +27,7 @@ function love.turris.newGame()
 	o.holdOffsetY = 0
 
 	o.init = function()
+		o.player = love.turris.newPlayer()
 		o.setMap(turMap.getMap())
 		o.baseX = math.floor(o.map.width / 2 + 0.5)
 		o.baseY = math.floor(o.map.height / 2 + 0.5)
@@ -69,14 +70,13 @@ function love.turris.newGame()
 		print ("adding main base", o.baseX, o.baseY)
 		o.addTower(o.baseX, o.baseY, 2) --main base
 
-		--		o.addTower(2, 2,1)
+		o.player.setMass(9999) -- enough to place the towers
+
 		o.addTower(11, 2, 4)
 		o.addTower(5, 3, 3)
 		o.addTower(7, 5, 5)
-		--		o.addTower(2,o.baseY-1,1) --TODO another debugging tower
-		--		o.addTower(2,o.baseY+1,1) --TODO another debugging tower
-		--		o.addTower(o.baseX-1,o.baseY,1) --TODO another debugging tower
-		--		o.addTower(o.baseX-1,o.baseY-1,1) --TODO another debugging tower
+
+		o.player.setMass(20)
 
 		o.imgLaser = G.newImage("gfx/laserbeam_blue.png")
 		o.imgLaser:setWrap("repeat", "repeat")
@@ -101,7 +101,6 @@ function love.turris.newGame()
 
 		o.mshPath = love.graphics.newMesh(vertices, o.imgPath, "fan")
 
-		o.player = love.turris.newPlayer()
 		o.layerHud = love.turris.newHudLayer(o.player)
 		o.layerGameOver = require("layer/gameover")
 	end
@@ -143,7 +142,9 @@ function love.turris.newGame()
 		local state = o.map.getState(x,y)
 		if state and state ==0 then
 			--print ("x, y:",x,y)
-			local t = love.turris.newTower(o.towerType[type], x, y, type)
+			local tt = o.towerType[type]
+			if tt.buildCost > o.player.mass then return end
+			local t = love.turris.newTower(tt, x, y, type)
 			--print ("tower: ",t, t.x, t.y)
 			o.map.setState(t.x, t.y, type)
 			--Playing Sound When Tower is Placed
@@ -152,6 +153,7 @@ function love.turris.newGame()
 			end
 			o.towers[x*o.map.height+y] = t
 			o.towerCount = o.towerCount+1
+			o.player.addMass(-10)
 			o.recalculatePaths()
 		end
 	end
@@ -163,14 +165,20 @@ function love.turris.newGame()
 	end
 	print("will try to remove tower at "..x..", "..y)
 	local state =o.map.getState(x,y)
-	if state and state==1 then -- TODO: let towers other than type 1 be deleted
-		o.towerCount = o.towerCount-1
-		o.towers[x*o.map.height+y] = nil
-		turMap.setState(x,y,0)
-		print(o.towers[x*o.map.height+y])
-		o.recalculatePaths()
-	else
-		print("Could not delete tower at "..x..", "..y)
+
+	if state then
+		if state==1 then -- TODO: let towers other than type 1 be deleted
+			local scrapValue = o.towerType[state].scrapValue
+			o.player.addMass(scrapValue)
+
+			o.towerCount = o.towerCount-1
+			o.towers[x*o.map.height+y] = nil
+			turMap.setState(x,y,0)
+			--print(o.towers[x*o.map.height+y])
+			o.recalculatePaths()
+		else
+			print("Could not delete tower at "..x..", "..y)
+		end
 	end
 	end
 
@@ -274,35 +282,38 @@ function love.turris.newGame()
 		for i = 1, o.towerCount do
 			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
 			local t = o.getnextTower(lastTowerPos+1) -- the next tower will always be after the first one. Do not ask for a tower after the last one, you will get nil
-			if t.id == 1 then
-				local e = t.determineTarget(o.enemies,distance_euclid)
-				t.target = e --TODO just do that inside tower module
-				if e then
-					local x, y = e.x, e.y
+			if t.id == 1 then -- laser tower
+				t.target = nil
+				local energyCost = dt*t.type.shotCost
+				if energyCost <= o.player.energy then
+					local e = t.determineTarget(o.enemies,distance_euclid)
+					t.target = e --TODO just do that inside tower module
 
-					local tx = (t.x - 0.5) * o.map.tileWidth + o.offsetX
-					local ty = (t.y - 0.5) * o.map.tileHeight + o.offsetY
-					local ex = (e.x - 0.5) * o.map.tileWidth + o.offsetX
-					local ey = (e.y - 0.5) * o.map.tileHeight + o.offsetY
-					local direction = math.atan2(tx - ex, ey - ty) + math.pi * 0.5
-					local length = math.sqrt(math.pow(tx - ex, 2) + math.pow((ty) - ey, 2))
-					--			if (length < 150)then
-					local timer = -math.mod(love.timer.getTime() * 2.0, 1.0)
-					--local vertices = {
-					--{ 0, 0, timer, 0, 255, 0, 0,},
-					--{ o.imgLaser:getWidth(), 0, timer + 1, 0, 0, 255, 0 },
-					--{ o.imgLaser:getWidth(), o.imgLaser:getHeight(), timer + 1, 1, 0, 0, 255 },
-					--{ 0, o.imgLaser:getHeight(), timer, 1, 255, 255, 0 },
-					--}
+					if e then
+						local x, y = e.x, e.y
 
-					if e.health > 0.0 then
-						e.health = e.health - t.type.damage*dt
-						if e.health <= 0 then
-							e.dead = true
+						local tx = (t.x - 0.5) * o.map.tileWidth + o.offsetX
+						local ty = (t.y - 0.5) * o.map.tileHeight + o.offsetY
+						local ex = (e.x - 0.5) * o.map.tileWidth + o.offsetX
+						local ey = (e.y - 0.5) * o.map.tileHeight + o.offsetY
+						local direction = math.atan2(tx - ex, ey - ty) + math.pi * 0.5
+						local length = math.sqrt(math.pow(tx - ex, 2) + math.pow((ty) - ey, 2))
+						local timer = -math.mod(love.timer.getTime() * 2.0, 1.0)
+						--local vertices = {
+						--{ 0, 0, timer, 0, 255, 0, 0,},
+						--{ o.imgLaser:getWidth(), 0, timer + 1, 0, 0, 255, 0 },
+						--{ o.imgLaser:getWidth(), o.imgLaser:getHeight(), timer + 1, 1, 0, 0, 255 },
+						--{ 0, o.imgLaser:getHeight(), timer, 1, 255, 255, 0 },
+						--}
+						o.player.addEnergy(-energyCost)
+						if e.health > 0.0 then
+							e.health = e.health - t.type.damage*dt
+							if e.health <= 0 then
+								e.dead = true
+							end
 						end
 					end
 				end
-
 			end
 			lastTowerPos = t.x*o.map.height+t.y
 		end
@@ -310,7 +321,7 @@ function love.turris.newGame()
 		-- test
 		--TODO: -> player.update
 		o.player.addMass(dt*2)
-		o.player.addEnergy(dt*10)
+		o.player.addEnergy(dt*5)
 	end
 	--------------------- drawing starts here
 
@@ -418,7 +429,7 @@ function love.turris.newGame()
 			local t = o.getnextTower(lastTowerPos+1) -- the next tower will always be after the first one. Do not ask for a tower after the last one, you will get nil
 			if t.id == 1 then
 				local e = t.target
-				if e then
+				if e and e.x and e.y then
 					local x, y = e.x, e.y
 
 					local tx = (t.x - 0.5) * o.map.tileWidth + o.offsetX
