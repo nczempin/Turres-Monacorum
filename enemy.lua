@@ -69,7 +69,6 @@ function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 	o.waypoints = o.generateWaypoints(map,x,y,baseX,baseY,nil)
 
 	o.currentWaypoint = 2
-	o.health = 100.0
 
 	-- TODO this depends on the type and not on the particular enemy
 	o.enemyType = enemyType
@@ -77,6 +76,9 @@ function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 	o.speed =  enemyType.baseSpeed
 	o.sheet = enemyType.sheet
 	-- type end
+
+	o.health = o.maxHealth
+
 
 	--o.shadow = {}
 	--o.shadow = lightWorld.newImage(o.img)
