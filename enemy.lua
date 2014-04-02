@@ -185,8 +185,8 @@ function love.turris.updateEnemies(o, dt)
 				-- TODO: destroy base (explosion!)
 				-- TODO: after explosions have finished -> transition to game over state
 				love.sounds.playSound("sounds/einschlag.mp3")
-				turMap.data[o.baseX][o.baseY].addHealth(-40)
-				if turMap.data[o.baseX][o.baseY].health <= 0 then
+				turMap.data[o.baseX][o.baseY].addHealth(-40) --TODO: Each creep does different damage to the base
+				if turMap.data[o.baseX][o.baseY].health <= 0 then --TODO: Multiple bases? Or I guess this is the main base; we don't care if the other generators die
 					love.setgamestate(4)
 				else
 					turGame.effectTimer = 0

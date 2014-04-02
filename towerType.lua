@@ -6,7 +6,7 @@ function love.turris.newTowerType(path)
 	o.glow = G.newImage(o.path .. "_glow.png")
 	o.upper = nil
 	o.maxHealth = 100.0
-
+	o.damage = 100
 	o.range = 2
 
 	o.getMaxHealth = function(health)
