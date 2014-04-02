@@ -28,6 +28,9 @@ function love.load()
 	stateMainMenu = require("state/main_menu")
 	stateCredits = require("state/credits")
 	stateSettings = require("state/settings")
+	stateSettingsVideo = require("state/settings_video")
+	stateSettingsVideoShaders = require("state/settings_video_shaders")
+	stateSettingsVideoDisplay = require("state/settings_video_display")
 
 	stateMainMenu.setVersion("v0.5.1")
 end
@@ -71,6 +74,12 @@ function love.update(dt)
 		stateCredits.update(dt)
 	elseif (currentgamestate == 6)then
 		stateSettings.update(dt)
+	elseif (currentgamestate == 7)then
+		stateSettingsVideo.update(dt)
+	elseif (currentgamestate == 8)then
+		stateSettingsVideoShaders.update(dt)
+	elseif (currentgamestate == 9)then
+		stateSettingsVideoDisplay.update(dt)
 	end
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
 end
@@ -96,6 +105,12 @@ function love.draw()
 		stateCredits.draw()
 	elseif currentgamestate == 6 then --settings screen
 		stateSettings.draw()
+	elseif currentgamestate == 7 then --settings screen
+		stateSettingsVideo.draw()
+	elseif currentgamestate == 8 then --settings screen
+		stateSettingsVideoShaders.draw()
+	elseif currentgamestate == 9 then --settings screen
+		stateSettingsVideoDisplay.draw()
 	end
 
 	if stateSettings.optionScanlines then

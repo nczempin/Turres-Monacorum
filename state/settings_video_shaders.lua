@@ -14,13 +14,17 @@ o.effectTimer = 0
 o.chromaticEffect = 0
 
 o.guiMenu			= love.gui.newGui()
---o.chkBloom			= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, true, "Video")
---o.chkScanlines		= o.guiMenu.newCheckbox(startx, starty + 64 * 1, 191, 32, true, "Scanlines")
---o.chkShadow			= o.guiMenu.newCheckbox(startx, starty + 64 * 2, 191, 32, true, "Shadow")
---o.chkSelfShadow		= o.guiMenu.newCheckbox(startx, starty + 64 * 3, 191, 32, true, "Self Shadow")
---o.chkGlow			= o.guiMenu.newCheckbox(startx, starty + 64 * 4, 191, 32, true, "Glow")
-o.btnVideo			= o.guiMenu.newButton(startx + 8, starty + 64 * 0 + 8, 176, 32, "Video")
+o.chkBloom			= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, true, "Bloom")
+o.chkScanlines		= o.guiMenu.newCheckbox(startx, starty + 64 * 1, 191, 32, true, "Scanlines")
+o.chkShadow			= o.guiMenu.newCheckbox(startx, starty + 64 * 2, 191, 32, true, "Shadow")
+o.chkSelfShadow		= o.guiMenu.newCheckbox(startx, starty + 64 * 3, 191, 32, true, "Self Shadow")
+o.chkGlow			= o.guiMenu.newCheckbox(startx, starty + 64 * 4, 191, 32, true, "Glow")
 o.btnBack			= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 32, "Back")
+
+o.optionBloom = true
+o.optionScanlines = true
+o.optionShadow = true
+o.optionGlow = true
 
 o.reset = function()
 	o.guiMenu.flushMouse()
@@ -32,16 +36,39 @@ o.update = function(dt)
 
 	o.guiMenu.update(dt)
 
+	if o.chkBloom.isHit() then
+		love.sounds.playSound("sounds/button_pressed.wav")
+		o.optionBloom = o.chkBloom.isChecked()
+	end
+
+	if o.chkScanlines.isHit() then
+		love.sounds.playSound("sounds/button_pressed.wav")
+		o.optionScanlines = o.chkScanlines.isChecked()
+	end
+
+	if o.chkShadow.isHit() then
+		love.sounds.playSound("sounds/button_pressed.wav")
+		lightWorld.optionShadows = o.chkShadow.isChecked()
+	end
+
+	if o.chkSelfShadow.isHit() then
+		love.sounds.playSound("sounds/button_pressed.wav")
+		lightWorld.optionPixelShadows = o.chkSelfShadow.isChecked()
+	end
+
+	if o.chkGlow.isHit() then
+		love.sounds.playSound("sounds/button_pressed.wav")
+		lightWorld.optionGlow = o.chkGlow.isChecked()
+--		if lightWorld.optionGlow then
+--			love.window.setMode( 800, 600 )
+--		else
+--			love.window.setMode( 1280, 720)
+--		end
+	end
 
 	if o.btnBack.isHit() or love.keyboard.isDown("escape") then
 		love.sounds.playSound("sounds/button_pressed.wav")
-		love.setgamestate(0)
-		o.guiMenu.flushMouse()
-	end
-
-	if o.btnVideo.isHit() then
-		love.sounds.playSound("sounds/button_pressed.wav")
-		love.setgamestate(7)
+		love.setgamestate(6)
 		o.guiMenu.flushMouse()
 	end
 end
