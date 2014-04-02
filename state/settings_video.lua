@@ -14,15 +14,9 @@ o.effectTimer = 0
 o.chromaticEffect = 0
 
 o.guiMenu			= love.gui.newGui()
-<<<<<<< HEAD
-o.btnDisplay			= o.guiMenu.newButton(startx + 8, starty + 64 * 0 + 8, 176, 32, "Display")
-o.btnShaders			= o.guiMenu.newButton(startx + 8, starty + 64 * 1 + 8, 176, 32, "Shaders")
-o.btnBack			= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 32, "Back")
-=======
 o.btnDisplay			= o.guiMenu.newButton(startx + 8, starty + 64 * 0 + 8, 176, 34, "Display")
 o.btnShaders			= o.guiMenu.newButton(startx + 8, starty + 64 * 1 + 8, 176, 34, "Shaders")
 o.btnBack			= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 34, "Back")
->>>>>>> master
 
 o.reset = function()
 	o.guiMenu.flushMouse()
