@@ -29,7 +29,7 @@ function love.load()
 	stateCredits = require("state/credits")
 	stateSettings = require("state/settings")
 
-	stateMainMenu.setVersion("0.4.1")
+	stateMainMenu.setVersion("v0.5.0")
 end
 
 function love.getgamestate()
