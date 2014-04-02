@@ -14,7 +14,7 @@ o.effectTimer = 0
 o.chromaticEffect = 0
 
 o.guiMenu			= love.gui.newGui()
-o.chkFullscreen			= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, true, "Fullscreen")
+o.chkFullscreen			= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, false, "Fullscreen")
 o.chkLarge		= o.guiMenu.newCheckbox(startx, starty + 64 * 1, 191, 32, false, "Large")
 o.btnBack			= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 32, "Back")
 
@@ -32,17 +32,19 @@ o.update = function(dt)
 
 	if o.chkFullscreen.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
-		--o.optionBloom = o.chkBloom.isChecked()
+		o.optionFullscreen = o.chkFullscreen.isChecked()
+		local success = love.window.setFullscreen( o.optionFullscreen )
 	end
 
 	if o.chkLarge.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
 		local success
 		o.optionLarge = o.chkLarge.isChecked()
+		o.optionFullscreen = o.chkFullscreen.isChecked()
 		if o.optionLarge then
-			success = love.window.setMode( 1280, 720)
+			success = love.window.setMode( 1280, 720, {fullscreen=o.optionFullscreen})
 		else
-			success = love.window.setMode( 800, 600 )
+			success = love.window.setMode( 800, 600 ,{fullscreen=o.optionFullscreen})
 		end
 		if not success then
 		--do something
