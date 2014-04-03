@@ -11,6 +11,7 @@ function love.gui.newRadioButton(x, y, width, height, text)
 	local o = {}
 
 	--Attribute
+	o.parent = nil
 	o.type			= "radiobutton"
 	o.x				= x or 0
 	o.y				= y or 0
@@ -173,6 +174,9 @@ function love.gui.newRadioButton(x, y, width, height, text)
 
 	--set checked mode
 	o.setChecked = function(checked)
+		if o.parent then
+			o.parent.flushRadioButtons()
+		end
 		o.checked = checked
 	end
 

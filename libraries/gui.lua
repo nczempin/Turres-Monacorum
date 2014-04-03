@@ -52,12 +52,7 @@ function love.gui.newGui()
 							if o.elements[i].type == "checkbox" then
 								o.elements[i].checked = not o.elements[i].checked
 							elseif o.elements[i].type == "radiobutton" then
-								for k = 1, #o.elements do
-									if o.elements[k].type == "radiobutton" then
-										o.elements[k].checked = false
-									end
-								end
-
+								o.flushRadioButtons()
 								o.elements[i].checked = true
 							end
 						end
@@ -84,6 +79,7 @@ function love.gui.newGui()
 	--Return new button
 	o.newButton = function(x, y, width, height, name, imagePath)
 		o.elements[#o.elements + 1] = love.gui.newButton(x, y, width, height, name)
+		o.elements[#o.elements].parent = o
 
 		return o.elements[#o.elements]
 	end
@@ -92,6 +88,7 @@ function love.gui.newGui()
 	o.newImageButton = function(x, y, width, height, img)
 		o.elements[#o.elements + 1] = love.gui.newButton(x, y, width, height)
 		o.elements[#o.elements].setImage(img)
+		o.elements[#o.elements].parent = o
 
 		return o.elements[#o.elements]
 	end
@@ -99,6 +96,7 @@ function love.gui.newGui()
 	--Return new checkbox
 	o.newCheckbox = function(x, y, width, height, checked, text)
 		o.elements[#o.elements + 1] = love.gui.newCheckbox(x, y, width, height, checked, text)
+		o.elements[#o.elements].parent = o
 
 		return o.elements[#o.elements]
 	end
@@ -106,6 +104,7 @@ function love.gui.newGui()
 	--Return new radiobutton
 	o.newRadioButton = function(x, y, width, height, name, imagePath)
 		o.elements[#o.elements + 1] = love.gui.newRadioButton(x, y, width, height, name)
+		o.elements[#o.elements].parent = o
 
 		return o.elements[#o.elements]
 	end
@@ -114,6 +113,7 @@ function love.gui.newGui()
 	o.newImageRadioButton = function(x, y, width, height, img)
 		o.elements[#o.elements + 1] = love.gui.newRadioButton(x, y, width, height)
 		o.elements[#o.elements].setImage(img)
+		o.elements[#o.elements].parent = o
 
 		return o.elements[#o.elements]
 	end
@@ -128,7 +128,7 @@ function love.gui.newGui()
 		return o.down
 	end
 
-	--Flush Mouse stats
+	--Flush mouse stats
 	o.flushMouse = function()
 		o.hit = false
 		o.down = true
@@ -136,6 +136,15 @@ function love.gui.newGui()
 		for i = 1, #o.elements do
 			o.elements[i].hit = false
 			o.elements[i].down = true
+		end
+	end
+
+	--Flush radiobuttons
+	o.flushRadioButtons = function()
+		for i = 1, #o.elements do
+			if o.elements[i].type == "radiobutton" then
+				o.elements[i].checked = false
+			end
 		end
 	end
 

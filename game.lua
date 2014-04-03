@@ -270,7 +270,7 @@ function love.turris.newGame()
 
 	o.update = function(dt)
 		o.layerHud.update(dt)
-		
+
 		if o.layerHud.btnTower1.isHit() then
 			love.turris.selectedtower = 1
 		elseif o.layerHud.btnTower2.isHit() then
@@ -278,7 +278,25 @@ function love.turris.newGame()
 		elseif o.layerHud.btnTower3.isHit() then
 			love.turris.selectedtower = 4
 		end
-		
+
+		if love.keyboard.isDown("escape") then
+			love.setgamestate(0)
+			love.turris.reinit()
+		elseif love.keyboard.isDown("1") then
+			love.turris.selectedtower = 1
+			o.layerHud.btnTower1.setChecked(true)
+		elseif love.keyboard.isDown("2") then
+			love.turris.selectedtower = 2 --2 would be the main base which should not be available for manual building
+		elseif love.keyboard.isDown("3") then
+			love.turris.selectedtower = 3
+			o.layerHud.btnTower2.setChecked(true)
+		elseif love.keyboard.isDown("4") then
+			love.turris.selectedtower = 4
+			o.layerHud.btnTower3.setChecked(true)
+		elseif love.keyboard.isDown("5") then
+			love.turris.selectedtower = 5
+		end
+
 		o.effectTimer = o.effectTimer + dt
 		o.dayTime = o.dayTime + dt * 0.1
 		T.updateEnemies(o,dt)

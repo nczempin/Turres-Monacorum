@@ -13,16 +13,16 @@ function love.turris.newHudLayer(player)
 	o.btnTower3 = o.guiGame.newImageRadioButton(208 * 2 + 16, W.getHeight() - 80, 192, 64, o.iconTower3)
 
 	o.btnTower1.setFontSize(16)
-	o.btnTower1.setText("Laser Tower [1]")
+	o.btnTower1.setText("Laser Tower (1)")
 	o.btnTower1.setTextPosition(32, -32)
 	o.btnTower1.setChecked(true)
 
 	o.btnTower2.setFontSize(16)
-	o.btnTower2.setText("Energy Tower [2]")
+	o.btnTower2.setText("Energy Tower (3)")
 	o.btnTower2.setTextPosition(32, -32)
 
 	o.btnTower3.setFontSize(16)
-	o.btnTower3.setText("Mass Tower [4]")
+	o.btnTower3.setText("Mass Tower (4)")
 	o.btnTower3.setTextPosition(32, -32)
 
 	o.btnTower1.setColorNormal(0, 127, 255, 63)

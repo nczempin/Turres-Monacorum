@@ -134,37 +134,6 @@ end
 
 function love.keypressed(key, code)
 
-	if key == "escape" then
-		if love.getgamestate() == 1 then
-			love.setgamestate(0)
-			love.turris.reinit()
-		end
-	end
-	if key == "1" then
-		if love.getgamestate() == 1 then
-			love.turris.selectedtower = 1
-		end
-	end
-	if key == "2" then
-		if love.getgamestate() == 1 then
-			love.turris.selectedtower = 2 --2 would be the main base which should not be available for manual building
-		end
-	end
-	if key == "3" then
-		if love.getgamestate() == 1 then
-			love.turris.selectedtower = 3
-		end
-	end
-	if key == "4" then
-		if love.getgamestate() == 1 then
-			love.turris.selectedtower = 4
-		end
-	end
-	if key == "5" then
-		if love.getgamestate() == 1 then
-			love.turris.selectedtower = 5
-		end
-	end
 end
 
 function love.mousepressed(x, y, key)
