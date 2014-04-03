@@ -25,6 +25,7 @@ function love.turris.newGame()
 	o.holdOffset = false
 	o.holdOffsetX = 0
 	o.holdOffsetY = 0
+	o.calcAi = 0
 
 	o.init = function()
 		o.player = love.turris.newPlayer()
@@ -66,16 +67,35 @@ function love.turris.newGame()
 		bombTower = o.newTowerType("gfx/tower04")
 		spawnHole = o.newTowerType("gfx/obstacle00")
 		spawnEggs = o.newTowerType("gfx/obstacle01")
+		spawnRock1 = o.newTowerType("gfx/obstacle02")
+		spawnRock2 = o.newTowerType("gfx/obstacle03")
 
 		laserTower.setUpperImage(true)
 		generatorTower.setUpperImage(true)
 		energyTower.setUpperImage(true)
 		bombTower.setUpperImage(true)
 
+		generatorTower.setBreakable(false)
+		spawnHole.setBreakable(false)
+		spawnEggs.setBreakable(false)
+
 		print ("adding main base", o.baseX, o.baseY)
 		o.addTower(o.baseX, o.baseY, 2) --main base
 
 		o.player.setMass(9999) -- enough to place the towers
+
+		for i = 1, o.map.width do
+			for k = 1, o.map.height do
+				if o.map.getState(i, k) == 0 then
+					local r = math.random(0, 7)
+					if r == 0 then
+						o.map.setState(i, k, 8)
+					elseif r == 1 then
+						o.map.setState(i, k, 9)
+					end
+				end
+			end
+		end
 
 		o.addTower(11, 2, 4)
 		o.addTower(5, 3, 3)
@@ -117,83 +137,86 @@ function love.turris.newGame()
 	o.recalculatePaths = function()
 		for i = 1, o.enemyCount do
 			local e = o.enemies[i]
-			local wpCurrent = e.waypoints[e.currentWaypoint]
-			print ("wp before: ",wpCurrent[1],wpCurrent[2])
-			print ("REPATHING ",i)
-			--e.waypoints = e.generateWaypoints(o.map, math.floor(e.x + 0.5), math.floor(e.y + 0.5), o.baseX, o.baseY,wpCurrent)
-			e.waypoints = e.generateWaypoints(o.map, wpCurrent[1],wpCurrent[2], o.baseX, o.baseY,wpCurrent)
-			--printWaypoints(e)
-			e.currentWaypoint = 1
-			wpCurrent =  e.waypoints[e.currentWaypoint]
-			print ("wp after: ",wpCurrent[1],wpCurrent[2])
-			local wpNext = e.waypoints[e.currentWaypoint]
-			local deltaX = wpNext[1] - e.x
-			local deltaY = wpNext[2] - e.y
-			--print ("delta: ", deltaX, deltaY)
-			local dirX,dirY = love.turris.normalize(deltaX , deltaY)
 
-			if dirX ~= dirX or dirY ~= dirY then
-			--print ("NaN")
-			else
-				dirX = math.floor(dirX)
-				dirY= math.floor(dirY)
-				--print ("dir: ",dirX, dirY)
-				e.updateVelocity(dirX,dirY)
+			if not e.dead then
+				local wpCurrent = e.waypoints[e.currentWaypoint]
+				--print ("wp before: ",wpCurrent[1],wpCurrent[2])
+				--print ("REPATHING ",i)
+				--e.waypoints = e.generateWaypoints(o.map, math.floor(e.x + 0.5), math.floor(e.y + 0.5), o.baseX, o.baseY,wpCurrent)
+				e.waypoints = e.generateWaypoints(o.map, wpCurrent[1],wpCurrent[2], o.baseX, o.baseY,wpCurrent)
+				--printWaypoints(e)
+				e.currentWaypoint = 1
+				wpCurrent =  e.waypoints[e.currentWaypoint]
+				--print ("wp after: ",wpCurrent[1],wpCurrent[2])
+				local wpNext = e.waypoints[e.currentWaypoint]
+				local deltaX = wpNext[1] - e.x
+				local deltaY = wpNext[2] - e.y
+				--print ("delta: ", deltaX, deltaY)
+				local dirX,dirY = love.turris.normalize(deltaX , deltaY)
+
+				if dirX ~= dirX or dirY ~= dirY then
+				--print ("NaN")
+				else
+					dirX = math.floor(dirX)
+					dirY= math.floor(dirY)
+					--print ("dir: ",dirX, dirY)
+					e.updateVelocity(dirX,dirY)
+				end
 			end
 		end
 	end
 
 	-- gameplay
 
-	o.addTower = function(x,y,type)
-		--print ("addTower:", x, y, type,o.map)
-		if not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height or not type or not (o.towerCount<o.towers.maxamount) then return end
-		local state = o.map.getState(x,y)
-		if state and state ==0 then
-			--print ("x, y:",x,y)
-			local tt = o.towerType[type]
-			if tt.buildCost > o.player.mass then return end
-			local t = love.turris.newTower(tt, x, y, type)
-			--print ("tower: ",t, t.x, t.y)
-			o.map.setState(t.x, t.y, type)
-			--Playing Sound When Tower is Placed
-			if currentgamestate == 1 then --TODO we should make sure that towers can never be _placed_ in any other state
-				love.sounds.playSound("sounds/tower_1.mp3")
+	o.addTower = function(x, y, id)
+		if x >= 1 and x <= o.map.width and y >= 1 and y <= o.map.height and id and o.towerCount < o.towers.maxamount then
+			local state = o.map.getState(x, y)
+			if state and state == 0 then
+				--print ("x, y:",x,y)
+				local tt = o.towerType[id]
+				if tt.buildCost > o.player.mass then return end
+				local t = love.turris.newTower(tt, x, y, id)
+				--print ("tower: ",t, t.x, t.y)
+				o.map.setState(t.x, t.y, id)
+				--Playing Sound When Tower is Placed
+				if currentgamestate == 1 then --TODO we should make sure that towers can never be _placed_ in any other state
+					love.sounds.playSound("sounds/tower_1.mp3")
+				end
+				o.towers[x * o.map.height + y] = t
+				o.towerCount = o.towerCount + 1
+				o.player.addMass(-10)
+				o.recalculatePaths()
 			end
-			o.towers[x*o.map.height+y] = t
-			o.towerCount = o.towerCount+1
-			o.player.addMass(-10)
-			o.recalculatePaths()
 		end
 	end
 
-	o.removeTower = function(x,y) --can remove from a position
-		if (not x or x<1 or x>o.map.width or not y or y<1 or y>o.map.height) then
-			print ("nothing will be removed here!"..x.." "..o.map.width.." "..y.." "..o.map.height)
-			return
-	end
-	print("will try to remove tower at "..x..", "..y)
-	local state =o.map.getState(x,y)
+	o.removeTower = function(x, y) --can remove from a position
+		if x >= 1 and x <= o.map.width and y >= 1 and y <= o.map.height then
+			print("will try to remove tower at " .. x .. ", " .. y)
+			local state = o.map.getState(x, y)
 
-	if state then
-		if state==1 then -- TODO: let towers other than type 1 be deleted
-			local scrapValue = o.towerType[state].scrapValue
-			o.player.addMass(scrapValue)
+			if state and state ~= 0 then
+				if o.towerType[state].breakable then -- TODO: let towers other than type 1 be deleted
+					local scrapValue = o.towerType[state].scrapValue
+					o.player.addMass(scrapValue)
 
-			o.towerCount = o.towerCount-1
-			o.towers[x*o.map.height+y] = nil
-			turMap.setState(x,y,0)
-			--print(o.towers[x*o.map.height+y])
-			o.recalculatePaths()
+					o.towerCount = o.towerCount-1
+					o.towers[x * o.map.height + y] = nil
+					turMap.setState(x, y, 0)
+					--print(o.towers[x*o.map.height+y])
+					o.recalculatePaths()
+				else
+					print("Could not delete tower at "..x..", "..y)
+				end
+			end
 		else
-			print("Could not delete tower at "..x..", "..y)
+			print ("nothing will be removed here!"..x.." "..o.map.width.." "..y.." "..o.map.height)
 		end
-	end
 	end
 
 	-- returns tower at given coordinates or nil
-	o.gettowerAt = function(x,y)
-		return o.towers[x*o.map.height+y]
+	o.gettowerAt = function(x, y)
+		return o.towers[x * o.map.height + y]
 	end
 
 	-- returns tower at given position or the next tower or nil
@@ -280,6 +303,11 @@ function love.turris.newGame()
 		T.updateEnemies(o,dt)
 
 		o.updateCamera(dt)
+
+		if math.floor(o.effectTimer) % 2 == o.calcAi then
+			o.calcAi = 1 - o.calcAi
+			o.recalculatePaths()
+		end
 
 		-- update shadows
 		if o.offsetChange then
@@ -612,6 +640,8 @@ function love.turris.newGame()
 
 					local tower = o.towerType[o.map.data[tileX + 1][tileY + 1].id]
 					if tower.upper then
+						G.draw(tower.upper, tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
+					else
 						G.draw(tower.img, tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
 					end
 

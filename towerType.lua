@@ -6,13 +6,14 @@ function love.turris.newTowerType(path)
 	o.glow = G.newImage(o.path .. "_glow.png")
 	o.upper = nil
 
-
 	--TODO: Of course these all have to differ depending on type
+	o.collision = true
 	o.maxHealth = 100.0
 	o.buildCost = 10 --mass
 	o.scrapValue = 5 --mass
 	o.shotCost = 10 --energy per second
-	
+	o.breakable = true
+
 	o.damage = 100
 	o.range = 2
 
@@ -22,6 +23,14 @@ function love.turris.newTowerType(path)
 
 	o.setMaxHealth = function(health)
 		o.maxHealth = health
+	end
+
+	o.isBreakable = function()
+		return o.breakable
+	end
+
+	o.setBreakable = function(breakable)
+		o.breakable = breakable
 	end
 
 	o.setUpperImage = function(upper)
