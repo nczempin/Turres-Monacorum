@@ -116,11 +116,11 @@ function love.turris.newHudLayer(player)
 		G.print("Shoot laser!", 208 * 0 + 88, W.getHeight() - 44)
 
 		G.setColor(255, 127, 0, 127)
-		G.print("Cost: 20 Mass", 208 * 1 + 88, W.getHeight() - 68)
+		G.print("Cost: 10 Mass", 208 * 1 + 88, W.getHeight() - 68)
 		G.print("Give energy", 208 * 1 + 88, W.getHeight() - 44)
 
 		G.setColor(0, 255, 127, 127)
-		G.print("Cost: 50 Mass", 208 * 2 + 88, W.getHeight() - 68)
+		G.print("Cost: 10 Mass", 208 * 2 + 88, W.getHeight() - 68)
 		G.print("Extract Mass", 208 * 2 + 88, W.getHeight() - 44)
 	end
 

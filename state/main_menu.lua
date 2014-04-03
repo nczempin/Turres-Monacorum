@@ -3,10 +3,10 @@ local o = {}
 local startx = W.getWidth() * 0.5 - 176 * 0.5
 local starty = 162
 
-o.imgLogo			= love.graphics.newImage("resources/sprites/ui/logo.png")
-o.imgBackground		= love.graphics.newImage("resources/sprites/ui/menu_background.png")
-o.imgMiddleground	= love.graphics.newImage("resources/sprites/ui/menu_middleground.png")
-o.imgScreen			= love.graphics.newImage("gfx/screen00.png")
+o.imgLogo			= love.graphics.newImage("gfx/menu/logo.png")
+o.imgBackground		= love.graphics.newImage("gfx/menu/menu_background.png")
+o.imgMiddleground	= love.graphics.newImage("gfx/menu/menu_middleground.png")
+o.imgScreen			= love.graphics.newImage("gfx/menu/screen00.png")
 
 o.fontMenu = G.newFont(24)
 o.fontVersion = G.newFont(16)

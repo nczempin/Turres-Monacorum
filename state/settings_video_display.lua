@@ -3,9 +3,9 @@ local o = {}
 local startx = W.getWidth() * 0.5 - 191 * 0.5
 local starty = 80
 
-o.imgBackground		= love.graphics.newImage("resources/sprites/ui/menu_background.png")
-o.imgMiddleground	= love.graphics.newImage("resources/sprites/ui/menu_middleground.png")
-o.imgScreen			= love.graphics.newImage("gfx/screen00.png")
+o.imgBackground		= love.graphics.newImage("gfx/menu/menu_background.png")
+o.imgMiddleground	= love.graphics.newImage("gfx/menu/menu_middleground.png")
+o.imgScreen			= love.graphics.newImage("gfx/menu/screen00.png")
 
 o.fontMenu = G.newFont(32)
 o.fontOption = G.newFont(24)
