@@ -328,7 +328,7 @@ function love.turris.newGame()
 
 	o.drawMap = function()
 		local dayTime = math.abs(math.sin(o.dayTime))
-		lightWorld.setAmbientColor(dayTime * 239 + 15, dayTime * 191 + 31, dayTime * 143 + 63)
+		lightWorld.setAmbientColor(dayTime * 223 + 31, dayTime * 159 + 63, dayTime * 63 + 127)
 
 		lightMouse.setPosition(love.mouse.getX(), love.mouse.getY(), 63)
 
@@ -345,6 +345,11 @@ function love.turris.newGame()
 					if id > 0 then
 						local tower = o.towerType[id]
 						-- tile
+						if not (lightWorld.optionShadows and lightWorld.optionPixelShadows) then
+							G.setColor(0, 0, 0, 127)
+							G.draw(tower.img, i * o.map.tileWidth + o.offsetX - 2, k * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY - 2, 0, (o.map.tileWidth + 4) / o.map.tileWidth)
+						end
+
 						G.setColor(255, 255, 255)
 						G.draw(tower.img, i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
 					end
