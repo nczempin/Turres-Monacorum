@@ -562,10 +562,13 @@ function love.turris.newGame()
 				local x = e.x
 				local y = e.y
 				local startIndex = e.currentWaypoint
-				for i=startIndex, #e.waypoints-1 do
+				G.setColor(232, 118, 0)
+				if e.waypoints[1] then
+					o.drawPathSegment({x,y}, e.waypoints[1])
+				end
+				for i = startIndex, #e.waypoints-1 do
 					local wpFrom = e.waypoints[i]
 					local wpTo = e.waypoints[i+1]
-					G.setColor(232, 118, 0)
 					o.drawPathSegment(wpFrom, wpTo)
 				end
 			end
