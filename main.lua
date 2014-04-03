@@ -23,6 +23,7 @@ function love.load()
 	FONT = G.newFont(32)
 
 	currentgamestate = 0  -- 0=Main Menu 1=gameonly 4= game+gameover message
+	love.turris.selectedtower = 1 -- 1=default tower (type 1), 2=tower type 2, ...
 	love.turris.reinit()
 
 	stateMainMenu = require("state/main_menu")
@@ -42,6 +43,7 @@ end
 function love.turris.reinit()
 	-- create game world
 	lightWorld.clearBodys()
+	love.turris.selectedtower = 1
 	turGame = love.turris.newGame()
 	turMap = love.turris.newMap(20, 20, 64, 48)
 	turGame.init()
@@ -136,6 +138,26 @@ function love.keypressed(key, code)
 		if love.getgamestate() == 1 then
 			love.setgamestate(0)
 			love.turris.reinit()
+		end
+	end
+	if key == "1" then
+		if love.getgamestate() == 1 then
+			love.turris.selectedtower = 1
+		end
+	end
+	if key == "2" then
+		if love.getgamestate() == 1 then
+			love.turris.selectedtower = 3 --2 would be the main base which should not be available for manual building
+		end
+	end
+	if key == "3" then
+		if love.getgamestate() == 1 then
+			love.turris.selectedtower = 4
+		end
+	end
+	if key == "4" then
+		if love.getgamestate() == 1 then
+			love.turris.selectedtower = 5
 		end
 	end
 end
