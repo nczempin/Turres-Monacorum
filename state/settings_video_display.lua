@@ -72,10 +72,10 @@ o.draw = function()
 
 	G.setBlendMode("alpha")
 	G.setColor(0, 0, 0, 95)
-	G.printf("Settings", 4, 24 + 4, W.getWidth(), "center")
+	G.printf("Display", 4, 24 + 4, W.getWidth(), "center")
 	G.setColor(255, 127, 0)
 	G.setBlendMode("additive")
-	G.printf("Settings", 0, 24, W.getWidth(), "center")
+	G.printf("Display", 0, 24, W.getWidth(), "center")
 
 	G.setFont(o.fontOption)
 	o.guiMenu.draw()

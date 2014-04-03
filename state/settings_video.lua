@@ -13,10 +13,10 @@ o.fontOption = G.newFont(24)
 o.effectTimer = 0
 o.chromaticEffect = 0
 
-o.guiMenu			= love.gui.newGui()
-o.btnDisplay			= o.guiMenu.newButton(startx + 8, starty + 64 * 0 + 8, 176, 34, "Display")
-o.btnShaders			= o.guiMenu.newButton(startx + 8, starty + 64 * 1 + 8, 176, 34, "Shaders")
-o.btnBack			= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 34, "Back")
+o.guiMenu		= love.gui.newGui()
+o.btnDisplay	= o.guiMenu.newButton(startx + 8, starty + 64 * 0 + 8, 176, 34, "Display")
+o.btnShaders	= o.guiMenu.newButton(startx + 8, starty + 64 * 1 + 8, 176, 34, "Shaders")
+o.btnBack		= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 34, "Back")
 
 o.reset = function()
 	o.guiMenu.flushMouse()
@@ -60,10 +60,10 @@ o.draw = function()
 
 	G.setBlendMode("alpha")
 	G.setColor(0, 0, 0, 95)
-	G.printf("Settings", 4, 24 + 4, W.getWidth(), "center")
+	G.printf("Video", 4, 24 + 4, W.getWidth(), "center")
 	G.setColor(255, 127, 0)
 	G.setBlendMode("additive")
-	G.printf("Settings", 0, 24, W.getWidth(), "center")
+	G.printf("Video", 0, 24, W.getWidth(), "center")
 
 	G.setFont(o.fontOption)
 	o.guiMenu.draw()

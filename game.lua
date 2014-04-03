@@ -60,12 +60,13 @@ function love.turris.newGame()
 
 		o.newGround("gfx/ground_diffuse001.png")
 		laserTower = o.newTowerType("gfx/tower00")
-		o.newTowerType("gfx/tower01")
+		generatorTower = o.newTowerType("gfx/tower01")
 		o.newTowerType("gfx/tower02")
 		o.newTowerType("gfx/tower03")
 		o.newTowerType("gfx/tower04")
 
 		laserTower.setUpperImage(true)
+		generatorTower.setUpperImage(true)
 
 		print ("adding main base", o.baseX, o.baseY)
 		o.addTower(o.baseX, o.baseY, 2) --main base
@@ -327,7 +328,7 @@ function love.turris.newGame()
 
 	o.drawMap = function()
 		local dayTime = math.abs(math.sin(o.dayTime))
-		lightWorld.setAmbientColor(dayTime * 239 + 15, dayTime * 191 + 31, dayTime * 143 + 63)
+		lightWorld.setAmbientColor(dayTime * 223 + 31, dayTime * 159 + 63, dayTime * 63 + 127)
 
 		lightMouse.setPosition(love.mouse.getX(), love.mouse.getY(), 63)
 
@@ -344,6 +345,11 @@ function love.turris.newGame()
 					if id > 0 then
 						local tower = o.towerType[id]
 						-- tile
+						if not (lightWorld.optionShadows and lightWorld.optionPixelShadows) then
+							G.setColor(0, 0, 0, 127)
+							G.draw(tower.img, i * o.map.tileWidth + o.offsetX - 2, k * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY - 2, 0, (o.map.tileWidth + 4) / o.map.tileWidth)
+						end
+
 						G.setColor(255, 255, 255)
 						G.draw(tower.img, i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
 					end
@@ -393,21 +399,24 @@ function love.turris.newGame()
 
 		if lightWorld.optionGlow then
 			lightWorld.setBuffer("glow")
-			o.drawPaths()
 			o.drawMapCursor()
+			o.drawPaths()
 			o.drawShots()
 			o.layerHud.draw()
 			lightWorld.setBuffer("render")
-
-			lightWorld.drawGlow()
 		else
 			o.drawPaths()
 			o.drawMapCursor()
 			o.drawShots()
-			o.layerHud.draw()
 		end
 
 		o.drawEnemies()
+
+		if lightWorld.optionGlow then
+			lightWorld.drawGlow()
+		else
+			o.layerHud.draw()
+		end
 
 		if o.effectTimer < 0.75 then
 			local colorAberration1 = math.sin(love.timer.getTime() * 20.0) * (0.75 - o.effectTimer) * 4.0
@@ -516,7 +525,7 @@ function love.turris.newGame()
 				for k = 0, o.map.height - 1 do
 					local tile = o.map.data[i + 1][k + 1]
 					local id = tile.id
-					if id == 2 then
+					if id ~= 0 then
 						local tower = o.towerType[id]
 						-- tile
 						if lightWorld.optionGlow then
@@ -524,8 +533,35 @@ function love.turris.newGame()
 						else
 							G.setColor(255, 255, 255)
 						end
-						G.draw(tower.img, i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
+						if tower.upper then
+							G.draw(tower.upper, i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
+						end
 					end
+				end
+			end
+		end
+
+		if lightWorld.optionGlow then
+			G.setColor(0, 0, 0)
+			for i = 1, o.enemyCount do
+				local e = o.enemies[i]
+				if e and not e.dead then
+					local x = e.x
+					local y = e.y
+
+					local dir = e.getDirection()
+					local directionAnim = (dir + math.pi) / (math.pi * 0.25) - 1
+
+					if directionAnim == 0 then
+						directionAnim = 8
+					end
+
+					local ca = e.sheet
+					ca:seek(directionAnim)
+					local tileOffsetX = (ca.fw * 0.5)
+					if not tileOffsetX then print (tileOffsetX) end
+					local xPos = x * o.map.tileWidth - tileOffsetX + o.offsetX - 32
+					ca:draw(xPos, (y - 1) * o.map.tileHeight - (ca.fh / 8.0 * 0.5) + o.offsetY - 24 + math.sin(love.timer.getTime() * 2.0) * 4.0)
 				end
 			end
 		end

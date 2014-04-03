@@ -1,14 +1,14 @@
 local o = {}
 
 local startx = W.getWidth() * 0.5 - 176 * 0.5
-local starty = 160
+local starty = 162
 
 o.imgLogo			= love.graphics.newImage("resources/sprites/ui/logo.png")
 o.imgBackground		= love.graphics.newImage("resources/sprites/ui/menu_background.png")
 o.imgMiddleground	= love.graphics.newImage("resources/sprites/ui/menu_middleground.png")
 o.imgScreen			= love.graphics.newImage("gfx/screen00.png")
 
-o.fontMenu = G.newFont(32)
+o.fontMenu = G.newFont(24)
 o.fontVersion = G.newFont(16)
 
 o.version = "0.0.0"
@@ -16,10 +16,10 @@ o.effectTimer = 0
 o.chromaticEffect = 0
 
 o.guiMenu		= love.gui.newGui()
-o.btnStart		= o.guiMenu.newButton(startx, starty + 80 * 0, 176, 48, "Start")
-o.btnConfigure	= o.guiMenu.newButton(startx, starty + 80 * 1, 176, 48, "Settings")
-o.btnCredits	= o.guiMenu.newButton(startx, starty + 80 * 2, 176, 48, "Credits")
-o.btnQuit		= o.guiMenu.newButton(startx, starty + 80 * 3, 176, 48, "Quit")
+o.btnStart		= o.guiMenu.newButton(startx, starty + 82 * 0, 176, 34, "Start")
+o.btnConfigure	= o.guiMenu.newButton(startx, starty + 82 * 1, 176, 34, "Settings")
+o.btnCredits	= o.guiMenu.newButton(startx, starty + 82 * 2, 176, 34, "Credits")
+o.btnQuit		= o.guiMenu.newButton(startx, starty + 82 * 3, 176, 34, "Quit")
 
 o.reset = function()
 	o.guiMenu.flushMouse()
@@ -64,7 +64,7 @@ o.draw = function()
 	G.draw(o.imgBackground)
 	G.setColor(95 + math.sin(o.effectTimer * 0.1) * 63, 191 + math.cos(o.effectTimer) * 31, 223 + math.sin(o.effectTimer) * 31, 255)
 	G.setBlendMode("additive")
-	G.draw(o.imgMiddleground,(W.getWidth()-o.imgMiddleground:getWidth())*0.5,0)
+	G.draw(o.imgMiddleground,(W.getWidth()-o.imgMiddleground:getWidth()) * 0.5, 0)
 	G.setColor(255, 255, 255)
 	G.setBlendMode("alpha")
 	G.draw(o.imgLogo, W.getWidth() * 0.5, o.imgLogo:getHeight() * 0.5, math.sin(o.effectTimer * 4) * 0.05 * math.max(0, 2 - o.effectTimer ^ 0.5), 1, 1, o.imgLogo:getWidth() * 0.5, o.imgLogo:getHeight() * 0.5)
