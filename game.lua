@@ -233,19 +233,21 @@ function love.turris.newGame()
 			end
 
 			if o.layerHud.guiGame.hover then
-				if love.mouse.getX() < 128 then
-					o.offsetX = o.offsetX + dt * (128 - love.mouse.getX()) ^ 1.25
+				local border = 64
+
+				if love.mouse.getX() < border then
+					o.offsetX = o.offsetX + dt * (border - love.mouse.getX()) ^ 1.5
 					o.offsetChange = true
-				elseif love.mouse.getX() > W.getWidth() - 128 then
-					o.offsetX = o.offsetX - dt * (128 - (W.getWidth() - love.mouse.getX())) ^ 1.25
+				elseif love.mouse.getX() > W.getWidth() - border then
+					o.offsetX = o.offsetX - dt * (border - (W.getWidth() - love.mouse.getX())) ^ 1.5
 					o.offsetChange = true
 				end
 
-				if love.mouse.getY() < 128 then
-					o.offsetY = o.offsetY + dt * (128 - love.mouse.getY()) ^ 1.25
+				if love.mouse.getY() < border then
+					o.offsetY = o.offsetY + dt * (border - love.mouse.getY()) ^ 1.5
 					o.offsetChange = true
-				elseif love.mouse.getY() > W.getHeight() - 128 then
-					o.offsetY = o.offsetY - dt * (128 - (W.getHeight() - love.mouse.getY())) ^ 1.25
+				elseif love.mouse.getY() > W.getHeight() - border then
+					o.offsetY = o.offsetY - dt * (border - (W.getHeight() - love.mouse.getY())) ^ 1.5
 					o.offsetChange = true
 				end
 			end

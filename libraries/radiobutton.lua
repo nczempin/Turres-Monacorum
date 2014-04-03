@@ -27,6 +27,8 @@ function love.gui.newRadioButton(x, y, width, height, text)
 	o.hit			= false
 	o.down			= true
 	o.img			= nil
+	o.imgX			= 0
+	o.imgY			= 0
 	o.colorNormal	= {255, 127, 0, 255}
 	o.colorHover	= {0, 127, 255, 255}
 	o.colorDisabled	= {255, 255, 255, 63}
@@ -54,10 +56,18 @@ function love.gui.newRadioButton(x, y, width, height, text)
 			G.setBlendMode("alpha")
 			G.setColor(0, 0, 0, 31)
 			G.rectangle("fill", o.x, o.y, o.width, o.height)
+			G.setColor(0, 0, 0, 95)
+			G.setLineWidth(4)
+			G.rectangle("line", o.x, o.y, o.width, o.height)
+			G.setBlendMode("additive")
+			G.setColor(color[1], color[2], color[3], color[4])
+			G.setLineWidth(2)
+			G.rectangle("line", o.x, o.y, o.width, o.height)
 
 			if o.img then
+				G.setBlendMode("alpha")
 				G.setColor(255, 255, 255)
-				G.draw(o.img, o.x, o.y)
+				G.draw(o.img, o.x + o.imgX, o.y + o.imgY)
 			end
 
 			if o.text then
@@ -81,14 +91,6 @@ function love.gui.newRadioButton(x, y, width, height, text)
 
 				G.setBlendMode("alpha")
 			end
-
-			G.setColor(0, 0, 0, 95)
-			G.setLineWidth(4)
-			G.rectangle("line", o.x, o.y, o.width, o.height)
-			G.setBlendMode("additive")
-			G.setColor(color[1], color[2], color[3], color[4])
-			G.setLineWidth(2)
-			G.rectangle("line", o.x, o.y, o.width, o.height)
 		end
 	end
 
@@ -204,6 +206,14 @@ function love.gui.newRadioButton(x, y, width, height, text)
 	-- @param height
 	o.setImage = function(img)
 		o.img = img
+	end
+
+	--Set image position
+	-- @param x
+	-- @param y
+	o.setImagePosition = function(x, y)
+		o.imgX = x
+		o.imgY = y
 	end
 
 	--Set normal color
