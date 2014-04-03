@@ -64,6 +64,8 @@ function love.turris.newGame()
 		o.newTowerType("gfx/tower02")
 		o.newTowerType("gfx/tower03")
 		o.newTowerType("gfx/tower04")
+		spawnHole = o.newTowerType("gfx/obstacle00")
+		spawnEggs = o.newTowerType("gfx/obstacle01")
 
 		laserTower.setUpperImage(true)
 		generatorTower.setUpperImage(true)
@@ -76,6 +78,10 @@ function love.turris.newGame()
 		o.addTower(11, 2, 4)
 		o.addTower(5, 3, 3)
 		o.addTower(7, 5, 5)
+		o.addTower(1, o.baseY, 6)
+		o.addTower(o.baseX, 1, 7)
+		o.addTower(o.map.width, o.baseY, 7)
+		o.addTower(o.baseX, o.map.height, 6)
 
 		o.player.setMass(20)
 
@@ -226,22 +232,25 @@ function love.turris.newGame()
 				o.offsetChange = true
 			end
 
-			if love.mouse.getX() < 128 then
-				o.offsetX = o.offsetX + dt * (128 - love.mouse.getX()) ^ 1.25
-				o.offsetChange = true
-			elseif love.mouse.getX() > W.getWidth() - 128 then
-				o.offsetX = o.offsetX - dt * (128 - (W.getWidth() - love.mouse.getX())) ^ 1.25
-				o.offsetChange = true
-			end
+			if o.layerHud.guiGame.hover then
+				if love.mouse.getX() < 128 then
+					o.offsetX = o.offsetX + dt * (128 - love.mouse.getX()) ^ 1.25
+					o.offsetChange = true
+				elseif love.mouse.getX() > W.getWidth() - 128 then
+					o.offsetX = o.offsetX - dt * (128 - (W.getWidth() - love.mouse.getX())) ^ 1.25
+					o.offsetChange = true
+				end
 
-			if love.mouse.getY() < 128 then
-				o.offsetY = o.offsetY + dt * (128 - love.mouse.getY()) ^ 1.25
-				o.offsetChange = true
-			elseif love.mouse.getY() > W.getHeight() - 128 then
-				o.offsetY = o.offsetY - dt * (128 - (W.getHeight() - love.mouse.getY())) ^ 1.25
-				o.offsetChange = true
+				if love.mouse.getY() < 128 then
+					o.offsetY = o.offsetY + dt * (128 - love.mouse.getY()) ^ 1.25
+					o.offsetChange = true
+				elseif love.mouse.getY() > W.getHeight() - 128 then
+					o.offsetY = o.offsetY - dt * (128 - (W.getHeight() - love.mouse.getY())) ^ 1.25
+					o.offsetChange = true
+				end
 			end
 		end
+
 
 		if o.offsetX > 0 then
 			o.offsetX = 0
@@ -254,12 +263,22 @@ function love.turris.newGame()
 		elseif o.offsetY < W.getHeight() - turMap.getHeight() * turMap.getTileHeight() then
 			o.offsetY = W.getHeight() - turMap.getHeight() * turMap.getTileHeight()
 		end
+
 		holdOffsetX = love.mouse.getX()
 		holdOffsetY = love.mouse.getY()
-
 	end
 
 	o.update = function(dt)
+		o.layerHud.update(dt)
+		
+		if o.layerHud.btnTower1.isHit() then
+			love.turris.selectedtower = 1
+		elseif o.layerHud.btnTower2.isHit() then
+			love.turris.selectedtower = 3
+		elseif o.layerHud.btnTower3.isHit() then
+			love.turris.selectedtower = 4
+		end
+		
 		o.effectTimer = o.effectTimer + dt
 		o.dayTime = o.dayTime + dt * 0.1
 		T.updateEnemies(o,dt)
@@ -283,40 +302,43 @@ function love.turris.newGame()
 		for i = 1, o.towerCount do
 			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
 			local t = o.getnextTower(lastTowerPos+1) -- the next tower will always be after the first one. Do not ask for a tower after the last one, you will get nil
-			if t.id == 1 then -- laser tower
-				t.target = nil
-				local energyCost = dt*t.type.shotCost
-				if energyCost <= o.player.energy then
-					local e = t.determineTarget(o.enemies,distance_euclid)
-					t.target = e --TODO just do that inside tower module
 
-					if e then
-						local x, y = e.x, e.y
+			if t then
+				if t.id == 1 then -- laser tower
+					t.target = nil
+					local energyCost = dt*t.type.shotCost
+					if energyCost <= o.player.energy then
+						local e = t.determineTarget(o.enemies,distance_euclid)
+						t.target = e --TODO just do that inside tower module
 
-						local tx = (t.x - 0.5) * o.map.tileWidth + o.offsetX
-						local ty = (t.y - 0.5) * o.map.tileHeight + o.offsetY
-						local ex = (e.x - 0.5) * o.map.tileWidth + o.offsetX
-						local ey = (e.y - 0.5) * o.map.tileHeight + o.offsetY
-						local direction = math.atan2(tx - ex, ey - ty) + math.pi * 0.5
-						local length = math.sqrt(math.pow(tx - ex, 2) + math.pow((ty) - ey, 2))
-						local timer = -math.mod(love.timer.getTime() * 2.0, 1.0)
-						--local vertices = {
-						--{ 0, 0, timer, 0, 255, 0, 0,},
-						--{ o.imgLaser:getWidth(), 0, timer + 1, 0, 0, 255, 0 },
-						--{ o.imgLaser:getWidth(), o.imgLaser:getHeight(), timer + 1, 1, 0, 0, 255 },
-						--{ 0, o.imgLaser:getHeight(), timer, 1, 255, 255, 0 },
-						--}
-						o.player.addEnergy(-energyCost)
-						if e.health > 0.0 then
-							e.health = e.health - t.type.damage*dt
-							if e.health <= 0 then
-								e.dead = true
+						if e then
+							local x, y = e.x, e.y
+
+							local tx = (t.x - 0.5) * o.map.tileWidth + o.offsetX
+							local ty = (t.y - 0.5) * o.map.tileHeight + o.offsetY
+							local ex = (e.x - 0.5) * o.map.tileWidth + o.offsetX
+							local ey = (e.y - 0.5) * o.map.tileHeight + o.offsetY
+							local direction = math.atan2(tx - ex, ey - ty) + math.pi * 0.5
+							local length = math.sqrt(math.pow(tx - ex, 2) + math.pow((ty) - ey, 2))
+							local timer = -math.mod(love.timer.getTime() * 2.0, 1.0)
+							--local vertices = {
+							--{ 0, 0, timer, 0, 255, 0, 0,},
+							--{ o.imgLaser:getWidth(), 0, timer + 1, 0, 0, 255, 0 },
+							--{ o.imgLaser:getWidth(), o.imgLaser:getHeight(), timer + 1, 1, 0, 0, 255 },
+							--{ 0, o.imgLaser:getHeight(), timer, 1, 255, 255, 0 },
+							--}
+							o.player.addEnergy(-energyCost)
+							if e.health > 0.0 then
+								e.health = e.health - t.type.damage*dt
+								if e.health <= 0 then
+									e.dead = true
+								end
 							end
 						end
 					end
 				end
+				lastTowerPos = t.x*o.map.height+t.y
 			end
-			lastTowerPos = t.x*o.map.height+t.y
 		end
 
 		-- test
@@ -436,38 +458,40 @@ function love.turris.newGame()
 		for i = 1, o.towerCount do
 			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
 			local t = o.getnextTower(lastTowerPos+1) -- the next tower will always be after the first one. Do not ask for a tower after the last one, you will get nil
-			if t.id == 1 then
-				local e = t.target
-				if e and e.x and e.y then
-					local x, y = e.x, e.y
+			if t then
+				if t.id == 1 then
+					local e = t.target
+					if e and e.x and e.y then
+						local x, y = e.x, e.y
 
-					local tx = (t.x - 0.5) * o.map.tileWidth + o.offsetX
-					local ty = (t.y - 0.5) * o.map.tileHeight + o.offsetY
-					local ex = (e.x - 0.5) * o.map.tileWidth + o.offsetX
-					local ey = (e.y - 0.5) * o.map.tileHeight + o.offsetY
-					local direction = math.atan2(tx - ex, ey - ty) + math.pi * 0.5
-					local length = math.sqrt(math.pow(tx - ex, 2) + math.pow((ty) - ey, 2))
-					--			if (length < 150)then
-					local timer = -math.mod(love.timer.getTime() * 2.0, 1.0)
-					--local vertices = {
-					--{ 0, 0, timer, 0, 255, 0, 0,},
-					--{ o.imgLaser:getWidth(), 0, timer + 1, 0, 0, 255, 0 },
-					--{ o.imgLaser:getWidth(), o.imgLaser:getHeight(), timer + 1, 1, 0, 0, 255 },
-					--{ 0, o.imgLaser:getHeight(), timer, 1, 255, 255, 0 },
-					--}
-					local vertices = {
-						{ 0, 0, timer, 0, 255, 127, 0 },
-						{ o.imgLaser:getWidth(), 0, timer + length / o.imgLaser:getWidth(), 0, 0, 127, 255 },
-						{ o.imgLaser:getWidth(), o.imgLaser:getHeight(), timer + length / o.imgLaser:getWidth(), 1, 0, 127, 255 },
-						{ 0, o.imgLaser:getHeight(), timer, 1, 255, 127, 0 },
-					}
-					o.mshLaser:setVertices(vertices)
-					G.draw(o.mshLaser, (t.x - 0.5) * o.map.tileWidth + o.offsetX, (t.y - 0.5) * o.map.tileHeight + o.offsetY - 8, direction, length / o.imgLaser:getWidth(), 1, 0, 64)
-					--		end
+						local tx = (t.x - 0.5) * o.map.tileWidth + o.offsetX
+						local ty = (t.y - 0.5) * o.map.tileHeight + o.offsetY
+						local ex = (e.x - 0.5) * o.map.tileWidth + o.offsetX
+						local ey = (e.y - 0.5) * o.map.tileHeight + o.offsetY
+						local direction = math.atan2(tx - ex, ey - ty) + math.pi * 0.5
+						local length = math.sqrt(math.pow(tx - ex, 2) + math.pow((ty) - ey, 2))
+						--			if (length < 150)then
+						local timer = -math.mod(love.timer.getTime() * 2.0, 1.0)
+						--local vertices = {
+						--{ 0, 0, timer, 0, 255, 0, 0,},
+						--{ o.imgLaser:getWidth(), 0, timer + 1, 0, 0, 255, 0 },
+						--{ o.imgLaser:getWidth(), o.imgLaser:getHeight(), timer + 1, 1, 0, 0, 255 },
+						--{ 0, o.imgLaser:getHeight(), timer, 1, 255, 255, 0 },
+						--}
+						local vertices = {
+							{ 0, 0, timer, 0, 255, 127, 0 },
+							{ o.imgLaser:getWidth(), 0, timer + length / o.imgLaser:getWidth(), 0, 0, 127, 255 },
+							{ o.imgLaser:getWidth(), o.imgLaser:getHeight(), timer + length / o.imgLaser:getWidth(), 1, 0, 127, 255 },
+							{ 0, o.imgLaser:getHeight(), timer, 1, 255, 127, 0 },
+						}
+						o.mshLaser:setVertices(vertices)
+						G.draw(o.mshLaser, (t.x - 0.5) * o.map.tileWidth + o.offsetX, (t.y - 0.5) * o.map.tileHeight + o.offsetY - 8, direction, length / o.imgLaser:getWidth(), 1, 0, 64)
+						--		end
 
+					end
 				end
+				lastTowerPos = t.x * o.map.height + t.y
 			end
-			lastTowerPos = t.x*o.map.height+t.y
 		end
 
 		-- hide shots under tower edges
@@ -568,32 +592,21 @@ function love.turris.newGame()
 	end
 
 	o.drawMapCursor = function()
-		local mx = love.mouse.getX()
-		local my = love.mouse.getY()
-		local tileX = math.floor((mx - o.offsetX) / o.map.tileWidth)
-		local tileY = math.floor((my - o.offsetY) / o.map.tileHeight)
+		if o.layerHud.guiGame.hover then
+			local mx = love.mouse.getX()
+			local my = love.mouse.getY()
+			local tileX = math.floor((mx - o.offsetX) / o.map.tileWidth)
+			local tileY = math.floor((my - o.offsetY) / o.map.tileHeight)
 
-		if o.map.data[tileX + 1][tileY + 1].id == 0 then
-			G.setColor(0, 127, 255)
-			G.draw(o.mapCursorNormal, tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight + o.offsetY)
-		else
-			G.setColor(255, 63, 0)
-			G.draw(o.mapCursorBlock, tileX * o.map.tileWidth + o.offsetX + o.map.tileWidth * 0.5, tileY * o.map.tileHeight + o.offsetY + o.map.tileHeight * 0.5, 0, 0.95 - math.sin(o.effectTimer * 5.0) * 0.05, 0.95 - math.sin(o.effectTimer * 5.0) * 0.05, o.map.tileWidth * 0.5, o.map.tileHeight * 0.5)
-		end
-	end
-
-	o.drawMapCursor = function()
-		local mx = love.mouse.getX()
-		local my = love.mouse.getY()
-		local tileX = math.floor((mx - o.offsetX) / o.map.tileWidth)
-		local tileY = math.floor((my - o.offsetY) / o.map.tileHeight)
-
-		if o.map.data[tileX + 1][tileY + 1].id == 0 then
-			G.setColor(0, 127, 255)
-			G.draw(o.mapCursorNormal, tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight + o.offsetY)
-		else
-			G.setColor(255, 63, 0)
-			G.draw(o.mapCursorBlock, tileX * o.map.tileWidth + o.offsetX + o.map.tileWidth * 0.5, tileY * o.map.tileHeight + o.offsetY + o.map.tileHeight * 0.5, 0, 0.95 - math.sin(o.effectTimer * 5.0) * 0.05, 0.95 - math.sin(o.effectTimer * 5.0) * 0.05, o.map.tileWidth * 0.5, o.map.tileHeight * 0.5)
+			if tileX >= 0 and tileY >= 0 and tileX < o.map.width and tileY < o.map.height then
+				if o.map.data[tileX + 1][tileY + 1].id == 0 then
+					G.setColor(0, 127, 255)
+					G.draw(o.mapCursorNormal, tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight + o.offsetY)
+				else
+					G.setColor(255, 63, 0)
+					G.draw(o.mapCursorBlock, tileX * o.map.tileWidth + o.offsetX + o.map.tileWidth * 0.5, tileY * o.map.tileHeight + o.offsetY + o.map.tileHeight * 0.5, 0, 0.95 - math.sin(o.effectTimer * 5.0) * 0.05, 0.95 - math.sin(o.effectTimer * 5.0) * 0.05, o.map.tileWidth * 0.5, o.map.tileHeight * 0.5)
+				end
+			end
 		end
 	end
 

@@ -3,6 +3,7 @@ love.gui = {}
 
 require "libraries/button"
 require "libraries/checkbox"
+require "libraries/radiobutton"
 
 function love.gui.newGui()
 	local o = {}
@@ -19,6 +20,8 @@ function love.gui.newGui()
 		local my = love.mouse.getY()
 
 		o.timer = o.timer + dt
+
+		o.hover = true
 
 		if love.mouse.isDown("l") then
 			if o.down then
@@ -38,6 +41,7 @@ function love.gui.newGui()
 
 			if o.elements[i].enabled then
 				if mx >= o.elements[i].x and mx <= o.elements[i].x + o.elements[i].width and my >= o.elements[i].y and my <= o.elements[i].y + o.elements[i].height then
+					o.hover = false
 					o.elements[i].hover = true
 					if love.mouse.isDown("l") then
 						if o.elements[i].down then
@@ -47,6 +51,14 @@ function love.gui.newGui()
 							o.elements[i].down = true
 							if o.elements[i].type == "checkbox" then
 								o.elements[i].checked = not o.elements[i].checked
+							elseif o.elements[i].type == "radiobutton" then
+								for k = 1, #o.elements do
+									if o.elements[k].type == "radiobutton" then
+										o.elements[k].checked = false
+									end
+								end
+
+								o.elements[i].checked = true
 							end
 						end
 					else
@@ -71,7 +83,15 @@ function love.gui.newGui()
 
 	--Return new button
 	o.newButton = function(x, y, width, height, name, imagePath)
-		o.elements[#o.elements + 1] = love.gui.newButton(x, y, width, height, name, imagePath)
+		o.elements[#o.elements + 1] = love.gui.newButton(x, y, width, height, name)
+
+		return o.elements[#o.elements]
+	end
+
+	--Return new image button
+	o.newImageButton = function(x, y, width, height, img)
+		o.elements[#o.elements + 1] = love.gui.newButton(x, y, width, height)
+		o.elements[#o.elements].setImage(img)
 
 		return o.elements[#o.elements]
 	end
@@ -79,6 +99,21 @@ function love.gui.newGui()
 	--Return new checkbox
 	o.newCheckbox = function(x, y, width, height, checked, text)
 		o.elements[#o.elements + 1] = love.gui.newCheckbox(x, y, width, height, checked, text)
+
+		return o.elements[#o.elements]
+	end
+
+	--Return new radiobutton
+	o.newRadioButton = function(x, y, width, height, name, imagePath)
+		o.elements[#o.elements + 1] = love.gui.newRadioButton(x, y, width, height, name)
+
+		return o.elements[#o.elements]
+	end
+
+	--Return new image radiobutton
+	o.newImageRadioButton = function(x, y, width, height, img)
+		o.elements[#o.elements + 1] = love.gui.newRadioButton(x, y, width, height)
+		o.elements[#o.elements].setImage(img)
 
 		return o.elements[#o.elements]
 	end
