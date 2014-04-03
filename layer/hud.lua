@@ -7,11 +7,13 @@ function love.turris.newHudLayer(player)
 	o.iconTower2 = G.newImage("gfx/hud/button_tower01.png")
 	o.iconTower3 = G.newImage("gfx/hud/button_tower02.png")
 
+	-- create gui elements
 	o.guiGame = love.gui.newGui()
 	o.btnTower1 = o.guiGame.newImageRadioButton(208 * 0 + 16, W.getHeight() - 75, 192, 57, o.iconTower1)
 	o.btnTower2 = o.guiGame.newImageRadioButton(208 * 1 + 16, W.getHeight() - 75, 192, 57, o.iconTower2)
 	o.btnTower3 = o.guiGame.newImageRadioButton(208 * 2 + 16, W.getHeight() - 75, 192, 57, o.iconTower3)
 
+	-- config gui elements
 	o.btnTower1.setFontSize(16)
 	o.btnTower1.setText("Laser Tower (1)")
 	o.btnTower1.setTextPosition(32, -32)
@@ -40,6 +42,35 @@ function love.turris.newHudLayer(player)
 
 	o.update = function(dt)
 		o.guiGame.update(dt)
+
+		if o.btnTower1.isHit() then
+			love.turris.selectedtower = 1
+		elseif o.btnTower2.isHit() then
+			love.turris.selectedtower = 3
+		elseif o.btnTower3.isHit() then
+			love.turris.selectedtower = 4
+		end
+
+		if love.keyboard.isDown("escape") then
+			love.setgamestate(0)
+			love.turris.reinit()
+		elseif love.keyboard.isDown("1") then
+			love.turris.selectedtower = 1
+			o.btnTower1.setChecked(true)
+		elseif love.keyboard.isDown("2") then
+			love.turris.selectedtower = 2 --2 would be the main base which should not be available for manual building
+			o.guiGame.flushRadioButtons()
+		elseif love.keyboard.isDown("3") then
+			love.turris.selectedtower = 3
+			o.btnTower2.setChecked(true)
+		elseif love.keyboard.isDown("4") then
+			love.turris.selectedtower = 4
+			o.guiGame.flushRadioButtons()
+			o.btnTower3.setChecked(true)
+		elseif love.keyboard.isDown("5") then
+			love.turris.selectedtower = 5
+			o.guiGame.flushRadioButtons()
+		end
 	end
 
 	o.draw = function()
