@@ -7,11 +7,12 @@
 -- @param name The Name of the button
 -- @param path for an Image
 
-function love.gui.newButton(x, y, width, height, text)
+function love.gui.newRadioButton(x, y, width, height, text)
 	local o = {}
 
 	--Attribute
-	o.type			= "button"
+	o.parent = nil
+	o.type			= "radiobutton"
 	o.x				= x or 0
 	o.y				= y or 0
 	o.width 		= width or 64
@@ -21,10 +22,13 @@ function love.gui.newButton(x, y, width, height, text)
 	o.textY			= nil
 	o.enabled 		= true
 	o.visible 		= true
+	o.checked		= false
 	o.hover 		= false
 	o.hit			= false
 	o.down			= true
 	o.img			= nil
+	o.imgX			= 0
+	o.imgY			= 0
 	o.colorNormal	= {255, 127, 0, 255}
 	o.colorHover	= {0, 127, 255, 255}
 	o.colorDisabled	= {255, 255, 255, 63}
@@ -40,7 +44,7 @@ function love.gui.newButton(x, y, width, height, text)
 			local color
 
 			if o.enabled then
-				if o.hover then
+				if o.hover or o.checked then
 					color = o.colorHover
 				else
 					color = o.colorNormal
@@ -100,9 +104,14 @@ function love.gui.newButton(x, y, width, height, text)
 		return o.down
 	end
 
+	--Return true when checked
+	o.isChecked = function()
+		return o.checked
+	end
+
 	--Return type
 	o.getType = function()
-		return "button"
+		return "radiobutton"
 	end
 
 	--Return x position
@@ -165,6 +174,14 @@ function love.gui.newButton(x, y, width, height, text)
 		o.height = height
 	end
 
+	--set checked mode
+	o.setChecked = function(checked)
+		if o.parent then
+			o.parent.flushRadioButtons()
+		end
+		o.checked = checked
+	end
+
 	--Set text
 	-- @param text
 	o.setFontSize = function(size)
@@ -189,6 +206,14 @@ function love.gui.newButton(x, y, width, height, text)
 	-- @param height
 	o.setImage = function(img)
 		o.img = img
+	end
+
+	--Set image position
+	-- @param x
+	-- @param y
+	o.setImagePosition = function(x, y)
+		o.imgX = x
+		o.imgY = y
 	end
 
 	--Set normal color

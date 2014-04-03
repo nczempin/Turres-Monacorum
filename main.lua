@@ -23,6 +23,7 @@ function love.load()
 	FONT = G.newFont(32)
 
 	currentgamestate = 0  -- 0=Main Menu 1=gameonly 4= game+gameover message
+	love.turris.selectedtower = 1 -- 1=default tower (type 1), 2=tower type 2, ...
 	love.turris.reinit()
 
 	stateMainMenu = require("state/main_menu")
@@ -42,6 +43,7 @@ end
 function love.turris.reinit()
 	-- create game world
 	lightWorld.clearBodys()
+	love.turris.selectedtower = 1
 	turGame = love.turris.newGame()
 	turMap = love.turris.newMap(20, 20, 64, 48)
 	turGame.init()
@@ -132,12 +134,6 @@ end
 
 function love.keypressed(key, code)
 
-	if key == "escape" then
-		if love.getgamestate() == 1 then
-			love.setgamestate(0)
-			love.turris.reinit()
-		end
-	end
 end
 
 function love.mousepressed(x, y, key)

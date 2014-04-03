@@ -1,6 +1,6 @@
 local o = {}
 
-o.imgScreen	= love.graphics.newImage("gfx/screen00.png")
+o.imgScreen	= love.graphics.newImage("gfx/menu/screen00.png")
 
 o.mainContributorsFontSize = 32
 o.mainContributorsFont = G.newFont(o.mainContributorsFontSize)
