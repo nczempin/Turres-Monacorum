@@ -87,7 +87,7 @@ function love.turris.newGame()
 		for i = 1, o.map.width do
 			for k = 1, o.map.height do
 				if o.map.getState(i, k) == 0 then
-					local r = math.random(0, 7)
+					local r = math.random(0, 37)
 					if r == 0 then
 						o.map.setState(i, k, 8)
 					elseif r == 1 then
