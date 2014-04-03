@@ -1,13 +1,21 @@
 local o = {}
 
-o.imgScreen	= love.graphics.newImage("gfx/screen00.png")
+o.imgScreen	= love.graphics.newImage("gfx/menu/screen00.png")
 
 o.mainContributorsFontSize = 32
 o.mainContributorsFont = G.newFont(o.mainContributorsFontSize)
 o.externalLibsFontSize = 16
 o.externalLibsFont = G.newFont(o.externalLibsFontSize)
 
-o.names = { "Aldo Brießmann", "Elena Reinertz", "Marcus Ihde", "Meral Leyla", "Michael Steidl", "Nicolai Czempin", "Robin Kocaurek" }
+o.names = {
+	"Aldo Brießmann (Code)",
+	"Elena Reinertz (Graphics)",
+	"Marcus Ihde (Code)",
+	"Meral Leyla (Sound)",
+	"Michael Steidl (Code, Sound)",
+	"Nicolai Czempin (Code)",
+	"Robin Kocaurek (Graphics)"
+}
 
 o.otherText = {
 	"TESound lib: Ensayia & Taehl",
@@ -15,7 +23,6 @@ o.otherText = {
 	"Postshader lib: Marcus Ihde",
 	"Animation lib: Bart Bes",
 	"A* Search lib: RapidFire Studio",
-
 }
 
 o.guiCredits = love.gui.newGui()
@@ -47,7 +54,7 @@ o.draw = function()
 		local g = 127 + math.sin(love.timer.getTime() * 5 - i*f + 180) * 127
 		local b = 127 + math.sin(love.timer.getTime() * 5 - i*f + 270) * 127
 		local x = 0
-		local y = 72 + i * 32
+		local y = 48 + i * 48
 		G.setColor(r, g, b, 255)
 		G.printf(o.names[i], x, y, W.getWidth(), "center")
 	end

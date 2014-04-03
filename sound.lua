@@ -3,6 +3,11 @@ LOVE_SOUND_SOUNDVOLUME		= 0.5
 
 love.sounds = {}
 
+soundNames = {};
+
+soundNames.placingTower = "placingTower"
+
+
 local startTime = 0
 	
 --Functions for playing sounds
@@ -27,8 +32,6 @@ function love.sounds.playSound(soundPath, timeInMilliSeconds)
 	else
 		TEsound.play(soundPath,"sound",LOVE_SOUND_SOUNDVOLUME,nil,nil)
 	end
-	
-	
 end
 
 --Sets the Background Volume

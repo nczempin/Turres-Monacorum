@@ -3,26 +3,27 @@ require "external/a-star"
 function aStar(start, goal, all_nodes)
 	--print (start.x,start.y, goal.x,goal.y)
 
-	local valid_node_func = function ( node, neighbor )
-
+	local valid_node_func = function(node, neighbor)
 		local state = turMap.getState(neighbor.x, neighbor.y)
-		if state  == 1 then
+
+		if state and state ~= 0 and state ~= 2 and turGame.towerType[state].collision then
 			return false
 		end
+
 		local MAX_DIST = 1
 
-		if
-			distance_manhattan ( node.x, node.y, neighbor.x, neighbor.y ) <= MAX_DIST then
+		if distance_manhattan(node.x, node.y, neighbor.x, neighbor.y) <= MAX_DIST then
 			return true
 		end
+
 		return false
 	end
 
 	--local path = astar.path ( all_nodes [ 2 ], all_nodes [ 100 ], all_nodes, true, valid_node_func )
-	local path = astar.path ( start, goal, all_nodes, true, valid_node_func )
+	local path = astar.path(start, goal, all_nodes, true, valid_node_func)
 
 	if not path then
-		print ( "No valid path found" )
+		print("No valid path found")
 	else
 --		for i, node in ipairs ( path ) do
 --			print ( "Step " .. i .. " >> " .. node.x..", "..node.y )

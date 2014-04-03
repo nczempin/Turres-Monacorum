@@ -15,6 +15,7 @@ o.draw = function()
 		love.postshader.addEffect("chromatic", colorAberration1, colorAberration2, colorAberration2, -colorAberration1, colorAberration1, -colorAberration2)
 	else
 		love.postshader.addEffect("monochrom", 127, 255, 191, 0.2)
+		G.setFont(FONT)
 		G.setColor(255, 0, 0, 127)
 		G.printf("Game Over!", 0, 240, W.getWidth(), "center")
 		G.setColor(255, 255, 255, 127)

@@ -19,11 +19,13 @@ buttonDetected = 0
 -- GameStates:0=MainMenu, 1=inGame, 2=Load, 3=Settings, 4=Game Over, 5 = Credits
 
 function love.turris.checkleftclick(clickx,clicky)
-	currentgstate=love.getgamestate()
+	currentgstate = love.getgamestate()
 	if currentgstate == 1 then --ingame
-		--love.setgamestate(0)
-		local clickedfieldx,clickedfieldy=getclickedfield(clickx,clicky)
-		turGame.addTower(clickedfieldx,clickedfieldy,love.turris.selectedtower)
+		if turGame.layerHud.guiGame.hover then
+			--love.setgamestate(0)
+			local clickedfieldx, clickedfieldy = getclickedfield(clickx, clicky)
+			turGame.addTower(clickedfieldx, clickedfieldy, love.turris.selectedtower)
+		end
 	elseif currentgstate == 4 then --game over
 		love.turris.gameoverstate()
 	elseif currentgstate == 5 then --credits

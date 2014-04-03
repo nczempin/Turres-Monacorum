@@ -28,7 +28,7 @@ end
 
 printWaypoints = function(e)
 	print ("waypoints:")
-	for i=1, #e.waypoints do
+	for i = 1, #e.waypoints do
 		print (i, e.waypoints[i][1], e.waypoints[i][2])
 	end
 
@@ -37,29 +37,32 @@ end
 function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 	local o = {}
 
-	o.generateWaypoints = function(map, startX, startY, goalX, goalY,wpCurrent)
-		print ("generate:",startX,startY,goalX,goalY)
+	o.generateWaypoints = function(map, startX, startY, goalX, goalY, wpCurrent)
+		--print ("generate:", startX, startY, goalX, goalY)
 		local all_nodes = getAllNodes(map)
 		local start = findNode(all_nodes, startX, startY)
 		local goal = findNode(all_nodes, goalX, goalY)
-		local path = aStar(start,goal,all_nodes)
+		local path = aStar(start, goal, all_nodes)
 
-		local wp = {{startX,startY},{goalX,goalY}}
+		local wp = {
+			{startX, startY},
+			{ goalX, goalY}
+		}
 
 		if path then
-			print ("path: yes")
+			--print ("path: yes")
 
 			if (wpCurrent and wpCurrent.x and wpCurrent.y) then
-				print ("wpCurrent: ",wpCurrent.x, wpCurrent.y)
-				wp ={wpCurrent}
+				--print ("wpCurrent: ",wpCurrent.x, wpCurrent.y)
+				wp = {wpCurrent}
 			else
 				wp = {}
 			end
 			local fudge = #wp
-			print "copying path to waypoints"
+			--print "copying path to waypoints"
 			for i = 1, #path do
 				--print ("path: ", i, path[i].x, path[i].y)
-				wp[i+fudge] ={ path[i].x, path[i].y }
+				wp[i + fudge] = { path[i].x, path[i].y }
 				--print ("wp: ",wp[i+fudge][1], wp[i+fudge][2])
 			end
 
