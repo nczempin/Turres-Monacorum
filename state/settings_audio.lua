@@ -10,16 +10,13 @@ o.imgScreen			= love.graphics.newImage("gfx/menu/screen00.png")
 o.fontMenu = G.newFont(32)
 o.fontOption = G.newFont(24)
 
-o.optionMusic = true
-o.optionSound = true
-
 o.effectTimer = 0
 o.chromaticEffect = 0
 
-o.guiMenu		= love.gui.newGui()
-o.chkMusic		= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, true, "Music")
-o.chkSound		= o.guiMenu.newCheckbox(startx, starty + 64 * 1, 191, 32, true, "Sound")
-o.btnBack		= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 34, "Back")
+o.guiMenu	= love.gui.newGui()
+o.chkMusic	= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, true, "Music")
+o.chkSound	= o.guiMenu.newCheckbox(startx, starty + 64 * 1, 191, 32, true, "Sound")
+o.btnBack	= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 34, "Back")
 
 o.optionLarge = small
 
