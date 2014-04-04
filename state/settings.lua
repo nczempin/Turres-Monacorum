@@ -80,4 +80,13 @@ o.draw = function()
 	end
 end
 
+o.refreshScreenSize = function()
+	local startx = love.window.getWidth() * 0.5 - 191 * 0.5
+	local starty = 80
+
+	o.btnVideo.setPosition(startx + 8, starty + 64 * 0)
+	o.btnAudio.setPosition(startx + 8, starty + 64 * 1)
+	o.btnBack.setPosition(startx + 8, starty + 64 * 5)
+end
+
 return o

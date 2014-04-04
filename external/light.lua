@@ -402,6 +402,21 @@ function love.light.newWorld()
 
 		o.changed = false
 	end
+	o.refreshScreenSize = function()
+		o.shadow = love.graphics.newCanvas()
+		o.shadow2 = love.graphics.newCanvas()
+		o.shine = love.graphics.newCanvas()
+		o.shine2 = love.graphics.newCanvas()
+		o.normalMap = love.graphics.newCanvas()
+		o.glowMap = love.graphics.newCanvas()
+		o.glowMap2 = love.graphics.newCanvas()
+		o.refractionMap = love.graphics.newCanvas()
+		o.refractionMap2 = love.graphics.newCanvas()
+		o.reflectionMap = love.graphics.newCanvas()
+		o.reflectionMap2 = love.graphics.newCanvas()
+		o.pixelShadow = love.graphics.newCanvas()
+		o.pixelShadow2 = love.graphics.newCanvas()
+	end
 	-- draw shadow
 	o.drawShadow = function()
 		if o.optionShadows and (o.isShadows or o.isLight) then

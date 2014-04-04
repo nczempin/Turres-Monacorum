@@ -137,7 +137,7 @@ function love.gui.newRadioButton(x, y, width, height, text)
 	--Set position
 	-- @param x
 	-- @param y
-	o.setX = function(x, y)
+	o.setPosition = function(x, y)
 		o.x = x
 		o.y = y
 	end

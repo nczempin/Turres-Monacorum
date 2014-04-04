@@ -71,7 +71,7 @@ o.update = function(dt)
 
 	if o.btnBack.isHit() or love.keyboard.isDown("escape") then
 		love.sounds.playSound("sounds/button_pressed.wav")
-		love.setgamestate(6)
+		love.setgamestate(7)
 		o.guiMenu.flushMouse()
 	end
 end
@@ -107,6 +107,19 @@ o.draw = function()
 
 		love.postshader.addEffect("chromatic", colorAberration1, colorAberration2, colorAberration2, -colorAberration1, colorAberration1, -colorAberration2)
 	end
+end
+
+o.refreshScreenSize = function()
+	local startx = love.window.getWidth() * 0.5 - 191 * 0.5
+	local starty = 80
+
+	o.chkBloom.setPosition(startx, starty + 56 * 0)
+	o.chkScanlines.setPosition(startx, starty + 56 * 1)
+	o.chkShadow.setPosition(startx, starty + 56 * 2)
+	o.chkSelfShadow.setPosition(startx, starty + 56 * 3)
+	o.chkLights.setPosition(startx, starty + 56 * 4)
+	o.chkGlow.setPosition(startx, starty + 56 * 5)
+	o.btnBack.setPosition(startx + 8, starty + 64 * 5 + 8)
 end
 
 return o

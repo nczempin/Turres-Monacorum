@@ -33,7 +33,7 @@ o.update = function(dt)
 	if o.chkFullscreen.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
 		o.optionFullscreen = o.chkFullscreen.isChecked()
-		local success = love.windolove.window.setFullscreen( o.optionFullscreen )
+		local success = love.window.setFullscreen( o.optionFullscreen )
 	end
 
 	if o.chkLarge.isHit() then
@@ -42,12 +42,20 @@ o.update = function(dt)
 		o.optionLarge = o.chkLarge.isChecked()
 		o.optionFullscreen = o.chkFullscreen.isChecked()
 		if o.optionLarge then
-			success = love.windolove.window.setMode( 1280, 720, {fullscreen=o.optionFullscreen})
+			success = love.window.setMode( 1280, 720, {fullscreen=o.optionFullscreen})
 		else
-			success = love.windolove.window.setMode( 800, 600 ,{fullscreen=o.optionFullscreen})
+			success = love.window.setMode( 800, 600 ,{fullscreen=o.optionFullscreen})
 		end
-		if not success then
-		--do something
+		if success then
+			love.postshader.refreshScreenSize()
+			lightWorld.refreshScreenSize()
+			stateMainMenu.refreshScreenSize()
+			stateSettings.refreshScreenSize()
+			stateSettingsVideo.refreshScreenSize()
+			stateSettingsVideoShaders.refreshScreenSize()
+			stateSettingsVideoDisplay.refreshScreenSize()
+			stateSettingsAudio.refreshScreenSize()
+			love.turris.reinit()
 		end
 	end
 
@@ -89,6 +97,15 @@ o.draw = function()
 
 		love.postshader.addEffect("chromatic", colorAberration1, colorAberration2, colorAberration2, -colorAberration1, colorAberration1, -colorAberration2)
 	end
+end
+
+o.refreshScreenSize = function()
+	local startx = love.window.getWidth() * 0.5 - 191 * 0.5
+	local starty = 80
+
+	o.chkFullscreen.setPosition(startx, starty + 64 * 0)
+	o.chkLarge.setPosition(startx, starty + 64 * 1)
+	o.btnBack.setPosition(startx + 8, starty + 64 * 5)
 end
 
 return o

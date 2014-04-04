@@ -33,7 +33,7 @@ o.update = function(dt)
 	if o.chkMusic.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
 		if o.chkMusic.isChecked() then
-			love.sounds.setBackgroundVolume(0.5)
+			love.sounds.setBackgroundVolume(0.75)
 		else
 			love.sounds.setBackgroundVolume(0.0)
 		end
@@ -42,7 +42,7 @@ o.update = function(dt)
 	if o.chkSound.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
 		if o.chkSound.isChecked() then
-			love.sounds.setSoundVolume(0.5)
+			love.sounds.setSoundVolume(0.75)
 		else
 			love.sounds.setSoundVolume(0.0)
 		end
@@ -68,10 +68,10 @@ o.draw = function()
 
 	love.graphics.setBlendMode("alpha")
 	love.graphics.setColor(0, 0, 0, 95)
-	love.graphics.printf("Display", 4, 24 + 4, love.window.getWidth(), "center")
+	love.graphics.printf("Audio", 4, 24 + 4, love.window.getWidth(), "center")
 	love.graphics.setColor(255, 127, 0)
 	love.graphics.setBlendMode("additive")
-	love.graphics.printf("Display", 0, 24, love.window.getWidth(), "center")
+	love.graphics.printf("Audio", 0, 24, love.window.getWidth(), "center")
 
 	love.graphics.setFont(o.fontOption)
 	o.guiMenu.draw()
@@ -86,6 +86,15 @@ o.draw = function()
 
 		love.postshader.addEffect("chromatic", colorAberration1, colorAberration2, colorAberration2, -colorAberration1, colorAberration1, -colorAberration2)
 	end
+end
+
+o.refreshScreenSize = function()
+	local startx = love.window.getWidth() * 0.5 - 191 * 0.5
+	local starty = 80
+
+	o.chkMusic.setPosition(startx, starty + 64 * 0)
+	o.chkSound.setPosition(startx, starty + 64 * 1)
+	o.btnBack.setPosition(startx + 8, starty + 64 * 5)
 end
 
 return o

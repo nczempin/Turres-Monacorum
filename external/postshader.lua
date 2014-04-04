@@ -35,10 +35,6 @@ LOVE_POSTSHADER_MONOCHROM = love.graphics.newShader("shader/monochrom.glsl")
 LOVE_POSTSHADER_SCANLINES = love.graphics.newShader("shader/scanlines.glsl")
 LOVE_POSTSHADER_TILT_SHIFT = love.graphics.newShader("shader/tilt_shift.glsl")
 
-LOVE_POSTSHADER_BLURV:send("screen", {love.window.getWidth(), love.window.getHeight()})
-LOVE_POSTSHADER_BLURH:send("screen", {love.window.getWidth(), love.window.getHeight()})
-LOVE_POSTSHADER_SCANLINES:send("screenHeight", {love.window.getWidth(), love.window.getHeight()})
-
 love.postshader = {}
 
 love.postshader.setBuffer = function(path)
@@ -59,6 +55,8 @@ love.postshader.addEffect = function(shader, ...)
 
 	if shader == "bloom" then
 		-- Bloom Shader
+		LOVE_POSTSHADER_BLURV:send("screen", {love.window.getWidth(), love.window.getHeight()})
+		LOVE_POSTSHADER_BLURH:send("screen", {love.window.getWidth(), love.window.getHeight()})
 		LOVE_POSTSHADER_BLURV:send("steps", args[1] or 2.0)
 		LOVE_POSTSHADER_BLURH:send("steps", args[1] or 2.0)
 
@@ -81,6 +79,8 @@ love.postshader.addEffect = function(shader, ...)
 		love.graphics.setBlendMode("alpha")
 	elseif shader == "blur" then
 		-- Blur Shader
+		LOVE_POSTSHADER_BLURV:send("screen", {love.window.getWidth(), love.window.getHeight()})
+		LOVE_POSTSHADER_BLURH:send("screen", {love.window.getWidth(), love.window.getHeight()})
 		LOVE_POSTSHADER_BLURV:send("steps", args[1] or 2.0)
 		LOVE_POSTSHADER_BLURH:send("steps", args[2] or 2.0)
 
@@ -121,12 +121,15 @@ love.postshader.addEffect = function(shader, ...)
 		love.graphics.draw(LOVE_POSTSHADER_BUFFER_RENDER)
 	elseif shader == "scanlines" then
 		-- Scanlines Shader
+		LOVE_POSTSHADER_SCANLINES:send("screen", {love.window.getWidth(), love.window.getHeight()})
 		LOVE_POSTSHADER_SCANLINES:send("strength", args[1] or 2.0)
 		LOVE_POSTSHADER_SCANLINES:send("time", args[2] or love.timer.getTime())
 		love.graphics.setShader(LOVE_POSTSHADER_SCANLINES)
 		love.graphics.draw(LOVE_POSTSHADER_BUFFER_RENDER)
 	elseif shader == "tiltshift" then
 		-- Blur Shader
+		LOVE_POSTSHADER_BLURV:send("screen", {love.window.getWidth(), love.window.getHeight()})
+		LOVE_POSTSHADER_BLURH:send("screen", {love.window.getWidth(), love.window.getHeight()})
 		LOVE_POSTSHADER_BLURV:send("steps", args[1] or 2.0)
 		LOVE_POSTSHADER_BLURH:send("steps", args[1] or 2.0)
 
@@ -159,4 +162,9 @@ love.postshader.draw = function()
 		love.graphics.setColor(255, 255, 255)
 		love.graphics.draw(LOVE_POSTSHADER_LAST_BUFFER)
 	end
+end
+
+love.postshader.refreshScreenSize = function()
+	LOVE_POSTSHADER_BUFFER_RENDER = love.graphics.newCanvas()
+	LOVE_POSTSHADER_BUFFER_BACK = love.graphics.newCanvas()
 end

@@ -91,4 +91,14 @@ o.setVersion = function(version)
 	o.version = version
 end
 
+o.refreshScreenSize = function()
+	local startx = love.window.getWidth() * 0.5 - 176 * 0.5
+	local starty = 162
+
+	o.btnStart.setPosition(startx, starty + 82 * 0)
+	o.btnConfigure.setPosition(startx, starty + 82 * 1)
+	o.btnCredits.setPosition(startx, starty + 82 * 2)
+	o.btnQuit.setPosition(startx, starty + 82 * 3)
+end
+
 return o
