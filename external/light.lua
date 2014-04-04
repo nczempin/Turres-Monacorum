@@ -40,16 +40,15 @@ LOVE_LIGHT_TRANSLATE_Y = 0
 LOVE_LIGHT_TRANSLATE_X_OLD = 0
 LOVE_LIGHT_TRANSLATE_Y_OLD = 0
 LOVE_LIGHT_DIRECTION = 0
+
 love.light = {}
 
 -- light world
 function love.light.newWorld()
 	local o = {}
+
 	o.lights = {}
 	o.ambient = {0, 0, 0}
-	o.circle = {}
-	o.poly = {}
-	o.img = {}
 	o.body = {}
 	o.refraction = {}
 	o.shadow = love.graphics.newCanvas()
@@ -111,13 +110,10 @@ function love.light.newWorld()
 			love.graphics.setShader(o.shader)
 
 			local lightsOnScreen = 0
-			LOVE_LIGHT_CIRCLE = o.circle
-			LOVE_LIGHT_POLY = o.poly
-			LOVE_LIGHT_IMAGE = o.img
 			LOVE_LIGHT_BODY = o.body
 			for i = 1, #o.lights do
 				if o.lights[i].changed or o.changed then
-					if  o.lights[i].x + o.lights[i].range > LOVE_LIGHT_TRANSLATE_X and o.lights[i].x - o.lights[i].range < love.graphics.getWidth() + LOVE_LIGHT_TRANSLATE_X
+					if o.lights[i].x + o.lights[i].range > LOVE_LIGHT_TRANSLATE_X and o.lights[i].x - o.lights[i].range < love.graphics.getWidth() + LOVE_LIGHT_TRANSLATE_X
 						and o.lights[i].y + o.lights[i].range > LOVE_LIGHT_TRANSLATE_Y and o.lights[i].y - o.lights[i].range < love.graphics.getHeight() + LOVE_LIGHT_TRANSLATE_Y
 					then
 						local lightposrange = {o.lights[i].x, love.graphics.getHeight() - o.lights[i].y, o.lights[i].range}
@@ -835,6 +831,18 @@ function love.light.newLight(p, x, y, red, green, blue, range)
 	o.getType = function()
 		return "light"
 	end
+	-- clear
+	o.clear = function()
+		for i = 1, #p.lights do
+			if p.lights[i] == o then
+				for k = i, #p.lights - 1 do
+					p.lights[k] = p.lights[k + 1]
+				end
+				p.lights[#p.lights] = nil
+				break
+			end
+		end
+	end
 
 	return o
 end
@@ -1387,6 +1395,19 @@ function love.light.newBody(p, type, ...)
 			o.shadowY = args[2] or 0
 			o.fadeStrength = args[3] or 0.0
 		end
+	end
+	-- clear
+	o.clear = function()
+		for i = 1, #p.body do
+			if p.body[i] == o then
+				for k = i, #p.body - 1 do
+					p.body[k] = p.body[k + 1]
+				end
+				p.body[#p.body] = nil
+				break
+			end
+		end
+		p.changed = true
 	end
 
 	return o

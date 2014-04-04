@@ -21,6 +21,7 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 		end
 	end
 	o.shadow = {}
+	o.light = {}
 	local img = love.graphics.newImage("gfx/ground01.png")
 	local normal = love.graphics.newImage("gfx/ground01_normal.png")
 	local glow = love.graphics.newImage("gfx/ground01_glow.png")
@@ -31,11 +32,10 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 	o.shadowGround.setShadow(false)
 	for i = 0, o.width - 1 do
 		o.shadow[i + 1] = {}
+		o.light[i + 1] = {}
 		for k = 0, o.height - 1 do
-			o.shadow[i + 1][k + 1] = lightWorld.newImage(img, i * o.tileWidth + o.tileWidth * 0.5, k * o.tileHeight + o.tileHeight * 0.5, o.tileWidth, o.tileHeight)
-			o.shadow[i + 1][k + 1].setShadow(false)
-			--o.shadow[i + 1][k + 1].setNormalMap(normal)
-			--o.shadow[i + 1][k + 1].setGlowMap(glow)
+			--o.shadow[i + 1][k + 1] = lightWorld.newImage(img, i * o.tileWidth + o.tileWidth * 0.5, k * o.tileHeight + o.tileHeight * 0.5, o.tileWidth, o.tileHeight)
+			--o.shadow[i + 1][k + 1].setShadow(false)
 		end
 	end
 	o.getState = function(x, y)
@@ -63,17 +63,36 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 	o.setState = function(x, y, n)
 		local d = o.data[x][y]
 		d.id = n
-		if n > 0 and n < 8 then
+		if n > 0 then
+			if not o.shadow[x][y] then
+				o.shadow[x][y] = lightWorld.newImage(img, (x - 1) * o.tileWidth + o.tileWidth * 0.5 + turGame.offsetX, (y - 1) * o.tileHeight + o.tileHeight * 0.5 + turGame.offsetY, o.tileWidth, o.tileHeight)
+			end
 			o.shadow[x][y].setImage(turGame.towerType[n].img)
 			o.shadow[x][y].setImageOffset(o.tileWidth * 0.5, o.tileHeight * 0.5 + (turGame.towerType[n].img:getHeight() - o.tileHeight))
 			o.shadow[x][y].setNormalMap(turGame.towerType[n].normal)
 			o.shadow[x][y].setNormalOffset(o.tileWidth * 0.5, o.tileHeight * 0.5 + (turGame.towerType[n].img:getHeight() - o.tileHeight))
 			o.shadow[x][y].setGlowMap(turGame.towerType[n].glow)
 			o.shadow[x][y].setShadow(true)
-		else
-			o.shadow[x][y].setNormalMap(nil)
-			o.shadow[x][y].setGlowMap(nil)
-			o.shadow[x][y].setShadow(false)
+			if n == 1 then
+				o.light[x][y] = lightWorld.newLight(x * o.tileWidth - o.tileWidth * 0.5 + turGame.offsetX, y * o.tileHeight - o.tileHeight * 0.5 + turGame.offsetY, 255, 191, 63, 150)
+			elseif n == 2 then
+				o.light[x][y] = lightWorld.newLight(x * o.tileWidth - o.tileWidth * 0.5 + turGame.offsetX, y * o.tileHeight - o.tileHeight * 0.5 + turGame.offsetY, 127, 191, 255, 150)
+			elseif n == 3 then
+				o.light[x][y] = lightWorld.newLight(x * o.tileWidth - o.tileWidth * 0.5 + turGame.offsetX, y * o.tileHeight - o.tileHeight * 0.5 + turGame.offsetY, 63, 127, 255, 150)
+			elseif n == 4 then
+				o.light[x][y] = lightWorld.newLight(x * o.tileWidth - o.tileWidth * 0.5 + turGame.offsetX, y * o.tileHeight - o.tileHeight * 0.5 + turGame.offsetY, 63, 255, 127, 150)
+			elseif n == 8 or n == 9 then
+				o.shadow[x][y].setShadowType("circle", 16, 0, 0)
+			end
+		elseif n == 0 then
+			if o.shadow[x][y] then
+				o.shadow[x][y].clear()
+				o.shadow[x][y] = nil
+			end
+			if o.light[x][y] then
+				o.light[x][y].clear()
+				o.light[x][y] = nil
+			end
 		end
 	end
 

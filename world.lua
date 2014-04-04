@@ -7,10 +7,6 @@ lightWorld.setAmbientColor(15, 15, 31)
 lightWorld.setRefractionStrength(32.0)
 lightWorld.setGlowStrength(3.0)
 
--- create light
-lightMouse = lightWorld.newLight(0, 0, 31, 191, 63, 300)
-lightMouse.setRange(300)
-
 ------------
 -- TODO: move all functions into gui or game object
 ------------

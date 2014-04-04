@@ -33,11 +33,13 @@ function love.turris.newGame()
 		o.baseX = math.floor(o.map.width / 2 + 0.5)
 		o.baseY = math.floor(o.map.height / 2 + 0.5)
 		o.towers.maxamount = o.map.width*o.map.height
-		for x=1,o.map.height do
-			for y=1,o.map.width do
+
+		for x = 1,o.map.height do
+			for y = 1,o.map.width do
 				o.towers[x*o.map.height+y]=nil
 			end
 		end
+
 		o.mapCursorNormal = G.newImage("gfx/map_cursor_normal.png")
 		o.mapCursorBlock = G.newImage("gfx/map_cursor_block.png")
 		o.creepImg1 = G.newImage("gfx/creep00_diffuse_sheet.png")
@@ -49,21 +51,21 @@ function love.turris.newGame()
 		local et1 = love.turris.newEnemyType(o.creepAnim1, 100, 1.0)
 		local et2 = love.turris.newEnemyType(o.creepAnim2, 2000, 0.5)
 
-		o.enemyTypes = {et1, et2}
+		o.enemyTypes = { et1, et2 }
 		o.enemyCount = 1
-		o.enemies[o.enemyCount]= love.turris.newEnemy(o.enemyTypes[2], o.map, 1, o.baseY, o.baseX, o.baseY)
-		o.enemyCount = o.enemyCount +1
-		o.enemies[o.enemyCount]= love.turris.newEnemy(o.enemyTypes[1], o.map, o.baseX, 1, o.baseX, o.baseY)
-		o.enemyCount = o.enemyCount +1
-		o.enemies[o.enemyCount]= love.turris.newEnemy(o.enemyTypes[1], o.map, o.map.width, o.baseY, o.baseX, o.baseY)
-		o.enemyCount = o.enemyCount +1
-		o.enemies[o.enemyCount]= love.turris.newEnemy(o.enemyTypes[2], o.map, o.baseX, o.map.height, o.baseX, o.baseY)
+		o.enemies[o.enemyCount] = love.turris.newEnemy(o.enemyTypes[2], o.map, 1, o.baseY, o.baseX, o.baseY)
+		o.enemyCount = o.enemyCount + 1
+		o.enemies[o.enemyCount] = love.turris.newEnemy(o.enemyTypes[1], o.map, o.baseX, 1, o.baseX, o.baseY)
+		o.enemyCount = o.enemyCount + 1
+		o.enemies[o.enemyCount] = love.turris.newEnemy(o.enemyTypes[1], o.map, o.map.width, o.baseY, o.baseX, o.baseY)
+		o.enemyCount = o.enemyCount + 1
+		o.enemies[o.enemyCount] = love.turris.newEnemy(o.enemyTypes[2], o.map, o.baseX, o.map.height, o.baseX, o.baseY)
 
 		o.newGround("gfx/ground_diffuse001.png")
 		laserTower = o.newTowerType("gfx/tower00")
 		generatorTower = o.newTowerType("gfx/tower01")
 		energyTower = o.newTowerType("gfx/tower02")
-		o.newTowerType("gfx/tower03")
+		massTower = o.newTowerType("gfx/tower03")
 		bombTower = o.newTowerType("gfx/tower04")
 		spawnHole = o.newTowerType("gfx/obstacle00")
 		spawnEggs = o.newTowerType("gfx/obstacle01")
@@ -73,13 +75,14 @@ function love.turris.newGame()
 		laserTower.setUpperImage(true)
 		generatorTower.setUpperImage(true)
 		energyTower.setUpperImage(true)
+		massTower.setUpperImage(true)
 		bombTower.setUpperImage(true)
 
 		generatorTower.setBreakable(false)
 		spawnHole.setBreakable(false)
 		spawnEggs.setBreakable(false)
 
-		print ("adding main base", o.baseX, o.baseY)
+		print("adding main base", o.baseX, o.baseY)
 		o.addTower(o.baseX, o.baseY, 2) --main base
 
 		o.player.setMass(9999) -- enough to place the towers
@@ -87,7 +90,7 @@ function love.turris.newGame()
 		for i = 1, o.map.width do
 			for k = 1, o.map.height do
 				if o.map.getState(i, k) == 0 then
-					local r = math.random(0, 7)
+					local r = math.random(0, 15)
 					if r == 0 then
 						o.map.setState(i, k, 8)
 					elseif r == 1 then
@@ -110,7 +113,7 @@ function love.turris.newGame()
 		o.imgLaser = G.newImage("gfx/laserbeam_blue.png")
 		o.imgLaser:setWrap("repeat", "repeat")
 		local vertices = {
-			{ 0, 0, 0, 0, 255, 0, 0,},
+			{ 0, 0, 0, 0, 255, 0, 0 },
 			{ o.imgLaser:getWidth(), 0, 1, 0, 0, 255, 0 },
 			{ o.imgLaser:getWidth(), o.imgLaser:getHeight(), 1, 1, 0, 0, 255 },
 			{ 0, o.imgLaser:getHeight(), 0, 1, 255, 255, 0 },
@@ -158,7 +161,7 @@ function love.turris.newGame()
 				--print ("NaN")
 				else
 					dirX = math.floor(dirX)
-					dirY= math.floor(dirY)
+					dirY = math.floor(dirY)
 					--print ("dir: ",dirX, dirY)
 					e.updateVelocity(dirX,dirY)
 				end
@@ -206,11 +209,11 @@ function love.turris.newGame()
 					--print(o.towers[x*o.map.height+y])
 					o.recalculatePaths()
 				else
-					print("Could not delete tower at "..x..", "..y)
+					print("Could not delete tower at " .. x .. ", " .. y)
 				end
 			end
 		else
-			print ("nothing will be removed here!"..x.." "..o.map.width.." "..y.." "..o.map.height)
+			print ("nothing will be removed here!" .. x .. " " .. o.map.width .. " " ..y.. " " .. o.map.height)
 		end
 	end
 
@@ -221,7 +224,7 @@ function love.turris.newGame()
 
 	-- returns tower at given position or the next tower or nil
 	o.getnextTower = function(arrayPos)
-		for i=arrayPos,o.towers.maxamount do
+		for i = arrayPos, o.towers.maxamount do
 			if o.towers[i] then
 				--print("returning tower..."..o.towers[i].x..", "..o.towers[i].y.." "..arrayPos)
 				return o.towers[i]
@@ -278,7 +281,6 @@ function love.turris.newGame()
 			end
 		end
 
-
 		if o.offsetX > 0 then
 			o.offsetX = 0
 		elseif o.offsetX < W.getWidth() - turMap.getWidth() * turMap.getTileWidth() then
@@ -305,8 +307,8 @@ function love.turris.newGame()
 		o.updateCamera(dt)
 
 		if math.floor(o.effectTimer) % 2 == o.calcAi then
-			o.calcAi = 1 - o.calcAi
-			o.recalculatePaths()
+			--o.calcAi = 1 - o.calcAi
+			--o.recalculatePaths()
 		end
 
 		-- update shadows
@@ -314,10 +316,24 @@ function love.turris.newGame()
 			o.map.shadowGround.setPosition(o.map.width * o.map.tileWidth * 0.5 + o.offsetX, o.map.height * o.map.tileHeight * 0.5 + o.offsetY)
 			for i = 1, o.map.width do
 				for k = 1, o.map.height do
-					o.map.shadow[i][k].setPosition(i * o.map.tileWidth - o.map.tileWidth * 0.5 + o.offsetX, k * o.map.tileHeight - o.map.tileHeight * 0.5 + o.offsetY)
+					if o.map.shadow[i][k] then
+						o.map.shadow[i][k].setPosition(i * o.map.tileWidth - o.map.tileWidth * 0.5 + o.offsetX, k * o.map.tileHeight - o.map.tileHeight * 0.5 + o.offsetY)
+						if o.map.light[i][k] then
+							o.map.light[i][k].setPosition(i * o.map.tileWidth - o.map.tileWidth * 0.5 + o.offsetX, k * o.map.tileHeight - o.map.tileHeight * 0.5 + o.offsetY)
+						end
+					end
 				end
 			end
 			o.offsetChange = false
+		end
+
+		-- update light
+		for i = 1, o.map.width do
+			for k = 1, o.map.height do
+				if o.map.data[i][k].id == 2 and o.map.light[i][k] then
+					o.map.light[i][k].setRange(200 - math.sin(o.dayTime * 15.0) * 50)
+				end
+			end
 		end
 
 		-- update animations
@@ -374,13 +390,14 @@ function love.turris.newGame()
 
 	o.drawMap = function()
 		local dayTime = math.abs(math.sin(o.dayTime))
-		lightWorld.setAmbientColor(dayTime * 223 + 31, dayTime * 159 + 63, dayTime * 63 + 127)
+		--lightWorld.setAmbientColor(dayTime * 223 + 31, dayTime * 159 + 63, dayTime * 63 + 127)
+		lightWorld.setAmbientColor(dayTime * 240 + 15, dayTime * 223 + 15, dayTime * 191 + 31)
 
 		lightMouse.setPosition(love.mouse.getX(), love.mouse.getY(), 63)
 
 		G.setBlendMode("alpha")
 
-		if o.map and o.map.width and o.map.height then
+		if o.map then
 			G.setColor(255, 255, 255)
 			G.draw(o.mshGround, o.offsetX, o.offsetY)
 			lightWorld.drawShadow()

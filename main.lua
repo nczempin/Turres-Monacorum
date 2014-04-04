@@ -43,6 +43,12 @@ end
 function love.turris.reinit()
 	-- create game world
 	lightWorld.clearBodys()
+	lightWorld.clearLights()
+
+	-- create light
+	lightMouse = lightWorld.newLight(0, 0, 31, 191, 63, 300)
+	lightMouse.setRange(300)
+
 	love.turris.selectedtower = 1
 	turGame = love.turris.newGame()
 	turMap = love.turris.newMap(20, 20, 64, 48)

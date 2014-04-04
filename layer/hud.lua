@@ -14,19 +14,19 @@ function love.turris.newHudLayer(player)
 	o.btnTower3 = o.guiGame.newImageRadioButton(208 * 2 + 16, W.getHeight() - 75, 192, 57, o.iconTower3)
 
 	-- config gui elements
-	o.btnTower1.setFontSize(16)
-	o.btnTower1.setText("Laser Tower (1)")
+	--o.btnTower1.setFontSize(16)
+	--o.btnTower1.setText("Laser Tower (1)")
 	o.btnTower1.setTextPosition(32, -32)
 	o.btnTower1.setImagePosition(4, -11)
 	o.btnTower1.setChecked(true)
 
-	o.btnTower2.setFontSize(16)
-	o.btnTower2.setText("Energy Tower (3)")
+	--o.btnTower2.setFontSize(16)
+	--o.btnTower2.setText("Energy Tower (3)")
 	o.btnTower2.setTextPosition(32, -32)
 	o.btnTower2.setImagePosition(4, -13)
 
-	o.btnTower3.setFontSize(16)
-	o.btnTower3.setText("Mass Tower (4)")
+	--o.btnTower3.setFontSize(16)
+	--o.btnTower3.setText("Mass Tower (4)")
 	o.btnTower3.setTextPosition(32, -32)
 	o.btnTower3.setImagePosition(4, -11)
 
@@ -37,6 +37,10 @@ function love.turris.newHudLayer(player)
 	o.btnTower1.setColorHover(0, 127, 255, 255)
 	o.btnTower2.setColorHover(255, 127, 0, 255)
 	o.btnTower3.setColorHover(0, 255, 127, 255)
+
+	-- set font
+	o.fontTitle = G.newFont("arialbi.ttf" ,24)
+	o.fontDescription = G.newFont(16)
 
 	o.player = player
 
@@ -109,21 +113,58 @@ function love.turris.newHudLayer(player)
 		G.setColor(255, 127, 0, 191 + math.sin(love.timer.getTime() * 5.0) * 63)
 		G.draw(o.iconEnergy, W.getWidth() - 40, 16)
 
+		if o.btnTower1.isChecked() then
+			G.setColor(0, 127, 255, 127)
+		else
+			G.setColor(0, 127, 255, 31)
+		end
+		G.rectangle("fill", 208 * 0 + 16, W.getHeight() - 108, 192, 28)
+		if o.btnTower2.isChecked() then
+			G.setColor(255, 127, 0, 127)
+		else
+			G.setColor(255, 127, 0, 31)
+		end
+		G.rectangle("fill", 208 * 1 + 16, W.getHeight() - 108, 192, 28)
+		if o.btnTower3.isChecked() then
+			G.setColor(0, 255, 127, 127)
+		else
+			G.setColor(0, 255, 127, 31)
+		end
+		G.rectangle("fill", 208 * 2 + 16, W.getHeight() - 108, 192, 28)
+
+		G.setFont(o.fontTitle)
+		G.setColor(0, 0, 0)
+		G.printf("Laser Tower", 208 * 0 + 16, W.getHeight() - 108, 192, "center")
+		G.printf("Energy Tower", 208 * 1 + 16, W.getHeight() - 108, 192, "center")
+		G.printf("Mass Tower", 208 * 2 + 16, W.getHeight() - 108, 192, "center")
+
 		o.guiGame.draw()
 
-		G.setColor(0, 127, 255, 127)
+		G.setFont(o.fontDescription)
+		if o.btnTower1.isChecked() then
+			G.setColor(0, 127, 255, 255)
+		else
+			G.setColor(0, 127, 255, 127)
+		end
 		G.print("Cost: 10 Mass", 208 * 0 + 88, W.getHeight() - 68)
 		G.print("Shoot laser!", 208 * 0 + 88, W.getHeight() - 44)
 
-		G.setColor(255, 127, 0, 127)
+		if o.btnTower2.isChecked() then
+			G.setColor(255, 127, 0, 255)
+		else
+			G.setColor(255, 127, 0, 127)
+		end
 		G.print("Cost: 10 Mass", 208 * 1 + 88, W.getHeight() - 68)
 		G.print("Give energy", 208 * 1 + 88, W.getHeight() - 44)
 
-		G.setColor(0, 255, 127, 127)
+		if o.btnTower3.isChecked() then
+			G.setColor(0, 255, 127, 255)
+		else
+			G.setColor(0, 255, 127, 127)
+		end
 		G.print("Cost: 10 Mass", 208 * 2 + 88, W.getHeight() - 68)
 		G.print("Extract Mass", 208 * 2 + 88, W.getHeight() - 44)
 	end
 
 	return o
-
 end
