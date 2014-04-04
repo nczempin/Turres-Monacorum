@@ -73,15 +73,20 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 			o.shadow[x][y].setNormalOffset(o.tileWidth * 0.5, o.tileHeight * 0.5 + (turGame.towerType[n].img:getHeight() - o.tileHeight))
 			o.shadow[x][y].setGlowMap(turGame.towerType[n].glow)
 			o.shadow[x][y].setShadow(true)
-			if n == 1 then
-				o.light[x][y] = lightWorld.newLight(x * o.tileWidth - o.tileWidth * 0.5 + turGame.offsetX, y * o.tileHeight - o.tileHeight * 0.5 + turGame.offsetY, 255, 191, 63, 150)
-			elseif n == 2 then
-				o.light[x][y] = lightWorld.newLight(x * o.tileWidth - o.tileWidth * 0.5 + turGame.offsetX, y * o.tileHeight - o.tileHeight * 0.5 + turGame.offsetY, 127, 191, 255, 150)
-			elseif n == 3 then
-				o.light[x][y] = lightWorld.newLight(x * o.tileWidth - o.tileWidth * 0.5 + turGame.offsetX, y * o.tileHeight - o.tileHeight * 0.5 + turGame.offsetY, 63, 127, 255, 150)
-			elseif n == 4 then
-				o.light[x][y] = lightWorld.newLight(x * o.tileWidth - o.tileWidth * 0.5 + turGame.offsetX, y * o.tileHeight - o.tileHeight * 0.5 + turGame.offsetY, 63, 255, 127, 150)
-			elseif n == 8 or n == 9 then
+
+			if stateSettingsVideoShaders.optionLights then
+				if n == 1 then
+					o.light[x][y] = lightWorld.newLight(x * o.tileWidth - o.tileWidth * 0.5 + turGame.offsetX, y * o.tileHeight - o.tileHeight * 0.5 + turGame.offsetY, 255, 191, 63, 150)
+				elseif n == 2 then
+					o.light[x][y] = lightWorld.newLight(x * o.tileWidth - o.tileWidth * 0.5 + turGame.offsetX, y * o.tileHeight - o.tileHeight * 0.5 + turGame.offsetY, 127, 191, 255, 150)
+				elseif n == 3 then
+					o.light[x][y] = lightWorld.newLight(x * o.tileWidth - o.tileWidth * 0.5 + turGame.offsetX, y * o.tileHeight - o.tileHeight * 0.5 + turGame.offsetY, 63, 127, 255, 150)
+				elseif n == 4 then
+					o.light[x][y] = lightWorld.newLight(x * o.tileWidth - o.tileWidth * 0.5 + turGame.offsetX, y * o.tileHeight - o.tileHeight * 0.5 + turGame.offsetY, 63, 255, 127, 150)
+				end
+			end
+
+			if n == 8 or n == 9 then
 				o.shadow[x][y].setShadowType("circle", 16, 0, 0)
 			end
 		elseif n == 0 then

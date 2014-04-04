@@ -3,9 +3,9 @@ local o = {}
 o.imgScreen	= love.graphics.newImage("gfx/menu/screen00.png")
 
 o.mainContributorsFontSize = 32
-o.mainContributorsFont = G.newFont(o.mainContributorsFontSize)
+o.mainContributorsFont = love.graphics.newFont(o.mainContributorsFontSize)
 o.externalLibsFontSize = 16
-o.externalLibsFont = G.newFont(o.externalLibsFontSize)
+o.externalLibsFont = love.graphics.newFont(o.externalLibsFontSize)
 
 o.names = {
 	"Aldo Brießmann (Code)",
@@ -42,11 +42,11 @@ o.draw = function()
 		lightWorld.setBuffer("glow")
 	end
 
-	G.setColor(255, 255, 255, 31)
-	G.draw(o.imgScreen)
+	love.graphics.setColor(255, 255, 255, 31)
+	love.graphics.draw(o.imgScreen)
 
 	--main contributors
-	G.setFont(o.mainContributorsFont)
+	love.graphics.setFont(o.mainContributorsFont)
 	local f = 7
 	for i = 1, #o.names do
 		local r = 127 + math.sin(love.timer.getTime() * 5 - i * f + 90) * 127
@@ -54,17 +54,17 @@ o.draw = function()
 		local b = 127 + math.sin(love.timer.getTime() * 5 - i * f + 270) * 127
 		local x = 0
 		local y = 48 + i * 48
-		G.setColor(r, g, b, 255)
-		G.printf(o.names[i], x, y, W.getWidth(), "center")
+		love.graphics.setColor(r, g, b, 255)
+		love.graphics.printf(o.names[i], x, y, W.getWidth(), "center")
 	end
 
 	--external libraries and other
-	G.setFont(o.externalLibsFont)
+	love.graphics.setFont(o.externalLibsFont)
 	for i = 1, #o.otherText do
 		local x = W.getWidth() - 280
 		local y = W.getHeight() - (i + 2) * o.externalLibsFontSize
-		G.setColor(75, 75, 75, 255)
-		G.print(o.otherText[i], x, y)
+		love.graphics.setColor(75, 75, 75, 255)
+		love.graphics.print(o.otherText[i], x, y)
 	end
 
 	if lightWorld.optionGlow then

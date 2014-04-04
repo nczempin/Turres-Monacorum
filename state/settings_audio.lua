@@ -1,14 +1,14 @@
 local o = {}
 
-local startx = W.getWidth() * 0.5 - 191 * 0.5
+local startx = love.window.getWidth() * 0.5 - 191 * 0.5
 local starty = 80
 
 o.imgBackground		= love.graphics.newImage("gfx/menu/menu_background.png")
 o.imgMiddleground	= love.graphics.newImage("gfx/menu/menu_middleground.png")
 o.imgScreen			= love.graphics.newImage("gfx/menu/screen00.png")
 
-o.fontMenu = G.newFont(32)
-o.fontOption = G.newFont(24)
+o.fontMenu = love.graphics.newFont(32)
+o.fontOption = love.graphics.newFont(24)
 
 o.effectTimer = 0
 o.chromaticEffect = 0
@@ -56,24 +56,24 @@ o.update = function(dt)
 end
 
 o.draw = function()
-	G.setFont(o.fontMenu)
-	G.setBlendMode("alpha")
-	G.setColor(255, 255, 255)
-	G.draw(o.imgScreen)
-	G.setColor(255, 255, 255, 223)
-	G.draw(o.imgBackground)
-	G.setColor(95 + math.sin(o.effectTimer * 0.1) * 63, 191 + math.cos(o.effectTimer) * 31, 223 + math.sin(o.effectTimer) * 31, 255)
-	G.setBlendMode("additive")
-	G.draw(o.imgMiddleground,(W.getWidth()-o.imgMiddleground:getWidth())*0.5,0)
+	love.graphics.setFont(o.fontMenu)
+	love.graphics.setBlendMode("alpha")
+	love.graphics.setColor(255, 255, 255)
+	love.graphics.draw(o.imgScreen)
+	love.graphics.setColor(255, 255, 255, 223)
+	love.graphics.draw(o.imgBackground)
+	love.graphics.setColor(95 + math.sin(o.effectTimer * 0.1) * 63, 191 + math.cos(o.effectTimer) * 31, 223 + math.sin(o.effectTimer) * 31, 255)
+	love.graphics.setBlendMode("additive")
+	love.graphics.draw(o.imgMiddleground,(love.window.getWidth()-o.imgMiddleground:getWidth())*0.5,0)
 
-	G.setBlendMode("alpha")
-	G.setColor(0, 0, 0, 95)
-	G.printf("Display", 4, 24 + 4, W.getWidth(), "center")
-	G.setColor(255, 127, 0)
-	G.setBlendMode("additive")
-	G.printf("Display", 0, 24, W.getWidth(), "center")
+	love.graphics.setBlendMode("alpha")
+	love.graphics.setColor(0, 0, 0, 95)
+	love.graphics.printf("Display", 4, 24 + 4, love.window.getWidth(), "center")
+	love.graphics.setColor(255, 127, 0)
+	love.graphics.setBlendMode("additive")
+	love.graphics.printf("Display", 0, 24, love.window.getWidth(), "center")
 
-	G.setFont(o.fontOption)
+	love.graphics.setFont(o.fontOption)
 	o.guiMenu.draw()
 
 	if math.random(0, love.timer.getFPS() * 5) == 0 then

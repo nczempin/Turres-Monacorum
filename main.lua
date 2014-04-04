@@ -14,6 +14,15 @@ require "sound"
 
 require "util"
 
+-- states
+stateMainMenu = require("state/main_menu")
+stateCredits = require("state/credits")
+stateSettings = require("state/settings")
+stateSettingsVideo = require("state/settings_video")
+stateSettingsVideoShaders = require("state/settings_video_shaders")
+stateSettingsVideoDisplay = require("state/settings_video_display")
+stateSettingsAudio = require("state/settings_audio")
+
 function love.load()
 	G = love.graphics
 	W = love.window
@@ -25,14 +34,6 @@ function love.load()
 	currentgamestate = 0  -- 0=Main Menu 1=gameonly 4= game+gameover message
 	love.turris.selectedtower = 1 -- 1=default tower (type 1), 2=tower type 2, ...
 	love.turris.reinit()
-
-	stateMainMenu = require("state/main_menu")
-	stateCredits = require("state/credits")
-	stateSettings = require("state/settings")
-	stateSettingsVideo = require("state/settings_video")
-	stateSettingsVideoShaders = require("state/settings_video_shaders")
-	stateSettingsVideoDisplay = require("state/settings_video_display")
-	stateSettingsAudio = require("state/settings_audio")
 
 	stateMainMenu.setVersion("v0.5.2")
 end

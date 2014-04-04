@@ -1,29 +1,31 @@
 local o = {}
 
-local startx = W.getWidth() * 0.5 - 191 * 0.5
+local startx = love.window.getWidth() * 0.5 - 191 * 0.5
 local starty = 80
 
 o.imgBackground		= love.graphics.newImage("gfx/menu/menu_background.png")
 o.imgMiddleground	= love.graphics.newImage("gfx/menu/menu_middleground.png")
 o.imgScreen			= love.graphics.newImage("gfx/menu/screen00.png")
 
-o.fontMenu = G.newFont(32)
-o.fontOption = G.newFont(24)
+o.fontMenu = love.graphics.newFont(32)
+o.fontOption = love.graphics.newFont(24)
 
 o.effectTimer = 0
 o.chromaticEffect = 0
 
-o.guiMenu			= love.gui.newGui()
-o.chkBloom			= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, true, "Bloom")
-o.chkScanlines		= o.guiMenu.newCheckbox(startx, starty + 64 * 1, 191, 32, true, "Scanlines")
-o.chkShadow			= o.guiMenu.newCheckbox(startx, starty + 64 * 2, 191, 32, true, "Shadow")
-o.chkSelfShadow		= o.guiMenu.newCheckbox(startx, starty + 64 * 3, 191, 32, true, "Self Shadow")
-o.chkGlow			= o.guiMenu.newCheckbox(startx, starty + 64 * 4, 191, 32, true, "Glow")
-o.btnBack			= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 34, "Back")
+o.guiMenu		= love.gui.newGui()
+o.chkBloom		= o.guiMenu.newCheckbox(startx, starty + 56 * 0, 191, 32, true, "Bloom")
+o.chkScanlines	= o.guiMenu.newCheckbox(startx, starty + 56 * 1, 191, 32, true, "Scanlines")
+o.chkShadow		= o.guiMenu.newCheckbox(startx, starty + 56 * 2, 191, 32, true, "Shadow")
+o.chkSelfShadow	= o.guiMenu.newCheckbox(startx, starty + 56 * 3, 191, 32, true, "Self Shadow")
+o.chkLights		= o.guiMenu.newCheckbox(startx, starty + 56 * 4, 191, 32, true, "Multi Lights")
+o.chkGlow		= o.guiMenu.newCheckbox(startx, starty + 56 * 5, 191, 32, true, "Glow")
+o.btnBack		= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 34, "Back")
 
 o.optionBloom = true
 o.optionScanlines = true
 o.optionShadow = true
+o.optionLights = true
 o.optionGlow = true
 
 o.reset = function()
@@ -56,6 +58,12 @@ o.update = function(dt)
 		lightWorld.optionPixelShadows = o.chkSelfShadow.isChecked()
 	end
 
+	if o.chkLights.isHit() then
+		love.sounds.playSound("sounds/button_pressed.wav")
+		o.optionLights = o.chkLights.isChecked()
+		love.turris.reinit()
+	end
+
 	if o.chkGlow.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
 		lightWorld.optionGlow = o.chkGlow.isChecked()
@@ -69,24 +77,24 @@ o.update = function(dt)
 end
 
 o.draw = function()
-	G.setFont(o.fontMenu)
-	G.setBlendMode("alpha")
-	G.setColor(255, 255, 255)
-	G.draw(o.imgScreen)
-	G.setColor(255, 255, 255, 223)
-	G.draw(o.imgBackground)
-	G.setColor(95 + math.sin(o.effectTimer * 0.1) * 63, 191 + math.cos(o.effectTimer) * 31, 223 + math.sin(o.effectTimer) * 31, 255)
-	G.setBlendMode("additive")
-	G.draw(o.imgMiddleground,(W.getWidth()-o.imgMiddleground:getWidth())*0.5,0)
+	love.graphics.setFont(o.fontMenu)
+	love.graphics.setBlendMode("alpha")
+	love.graphics.setColor(255, 255, 255)
+	love.graphics.draw(o.imgScreen)
+	love.graphics.setColor(255, 255, 255, 223)
+	love.graphics.draw(o.imgBackground)
+	love.graphics.setColor(95 + math.sin(o.effectTimer * 0.1) * 63, 191 + math.cos(o.effectTimer) * 31, 223 + math.sin(o.effectTimer) * 31, 255)
+	love.graphics.setBlendMode("additive")
+	love.graphics.draw(o.imgMiddleground, (love.window.getWidth() - o.imgMiddleground:getWidth()) * 0.5, 0)
 
-	G.setBlendMode("alpha")
-	G.setColor(0, 0, 0, 95)
-	G.printf("Shaders", 4, 24 + 4, W.getWidth(), "center")
-	G.setColor(255, 127, 0)
-	G.setBlendMode("additive")
-	G.printf("Shaders", 0, 24, W.getWidth(), "center")
+	love.graphics.setBlendMode("alpha")
+	love.graphics.setColor(0, 0, 0, 95)
+	love.graphics.printf("Shaders", 4, 24 + 4, love.window.getWidth(), "center")
+	love.graphics.setColor(255, 127, 0)
+	love.graphics.setBlendMode("additive")
+	love.graphics.printf("Shaders", 0, 24, love.window.getWidth(), "center")
 
-	G.setFont(o.fontOption)
+	love.graphics.setFont(o.fontOption)
 	o.guiMenu.draw()
 
 	if math.random(0, love.timer.getFPS() * 5) == 0 then
