@@ -32,6 +32,7 @@ function love.load()
 	stateSettingsVideo = require("state/settings_video")
 	stateSettingsVideoShaders = require("state/settings_video_shaders")
 	stateSettingsVideoDisplay = require("state/settings_video_display")
+	stateSettingsAudio = require("state/settings_audio")
 
 	stateMainMenu.setVersion("v0.5.2")
 end
@@ -63,7 +64,9 @@ function love.setgamestate(newgamestate)
 	end
 
 	if currentgamestate == 5 then
-		love.sounds.stopSound("gameover")
+		if stateSettingsAudio.optionMusic then
+			love.sounds.stopSound("gameover")
+		end
 	elseif newgamestate == 5 then
 		love.sounds.playBackground("sounds/music/highscore.mp3", "gameover")
 	end
@@ -88,6 +91,8 @@ function love.update(dt)
 		stateSettingsVideoShaders.update(dt)
 	elseif (currentgamestate == 9)then
 		stateSettingsVideoDisplay.update(dt)
+	elseif (currentgamestate == 10)then
+		stateSettingsAudio.update(dt)
 	end
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
 end
@@ -119,6 +124,8 @@ function love.draw()
 		stateSettingsVideoShaders.draw()
 	elseif currentgamestate == 9 then --settings screen
 		stateSettingsVideoDisplay.draw()
+	elseif currentgamestate == 10 then --settings audio
+		stateSettingsAudio.draw()
 	end
 
 	if stateSettingsVideoShaders.optionScanlines then

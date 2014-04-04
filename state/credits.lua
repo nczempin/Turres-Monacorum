@@ -49,10 +49,9 @@ o.draw = function()
 	G.setFont(o.mainContributorsFont)
 	local f = 7
 	for i = 1, #o.names do
-
-		local r = 127 + math.sin(love.timer.getTime() * 5 - i*f + 90) * 127
-		local g = 127 + math.sin(love.timer.getTime() * 5 - i*f + 180) * 127
-		local b = 127 + math.sin(love.timer.getTime() * 5 - i*f + 270) * 127
+		local r = 127 + math.sin(love.timer.getTime() * 5 - i * f + 90) * 127
+		local g = 127 + math.sin(love.timer.getTime() * 5 - i * f + 180) * 127
+		local b = 127 + math.sin(love.timer.getTime() * 5 - i * f + 270) * 127
 		local x = 0
 		local y = 48 + i * 48
 		G.setColor(r, g, b, 255)

@@ -88,6 +88,7 @@ function love.light.newWorld()
 	o.optionRefraction = true
 	o.optionReflection = true
 	o.isShadows = false
+	o.isLight = false
 	o.isPixelShadows = false
 	o.isGlow = false
 	o.isRefraction = false
@@ -106,7 +107,7 @@ function love.light.newWorld()
 		love.graphics.setColor(255, 255, 255)
 		love.graphics.setBlendMode("alpha")
 
-		if o.optionShadows and o.isShadows then
+		if o.optionShadows and (o.isShadows or o.isLight) then
 			love.graphics.setShader(o.shader)
 
 			local lightsOnScreen = 0
@@ -403,7 +404,7 @@ function love.light.newWorld()
 	end
 	-- draw shadow
 	o.drawShadow = function()
-		if o.optionShadows and o.isShadows then
+		if o.optionShadows and (o.isShadows or o.isLight) then
 			love.graphics.setColor(255, 255, 255)
 			if o.blur then
 				LOVE_LIGHT_LAST_BUFFER = love.graphics.getCanvas()
@@ -553,6 +554,7 @@ function love.light.newWorld()
 	-- clear lights
 	o.clearLights = function()
 		o.lights = {}
+		o.isLight = false
 		o.changed = true
 	end
 	-- clear objects
@@ -739,6 +741,7 @@ function love.light.newLight(p, x, y, red, green, blue, range)
 	o.glowStrength = 0.0
 	o.changed = true
 	o.visible = true
+	p.isLight = true
 	-- set position
 	o.setPosition = function(x, y, z)
 		if x ~= o.x or y ~= o.y or (z and z ~= o.z) then

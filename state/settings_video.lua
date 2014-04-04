@@ -28,7 +28,6 @@ o.update = function(dt)
 
 	o.guiMenu.update(dt)
 
-
 	if o.btnBack.isHit() or love.keyboard.isDown("escape") then
 		love.sounds.playSound("sounds/button_pressed.wav")
 		love.setgamestate(0)
