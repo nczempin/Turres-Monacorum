@@ -90,7 +90,8 @@ function love.turris.newGame()
 		for i = 1, o.map.width do
 			for k = 1, o.map.height do
 				if o.map.getState(i, k) == 0 then
-					local r = math.random(0, 15)
+					local r = math.random(0, 37)
+
 					if r == 0 then
 						o.map.setState(i, k, 8)
 					elseif r == 1 then
@@ -557,33 +558,39 @@ function love.turris.newGame()
 			end
 		end
 	end
+	o.drawPathSegment = function(wpFrom, wpTo)
+		local direction = math.atan2(wpFrom[1] - wpTo[1], wpTo[2] - wpFrom[2]) + math.pi * 0.5
+		local length = math.sqrt(math.pow(wpFrom[1] * o.map.tileWidth - wpTo[1] * o.map.tileWidth, 2) + math.pow(wpFrom[2] * o.map.tileHeight - wpTo[2] * o.map.tileHeight, 2))
+		local timer = -math.mod(love.timer.getTime() * 2.0, 1.0)
+		local vertices = {
+			{ 0, 0, timer, 0, 255, 0, 0 },
+			{ o.imgPath:getWidth(), 0, timer + length / o.imgPath:getWidth(), 0, 255, 0, 0 },
+			{ o.imgPath:getWidth(), o.imgPath:getHeight(), timer + length / o.imgPath:getWidth(), 1, 127, 127, 0 },
+			{ 0, o.imgPath:getHeight(), timer, 1, 127, 127, 0 },
+		}
+		o.mshPath:setVertices(vertices)
+		G.draw(o.mshPath, (wpFrom[1] - 0.5) * o.map.tileWidth + o.offsetX, (wpFrom[2] - 0.5) * o.map.tileHeight + o.offsetY, direction, (length) / o.imgPath:getWidth(), 1, 0, o.imgPath:getHeight() * 0.5)
 
+	end
 	o.drawPaths = function()
 		G.setBlendMode("alpha")
 		for i = 1, o.enemyCount do
 			local e = o.enemies[i]
-			local x = e.x
-			local y = e.y
-			for i=1, #e.waypoints-1 do
-				local wpFrom = e.waypoints[i]
-				local wpTo = e.waypoints[i+1]
+			if not e.dead then
+				local x = e.x
+				local y = e.y
+				local startIndex = e.currentWaypoint
 				G.setColor(232, 118, 0)
-				--o.drawLine(wpFrom[1],wpFrom[2],wpTo[1],wpTo[2])
-
-				local direction = math.atan2(wpFrom[1] - wpTo[1], wpTo[2] - wpFrom[2]) + math.pi * 0.5
-				local length = math.sqrt(math.pow(wpFrom[1] * o.map.tileWidth - wpTo[1] * o.map.tileWidth, 2) + math.pow(wpFrom[2] * o.map.tileHeight - wpTo[2] * o.map.tileHeight, 2))
-				local timer = -math.mod(love.timer.getTime() * 2.0, 1.0)
-				local vertices = {
-					{ 0, 0, timer, 0, 255, 0, 0 },
-					{ o.imgPath:getWidth(), 0, timer + length / o.imgPath:getWidth(), 0, 255, 0, 0 },
-					{ o.imgPath:getWidth(), o.imgPath:getHeight(), timer + length / o.imgPath:getWidth(), 1, 127, 127, 0 },
-					{ 0, o.imgPath:getHeight(), timer, 1, 127, 127, 0 },
-				}
-				o.mshPath:setVertices(vertices)
-				G.draw(o.mshPath, (wpFrom[1] - 0.5) * o.map.tileWidth + o.offsetX, (wpFrom[2] - 0.5) * o.map.tileHeight + o.offsetY, direction, (length) / o.imgPath:getWidth(), 1, 0, o.imgPath:getHeight() * 0.5)
+				if e.waypoints[1] then
+					o.drawPathSegment({x,y}, e.waypoints[1])
+				end
+				for i = startIndex, #e.waypoints-1 do
+					local wpFrom = e.waypoints[i]
+					local wpTo = e.waypoints[i+1]
+					o.drawPathSegment(wpFrom, wpTo)
+				end
 			end
 		end
-
 		-- hide path under tower edges
 		if o.map then
 			for i = 0, o.map.width - 1 do
