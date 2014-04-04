@@ -213,9 +213,9 @@ function love.turris.newGame()
 					print("Could not delete tower at " .. x .. ", " .. y)
 				end
 			end
-		else
-			print ("nothing will be removed here!" .. x .. " " .. o.map.width .. " " ..y.. " " .. o.map.height)
-		end
+	else
+		print ("nothing will be removed here!" .. x .. " " .. o.map.width .. " " ..y.. " " .. o.map.height)
+	end
 	end
 
 	-- returns tower at given coordinates or nil
@@ -308,8 +308,8 @@ function love.turris.newGame()
 		o.updateCamera(dt)
 
 		if math.floor(o.effectTimer) % 2 == o.calcAi then
-			--o.calcAi = 1 - o.calcAi
-			--o.recalculatePaths()
+		--o.calcAi = 1 - o.calcAi
+		--o.recalculatePaths()
 		end
 
 		-- update shadows
@@ -581,8 +581,8 @@ function love.turris.newGame()
 				local y = e.y
 				local startIndex = e.currentWaypoint
 				G.setColor(232, 118, 0)
-				if e.waypoints[1] then
-					o.drawPathSegment({x,y}, e.waypoints[1])
+				if e.waypoints[startIndex] then
+					o.drawPathSegment({x,y}, e.waypoints[startIndex])
 				end
 				for i = startIndex, #e.waypoints-1 do
 					local wpFrom = e.waypoints[i]
