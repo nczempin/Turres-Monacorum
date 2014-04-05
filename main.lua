@@ -27,9 +27,15 @@ function loadOptions()
 	local optionsIni = "options.ini"
 	if (FS.exists(optionsIni))then
 		local option = "display.large"
+		local optionLines = {}
+		local lines = {}
+
 		for line in love.filesystem.lines(optionsIni) do
+			table.insert(lines, line)
+		end
+		for i,line in ipairs(lines)do
 			local m1, m2 = string.find(line, option.."=")
-			print (m1,m2)
+			print (i, m1,m2)
 			if m2 then
 				local setting = string.sub(line, m2+1)
 				if string.find(setting, "true")then
@@ -51,7 +57,7 @@ function love.load()
 	T = love.turris
 	S = love.sounds
 	FS = love.filesystem
-	loadOptions() 
+	loadOptions()
 	FONT = G.newFont(32)
 
 	currentgamestate = 0  -- 0=Main Menu 1=gameonly 4= game+gameover message
