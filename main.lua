@@ -23,12 +23,35 @@ stateSettingsVideoShaders = require("state/settings_video_shaders")
 stateSettingsVideoDisplay = require("state/settings_video_display")
 stateSettingsAudio = require("state/settings_audio")
 
+function loadOptions()
+	local optionsIni = "options.ini"
+	if (FS.exists(optionsIni))then
+		local option = "display.large"
+		for line in love.filesystem.lines(optionsIni) do
+			local m1, m2 = string.find(line, option.."=")
+			print (m1,m2)
+			if m2 then
+				local setting = string.sub(line, m2+1)
+				if string.find(setting, "true")then
+					stateSettingsVideoDisplay.optionLarge = true --TODO: can/should we change the options in conf.lua from here?
+				else
+					stateSettingsVideoDisplay.optionLarge = false
+				end
+				stateSettingsVideoDisplay.checkOptionsLarge() --TODO: provide a function that changes the option and immediately switches
+
+			end
+		end
+	end
+
+end
+
 function love.load()
 	G = love.graphics
 	W = love.window
 	T = love.turris
 	S = love.sounds
-
+	FS = love.filesystem
+	loadOptions() 
 	FONT = G.newFont(32)
 
 	currentgamestate = 0  -- 0=Main Menu 1=gameonly 4= game+gameover message
