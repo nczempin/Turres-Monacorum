@@ -13,9 +13,11 @@ function love.turris.newTowerType(path)
 	o.scrapValue = 5 --mass
 	o.shotCost = 10 --energy per second
 	o.breakable = true
+	o.energyGeneration = 0
+	o.massGeneration = 0
 
 	o.damage = 100
-	o.range = 2
+	o.range = 4
 
 	o.getMaxHealth = function(health)
 		return o.maxHealth
@@ -31,6 +33,14 @@ function love.turris.newTowerType(path)
 
 	o.setBreakable = function(breakable)
 		o.breakable = breakable
+	end
+
+	o.setEnergyGeneration = function(energy)
+		o.energyGeneration = energy
+	end
+
+	o.setMassGeneration = function(mass)
+		o.massGeneration = mass
 	end
 
 	o.setUpperImage = function(upper)

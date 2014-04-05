@@ -39,9 +39,9 @@ end
 function love.turris.checkrightclick(clickx,clicky)
 	currentgstate = love.getgamestate()
 	if currentgamestate == 1 then --ingame
-		local clickedfieldx, clickedfieldy = getclickedfield(clickx, clicky)
-		turGame.removeTower(clickedfieldx, clickedfieldy)
-		--turMap.setState(clickedfieldx,clickedfieldy,0)
-		--turrets will be removed
+		if turGame.layerHud.guiGame.hover then
+			local clickedfieldx, clickedfieldy = getclickedfield(clickx, clicky)
+			turGame.removeTower(clickedfieldx, clickedfieldy)
+		end
 	end
 end

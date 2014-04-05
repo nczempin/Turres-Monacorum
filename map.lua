@@ -20,6 +20,13 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 			end
 		end
 	end
+	o.collision = {}
+	for i = 1, o.width do
+		o.collision[i] = {}
+		for k = 1, o.height do
+			o.collision[i][k] = 0
+		end
+	end
 	o.shadow = {}
 	o.light = {}
 	local img = love.graphics.newImage("gfx/ground01.png")
@@ -89,6 +96,12 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 			if n == 8 or n == 9 then
 				o.shadow[x][y].setShadowType("circle", 16, 0, 0)
 			end
+
+			if turGame.towerType[n].collision and n ~= 2 then
+				o.collision[y][x] = 1
+			else
+				o.collision[y][x] = 0
+			end
 		elseif n == 0 then
 			if o.shadow[x][y] then
 				o.shadow[x][y].clear()
@@ -98,6 +111,14 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 				o.light[x][y].clear()
 				o.light[x][y] = nil
 			end
+
+			o.collision[y][x] = 0
+		end
+
+		for i = 1, #turGame.enemies do
+			local e = turGame.enemies[i]
+			e.ai.syncStart()
+			e.ai.refresh()
 		end
 	end
 

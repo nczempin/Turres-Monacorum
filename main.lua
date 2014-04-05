@@ -2,6 +2,7 @@ require "libraries/gui"
 
 require "external/postshader"
 require "external/light"
+require "external/ai"
 
 require "external/anim"
 require "external/TEsound"
