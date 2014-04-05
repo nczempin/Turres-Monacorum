@@ -23,7 +23,24 @@ o.optionLarge = small
 o.reset = function()
 	o.guiMenu.flushMouse()
 end
-
+o.checkOptionsLarge = function()
+	if o.optionLarge then
+		success = love.window.setMode( 1280, 720, {fullscreen=o.optionFullscreen,vsync=false})--TODO: make vsync an option
+	else
+		success = love.window.setMode( 800, 600 ,{fullscreen=o.optionFullscreen,vsync=false})
+	end
+	if success then
+		love.postshader.refreshScreenSize()
+		lightWorld.refreshScreenSize()
+		stateMainMenu.refreshScreenSize()
+		stateSettings.refreshScreenSize()
+		stateSettingsVideo.refreshScreenSize()
+		stateSettingsVideoShaders.refreshScreenSize()
+		stateSettingsVideoDisplay.refreshScreenSize()
+		stateSettingsAudio.refreshScreenSize()
+		love.turris.reinit()
+	end
+end
 o.update = function(dt)
 	o.effectTimer = o.effectTimer + dt
 	o.chromaticEffect = o.chromaticEffect + dt
@@ -41,22 +58,7 @@ o.update = function(dt)
 		local success
 		o.optionLarge = o.chkLarge.isChecked()
 		o.optionFullscreen = o.chkFullscreen.isChecked()
-		if o.optionLarge then
-			success = love.window.setMode( 1280, 720, {fullscreen=o.optionFullscreen})
-		else
-			success = love.window.setMode( 800, 600 ,{fullscreen=o.optionFullscreen})
-		end
-		if success then
-			love.postshader.refreshScreenSize()
-			lightWorld.refreshScreenSize()
-			stateMainMenu.refreshScreenSize()
-			stateSettings.refreshScreenSize()
-			stateSettingsVideo.refreshScreenSize()
-			stateSettingsVideoShaders.refreshScreenSize()
-			stateSettingsVideoDisplay.refreshScreenSize()
-			stateSettingsAudio.refreshScreenSize()
-			love.turris.reinit()
-		end
+		o.checkOptionLarge()
 	end
 
 	if o.btnBack.isHit() or love.keyboard.isDown("escape") then
