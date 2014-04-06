@@ -90,6 +90,11 @@ function love.gui.newButton(x, y, width, height, text)
 		end
 	end
 
+	--Return true when hover
+	o.onHover = function()
+		return o.hover
+	end
+
 	--Return true when hit
 	o.isHit = function()
 		return o.hit

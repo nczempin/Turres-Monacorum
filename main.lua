@@ -23,6 +23,7 @@ stateSettingsVideo = require("state/settings_video")
 stateSettingsVideoShaders = require("state/settings_video_shaders")
 stateSettingsVideoDisplay = require("state/settings_video_display")
 stateSettingsAudio = require("state/settings_audio")
+stateWorldMenu = require("state/world_menu")
 
 function loadOptions()
 	local optionsIni = "options.ini"
@@ -122,6 +123,8 @@ function love.update(dt)
 		stateSettingsVideoDisplay.update(dt)
 	elseif (currentgamestate == 10)then
 		stateSettingsAudio.update(dt)
+	elseif (currentgamestate == 11)then
+		stateWorldMenu.update(dt)
 	end
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
 end
@@ -155,6 +158,8 @@ function love.draw()
 		stateSettingsVideoDisplay.draw()
 	elseif currentgamestate == 10 then --settings audio
 		stateSettingsAudio.draw()
+	elseif currentgamestate == 11 then --settings world
+		stateWorldMenu.draw()
 	end
 
 	if stateSettingsVideoShaders.optionScanlines then

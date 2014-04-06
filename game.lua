@@ -492,7 +492,7 @@ function love.turris.newGame()
 						local direction = math.atan2(tx - ex, ey - ty) + math.pi * 0.5
 						local length = math.sqrt(math.pow(tx - ex, 2) + math.pow((ty) - ey, 2))
 						--			if (length < 150)then
-						local timer = -math.mod(love.timer.getTime() * 2.0, 1.0)
+						local timer = -math.mod(love.timer.getTime() * 5, 1.0)
 						--local vertices = {
 						--{ 0, 0, timer, 0, 255, 0, 0,},
 						--{ o.imgLaser:getWidth(), 0, timer + 1, 0, 0, 255, 0 },

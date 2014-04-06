@@ -33,7 +33,7 @@ o.update = function(dt)
 
 	if o.btnStart.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
-		love.setgamestate(1)
+		love.setgamestate(11)
 		o.guiMenu.flushMouse()
 	end
 
