@@ -17,16 +17,17 @@ require "util"
 
 -- states
 stateMainMenu = require("state/main_menu")
+stateWorldMenu = require("state/world_menu")
 stateCredits = require("state/credits")
 stateSettings = require("state/settings")
 stateSettingsVideo = require("state/settings_video")
 stateSettingsVideoShaders = require("state/settings_video_shaders")
 stateSettingsVideoDisplay = require("state/settings_video_display")
 stateSettingsAudio = require("state/settings_audio")
-stateWorldMenu = require("state/world_menu")
 
 function loadOptions()
 	local optionsIni = "options.ini"
+
 	if (FS.exists(optionsIni))then
 		local option = "display.large"
 		local optionLines = {}
@@ -35,6 +36,7 @@ function loadOptions()
 		for line in love.filesystem.lines(optionsIni) do
 			table.insert(lines, line)
 		end
+
 		for i,line in ipairs(lines)do
 			local m1, m2 = string.find(line, option.."=")
 			print (i, m1,m2)
@@ -46,11 +48,9 @@ function loadOptions()
 					stateSettingsVideoDisplay.optionLarge = false
 				end
 				stateSettingsVideoDisplay.checkOptionsLarge() --TODO: provide a function that changes the option and immediately switches
-
 			end
 		end
 	end
-
 end
 
 function love.load()

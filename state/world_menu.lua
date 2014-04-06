@@ -58,7 +58,7 @@ end
 o.draw = function()
 	love.graphics.setBlendMode("alpha")
 	love.graphics.setColor(95 + math.sin(o.effectTimer * 0.1) * 63, 191 + math.cos(o.effectTimer) * 31, 223 + math.sin(o.effectTimer) * 31, 255)
-	love.graphics.draw(o.imgBackground)
+	love.graphics.draw(o.imgBackground, love.window.getWidth() * 0.5 - o.imgBackground:getWidth() * 0.5)
 	love.graphics.setColor(255, 127, 0)
 	love.graphics.printf("Missions", 0, 24, love.window.getWidth(), "center")
 
@@ -94,12 +94,16 @@ end
 
 o.refreshScreenSize = function()
 	local startx = love.window.getWidth() * 0.5 - 176 * 0.5
-	local starty = 162
+	local starty = 128
 
-	o.btnStart.setPosition(startx, starty + 82 * 0)
-	o.btnConfigure.setPosition(startx, starty + 82 * 1)
-	o.btnCredits.setPosition(startx, starty + 82 * 2)
-	o.btnQuit.setPosition(startx, starty + 82 * 3)
+	o.guiMenu		= love.gui.newGui()
+	o.btnStage1		= o.guiMenu.newButton(startx - 20, starty, 34, 34, "1")
+	o.btnStage2		= o.guiMenu.newButton(startx + 60, starty + 56, 34, 34, "2")
+	o.btnStage3		= o.guiMenu.newButton(startx + 112, starty + 144, 34, 34, "3")
+	o.btnBack		= o.guiMenu.newButton(love.window.getWidth() - 192, love.window.getHeight() - 48, 176, 34, "Back")
+
+	o.btnStage2.disable()
+	o.btnStage3.disable()
 end
 
 return o
