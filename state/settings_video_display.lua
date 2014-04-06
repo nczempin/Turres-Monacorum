@@ -58,7 +58,7 @@ o.update = function(dt)
 		local success
 		o.optionLarge = o.chkLarge.isChecked()
 		o.optionFullscreen = o.chkFullscreen.isChecked()
-		o.checkOptionLarge()
+		o.checkOptionsLarge()
 	end
 
 	if o.btnBack.isHit() or love.keyboard.isDown("escape") then
