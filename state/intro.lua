@@ -42,12 +42,8 @@ o.draw = function()
 		local sy = love.window.getHeight()/o.imgBackground1:getHeight()
 		love.graphics.draw(o.imgBackground1, 0,0,0,sx,sy)
 	elseif o.phase == 2 then
-		love.graphics.setBlendMode("alpha")
-		--	love.graphics.setColor(95 + math.sin(o.effectTimer * 0.1) * 63, 191 + math.cos(o.effectTimer) * 31, 223 + math.sin(o.effectTimer) * 31, 255)
 		love.graphics.setColor(127, 127, 127)
-
 		love.graphics.draw(o.imgBackground2, love.window.getWidth() * 0.5 - o.imgBackground2:getWidth() * 0.5)
-		--	love.graphics.setColor(255, 127, 0)
 
 
 		love.graphics.printf(loremIpsum, love.window.getWidth()*0.25, 160, love.window.getWidth()*0.5, "left")
