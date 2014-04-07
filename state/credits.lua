@@ -18,11 +18,11 @@ o.names = {
 }
 
 o.otherText = {
-	"TESound lib: Ensayia & Taehl",
+	"Animation lib: Bart Bes",
+	"Jumper pathfinding lib: Roland Yonaba",
 	"Light/Shadow lib: Marcus Ihde",
 	"Postshader lib: Marcus Ihde",
-	"Animation lib: Bart Bes",
-	"A* Search lib: RapidFire Studio",
+	"TESound lib: Ensayia & Taehl",
 }
 
 o.guiCredits = love.gui.newGui()
@@ -60,9 +60,9 @@ o.draw = function()
 
 	--external libraries and other
 	love.graphics.setFont(o.externalLibsFont)
-	for i = 1, #o.otherText do
-		local x = W.getWidth() - 280
-		local y = W.getHeight() - (i + 2) * o.externalLibsFontSize
+	for i = #o.otherText, 1, -1 do
+		local x = W.getWidth()*.7
+		local y = W.getHeight() - (#o.otherText -i + 2) * o.externalLibsFontSize
 		love.graphics.setColor(75, 75, 75, 255)
 		love.graphics.print(o.otherText[i], x, y)
 	end

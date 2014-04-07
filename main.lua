@@ -64,10 +64,9 @@ function love.load()
 	FONT = G.newFont(32)
 
 	currentgamestate = 12  -- TODO: make "skip intro" an option
-	love.turris.selectedtower = 1 -- 1=default tower (type 1), 2=tower type 2, ...
 	love.turris.reinit()
 
-	stateMainMenu.setVersion("v0.6.0")
+	stateMainMenu.setVersion("v0.6.1")
 end
 
 function love.getgamestate()
