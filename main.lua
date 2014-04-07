@@ -67,7 +67,7 @@ function love.load()
 	love.turris.selectedtower = 1 -- 1=default tower (type 1), 2=tower type 2, ...
 	love.turris.reinit()
 
-	stateMainMenu.setVersion("v0.5.2")
+	stateMainMenu.setVersion("v0.6.0")
 end
 
 function love.getgamestate()
