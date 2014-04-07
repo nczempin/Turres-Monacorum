@@ -17,6 +17,7 @@ require "util"
 
 -- states
 stateMainMenu = require("state/main_menu")
+stateIntro = require("state/intro")
 stateWorldMenu = require("state/world_menu")
 stateCredits = require("state/credits")
 stateSettings = require("state/settings")
@@ -62,7 +63,7 @@ function love.load()
 	loadOptions()
 	FONT = G.newFont(32)
 
-	currentgamestate = 0  -- 0=Main Menu 1=gameonly 4= game+gameover message
+	currentgamestate = 12  -- TODO: make "skip intro" an option
 	love.turris.selectedtower = 1 -- 1=default tower (type 1), 2=tower type 2, ...
 	love.turris.reinit()
 
@@ -125,6 +126,8 @@ function love.update(dt)
 		stateSettingsAudio.update(dt)
 	elseif (currentgamestate == 11)then
 		stateWorldMenu.update(dt)
+	elseif (currentgamestate == 12)then
+		stateIntro.update(dt)
 	end
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
 end
@@ -160,6 +163,8 @@ function love.draw()
 		stateSettingsAudio.draw()
 	elseif currentgamestate == 11 then --settings world
 		stateWorldMenu.draw()
+	elseif currentgamestate == 12 then --intro
+		stateIntro.draw()
 	end
 
 	if stateSettingsVideoShaders.optionScanlines then
