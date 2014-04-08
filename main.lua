@@ -96,6 +96,9 @@ function love.setgamestate(newgamestate)
 	elseif newgamestate == 1 then
 		turGame.layerGameOver.effectTimer = 0
 			love.sounds.playBackground("sounds/music/SIREN_MIX.mp3", "game")
+	elseif newgamestate == 4 then
+		turGame.layerGameOver.effectTimer = 0
+			love.sounds.playBackground("sounds/music/game_over_music.mp3", "game")
 	end
 
 	if currentgamestate == 5 then
