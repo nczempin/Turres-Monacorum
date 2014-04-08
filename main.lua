@@ -99,9 +99,7 @@ function love.setgamestate(newgamestate)
 	end
 
 	if currentgamestate == 5 then
-		love.sounds.stopSound("gameover")
 	elseif newgamestate == 5 then
-		love.sounds.stopSound("menu")
 		love.sounds.playBackground("sounds/music/highscore.mp3", "gameover")
 	end
 
