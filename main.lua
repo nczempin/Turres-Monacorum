@@ -89,15 +89,13 @@ function love.turris.reinit()
 end
 
 function love.setgamestate(newgamestate)
+	love.sounds.stopSound("all")
 	if newgamestate == 0 then
 		stateMainMenu.effectTimer = 0
 		love.sounds.playBackground("sounds/music/turres_music_1.mp3", "menu")
 	elseif newgamestate == 1 then
 		turGame.layerGameOver.effectTimer = 0
-		love.sounds.stopSound("menu")
-		love.sounds.playBackground("sounds/music/SIREN_MIX.mp3", "game")
-	else
-		love.sounds.stopSound("game")
+			love.sounds.playBackground("sounds/music/SIREN_MIX.mp3", "game")
 	end
 
 	if currentgamestate == 5 then
