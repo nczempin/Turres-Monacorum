@@ -92,10 +92,10 @@ function love.setgamestate(newgamestate)
 	love.sounds.stopSound("all")
 	if newgamestate == 0 then
 		stateMainMenu.effectTimer = 0
-		love.sounds.playBackground("sounds/music/turres_music_1.mp3", "menu")
+		love.sounds.playBackground("sounds/music/Chiptune_2step_mp3.mp3", "menu")
 	elseif newgamestate == 1 then
 		turGame.layerGameOver.effectTimer = 0
-			love.sounds.playBackground("sounds/music/SIREN_MIX.mp3", "game")
+		love.sounds.playBackground("sounds/music/turres_music_1.mp3", "menu")
 	elseif newgamestate == 4 then
 		turGame.layerGameOver.effectTimer = 0
 			love.sounds.playBackground("sounds/music/game_over_music.mp3", "game")
