@@ -10,6 +10,7 @@ require "external/TEsound"
 require "world"
 require "game"
 require "map"
+require "spawn"
 require "towerType"
 require "sound"
 
@@ -62,6 +63,7 @@ function love.load()
 	FS = love.filesystem
 	loadOptions()
 	FONT = G.newFont(32)
+	FONT_SMALL = G.newFont(24)
 
 	currentgamestate = 12  -- TODO: make "skip intro" an option
 	love.turris.reinit()

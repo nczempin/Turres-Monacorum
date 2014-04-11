@@ -65,10 +65,11 @@ o.draw = function()
 		love.graphics.setColor(63, 63, 63)
 		love.graphics.printf("Created with:", 0, love.window.getHeight() * 0.5 - o.imgBackground1:getHeight() - 8, love.window.getWidth(), "center")
 	elseif o.phase == 2 then
-		love.graphics.setColor(63, 63, 63)
+		love.graphics.setBlendMode("alpha")
+		love.graphics.setColor(95 + math.sin(o.effectTimer * 0.1) * 63, 191 + math.cos(o.effectTimer) * 31, 223 + math.sin(o.effectTimer) * 31, 127)
 		love.graphics.draw(o.imgBackground2, love.window.getWidth() * 0.5 - o.imgBackground2:getWidth() * 0.5)
 
-		love.graphics.setColor(127, 127, 127)
+		love.graphics.setColor(95 + math.sin(o.effectTimer * 0.1) * 63, 191 + math.cos(o.effectTimer) * 31, 223 + math.sin(o.effectTimer) * 31, 255)
 		love.graphics.setFont(o.fontTitle)
 		love.graphics.printf(o.quote, love.window.getWidth() * 0.5 - 128, love.window.getHeight() * 0.5 - 16, love.window.getWidth() * 0.5, "left")
 		love.graphics.printf(o.source, love.window.getWidth() * 0.5 + 64, love.window.getHeight() * 0.5 + 16, love.window.getWidth() * 0.5, "left")

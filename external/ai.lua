@@ -61,7 +61,7 @@ love.ai.newAI = function()
 			end
 
 			if o.direction == 0 and (o.currX ~= o.endX or o.currY ~= o.endY) and o.map[o.endY][o.endX] == 0 then
-				if o.path and o.step <= #o.path then
+				if o.path and o.step < #o.path then
 					o.step = o.step + 1
 
 					o.nextX = o.path[o.step].x

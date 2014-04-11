@@ -55,12 +55,19 @@ function love.turris.newGame()
 		o.enemyTypes = { et1, et2 }
 		o.enemyCount = 1
 		o.enemies[o.enemyCount] = love.turris.newEnemy(o.enemyTypes[2], o.map, 1, o.baseY, o.baseX, o.baseY)
-		o.enemyCount = o.enemyCount + 1
-		o.enemies[o.enemyCount] = love.turris.newEnemy(o.enemyTypes[1], o.map, o.baseX, 1, o.baseX, o.baseY)
-		o.enemyCount = o.enemyCount + 1
-		o.enemies[o.enemyCount] = love.turris.newEnemy(o.enemyTypes[1], o.map, o.map.width, o.baseY, o.baseX, o.baseY)
-		o.enemyCount = o.enemyCount + 1
-		o.enemies[o.enemyCount] = love.turris.newEnemy(o.enemyTypes[2], o.map, o.baseX, o.map.height, o.baseX, o.baseY)
+
+		o.spawn1 = love.turris.newSpawn(o.map, o.baseX, 1, o.baseX, o.baseY)
+		o.spawn1.addEnemyType(et1, 3, 15) -- type, delay, count
+
+		o.spawn2 = love.turris.newSpawn(o.map, 1, o.baseY, o.baseX, o.baseY)
+		o.spawn2.addEnemyType(et2, 7, 5) -- type, delay, count
+
+		o.spawn3 = love.turris.newSpawn(o.map, o.map.width, o.baseY, o.baseX, o.baseY)
+		o.spawn3.addEnemyType(et1, 3, 15) -- type, delay, count
+		o.spawn3.addEnemyType(et2, 7, 5) -- type, delay, count
+
+		o.spawn4 = love.turris.newSpawn(o.map, o.baseX, o.map.height, o.baseX, o.baseY)
+		o.spawn4.addEnemyType(et2, 7, 5) -- type, delay, count
 
 		o.newGround("gfx/ground_diffuse001.png")
 		laserTower = o.newTowerType("gfx/tower00")
@@ -277,17 +284,10 @@ function love.turris.newGame()
 
 		o.updateCamera(dt)
 
-		if o.spawnTime >= 5 then
-			o.enemies[o.enemyCount] = love.turris.newEnemy(o.enemyTypes[2], o.map, 1, o.baseY, o.baseX, o.baseY)
-			o.enemyCount = o.enemyCount + 1
-			o.enemies[o.enemyCount] = love.turris.newEnemy(o.enemyTypes[1], o.map, o.baseX, 1, o.baseX, o.baseY)
-			o.enemyCount = o.enemyCount + 1
-			o.enemies[o.enemyCount] = love.turris.newEnemy(o.enemyTypes[1], o.map, o.map.width, o.baseY, o.baseX, o.baseY)
-			o.enemyCount = o.enemyCount + 1
-			o.enemies[o.enemyCount] = love.turris.newEnemy(o.enemyTypes[2], o.map, o.baseX, o.map.height, o.baseX, o.baseY)
-
-			o.spawnTime = 0
-		end
+		o.spawn1.update(dt)
+		o.spawn2.update(dt)
+		o.spawn3.update(dt)
+		o.spawn4.update(dt)
 
 		-- update shadows
 		if o.offsetChange then
@@ -445,12 +445,20 @@ function love.turris.newGame()
 			o.drawMapCursor()
 			o.drawPaths()
 			o.drawShots()
+			o.spawn1.draw()
+			o.spawn2.draw()
+			o.spawn3.draw()
+			o.spawn4.draw()
 			o.layerHud.draw()
 			lightWorld.setBuffer("render")
 		else
 			o.drawPaths()
 			o.drawMapCursor()
 			o.drawShots()
+			o.spawn1.draw()
+			o.spawn2.draw()
+			o.spawn3.draw()
+			o.spawn4.draw()
 		end
 
 		o.drawEnemies()
