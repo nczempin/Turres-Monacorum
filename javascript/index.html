@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html>
+<head>
+<script type="text/javascript" src="main.js"></script>
+</head>
 <body>
 
 	<canvas id="myCanvas" width="800" height="600"
@@ -7,15 +10,6 @@
 Your browser does not support the HTML5 canvas tag.</canvas>
 
 	<script>
-		window.requestAnimFrame = (function(callback) {
-			return window.requestAnimationFrame
-					|| window.webkitRequestAnimationFrame
-					|| window.mozRequestAnimationFrame
-					|| window.oRequestAnimationFrame
-					|| window.msRequestAnimationFrame || function(callback) {
-						window.setTimeout(callback, 1000 / 60);
-					};
-		})();
 		var y = 0;
 		var dir = 1;
 		var imgLogo = new Image();
@@ -27,29 +21,6 @@ Your browser does not support the HTML5 canvas tag.</canvas>
 		var imgMiddleground = new Image();
 		imgMiddleground.src = "gfx/menu/menu_middleground.png";
 		animate();
-		//console.log(logoHeight);
-		function animate() {
-			var canvas = document.getElementById('myCanvas');
-			var context = canvas.getContext('2d');
-
-			// update
-			y += dir;
-			if (y > 600 - imgLogo.height || y < 0) {
-				dir *= -1;
-			}
-			// clear
-			//context.clearRect(0, 0, canvas.width, canvas.height);
-
-			// draw stuff
-			context.drawImage(imgBackground, 0, 0);
-			context.drawImage(imgLogo, 0, y);
-			context.drawImage(imgMiddleground, 0, 0);
-			// request new frame
-			requestAnimFrame(function() {
-				animate();
-			});
-		}
 	</script>
-
 </body>
 </html>
