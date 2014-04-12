@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+	<canvas id="myCanvas" width="800" height="600"
+		style="border: 1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+	<script>
+		var c = document.getElementById("myCanvas");
+		var ctx = c.getContext("2d");
+		var imgLogo = new Image();
+		imgLogo.src = 'gfx/menu/logo.png';
+		var imgBackground = new Image();
+		imgBackground.src = "gfx/menu/menu_background.png";
+
+		var imgMiddleground = new Image();
+		imgMiddleground.src = "gfx/menu/menu_middleground.png";
+		window.onload = function() {
+			var w = imgLogo.width;
+			var h = imgLogo.height;
+			ctx.drawImage(imgBackground, 0, 0);
+			ctx.drawImage(imgLogo, 0, 0, w, h);
+			ctx.drawImage(imgMiddleground, 0, 0);
+// 			console.log(myCanvas.width);
+// 			console.log(imgLogo.width);
+		}
+	</script>
+
+</body>
+</html>
