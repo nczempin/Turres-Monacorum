@@ -1,4 +1,4 @@
-function animate() {
+animate = function() {
 	var canvas = document.getElementById('myCanvas');
 	var context = canvas.getContext('2d');
 
@@ -26,4 +26,11 @@ window.requestAnimFrame = (function(callback) {
 				window.setTimeout(callback, 1000 / 60);
 			};
 })();
-
+var y = 0;
+var dir = 1;
+var imgLogo = new Image();
+imgLogo.src = 'gfx/menu/logo.png';
+var imgMiddleground = new Image();
+imgMiddleground.src = "gfx/menu/menu_middleground.png";
+var imgBackground = new Image();
+imgBackground.src = "gfx/menu/menu_background.png";
