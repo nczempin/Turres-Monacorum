@@ -34,3 +34,11 @@ var imgMiddleground = new Image();
 imgMiddleground.src = "gfx/menu/menu_middleground.png";
 var imgBackground = new Image();
 imgBackground.src = "gfx/menu/menu_background.png";
+var music = new Audio("sounds/music/Chiptune_2step_mp3.mp3");
+
+main = function() {
+	animate();
+	music.loop = true;
+	music.volume = .25;
+	music.load();
+}
