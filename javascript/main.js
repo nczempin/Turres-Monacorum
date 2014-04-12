@@ -12,8 +12,8 @@ animate = function() {
 
 	// draw stuff
 	context.drawImage(imgBackground, 0, 0);
-	context.drawImage(imgLogo, 0, y);
 	context.drawImage(imgMiddleground, 0, 0);
+	context.drawImage(imgLogo, 0, y);
 	// request new frame
 	requestAnimFrame(function() {
 		animate();
