@@ -39,7 +39,6 @@ o.checkOptionsLarge = function()
 		stateSettingsVideoShaders.refreshScreenSize()
 		stateSettingsVideoDisplay.refreshScreenSize()
 		stateSettingsAudio.refreshScreenSize()
-		love.turris.reinit()
 	end
 end
 o.update = function(dt)
@@ -56,7 +55,6 @@ o.update = function(dt)
 
 	if o.chkLarge.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
-		local success
 		o.optionLarge = o.chkLarge.isChecked()
 		o.optionFullscreen = o.chkFullscreen.isChecked()
 		o.checkOptionsLarge()

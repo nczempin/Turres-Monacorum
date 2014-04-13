@@ -21,7 +21,6 @@ o.btnStage2		= o.guiMenu.newButton(startx + 60, starty + 56, 34, 34, "2")
 o.btnStage3		= o.guiMenu.newButton(startx + 112, starty + 144, 34, 34, "3")
 o.btnBack		= o.guiMenu.newButton(love.window.getWidth() - 192, love.window.getHeight() - 48, 176, 34, "Back")
 
---o.btnStage2.disable()
 o.btnStage3.disable()
 
 o.reset = function()
@@ -108,7 +107,6 @@ o.refreshScreenSize = function()
 	o.btnStage3		= o.guiMenu.newButton(startx + 112, starty + 144, 34, 34, "3")
 	o.btnBack		= o.guiMenu.newButton(love.window.getWidth() - 192, love.window.getHeight() - 48, 176, 34, "Back")
 
-	o.btnStage2.disable()
 	o.btnStage3.disable()
 end
 

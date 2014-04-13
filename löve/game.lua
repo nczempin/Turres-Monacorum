@@ -83,6 +83,13 @@ function love.turris.newGame()
 
 		o.player.setMass(9999) -- enough to place the towers
 
+		o.spawn = {}
+		for i = 1, #o.map.spawn do
+			o.spawn[#o.spawn + 1] = love.turris.newSpawn(o.map, o.map.spawn[i].x, o.map.spawn[i].y, o.baseX, o.baseY)
+			o.spawn[#o.spawn].addEnemyType(enemyType[o.map.spawn[i].enemyType], o.map.spawn[i].delay, o.map.spawn[i].count)
+			o.addTower(o.map.spawn[i].x, o.map.spawn[i].y, 5 + o.map.spawn[i].enemyType)
+		end
+
 		for i = 1, o.map.width do
 			for k = 1, o.map.height do
 				if o.map.getState(i, k) == 0 then
@@ -95,13 +102,6 @@ function love.turris.newGame()
 					end
 				end
 			end
-		end
-
-		o.spawn = {}
-		for i = 1, #o.map.spawn do
-			o.spawn[#o.spawn + 1] = love.turris.newSpawn(o.map, o.map.spawn[i].x, o.map.spawn[i].y, o.baseX, o.baseY)
-			o.spawn[#o.spawn].addEnemyType(enemyType[o.map.spawn[i].enemyType], o.map.spawn[i].delay, o.map.spawn[i].count)
-			o.addTower(o.map.spawn[i].x, o.map.spawn[i].y, 5 + o.map.spawn[i].enemyType)
 		end
 
 		o.player.setMass(20)
