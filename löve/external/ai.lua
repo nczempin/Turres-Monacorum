@@ -8,6 +8,7 @@ love.ai.newAI = function()
 
 	o.map = nil
 	o.path = nil
+	o.length = 0
 	o.newPath = true
 	o.step = 0
 	o.walkable = 0
@@ -24,16 +25,35 @@ love.ai.newAI = function()
 
 	o.update = function(dt)
 		if o.newPath then
-			local path = LOVE_AI_PATH(LOVE_AI_GRID(o.map), 'JPS', o.walkable)
-			path:setMode('ORTHOGONAL')
+			local myFinder = LOVE_AI_PATH(LOVE_AI_GRID(o.map), 'JPS', o.walkable)
+			myFinder:setMode('ORTHOGONAL')
 			local time = love.timer.getTime()
-			o.path, o.length = path:getPath(o.startX, o.startY, o.endX, o.endY)
+			o.path, o.length = myFinder:getPath(o.startY, o.startX, o.endY, o.endX)
 			print(love.timer.getTime() - time)
 			o.step = 1
 			o.newPath = false
 		end
 
 		if o.speed > 0 then
+			if o.direction == 0 and (o.currX ~= o.endX or o.currY ~= o.endY) and o.map[o.endX][o.endY] == 0 then
+				if o.path and o.step <= #o.path then
+					o.step = o.step + 1
+
+					o.nextX = o.path[o.step].y
+					o.nextY = o.path[o.step].x
+
+					if o.currX > o.nextX then
+						o.direction = 1
+					elseif o.currX < o.nextX then
+						o.direction = 2
+					elseif o.currY > o.nextY then
+						o.direction = 3
+					elseif o.currY < o.nextY then
+						o.direction = 4
+					end
+				end
+			end
+
 			if o.direction == 1 then
 				o.currX = o.currX - dt * o.speed
 				if o.currX < o.nextX then
@@ -57,25 +77,6 @@ love.ai.newAI = function()
 				if o.currY > o.nextY then
 					o.currY = o.nextY
 					o.direction = 0
-				end
-			end
-
-			if o.direction == 0 and (o.currX ~= o.endX or o.currY ~= o.endY) and o.map[o.endY][o.endX] == 0 then
-				if o.path and o.step < #o.path then
-					o.step = o.step + 1
-
-					o.nextX = o.path[o.step].x
-					o.nextY = o.path[o.step].y
-
-					if o.currX > o.nextX then
-						o.direction = 1
-					elseif o.currX < o.nextX then
-						o.direction = 2
-					elseif o.currY > o.nextY then
-						o.direction = 3
-					elseif o.currY < o.nextY then
-						o.direction = 4
-					end
 				end
 			end
 		end
@@ -102,19 +103,19 @@ love.ai.newAI = function()
 	end
 
 	o.getPathX = function(n)
-		return o.path[n].x
-	end
-
-	o.getPathY = function(n)
 		return o.path[n].y
 	end
 
+	o.getPathY = function(n)
+		return o.path[n].x
+	end
+
 	o.getMapWidth = function()
-		return #o.map[1]
+		return #o.map
 	end
 
 	o.getMapHeight = function()
-		return #o.map
+		return #o.map[1]
 	end
 
 	o.getX = function()
@@ -128,9 +129,9 @@ love.ai.newAI = function()
 	o.newMap = function(width, height)
 		o.map = {}
 
-		for i = 1, height do
+		for i = 1, width do
 			o.map[i] = {}
-			for k = 1, width do
+			for k = 1, height do
 				o.map[i][k] = 0
 			end
 		end
@@ -143,16 +144,16 @@ love.ai.newAI = function()
 	end
 
 	o.getMapData = function(x, y)
-		if x >= 1 and x <= #o.map[1] and y >= 1 and y <= #o.map then
-			return o.map[y][x]
+		if o.map and x >= 1 and x <= #o.map and y >= 1 and y <= #o.map[1] then
+			return o.map[x][y]
 		else
 			return 1
 		end
 	end
 
 	o.setMapData = function(x, y, s)
-		if x >= 1 and x <= #o.map[1] and y >= 1 and y <= #o.map then
-			o.map[y][x] = s
+		if o.map and x >= 1 and x <= #o.map and y >= 1 and y <= #o.map[1] then
+			o.map[x][y] = s
 			o.newPath = true
 		end
 	end
@@ -162,7 +163,7 @@ love.ai.newAI = function()
 	end
 
 	o.setStartPosition = function(x, y)
-		if x >= 1 and x <= #o.map[1] and y >= 1 and y <= #o.map then
+		if o.map and x >= 1 and x <= #o.map and y >= 1 and y <= #o.map[1] then
 			o.startX = x
 			o.startY = y
 			o.currX = x
@@ -172,7 +173,7 @@ love.ai.newAI = function()
 	end
 
 	o.setEndPosition = function(x, y)
-		if x >= 1 and x <= #o.map[1] and y >= 1 and y <= #o.map then
+		if o.map and x >= 1 and x <= #o.map and y >= 1 and y <= #o.map[1] then
 			o.endX = x
 			o.endY = y
 			o.newPath = true
@@ -186,7 +187,7 @@ love.ai.newAI = function()
 	end
 
 	o.setPath = function(x, y, x2, y2)
-		if x >= 1 and x <= #o.map[1] and y >= 1 and y <= #o.map and x2 >= 1 and x2 <= #o.map[1] and y2 >= 1 and y2 <= #o.map then
+		if x >= 1 and x <= #o.map and y >= 1 and y <= #o.map[1] and x2 >= 1 and x2 <= #o.map and y2 >= 1 and y2 <= #o.map[1] then
 			o.startX = x
 			o.startY = y
 			o.endX = x2

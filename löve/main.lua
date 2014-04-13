@@ -66,7 +66,6 @@ function love.load()
 	FONT_SMALL = G.newFont(24)
 
 	currentgamestate = 12  -- TODO: make "skip intro" an option
-	love.turris.reinit()
 
 	stateMainMenu.setVersion("v0.6.1")
 end
@@ -75,7 +74,7 @@ function love.getgamestate()
 	return currentgamestate
 end
 
-function love.turris.reinit()
+function love.turris.reinit(map)
 	-- create game world
 	lightWorld.clearBodys()
 	lightWorld.clearLights()
@@ -86,21 +85,22 @@ function love.turris.reinit()
 
 	love.turris.selectedtower = 1
 	turGame = love.turris.newGame()
-	turMap = love.turris.newMap(20, 20, 64, 48)
+	turMap = love.turris.newMap(map)
 	turGame.init()
 end
 
-function love.setgamestate(newgamestate)
+function love.setgamestate(newgamestate, option)
 	love.sounds.stopSound("all")
 	if newgamestate == 0 then
 		stateMainMenu.effectTimer = 0
 		love.sounds.playBackground("sounds/music/Chiptune_2step_mp3.mp3", "menu")
 	elseif newgamestate == 1 then
+		love.turris.reinit(option)
 		turGame.layerGameOver.effectTimer = 0
 		love.sounds.playBackground("sounds/music/turres_music_1.mp3", "menu")
-	elseif newgamestate == 4 then
+	elseif newgamestate == 4 or newgamestate == 13 then
 		turGame.layerGameOver.effectTimer = 0
-			love.sounds.playBackground("sounds/music/game_over_music.mp3", "game")
+		love.sounds.playBackground("sounds/music/game_over_music.mp3", "game")
 	end
 
 	if currentgamestate == 5 then
@@ -134,6 +134,8 @@ function love.update(dt)
 		stateWorldMenu.update(dt)
 	elseif (currentgamestate == 12)then
 		stateIntro.update(dt)
+	elseif (currentgamestate == 13)then
+		turGame.layerWin.update(dt)
 	end
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
 end
@@ -171,6 +173,9 @@ function love.draw()
 		stateWorldMenu.draw()
 	elseif currentgamestate == 12 then --intro
 		stateIntro.draw()
+	elseif currentgamestate == 13 then --intro
+		turGame.draw()
+		turGame.layerWin.draw()
 	end
 
 	if stateSettingsVideoShaders.optionScanlines then
@@ -186,7 +191,6 @@ end
 
 function love.turris.gameoverstate()
 	love.setgamestate(0)
-	love.turris.reinit()
 	stateMainMenu.reset()
 end
 

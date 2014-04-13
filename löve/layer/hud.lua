@@ -39,7 +39,7 @@ function love.turris.newHudLayer(player)
 	o.btnTower3.setColorHover(0, 255, 127, 255)
 
 	-- set font
-	o.fontTitle = G.newFont("arialbi.ttf" ,24)
+	o.fontTitle = G.newFont(24)
 	o.fontDescription = G.newFont(16)
 
 	o.player = player
@@ -57,23 +57,22 @@ function love.turris.newHudLayer(player)
 
 		if love.keyboard.isDown("escape") then
 			love.setgamestate(0)
-			love.turris.reinit()
 		elseif love.keyboard.isDown("1") then
 			love.turris.selectedtower = 1
 			o.btnTower1.setChecked(true)
+		--elseif love.keyboard.isDown("2") then
+			--love.turris.selectedtower = 2 --2 would be the main base which should not be available for manual building
+			--o.guiGame.flushRadioButtons()
 		elseif love.keyboard.isDown("2") then
-			love.turris.selectedtower = 2 --2 would be the main base which should not be available for manual building
-			o.guiGame.flushRadioButtons()
-		elseif love.keyboard.isDown("3") then
 			love.turris.selectedtower = 3
 			o.btnTower2.setChecked(true)
-		elseif love.keyboard.isDown("4") then
+		elseif love.keyboard.isDown("3") then
 			love.turris.selectedtower = 4
 			o.guiGame.flushRadioButtons()
 			o.btnTower3.setChecked(true)
-		elseif love.keyboard.isDown("5") then
-			love.turris.selectedtower = 5
-			o.guiGame.flushRadioButtons()
+		--elseif love.keyboard.isDown("5") then
+			--love.turris.selectedtower = 5
+			--o.guiGame.flushRadioButtons()
 		end
 	end
 
@@ -95,6 +94,7 @@ function love.turris.newHudLayer(player)
 			G.draw(o.iconEnergy, W.getWidth() - 40 + 2, 16 + 2)
 		end
 
+		G.setFont(FONT)
 		G.setLineWidth(2)
 		G.setColor(0, 127, 255)
 		G.rectangle("line", W.getWidth() - 352, 16, 160, 36)

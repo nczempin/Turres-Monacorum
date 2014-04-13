@@ -7,20 +7,20 @@ require "graphics"
 function love.turris.newGame()
 	local o = {}
 	o.map = {}
-	o.ground = {}
 	o.towerType = {}
 	o.towers = {} -- circular list
+	o.spawn = {}
 	o.towers.maxamount = 0
 	o.towerCount = 0
 	o.towers.next = 1
 	o.enemies = {}
-	o.enemyCount = 1
+	o.enemyCount = 0
 	o.enemyTypes = {}
 	o.dayTime = 90
 	o.effectTimer = 99
 	o.offsetX = 0.0
 	o.offsetY = 0.0
-	o.offsetChange = false
+	o.offsetChange = true
 	o.timer = 0
 	o.holdOffset = false
 	o.holdOffsetX = 0
@@ -31,12 +31,12 @@ function love.turris.newGame()
 	o.init = function()
 		o.player = love.turris.newPlayer()
 		o.setMap(turMap.getMap())
-		o.baseX = math.floor(o.map.width / 2 + 0.5)
-		o.baseY = math.floor(o.map.height / 2 + 0.5)
-		o.towers.maxamount = o.map.width*o.map.height
+		o.baseX = map.baseX
+		o.baseY = map.baseX
+		o.towers.maxamount = o.map.width * o.map.height
 
-		for x = 1,o.map.height do
-			for y = 1,o.map.width do
+		for x = 1, o.map.height do
+			for y = 1, o.map.width do
 				o.towers[x*o.map.height+y]=nil
 			end
 		end
@@ -49,27 +49,12 @@ function love.turris.newGame()
 		o.creepAnim2 = newAnimation(o.creepImg2, o.creepImg2:getWidth(), o.creepImg2:getHeight() / 8.0, 0, 0)
 		local img -- TODO
 
-		local et1 = love.turris.newEnemyType(o.creepAnim1, 100, 1.0)
-		local et2 = love.turris.newEnemyType(o.creepAnim2, 2000, 0.5)
+		local enemyType = {}
+		enemyType[1] = love.turris.newEnemyType(o.creepAnim1, 100, 1.0)
+		enemyType[2] = love.turris.newEnemyType(o.creepAnim2, 2000, 0.5)
 
-		o.enemyTypes = { et1, et2 }
-		o.enemyCount = 1
-		o.enemies[o.enemyCount] = love.turris.newEnemy(o.enemyTypes[2], o.map, 1, o.baseY, o.baseX, o.baseY)
+		o.enemyTypes = { enemyType[1], enemyType[2] }
 
-		o.spawn1 = love.turris.newSpawn(o.map, o.baseX, 1, o.baseX, o.baseY)
-		o.spawn1.addEnemyType(et1, 3, 15) -- type, delay, count
-
-		o.spawn2 = love.turris.newSpawn(o.map, 1, o.baseY, o.baseX, o.baseY)
-		o.spawn2.addEnemyType(et2, 7, 5) -- type, delay, count
-
-		o.spawn3 = love.turris.newSpawn(o.map, o.map.width, o.baseY, o.baseX, o.baseY)
-		o.spawn3.addEnemyType(et1, 3, 15) -- type, delay, count
-		o.spawn3.addEnemyType(et2, 7, 5) -- type, delay, count
-
-		o.spawn4 = love.turris.newSpawn(o.map, o.baseX, o.map.height, o.baseX, o.baseY)
-		o.spawn4.addEnemyType(et2, 7, 5) -- type, delay, count
-
-		o.newGround("gfx/ground_diffuse001.png")
 		laserTower = o.newTowerType("gfx/tower00")
 		generatorTower = o.newTowerType("gfx/tower01")
 		energyTower = o.newTowerType("gfx/tower02")
@@ -90,8 +75,8 @@ function love.turris.newGame()
 		spawnHole.setBreakable(false)
 		spawnEggs.setBreakable(false)
 
-		energyTower.setEnergyGeneration(10)
-		massTower.setMassGeneration(1)
+		energyTower.setEnergyGeneration(20)
+		massTower.setMassGeneration(2)
 
 		print("adding main base", o.baseX, o.baseY)
 		o.addTower(o.baseX, o.baseY, 2) --main base
@@ -112,13 +97,12 @@ function love.turris.newGame()
 			end
 		end
 
-		o.addTower(11, 2, 4)
-		o.addTower(5, 3, 3)
-		o.addTower(7, 5, 5)
-		o.addTower(1, o.baseY, 6)
-		o.addTower(o.baseX, 1, 7)
-		o.addTower(o.map.width, o.baseY, 7)
-		o.addTower(o.baseX, o.map.height, 6)
+		o.spawn = {}
+		for i = 1, #o.map.spawn do
+			o.spawn[#o.spawn + 1] = love.turris.newSpawn(o.map, o.map.spawn[i].x, o.map.spawn[i].y, o.baseX, o.baseY)
+			o.spawn[#o.spawn].addEnemyType(enemyType[o.map.spawn[i].enemyType], o.map.spawn[i].delay, o.map.spawn[i].count)
+			o.addTower(o.map.spawn[i].x, o.map.spawn[i].y, 5 + o.map.spawn[i].enemyType)
+		end
 
 		o.player.setMass(20)
 
@@ -147,6 +131,7 @@ function love.turris.newGame()
 
 		o.layerHud = love.turris.newHudLayer(o.player)
 		o.layerGameOver = require("layer/gameover")
+		o.layerWin = require("layer/win")
 	end
 
 	-- gameplay
@@ -154,6 +139,7 @@ function love.turris.newGame()
 	o.addTower = function(x, y, id)
 		if x >= 1 and x <= o.map.width and y >= 1 and y <= o.map.height and id and o.towerCount < o.towers.maxamount then
 			local state = o.map.getState(x, y)
+
 			if state and state == 0 then
 				--print ("x, y:",x,y)
 				local tt = o.towerType[id]
@@ -258,16 +244,24 @@ function love.turris.newGame()
 			end
 		end
 
-		if o.offsetX > 0 then
-			o.offsetX = 0
-		elseif o.offsetX < W.getWidth() - turMap.getWidth() * turMap.getTileWidth() then
-			o.offsetX = W.getWidth() - turMap.getWidth() * turMap.getTileWidth()
+		if turMap.getWidth() * turMap.getTileWidth() > W.getWidth() then
+			if o.offsetX > 0 then
+				o.offsetX = 0
+			elseif o.offsetX < W.getWidth() - turMap.getWidth() * turMap.getTileWidth() then
+				o.offsetX = W.getWidth() - turMap.getWidth() * turMap.getTileWidth()
+			end
+		else
+			o.offsetX = W.getWidth() * 0.5 - turMap.getWidth() * turMap.getTileWidth() * 0.5
 		end
 
-		if o.offsetY > 0 then
-			o.offsetY = 0
-		elseif o.offsetY < W.getHeight() - turMap.getHeight() * turMap.getTileHeight() then
-			o.offsetY = W.getHeight() - turMap.getHeight() * turMap.getTileHeight()
+		if turMap.getHeight() * turMap.getTileHeight() > W.getHeight() then
+			if o.offsetY > 0 then
+				o.offsetY = 0
+			elseif o.offsetY < W.getHeight() - turMap.getHeight() * turMap.getTileHeight() then
+				o.offsetY = W.getHeight() - turMap.getHeight() * turMap.getTileHeight()
+			end
+		else
+			o.offsetY = W.getHeight() * 0.5 - turMap.getHeight() * turMap.getTileHeight() * 0.5
 		end
 
 		holdOffsetX = love.mouse.getX()
@@ -280,14 +274,33 @@ function love.turris.newGame()
 		o.effectTimer = o.effectTimer + dt
 		o.dayTime = o.dayTime + dt * 0.1
 		o.spawnTime = o.spawnTime + dt
-		T.updateEnemies(o,dt)
+		T.updateEnemies(o, dt)
+
+		local win = true
+
+		for i = 1, #o.enemies do
+			if not o.enemies[i].dead then
+				win = false
+			end
+		end
+
+		for i = 1, #o.spawn do
+			if o.spawn[i].count > 0 then
+				win = false
+			end
+		end
+
+		if win then
+			love.setgamestate(13)
+		elseif o.map.data[o.baseX][o.baseY].health <= 0 then --TODO: Multiple bases? Or I guess this is the main base; we don't care if the other generators die
+			love.setgamestate(4)
+		end
 
 		o.updateCamera(dt)
 
-		o.spawn1.update(dt)
-		o.spawn2.update(dt)
-		o.spawn3.update(dt)
-		o.spawn4.update(dt)
+		for i = 1, #o.spawn do
+			o.spawn[i].update(dt)
+		end
 
 		-- update shadows
 		if o.offsetChange then
@@ -379,7 +392,7 @@ function love.turris.newGame()
 
 		if o.map then
 			G.setColor(255, 255, 255)
-			G.draw(o.mshGround, o.offsetX, o.offsetY)
+			o.map.drawGround(o.offsetX, o.offsetY)
 			lightWorld.drawShadow()
 			for i = 0, o.map.width - 1 do
 				for k = 0, o.map.height - 1 do
@@ -445,20 +458,18 @@ function love.turris.newGame()
 			o.drawMapCursor()
 			o.drawPaths()
 			o.drawShots()
-			o.spawn1.draw()
-			o.spawn2.draw()
-			o.spawn3.draw()
-			o.spawn4.draw()
+			for i = 1, #o.spawn do
+				o.spawn[i].draw()
+			end
 			o.layerHud.draw()
 			lightWorld.setBuffer("render")
 		else
 			o.drawPaths()
 			o.drawMapCursor()
 			o.drawShots()
-			o.spawn1.draw()
-			o.spawn2.draw()
-			o.spawn3.draw()
-			o.spawn4.draw()
+			for i = 1, #o.spawn do
+				o.spawn[i].draw()
+			end
 		end
 
 		o.drawEnemies()
@@ -561,13 +572,15 @@ function love.turris.newGame()
 
 	o.drawPaths = function()
 		G.setBlendMode("alpha")
-		for i = 1, o.enemyCount do
-			local e = o.enemies[i]
+		if o.enemyCount > 0 then
+			for i = 1, o.enemyCount do
+				local e = o.enemies[i]
 
-			if not e.dead then
-				if e.ai.path then
-					for k = math.max(1, e.ai.getPathStep() - 1), e.ai.getPathCount() - 1 do
-						o.drawPathSegment({e.ai.getPathX(k), e.ai.getPathY(k)}, {e.ai.getPathX(k + 1), e.ai.getPathY(k + 1)})
+				if not e.dead then
+					if e.ai.path then
+						for k = math.max(1, e.ai.getPathStep() - 1), e.ai.getPathCount() - 1 do
+							o.drawPathSegment({e.ai.getPathX(k), e.ai.getPathY(k)}, {e.ai.getPathX(k + 1), e.ai.getPathY(k + 1)})
+						end
 					end
 				end
 			end
@@ -731,22 +744,6 @@ function love.turris.newGame()
 				end
 			end
 		end
-	end
-
-	o.newGround = function(img)
-		img = G.newImage(img)
-		img:setWrap("repeat", "repeat")
-		o.ground[#o.ground + 1] = img
-
-		local vertices = {
-			{ 0, 0, 0, 0, 50, 80, 120 },
-			{ o.map.getWidth() * o.map.getTileWidth(), 0, (o.map.getWidth() * o.map.getTileWidth()) / img:getWidth(), 0, 50, 80, 120 },
-			{ o.map.getWidth() * o.map.getTileWidth(), o.map.getHeight() * o.map.getTileHeight(), (o.map.getWidth() * o.map.getTileWidth()) / img:getWidth(), (o.map.getHeight() * o.map.getTileHeight()) / img:getHeight(), 100, 80, 120 },
-			{ 0, o.map.getHeight() * o.map.getTileHeight(), 0, (o.map.getHeight() * o.map.getTileHeight()) / img:getHeight(), 100, 80, 120 },
-		}
-
-		o.mshGround = love.graphics.newMesh(vertices, img, "fan")
-		return o.ground[#o.ground]
 	end
 
 	o.newTowerType = function(img)

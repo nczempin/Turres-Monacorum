@@ -12,8 +12,8 @@ o.effectTimer = 0
 o.chromaticEffect = 0
 o.selDescription = nil
 o.description = {}
-o.description[1] = {"Stage 1", "Defeat 4 Wave lines", "with 2 different enemies."}
-o.description[2] = {"Stage 2", "Test1", "Test2"}
+o.description[1] = {"Stage 1", "Defeat 3 Wave lines", "with 2 different enemies.", "Mapsize: Small"}
+o.description[2] = {"Stage 2", "Defeat 3 Wave lines", "with 2 different enemies.", "Mapsize: Medium"}
 
 o.guiMenu		= love.gui.newGui()
 o.btnStage1		= o.guiMenu.newButton(startx - 20, starty, 34, 34, "1")
@@ -21,7 +21,7 @@ o.btnStage2		= o.guiMenu.newButton(startx + 60, starty + 56, 34, 34, "2")
 o.btnStage3		= o.guiMenu.newButton(startx + 112, starty + 144, 34, 34, "3")
 o.btnBack		= o.guiMenu.newButton(love.window.getWidth() - 192, love.window.getHeight() - 48, 176, 34, "Back")
 
-o.btnStage2.disable()
+--o.btnStage2.disable()
 o.btnStage3.disable()
 
 o.reset = function()
@@ -36,7 +36,13 @@ o.update = function(dt)
 
 	if o.btnStage1.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
-		love.setgamestate(1)
+		love.setgamestate(1, "mission1")
+		o.guiMenu.flushMouse()
+	end
+
+	if o.btnStage2.isHit() then
+		love.sounds.playSound("sounds/button_pressed.wav")
+		love.setgamestate(1, "mission2")
 		o.guiMenu.flushMouse()
 	end
 

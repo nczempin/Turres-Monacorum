@@ -22,7 +22,7 @@ function love.turris.checkleftclick(clickx,clicky)
 			local clickedfieldx, clickedfieldy = getclickedfield(clickx, clicky)
 			turGame.addTower(clickedfieldx, clickedfieldy, love.turris.selectedtower)
 		end
-	elseif currentgstate == 4 then --game over
+	elseif currentgstate == 4 or currentgstate == 13 then --game over
 		love.turris.gameoverstate()
 	elseif currentgstate == 5 then --credits
 		--love.setgamestate(0)

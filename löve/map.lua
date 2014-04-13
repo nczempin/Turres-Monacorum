@@ -1,9 +1,15 @@
-function love.turris.newMap(width, height, tileWidth, tileHeight)
+function love.turris.newMap(path)
+	-- load map object
+	love.filesystem.load("map/" .. path .. ".ini")()
+
 	local o = {}
-	o.width = width or 16
-	o.height = height or 16
-	o.tileWidth = tileWidth or 64
-	o.tileHeight = tileHeight or 48
+	o.width = map.width or 16
+	o.height = map.height or 16
+	o.tileWidth = map.tileWidth or 64
+	o.tileHeight = map.tileHeight or 48
+	o.baseX = map.baseX or math.floor(o.width * 0.5)
+	o.baseY = map.baseY or math.floor(o.height * 0.5)
+	o.spawn = map.spawn
 	o.data = {}
 	for i = 1, o.width do
 		o.data[i] = {}
@@ -29,10 +35,22 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 	end
 	o.shadow = {}
 	o.light = {}
-	local img = love.graphics.newImage("gfx/ground01.png")
+
+	o.ground = love.graphics.newImage("gfx/ground01_diffuse.png")
+	o.ground:setWrap("repeat", "repeat")
+
+	local vertices = {
+		{ 0, 0, 0, 0, 50, 80, 120 },
+		{ o.width * o.tileWidth, 0, (o.width * o.tileWidth) / o.ground:getWidth(), 0, 50, 80, 120 },
+		{ o.width * o.tileWidth, o.height * o.tileHeight, (o.width * o.tileWidth) / o.ground:getWidth(), (o.height * o.tileHeight) / o.ground:getHeight(), 100, 80, 120 },
+		{ 0, o.height * o.tileHeight, 0, (o.height * o.tileHeight) / o.ground:getHeight(), 100, 80, 120 },
+	}
+
+	o.mshGround = love.graphics.newMesh(vertices, o.ground, "fan")
+
 	local normal = love.graphics.newImage("gfx/ground01_normal.png")
 	local glow = love.graphics.newImage("gfx/ground01_glow.png")
-	o.shadowGround = lightWorld.newImage(img, o.width * o.tileWidth, o.height * o.tileHeight, o.width * o.tileWidth * 0.5, o.height * o.tileHeight * 0.5)
+	o.shadowGround = lightWorld.newImage(o.ground, o.width * o.tileWidth, o.height * o.tileHeight, o.width * o.tileWidth * 0.5, o.height * o.tileHeight * 0.5)
 	o.shadowGround.setNormalMap(normal, o.width * o.tileWidth, o.height * o.tileHeight)
 	o.shadowGround.setPosition(o.width * o.tileWidth * 0.5, o.height * o.tileHeight * 0.5)
 	--o.shadowGround.setGlowMap(glow)
@@ -45,34 +63,45 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 			--o.shadow[i + 1][k + 1].setShadow(false)
 		end
 	end
+
+	o.drawGround = function(ox, oy)
+		love.graphics.draw(o.mshGround, ox, oy)
+	end
+
 	o.getState = function(x, y)
-		if x > 0 and y > 0 and x <= o.width and y <= o.width then
+		if x > 0 and y > 0 and x <= o.width and y <= o.height then
 			return o.data[x][y].id
 		else
 			return nil
 		end
 	end
+
 	o.getHeight = function()
 		return o.height
 	end
+
 	o.getMap = function()
 		return o
 	end
+
 	o.getTileHeight = function()
 		return o.tileHeight
 	end
+
 	o.getTileWidth = function()
 		return o.tileWidth
 	end
+
 	o.getWidth = function()
 		return o.width
 	end
+
 	o.setState = function(x, y, n)
 		local d = o.data[x][y]
 		d.id = n
 		if n > 0 then
 			if not o.shadow[x][y] then
-				o.shadow[x][y] = lightWorld.newImage(img, (x - 1) * o.tileWidth + o.tileWidth * 0.5 + turGame.offsetX, (y - 1) * o.tileHeight + o.tileHeight * 0.5 + turGame.offsetY, o.tileWidth, o.tileHeight)
+				o.shadow[x][y] = lightWorld.newImage(o.ground, (x - 1) * o.tileWidth + o.tileWidth * 0.5 + turGame.offsetX, (y - 1) * o.tileHeight + o.tileHeight * 0.5 + turGame.offsetY, o.tileWidth, o.tileHeight)
 			end
 			o.shadow[x][y].setImage(turGame.towerType[n].img)
 			o.shadow[x][y].setImageOffset(o.tileWidth * 0.5, o.tileHeight * 0.5 + (turGame.towerType[n].img:getHeight() - o.tileHeight))
@@ -98,9 +127,9 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 			end
 
 			if turGame.towerType[n].collision and n ~= 2 then
-				o.collision[y][x] = 1
+				o.collision[x][y] = 1
 			else
-				o.collision[y][x] = 0
+				o.collision[x][y] = 0
 			end
 		elseif n == 0 then
 			if o.shadow[x][y] then
@@ -112,7 +141,7 @@ function love.turris.newMap(width, height, tileWidth, tileHeight)
 				o.light[x][y] = nil
 			end
 
-			o.collision[y][x] = 0
+			o.collision[x][y] = 0
 		end
 
 		for i = 1, #turGame.enemies do

@@ -126,19 +126,6 @@ function love.turris.updateEnemies(o, dt)
 	local won = true
 
 	for i = 1, #o.enemies do
-		--we won. TODO: wave handling
-		if not o.enemies[i].dead then
-			won = false
-			break
-		end
-	end
-
-	if won then
-		love.setgamestate(4) --TODO. A message indicating we won would be nice
-		return
-	end
-
-	for i = 1, #o.enemies do
 		local e = o.enemies[i]
 
 		e.update(dt)
@@ -152,11 +139,8 @@ function love.turris.updateEnemies(o, dt)
 				-- TODO: after explosions have finished -> transition to game over state
 				love.sounds.playSound("sounds/einschlag.mp3")
 				turMap.data[o.baseX][o.baseY].addHealth(-5) --TODO: Each creep does different damage to the base
-				if turMap.data[o.baseX][o.baseY].health <= 0 then --TODO: Multiple bases? Or I guess this is the main base; we don't care if the other generators die
-					love.setgamestate(4)
-				else
-					turGame.effectTimer = 0
-				end
+				turGame.effectTimer = 0
+
 				gameOverEffect = 0
 			end
 		end
