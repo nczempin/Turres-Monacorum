@@ -624,14 +624,17 @@ function love.light.newWorld()
 	end
 	-- set buffer
 	o.setBuffer = function(buffer)
-		if buffer == "render" then
+		if buffer == "last" then
 			love.graphics.setCanvas(LOVE_LIGHT_LAST_BUFFER)
 		else
 			LOVE_LIGHT_LAST_BUFFER = love.graphics.getCanvas()
 		end
 
-		if buffer == "glow" then
+		if buffer == "render" then
+			love.graphics.setCanvas()
+		elseif buffer == "glow" then
 			love.graphics.setCanvas(o.glowMap)
+			o.isGlow = true
 		end
 	end
 	-- set glow blur

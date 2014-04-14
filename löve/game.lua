@@ -452,7 +452,7 @@ function love.turris.newGame()
 				o.spawn[i].draw()
 			end
 			o.layerHud.draw()
-			lightWorld.setBuffer("render")
+			lightWorld.setBuffer("last")
 		else
 			o.drawPaths()
 			o.drawMapCursor()

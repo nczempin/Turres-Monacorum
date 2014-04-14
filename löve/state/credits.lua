@@ -68,7 +68,7 @@ o.draw = function()
 	end
 
 	if lightWorld.optionGlow then
-		lightWorld.setBuffer("render")
+		lightWorld.setBuffer("last")
 	end
 
 	if lightWorld.optionGlow then
