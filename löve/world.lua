@@ -4,7 +4,9 @@ love.turris = {}
 lightWorld = love.light.newWorld()
 lightWorld.setNormalInvert(true)
 lightWorld.setAmbientColor(15, 15, 31)
-lightWorld.setRefractionStrength(32.0)
+lightWorld.setRefractionStrength(16)
+lightWorld.setReflectionStrength(32)
+lightWorld.setReflectionVisibility(0.5)
 lightWorld.setGlowStrength(3.0)
 
 ------------

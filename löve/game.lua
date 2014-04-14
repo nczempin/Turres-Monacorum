@@ -49,11 +49,11 @@ function love.turris.newGame()
 		o.creepAnim2 = newAnimation(o.creepImg2, o.creepImg2:getWidth(), o.creepImg2:getHeight() / 8.0, 0, 0)
 		local img -- TODO
 
-		local enemyType = {}
-		enemyType[1] = love.turris.newEnemyType(o.creepAnim1, 100, 1.0)
-		enemyType[2] = love.turris.newEnemyType(o.creepAnim2, 2000, 0.5)
+		o.enemyType = {}
+		o.enemyType[1] = love.turris.newEnemyType(o.creepAnim1, 100, 1.0)
+		o.enemyType[2] = love.turris.newEnemyType(o.creepAnim2, 2000, 0.5)
 
-		o.enemyTypes = { enemyType[1], enemyType[2] }
+		o.enemyTypes = { o.enemyType[1], o.enemyType[2] }
 
 		laserTower = o.newTowerType("gfx/tower00")
 		generatorTower = o.newTowerType("gfx/tower01")
@@ -62,8 +62,9 @@ function love.turris.newGame()
 		bombTower = o.newTowerType("gfx/tower04")
 		spawnHole = o.newTowerType("gfx/obstacle00")
 		spawnEggs = o.newTowerType("gfx/obstacle01")
-		spawnRock1 = o.newTowerType("gfx/obstacle02")
-		spawnRock2 = o.newTowerType("gfx/obstacle03")
+		Rock1 = o.newTowerType("gfx/obstacle02")
+		Rock2 = o.newTowerType("gfx/obstacle03")
+		Water = o.newTowerType("gfx/obstacle04")
 
 		laserTower.setUpperImage(true)
 		generatorTower.setUpperImage(true)
@@ -71,38 +72,21 @@ function love.turris.newGame()
 		massTower.setUpperImage(true)
 		bombTower.setUpperImage(true)
 
+		Water.water = true
+
 		generatorTower.setBreakable(false)
 		spawnHole.setBreakable(false)
 		spawnEggs.setBreakable(false)
+		Water.setBreakable(false)
+
+		spawnHole.setCollision(false)
+		spawnEggs.setCollision(false)
+		Water.setCollision(false)
 
 		energyTower.setEnergyGeneration(20)
 		massTower.setMassGeneration(2)
 
-		print("adding main base", o.baseX, o.baseY)
-		o.addTower(o.baseX, o.baseY, 2) --main base
-
-		o.player.setMass(9999) -- enough to place the towers
-
-		o.spawn = {}
-		for i = 1, #o.map.spawn do
-			o.spawn[#o.spawn + 1] = love.turris.newSpawn(o.map, o.map.spawn[i].x, o.map.spawn[i].y, o.baseX, o.baseY)
-			o.spawn[#o.spawn].addEnemyType(enemyType[o.map.spawn[i].enemyType], o.map.spawn[i].delay, o.map.spawn[i].count)
-			o.addTower(o.map.spawn[i].x, o.map.spawn[i].y, 5 + o.map.spawn[i].enemyType)
-		end
-
-		for i = 1, o.map.width do
-			for k = 1, o.map.height do
-				if o.map.getState(i, k) == 0 then
-					local r = math.random(0, 37)
-
-					if r == 0 then
-						o.map.setState(i, k, 8)
-					elseif r == 1 then
-						o.map.setState(i, k, 9)
-					end
-				end
-			end
-		end
+		o.map.init()
 
 		o.player.setMass(20)
 
@@ -272,7 +256,7 @@ function love.turris.newGame()
 		o.layerHud.update(dt)
 
 		o.effectTimer = o.effectTimer + dt
-		o.dayTime = o.dayTime + dt * 0.1
+		o.dayTime = o.dayTime + dt * 0.01
 		o.spawnTime = o.spawnTime + dt
 		T.updateEnemies(o, dt)
 
@@ -322,7 +306,10 @@ function love.turris.newGame()
 		for i = 1, o.map.width do
 			for k = 1, o.map.height do
 				if o.map.data[i][k].id == 2 and o.map.light[i][k] then
-					o.map.light[i][k].setRange(200 - math.sin(o.dayTime * 15.0) * 50)
+					o.map.light[i][k].setRange(200 - math.sin(o.dayTime * 150.0) * 50)
+				end
+				if o.map.data[i][k].id > 0 and turGame.towerType[o.map.data[i][k].id].water then
+					o.map.shadow[i][k].setNormalTileOffset(o.dayTime * -2000, o.dayTime * -1000)
 				end
 			end
 		end
@@ -450,6 +437,9 @@ function love.turris.newGame()
 		--end
 		lightWorld.drawPixelShadow()
 
+		lightWorld.drawRefraction()
+		lightWorld.drawReflection()
+
 		o.drawTowerHealth()
 		o.drawEnemiesHealth()
 
@@ -541,14 +531,17 @@ function love.turris.newGame()
 					local id = tile.id
 					if id > 0 then
 						local tower = o.towerType[id]
-						-- tile
-						if lightWorld.optionGlow then
-							G.setColor(0, 0, 0)
-						else
-							G.setColor(255, 255, 255)
-						end
-						if tower.upper then
-							G.draw(tower.upper, i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
+
+						if tower and tower.collision == true then
+							-- tile
+							if lightWorld.optionGlow then
+								G.setColor(0, 0, 0)
+							else
+								G.setColor(255, 255, 255)
+							end
+							if tower.upper then
+								G.draw(tower.upper, i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
+							end
 						end
 					end
 				end
@@ -593,16 +586,19 @@ function love.turris.newGame()
 					local id = tile.id
 					if id ~= 0 then
 						local tower = o.towerType[id]
-						-- tile
-						if lightWorld.optionGlow then
-							G.setColor(0, 0, 0)
-						else
-							G.setColor(255, 255, 255)
-						end
-						if tower.upper then
-							G.draw(tower.upper, i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
-						else
-							G.draw(tower.img, i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
+
+						if tower and tower.collision then
+							-- tile
+							if lightWorld.optionGlow then
+								G.setColor(0, 0, 0)
+							else
+								G.setColor(255, 255, 255)
+							end
+							if tower.upper then
+								G.draw(tower.upper, i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
+							else
+								G.draw(tower.img, i * o.map.tileWidth + o.offsetX, k * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
+							end
 						end
 					end
 				end

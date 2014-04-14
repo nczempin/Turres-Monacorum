@@ -5,6 +5,7 @@ function love.turris.newTowerType(path)
 	o.normal = G.newImage(o.path .. "_normal.png")
 	o.glow = G.newImage(o.path .. "_glow.png")
 	o.upper = nil
+	o.water = false
 
 	--TODO: Of course these all have to differ depending on type
 	o.collision = true
@@ -33,6 +34,14 @@ function love.turris.newTowerType(path)
 
 	o.setBreakable = function(breakable)
 		o.breakable = breakable
+	end
+
+	o.getCollision = function()
+		return o.collision
+	end
+
+	o.setCollision = function(collision)
+		o.collision = collision
 	end
 
 	o.setEnergyGeneration = function(energy)

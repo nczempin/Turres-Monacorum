@@ -166,7 +166,7 @@ function love.turris.newHudLayer(player)
 		G.print("Extract Mass", 208 * 2 + 88, W.getHeight() - 44)
 
 		G.setColor(127, 191, 255, 31)
-		G.rectangle("fill", 16, 16, turGame.map.width * 4, turGame.map.height * 4)
+		G.rectangle("fill", 16, 16, turGame.map.width * 8, turGame.map.height * 8)
 
 		for i = 1, turGame.map.width do
 			for k = 1, turGame.map.height do
@@ -176,10 +176,10 @@ function love.turris.newHudLayer(player)
 					elseif turGame.map.data[i][k].id >= 6 and turGame.map.data[i][k].id <= 7 then
 						G.setColor(255, 127, 0, 127)
 					else
-						G.setColor(255, 255, 255, 63)
+						G.setColor(255, 255, 255, 31)
 					end
 
-					G.rectangle("fill", 16 + (i - 1) * 4, 16 + (k - 1) * 4, 4, 4)
+					G.rectangle("fill", 16 + (i - 1) * 8, 16 + (k - 1) * 8, 8, 8)
 				end
 			end
 		end
@@ -187,7 +187,7 @@ function love.turris.newHudLayer(player)
 		for i = 1, #turGame.enemies do
 			if not turGame.enemies[i].dead then
 				G.setColor(255, 0, 0, 127)
-				G.rectangle("fill", 16 + (turGame.enemies[i].ai.getX() - 1) * 4, 16 + (turGame.enemies[i].ai.getY() - 1) * 4, 4, 4)
+				G.rectangle("fill", 16 + (turGame.enemies[i].ai.getX() - 1) * 8, 16 + (turGame.enemies[i].ai.getY() - 1) * 8, 8, 8)
 			end
 		end
 	end

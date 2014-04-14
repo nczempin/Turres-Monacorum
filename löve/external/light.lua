@@ -243,7 +243,7 @@ function love.light.newWorld()
 			love.graphics.setShader()
 			love.graphics.setCanvas(o.normalMap)
 			for i = 1, #o.body do
-				if o.body[i].type == "image" and o.body[i].normalMesh then
+				if o.body[i].isPixelShadow and o.body[i].normalMesh then
 					love.graphics.setColor(255, 255, 255)
 					love.graphics.draw(o.body[i].normalMesh, o.body[i].x - o.body[i].nx + LOVE_LIGHT_TRANSLATE_X, o.body[i].y - o.body[i].ny + LOVE_LIGHT_TRANSLATE_Y)
 				end
@@ -344,20 +344,16 @@ function love.light.newWorld()
 			o.refractionMap:clear()
 			love.graphics.setCanvas(o.refractionMap)
 			for i = 1, #o.body do
-				if o.body[i].refraction and o.body[i].normal then
+				if o.body[i].isRefraction and o.body[i].normalMesh then
 					love.graphics.setColor(255, 255, 255)
-					if o.body[i].tileX == 0.0 and o.body[i].tileY == 0.0 then
-						love.graphics.draw(normal, o.body[i].x - o.body[i].nx + LOVE_LIGHT_TRANSLATE_X, o.body[i].y - o.body[i].ny + LOVE_LIGHT_TRANSLATE_Y)
-					else
-						o.body[i].normalMesh:setVertices(o.body[i].normalVert)
-						love.graphics.draw(o.body[i].normalMesh, o.body[i].x - o.body[i].nx + LOVE_LIGHT_TRANSLATE_X, o.body[i].y - o.body[i].ny + LOVE_LIGHT_TRANSLATE_Y)
-					end
+					o.body[i].normalMesh:setVertices(o.body[i].normalVert)
+					love.graphics.draw(o.body[i].normalMesh, o.body[i].x - o.body[i].nx + LOVE_LIGHT_TRANSLATE_X, o.body[i].y - o.body[i].ny + LOVE_LIGHT_TRANSLATE_Y)
 				end
 			end
 
 			love.graphics.setColor(0, 0, 0)
 			for i = 1, #o.body do
-				if not o.body[i].refractive then
+				if not o.body[i].isRefractive then
 					if o.body[i].type == "circle" then
 						love.graphics.circle("fill", o.body[i].x, o.body[i].y, o.body[i].radius)
 					elseif o.body[i].type == "rectangle" then
@@ -373,23 +369,32 @@ function love.light.newWorld()
 
 		if o.optionReflection and o.isReflection then
 			-- create reflection map
-			if o.changed then
-				o.reflectionMap:clear(0, 0, 0)
-				love.graphics.setCanvas(o.reflectionMap)
-				for i = 1, #o.body do
-					if o.body[i].reflection and o.body[i].normal then
-						love.graphics.setColor(255, 0, 0)
-						o.body[i].normalMesh:setVertices(o.body[i].normalVert)
-						love.graphics.draw(o.body[i].normalMesh, o.body[i].x - o.body[i].nx + LOVE_LIGHT_TRANSLATE_X, o.body[i].y - o.body[i].ny + LOVE_LIGHT_TRANSLATE_Y)
+			o.reflectionMap:clear(0, 0, 0)
+			love.graphics.setCanvas(o.reflectionMap)
+			for i = 1, #o.body do
+				if o.body[i].isReflection then
+					love.graphics.setColor(255, 0, 0)
+					if o.body[i].img then
+						love.graphics.draw(o.body[i].img, o.body[i].x - o.body[i].ix + LOVE_LIGHT_TRANSLATE_X, o.body[i].y - o.body[i].iy + LOVE_LIGHT_TRANSLATE_Y)
+					else
+						love.graphics.rectangle("fill", o.body[i].x - o.body[i].ox + LOVE_LIGHT_TRANSLATE_X, o.body[i].y - o.body[i].oy + LOVE_LIGHT_TRANSLATE_Y, o.body[i].width, o.body[i].height)
+					end
+				else
+					love.graphics.setColor(0, 0, 0)
+					if o.body[i].img then
+						love.graphics.draw(o.body[i].img, o.body[i].x - o.body[i].ix + LOVE_LIGHT_TRANSLATE_X, o.body[i].y - o.body[i].iy + LOVE_LIGHT_TRANSLATE_Y)
+					else
+						love.graphics.rectangle("fill", o.body[i].x + LOVE_LIGHT_TRANSLATE_X, o.body[i].y + LOVE_LIGHT_TRANSLATE_Y, o.body[i].width, o.body[i].height)
 					end
 				end
-				for i = 1, #o.body do
-					if o.body[i].reflective and o.body[i].img then
-						love.graphics.setColor(0, 255, 0)
+			end
+			for i = 1, #o.body do
+				if o.body[i].isReflective then
+					love.graphics.setColor(0, 255, 0)
+					if o.body[i].img then
 						love.graphics.draw(o.body[i].img, o.body[i].x - o.body[i].ix + LOVE_LIGHT_TRANSLATE_X, o.body[i].y - o.body[i].iy + LOVE_LIGHT_TRANSLATE_Y)
-					elseif not o.body[i].reflection and o.body[i].img then
-						love.graphics.setColor(0, 0, 0)
-						love.graphics.draw(o.body[i].img, o.body[i].x - o.body[i].ix + LOVE_LIGHT_TRANSLATE_X, o.body[i].y - o.body[i].iy + LOVE_LIGHT_TRANSLATE_Y)
+					else
+						love.graphics.rectangle("fill", o.body[i].x + LOVE_LIGHT_TRANSLATE_X, o.body[i].y + LOVE_LIGHT_TRANSLATE_Y, o.body[i].width, o.body[i].height)
 					end
 				end
 			end
@@ -873,6 +878,7 @@ function love.light.newBody(p, type, ...)
 	p.changed = true
 	o.id = #p.body
 	o.type = type
+	o.img = nil
 	o.normal = nil
 	o.material = nil
 	o.glow = nil
@@ -883,10 +889,10 @@ function love.light.newBody(p, type, ...)
 		o.ox = args[4] or 0
 		o.oy = args[5] or 0
 		o.shadowType = "circle"
-		o.reflection = false
-		o.reflective = false
-		o.refraction = false
-		o.refractive = false
+		o.isReflection = false
+		o.isReflective = false
+		o.isRefraction = false
+		o.isRefractive = false
 		p.isShadows = true
 	elseif o.type == "rectangle" then
 		o.x = args[1] or 0
@@ -906,18 +912,18 @@ function love.light.newBody(p, type, ...)
 			o.x - o.ox,
 			o.y - o.oy + o.height
 		}
-		o.reflection = false
-		o.reflective = false
-		o.refraction = false
-		o.refractive = false
+		o.isReflection = false
+		o.isReflective = false
+		o.isRefraction = false
+		o.isRefractive = false
 		p.isShadows = true
 	elseif o.type == "polygon" then
 		o.shadowType = "polygon"
 		o.data = args or {0, 0, 0, 0, 0, 0}
-		o.reflection = false
-		o.reflective = false
-		o.refraction = false
-		o.refractive = false
+		o.isReflection = false
+		o.isReflective = false
+		o.isRefraction = false
+		o.isRefractive = false
 		p.isShadows = true
 	elseif o.type == "image" then
 		o.img = args[1]
@@ -954,11 +960,15 @@ function love.light.newBody(p, type, ...)
 			o.x - o.ox,
 			o.y - o.oy + o.height
 		}
-		o.reflection = false
-		o.reflective = true
-		o.refraction = false
-		o.refractive = false
+		o.isShadow = true
+		o.isPixelShadow = true
+		o.isReflection = false
+		o.isReflective = true
+		o.isRefraction = false
+		o.isRefractive = false
 		p.isShadows = true
+		p.isPixelShadows = true
+		p.isReflective = true
 	elseif o.type == "refraction" then
 		o.normal = args[1]
 		o.x = args[2] or 0
@@ -984,10 +994,10 @@ function love.light.newBody(p, type, ...)
 		end
 		o.ox = o.width * 0.5
 		o.oy = o.height * 0.5
-		o.reflection = false
-		o.reflective = false
-		o.refraction = true
-		o.refractive = false
+		o.isReflection = false
+		o.isReflective = false
+		o.isRefraction = true
+		o.isRefractive = false
 		p.isRefraction = true
 	elseif o.type == "reflection" then
 		o.normal = args[1]
@@ -1014,10 +1024,10 @@ function love.light.newBody(p, type, ...)
 		end
 		o.ox = o.width * 0.5
 		o.oy = o.height * 0.5
-		o.reflection = true
-		o.reflective = false
-		o.refraction = false
-		o.refractive = false
+		o.isReflection = true
+		o.isReflective = false
+		o.isRefraction = false
+		o.isRefractive = false
 		p.isReflection = true
 	end
 	o.shine = true
@@ -1167,8 +1177,16 @@ function love.light.newBody(p, type, ...)
 		p.changed = true
 	end
 	-- set shadow on/off
-	o.setShadow = function(b)
-		o.castsNoShadow = not b
+	o.setShadow = function(shadow)
+		o.castsNoShadow = not shadow
+		p.changed = true
+	end
+	-- set pixel shadow on/off
+	o.setPixelShadow = function(shadow)
+		o.isPixelShadow = shadow
+		if shadow then
+			p.isPixelShadows = true
+		end
 		p.changed = true
 	end
 	-- set shine on/off
@@ -1190,19 +1208,31 @@ function love.light.newBody(p, type, ...)
 	end
 	-- set reflection on/off
 	o.setReflection = function(reflection)
-		o.reflection = reflection
+		o.isReflection = reflection
+		if reflection then
+			p.isReflection = true
+		end
 	end
 	-- set refraction on/off
 	o.setRefraction = function(refraction)
-		o.refraction = refraction
+		o.isRefraction = refraction
+		if refraction then
+			p.isRefraction = true
+		end
 	end
 	-- set reflective on other objects on/off
 	o.setReflective = function(reflective)
-		o.reflective = reflective
+		o.isReflective = reflective
+		if reflective then
+			p.isReflective = true
+		end
 	end
 	-- set refractive on other objects on/off
 	o.setRefractive = function(refractive)
-		o.refractive = refractive
+		o.isRefractive = refractive
+		if refractive then
+			p.isRefractive = true
+		end
 	end
 	-- set image
 	o.setImage = function(img)
@@ -1238,13 +1268,7 @@ function love.light.newBody(p, type, ...)
 	end
 	-- set height map
 	o.setHeightMap = function(heightMap, strength)
-		o.normal = HeightMapToNormalMap(heightMap, strength)
-		o.normalWidth = o.normal:getWidth()
-		o.normalHeight = o.normal:getHeight()
-		o.nx = o.normalWidth * 0.5
-		o.ny = o.normalHeight * 0.5
-
-		p.isPixelShadows = true
+		o.setNormalMap(HeightMapToNormalMap(heightMap, strength))
 	end
 	-- generate flat normal map
 	o.generateNormalMapFlat = function(mode)
@@ -1273,13 +1297,7 @@ function love.light.newBody(p, type, ...)
 			end
 		end
 
-		o.normal = love.graphics.newImage(imgNormalData)
-		o.normalWidth = o.normal:getWidth()
-		o.normalHeight = o.normal:getHeight()
-		o.nx = o.normalWidth * 0.5
-		o.ny = o.normalHeight * 0.5
-
-		p.isPixelShadows = true
+		o.setNormalMap(love.graphics.newImage(imgNormalData))
 	end
 	-- generate faded normal map
 	o.generateNormalMapGradient = function(horizontalGradient, verticalGradient)
@@ -1319,23 +1337,11 @@ function love.light.newBody(p, type, ...)
 			end
 		end
 
-		o.normal = love.graphics.newImage(imgNormalData)
-		o.normalWidth = o.normal:getWidth()
-		o.normalHeight = o.normal:getHeight()
-		o.nx = o.normalWidth * 0.5
-		o.ny = o.normalHeight * 0.5
-
-		p.isPixelShadows = true
+		o.setNormalMap(love.graphics.newImage(imgNormalData))
 	end
 	-- generate normal map
 	o.generateNormalMap = function(strength)
-		o.normal = HeightMapToNormalMap(o.img, strength)
-		o.normalWidth = o.normal:getWidth()
-		o.normalHeight = o.normal:getHeight()
-		o.nx = o.normalWidth * 0.5
-		o.ny = o.normalHeight * 0.5
-
-		p.isPixelShadows = true
+		o.setNormalMap(HeightMapToNormalMap(o.img, strength))
 	end
 	-- set material
 	o.setMaterial = function(material)
@@ -1494,7 +1500,7 @@ end
 
 function calculateShadows(light, body)
 	local shadowGeometry = {}
-	local shadowLength = 10000
+	local shadowLength = 100000
 
 	for i = 1, #body do
 		if body[i].shadowType == "rectangle" or body[i].shadowType == "polygon" then

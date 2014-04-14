@@ -7,6 +7,7 @@ function love.turris.newSpawn(map, x, y, baseX, baseY)
 	o.baseY = baseY
 	o.map = map
 	o.count = 0
+	o.font = G.newFont(20)
 
 	o.enemyType = {}
 
@@ -27,14 +28,16 @@ function love.turris.newSpawn(map, x, y, baseX, baseY)
 	end
 
 	o.draw = function()
-		local x = o.x * o.map.tileWidth - o.map.tileWidth * 0.5 + turGame.offsetX
-		local y = o.y * o.map.tileHeight - o.map.tileHeight * 0.5 + turGame.offsetY - 16 - math.sin(love.timer.getTime() * 5) * 4
+		local x = math.floor(o.x * o.map.tileWidth - o.map.tileWidth * 0.5 + turGame.offsetX)
+		local y = math.floor(o.y * o.map.tileHeight - o.map.tileHeight * 0.5 + turGame.offsetY - 16 - math.sin(love.timer.getTime() * 5) * 4)
 
-		love.graphics.setColor(31, 0, 0)
-		love.graphics.polygon("fill", x - 32, y - 32, x + 32, y - 32, x, y)
-		love.graphics.setFont(FONT_SMALL)
-		love.graphics.setColor(127, 63, 0)
-		love.graphics.printf(o.count, x - 32, y - 32, 64, "center")
+		love.graphics.setColor(255, 127, 63)
+		love.graphics.polygon("fill", x - 26, y - 41, x + 26, y - 41, x, y + 2)
+		love.graphics.setColor(127, 0, 0)
+		love.graphics.polygon("fill", x - 24, y - 40, x + 24, y - 40, x, y)
+		love.graphics.setFont(o.font)
+		love.graphics.setColor(255, 127, 0)
+		love.graphics.printf(o.count, x - 32, y - 40, 64, "center")
 	end
 
 	o.addEnemyType = function(enemyType, delay, count)

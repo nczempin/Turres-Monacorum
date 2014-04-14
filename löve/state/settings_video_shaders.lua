@@ -61,7 +61,6 @@ o.update = function(dt)
 	if o.chkLights.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
 		o.optionLights = o.chkLights.isChecked()
-		love.turris.reinit()
 	end
 
 	if o.chkGlow.isHit() then
