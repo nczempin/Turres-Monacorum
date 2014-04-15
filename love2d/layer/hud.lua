@@ -55,9 +55,7 @@ function love.turris.newHudLayer(player)
 			love.turris.selectedtower = 4
 		end
 
-		if love.keyboard.isDown("escape") then
-			love.setgamestate(0)
-		elseif love.keyboard.isDown("1") then
+		if love.keyboard.isDown("1") then
 			love.turris.selectedtower = 1
 			o.btnTower1.setChecked(true)
 		--elseif love.keyboard.isDown("2") then

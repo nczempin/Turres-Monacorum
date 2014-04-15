@@ -128,10 +128,10 @@ function love.turris.updateEnemies(o, dt)
 	for i = 1, #o.enemies do
 		local e = o.enemies[i]
 
-		e.update(dt)
-
 		if not e.dead then
-			if e.ai.path and e.ai.step == #e.ai.path then
+			e.update(dt)
+
+			if e.ai.path and e.ai.getCurrentLength() < 0.5 then
 				e.dead = true
 				-- Game Over!!! (for now)
 				-- TODO: destroy ship (explosion)

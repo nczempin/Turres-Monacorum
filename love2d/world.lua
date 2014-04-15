@@ -1,4 +1,5 @@
 love.turris = {}
+love.turris.save = {}
 
 -- create light world
 lightWorld = love.light.newWorld()

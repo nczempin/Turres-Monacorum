@@ -27,6 +27,7 @@ function love.turris.newGame()
 	o.holdOffsetY = 0
 	o.calcAi = 0
 	o.spawnTime = 0
+	o.mission = nil
 
 	o.init = function()
 		o.player = love.turris.newPlayer()
@@ -65,6 +66,8 @@ function love.turris.newGame()
 		Rock1 = o.newTowerType("gfx/obstacle02")
 		Rock2 = o.newTowerType("gfx/obstacle03")
 		Water = o.newTowerType("gfx/obstacle04")
+
+		laserTower.setRange(2.5)
 
 		laserTower.setUpperImage(true)
 		generatorTower.setUpperImage(true)
@@ -276,6 +279,8 @@ function love.turris.newGame()
 
 		if win then
 			love.setgamestate(13)
+			love.turris.save[o.mission] = true
+			love.filesystem.write("save.ini", Tserial.pack(love.turris.save))
 		elseif o.map.data[o.baseX][o.baseY].health <= 0 then --TODO: Multiple bases? Or I guess this is the main base; we don't care if the other generators die
 			love.setgamestate(4)
 		end
@@ -332,21 +337,6 @@ function love.turris.newGame()
 						t.target = e --TODO just do that inside tower module
 
 						if e then
-							local x, y = e.x, e.y
-
-							local tx = (t.x - 0.5) * o.map.tileWidth + o.offsetX
-							local ty = (t.y - 0.5) * o.map.tileHeight + o.offsetY
-							local ex = (e.x - 0.5) * o.map.tileWidth + o.offsetX
-							local ey = (e.y - 0.5) * o.map.tileHeight + o.offsetY
-							local direction = math.atan2(tx - ex, ey - ty) + math.pi * 0.5
-							local length = math.sqrt(math.pow(tx - ex, 2) + math.pow((ty) - ey, 2))
-							local timer = -math.mod(love.timer.getTime() * 2.0, 1.0)
-							--local vertices = {
-							--{ 0, 0, timer, 0, 255, 0, 0,},
-							--{ o.imgLaser:getWidth(), 0, timer + 1, 0, 0, 255, 0 },
-							--{ o.imgLaser:getWidth(), o.imgLaser:getHeight(), timer + 1, 1, 0, 0, 255 },
-							--{ 0, o.imgLaser:getHeight(), timer, 1, 255, 255, 0 },
-							--}
 							o.player.addEnergy(-energyCost)
 							if e.health > 0.0 then
 								e.health = e.health - t.type.damage*dt

@@ -18,7 +18,7 @@ function love.turris.newTowerType(path)
 	o.massGeneration = 0
 
 	o.damage = 100
-	o.range = 4
+	o.range = 1
 
 	o.getMaxHealth = function(health)
 		return o.maxHealth
@@ -50,6 +50,10 @@ function love.turris.newTowerType(path)
 
 	o.setMassGeneration = function(mass)
 		o.massGeneration = mass
+	end
+
+	o.setRange = function(range)
+		o.range = range
 	end
 
 	o.setUpperImage = function(upper)

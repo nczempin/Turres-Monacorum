@@ -76,6 +76,11 @@ function love.gui.newGui()
 		end
 	end
 
+	--Clear elements
+	o.clear = function()
+		o.elements = {}
+	end
+
 	--Return new button
 	o.newButton = function(x, y, width, height, name, imagePath)
 		o.elements[#o.elements + 1] = love.gui.newButton(x, y, width, height, name)

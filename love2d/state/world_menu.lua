@@ -1,9 +1,9 @@
 local o = {}
 
-local startx = love.window.getWidth() * 0.5 - 176 * 0.5
-local starty = 128
-
 o.imgBackground	= love.graphics.newImage("gfx/world.png")
+
+o.startx = love.window.getWidth() * 0.5 - o.imgBackground:getWidth() * 0.5
+o.starty = 128
 
 o.fontTitle = love.graphics.newFont(24)
 o.fontDescription = love.graphics.newFont(16)
@@ -11,17 +11,45 @@ o.fontDescription = love.graphics.newFont(16)
 o.effectTimer = 0
 o.chromaticEffect = 0
 o.selDescription = nil
-o.description = {}
-o.description[1] = {"Stage 1", "Defeat 3 Wave lines", "with 2 different enemies.", "Mapsize: Small"}
-o.description[2] = {"Stage 2", "Defeat 3 Wave lines", "with 2 different enemies.", "Mapsize: Medium"}
 
-o.guiMenu		= love.gui.newGui()
-o.btnStage1		= o.guiMenu.newButton(startx - 20, starty, 34, 34, "1")
-o.btnStage2		= o.guiMenu.newButton(startx + 60, starty + 56, 34, 34, "2")
-o.btnStage3		= o.guiMenu.newButton(startx + 112, starty + 144, 34, 34, "3")
-o.btnBack		= o.guiMenu.newButton(love.window.getWidth() - 192, love.window.getHeight() - 48, 176, 34, "Back")
+o.guiMenu = love.gui.newGui()
 
-o.btnStage3.disable()
+love.filesystem.load("data/menu/missions1.ini")()
+
+if love.filesystem.exists("save.ini") then
+	love.turris.save = Tserial.unpack(love.filesystem.read("save.ini"))
+else
+	love.filesystem.write("save.ini", "{}")
+	love.turris.save = {}
+end
+
+o.init = function()
+	o.guiMenu.clear()
+	
+	o.btnStage = {}
+	o.description = {}
+
+	for i = 1, #missions do
+		o.btnStage[i] = o.guiMenu.newButton(o.startx + missions[i].x, missions[i].y, 34, 34, i)
+		o.description[i] = {missions[i].title, missions[i].description}
+
+		local locked = true
+
+		if missions[i].needMission then
+			if love.turris.save[missions[i].needMission] then
+				locked = false
+			end
+		else
+			locked = false
+		end
+
+		if locked then
+			o.btnStage[i].disable()
+		end
+	end
+
+	o.btnBack = o.guiMenu.newButton(love.window.getWidth() - 192, love.window.getHeight() - 48, 176, 34, "Back")
+end
 
 o.reset = function()
 	o.guiMenu.flushMouse()
@@ -33,27 +61,21 @@ o.update = function(dt)
 
 	o.guiMenu.update(dt)
 
-	if o.btnStage1.isHit() then
-		love.sounds.playSound("sounds/button_pressed.wav")
-		love.setgamestate(1, "mission1")
-		o.guiMenu.flushMouse()
+	for i = 1, #o.btnStage do
+		if o.btnStage[i].isHit() then
+			love.sounds.playSound("sounds/button_pressed.wav")
+			love.setgamestate(1, missions[i].map)
+			o.guiMenu.flushMouse()
+		end
 	end
 
-	if o.btnStage2.isHit() then
-		love.sounds.playSound("sounds/button_pressed.wav")
-		love.setgamestate(1, "mission2")
-		o.guiMenu.flushMouse()
+	for i = 1, #o.btnStage do
+		if o.btnStage[i].onHover() then
+			o.selDescription = i
+		end
 	end
 
-	if o.btnStage1.onHover() then
-		o.selDescription = 1
-	end
-
-	if o.btnStage2.onHover() then
-		o.selDescription = 2
-	end
-
-	if o.btnBack.isHit() or love.keyboard.isDown("escape") then
+	if o.btnBack.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
 		love.setgamestate(0)
 		o.guiMenu.flushMouse()
@@ -98,16 +120,8 @@ o.setVersion = function(version)
 end
 
 o.refreshScreenSize = function()
-	local startx = love.window.getWidth() * 0.5 - 176 * 0.5
-	local starty = 128
-
-	o.guiMenu		= love.gui.newGui()
-	o.btnStage1		= o.guiMenu.newButton(startx - 20, starty, 34, 34, "1")
-	o.btnStage2		= o.guiMenu.newButton(startx + 60, starty + 56, 34, 34, "2")
-	o.btnStage3		= o.guiMenu.newButton(startx + 112, starty + 144, 34, 34, "3")
-	o.btnBack		= o.guiMenu.newButton(love.window.getWidth() - 192, love.window.getHeight() - 48, 176, 34, "Back")
-
-	o.btnStage3.disable()
+	o.startx = love.window.getWidth() * 0.5 - o.imgBackground:getWidth() * 0.5
+	o.starty = 128
 end
 
 return o

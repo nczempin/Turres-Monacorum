@@ -1,5 +1,6 @@
 require "libraries/gui"
 
+require "external/TSerial"
 require "external/postshader"
 require "external/light"
 require "external/ai"
@@ -87,6 +88,7 @@ function love.turris.reinit(map)
 	turGame = love.turris.newGame()
 	turMap = love.turris.newMap(map)
 	turGame.init()
+	turGame.mission = map
 end
 
 function love.setgamestate(newgamestate, option)
@@ -101,6 +103,8 @@ function love.setgamestate(newgamestate, option)
 	elseif newgamestate == 4 or newgamestate == 13 then
 		turGame.layerGameOver.effectTimer = 0
 		love.sounds.playBackground("sounds/music/game_over_music.mp3", "game")
+	elseif newgamestate == 11 then
+		stateWorldMenu.init()
 	end
 
 	if currentgamestate == 5 then
@@ -190,12 +194,20 @@ function love.draw()
 end
 
 function love.turris.gameoverstate()
-	love.setgamestate(0)
-	stateMainMenu.reset()
+	love.setgamestate(11)
+	--stateMainMenu.reset()
 end
 
 function love.keypressed(key, code)
-
+	if key == "escape" then
+		if currentgamestate == 1 then
+			love.sounds.playSound("sounds/button_pressed.wav")
+			love.setgamestate(11)
+		elseif currentgamestate == 11 then
+			love.sounds.playSound("sounds/button_pressed.wav")
+			love.setgamestate(0)
+		end
+	end
 end
 
 function love.mousepressed(x, y, key)

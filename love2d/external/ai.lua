@@ -7,6 +7,7 @@ love.ai.newAI = function()
 	local o = {}
 
 	o.map = nil
+	o.emptyMap = nil
 	o.path = nil
 	o.length = 0
 	o.newPath = true
@@ -30,13 +31,18 @@ love.ai.newAI = function()
 			local time = love.timer.getTime()
 			o.path, o.length = myFinder:getPath(o.startY, o.startX, o.endY, o.endX)
 			print(love.timer.getTime() - time)
+			if not o.path then
+				myFinder = LOVE_AI_PATH(LOVE_AI_GRID(o.emptyMap), 'JPS', o.walkable)
+				myFinder:setMode('ORTHOGONAL')
+				o.path, o.length = myFinder:getPath(o.startY, o.startX, o.endY, o.endX)
+			end
 			o.step = 1
 			o.newPath = false
 		end
 
 		if o.speed > 0 then
 			if o.direction == 0 and (o.currX ~= o.endX or o.currY ~= o.endY) and o.map[o.endX][o.endY] == 0 then
-				if o.path and o.step <= #o.path then
+				if o.path and o.step < #o.path then
 					o.step = o.step + 1
 
 					o.nextX = o.path[o.step].y
@@ -110,6 +116,10 @@ love.ai.newAI = function()
 		return o.path[n].x
 	end
 
+	o.getCurrentLength = function()
+		return (math.abs(o.currX - o.endX) ^ 2 + math.abs(o.currY - o.endY) ^ 2) ^ 0.5
+	end
+
 	o.getMapWidth = function()
 		return #o.map
 	end
@@ -136,11 +146,25 @@ love.ai.newAI = function()
 			end
 		end
 
+		o.newEmptyMap(width, height)
+
 		return o.map
+	end
+
+	o.newEmptyMap = function(width, height)
+		o.emptyMap = {}
+
+		for i = 1, width do
+			o.emptyMap[i] = {}
+			for k = 1, height do
+				o.emptyMap[i][k] = 0
+			end
+		end
 	end
 
 	o.setMap = function(map)
 		o.map = map
+		o.newEmptyMap(#o.map, #o.map[1])
 	end
 
 	o.getMapData = function(x, y)
