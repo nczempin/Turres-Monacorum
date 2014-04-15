@@ -2,13 +2,23 @@ LOVE_SOUND_BGMUSICVOLUME 	= 0.5
 LOVE_SOUND_SOUNDVOLUME		= 0.5
 
 love.sounds = {}
+love.sounds.files = {}
 
-soundNames = {};
+love.sounds.files.shootElectric = ""
+love.sounds.files.shootRocket 	= ""
+love.sounds.files.putTower		= "sounds.tower_2.mp3"
+love.sounds.files.removeTower	= ""
 
-soundNames.placingTower = "placingTower"
+love.sounds.files.spawnCreature = ""
 
+love.sounds.files.buttonPressed = "sounds/button_Pressed.mp3"
+love.sounds.files.buttonHover 	= ""
 
-local startTime = 0
+love.sounds.files.highscore 	= "sounds/music/highscore.mp3"
+love.sounds.files.mainMenu 		= "sounds/music/mainMenu.mp3"
+love.sounds.files.gameOver		= "sounds/music/game_over_music.mp3"
+love.sounds.files.gameBackground= "sounds/music/gameBackground"
+
 	
 --Functions for playing sounds
 -- Adds an BackgroundMusic
@@ -28,7 +38,7 @@ end
 -- @param  Time to Wait to Play the Sound in Milliseconds
 function love.sounds.playSound(soundPath, timeInMilliSeconds)
 	if timeInMilliSeconds ~= nil then
-		startTime = love.timer.getTime()
+		
 	else
 		TEsound.play(soundPath,"sound",LOVE_SOUND_SOUNDVOLUME,nil,nil)
 	end

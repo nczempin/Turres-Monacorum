@@ -93,19 +93,19 @@ function love.setgamestate(newgamestate, option)
 	love.sounds.stopSound("all")
 	if newgamestate == 0 then
 		stateMainMenu.effectTimer = 0
-		love.sounds.playBackground("sounds/music/Chiptune_2step_mp3.mp3", "menu")
+		love.sounds.playBackground(love.sounds.files.mainMenu, "mainMenu")
 	elseif newgamestate == 1 then
 		love.turris.reinit(option)
 		turGame.layerGameOver.effectTimer = 0
-		love.sounds.playBackground("sounds/music/turres_music_1.mp3", "menu")
+		love.sounds.playBackground(love.sounds.files.gameBackground, "gameBackground")
 	elseif newgamestate == 4 or newgamestate == 13 then
 		turGame.layerGameOver.effectTimer = 0
-		love.sounds.playBackground("sounds/music/game_over_music.mp3", "game")
+		love.sounds.playBackground(love.sounds.gameover, "gameover")
 	end
 
 	if currentgamestate == 5 then
 	elseif newgamestate == 5 then
-		love.sounds.playBackground("sounds/music/highscore.mp3", "gameover")
+		love.sounds.playBackground(love.sounds.highscore, "highscore")
 	end
 
 	currentgamestate = newgamestate
