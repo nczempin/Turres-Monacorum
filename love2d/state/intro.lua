@@ -44,30 +44,14 @@ local quoterandomizer = love.math.newRandomGenerator(os.time()*os.clock())
 for i=1,20 do -- the value 1 will be considered sufficiently random otherwise
 	quoterandomizer:random()
 end
-local quoteno = quoterandomizer:random(1,7) -- The second value will always have to be as high as the amount of quotes (the random number is not perfect, though)
-
-if(quoteno==1) then
-		o.quote = "War...war never changes."
-		o.source = "-Fallout"
-elseif(quoteno==2) then
-		o.quote = "Always put a tower where the creeps want to go!"
-		o.source = "-The Art Of Tower Defense"
-elseif(quoteno==3) then
-		o.quote = "Haskell <3"
-		o.source = "-???"
-elseif(quoteno==4) then
-		o.quote = "How about I always give you the same random number?"
-		o.source = "-love.math.random()"
-elseif(quoteno==5) then
-		o.quote = "Thou shalt not pass through my towers, foul creatures!"
-		o.source = "-William S."
-elseif(quoteno==6) then
-		o.quote = "Please stand by while we think of more quotes..." -- TODO
-		o.source = "-the developers"
-else
-		o.quote = "Fallback quote. It's not a bug, it's a feature."
-		o.source = "-Unknown Programmer"
-end
+local quotes ={"War...war never changes.","Fallout","Always put a tower where the creeps want to go!","The Art Of Tower Defense","Haskell <3", "???",
+	"How about I always give you the same random number?","love.math.random()","Thou shalt not pass through my towers, foul creatures!","William S.",
+	"Please stand by while we think of more quotes...","the developers","Fallback quote. It's not a bug, it's a feature.", "Unknown Programmer",
+	"Please use data-driven development ;-)","Nicolai"} --TODO: next step is to get these from an external file
+local quoteno = quoterandomizer:random(1,#quotes/2) -- The second value will always have to be as high as the amount of quotes (the random number is not perfect, though)
+local quoteIndex = 1+(quoteno-1)*2
+o.quote = quotes[quoteIndex]
+o.source = quotes[quoteIndex+1]
 
 o.draw = function()
 	if o.phase == 1 then
