@@ -15,7 +15,7 @@ o.chromaticEffect = 0
 
 o.guiMenu		= love.gui.newGui()
 o.chkFullscreen	= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, false, "Fullscreen")
-o.chkLarge		= o.guiMenu.newCheckbox(startx, starty + 64 * 1, 191, 32, false, "Large")
+o.comboLarge		= o.guiMenu.newComboBox(startx, starty + 64 * 1, 191, 32, {"1920x1080","1280x720","800x600", "640x480"})
 o.btnBack		= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 34, "Back")
 
 o.optionLarge = small
@@ -24,6 +24,7 @@ o.reset = function()
 	o.guiMenu.flushMouse()
 end
 o.checkOptionsLarge = function()
+	--FIXME make this work with the combobox
 	if o.optionLarge then
 		success = love.window.setMode( 1280, 720, {fullscreen=o.optionFullscreen,vsync=false})--TODO: make vsync an option
 	else
@@ -53,11 +54,12 @@ o.update = function(dt)
 		local success = love.window.setFullscreen( o.optionFullscreen )
 	end
 
-	if o.chkLarge.isHit() then
-		love.sounds.playSound("sounds/button_pressed.wav")
-		o.optionLarge = o.chkLarge.isChecked()
-		o.optionFullscreen = o.chkFullscreen.isChecked()
-		o.checkOptionsLarge()
+	if o.comboLarge.isHit() then
+	--love.sounds.playSound("sounds/button_pressed.wav")
+	--print "hello"
+	--		o.optionLarge = o.chkLarge.isChecked()
+	--		o.optionFullscreen = o.chkFullscreen.isChecked()
+	--		o.checkOptionsLarge()
 	end
 
 	if o.btnBack.isHit() or love.keyboard.isDown("escape") then

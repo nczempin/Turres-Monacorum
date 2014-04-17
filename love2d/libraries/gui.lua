@@ -4,6 +4,7 @@ love.gui = {}
 require "libraries/button"
 require "libraries/checkbox"
 require "libraries/radiobutton"
+require "libraries/comboBox"
 
 function love.gui.newGui()
 	local o = {}
@@ -13,6 +14,7 @@ function love.gui.newGui()
 	o.hit = false
 	o.down = true
 	o.timer = 0
+	o.comboTrack = nil --TODO: just using one variable means we can currently only use one combo per page/state/ gui object.
 
 	--Update gui
 	o.update = function(dt)
@@ -35,12 +37,18 @@ function love.gui.newGui()
 			o.down = false
 		end
 
+		--TODO all this needs to be more event-driven
+
 		--Check if Mouse is over an element
 		for i = 1, #o.elements do
-			o.elements[i].update(dt)
+			local e = o.elements[i]
+			e.update(dt)
 
-			if o.elements[i].enabled then
-				if mx >= o.elements[i].x and mx <= o.elements[i].x + o.elements[i].width and my >= o.elements[i].y and my <= o.elements[i].y + o.elements[i].height then
+			if e.enabled then
+				local w = e.boundingWidth or e.width
+				local h = e.boundingHeight or e.height
+				if mx >= o.elements[i].x and mx <= o.elements[i].x + w and my >= o.elements[i].y and my <= o.elements[i].y + h then
+
 					o.hover = false
 					o.elements[i].hover = true
 					if love.mouse.isDown("l") then
@@ -49,14 +57,32 @@ function love.gui.newGui()
 						else
 							o.elements[i].hit = true
 							o.elements[i].down = true
+
+							-- TODO this should be delegated to each object
 							if o.elements[i].type == "checkbox" then
 								o.elements[i].checked = not o.elements[i].checked
 							elseif o.elements[i].type == "radiobutton" then
 								o.flushRadioButtons()
 								o.elements[i].checked = true
+							elseif o.elements[i].type =="comboBox" then
+								if not o.combotrack then
+									--print (i, "down")
+									o.elements[i].activate()
+									o.comboTrack = i
+								end
 							end
 						end
 					else
+						if (o.comboTrack)then
+							--print (o.comboTrack,": up")
+							o.elements[o.comboTrack].select(mx,my)
+							o.elements[o.comboTrack].deactivate()
+							o.comboTrack = nil
+						end
+						-- TODO this should be delegated to each object
+						if o.elements[i].type =="comboBox" then --letting go within the original bounds.
+							o.elements[i].deactivate()
+						end
 						o.elements[i].hit = false
 						o.elements[i].down = false
 					end
@@ -67,8 +93,14 @@ function love.gui.newGui()
 				end
 			end
 		end
-	end
+		if not love.mouse.isDown("l") and o.comboTrack then
+			--print (o.comboTrack, "out")
+			o.elements[o.comboTrack].deactivate()
+			o.comboTrack = nil
+		end
 
+
+	end
 	--Draw gui
 	o.draw = function(dt)
 		for i = 1, #o.elements do
@@ -117,6 +149,14 @@ function love.gui.newGui()
 	--Return new image radiobutton
 	o.newImageRadioButton = function(x, y, width, height, img)
 		o.elements[#o.elements + 1] = love.gui.newRadioButton(x, y, width, height)
+		o.elements[#o.elements].setImage(img)
+		o.elements[#o.elements].parent = o
+
+		return o.elements[#o.elements]
+	end
+	--Return new comboBox
+	o.newComboBox = function(x, y, width, height, list)
+		o.elements[#o.elements + 1] = love.gui.newComboBox(x, y, width, height, list)
 		o.elements[#o.elements].setImage(img)
 		o.elements[#o.elements].parent = o
 
