@@ -44,11 +44,15 @@ function loadOptions()
 			local m1, m2 = string.find(line, option.."=")
 			print (i, m1,m2)
 			if m2 then
+
 				local setting = string.sub(line, m2+1)
+				--TODO: can/should we change the options in conf.lua from here?
 				if string.find(setting, "true")then
-					stateSettingsVideoDisplay.optionLarge = true --TODO: can/should we change the options in conf.lua from here?
+					print "large"
+					stateSettingsVideoDisplay.optionLarge = stateSettingsVideoDisplay.resolutionStrings[2] --TODO: this should really be handled inside the display settings module
 				else
-					stateSettingsVideoDisplay.optionLarge = false
+					print "not large"
+					stateSettingsVideoDisplay.optionLarge =  stateSettingsVideoDisplay.resolutionStrings[3]--TODO: this should really be handled inside the display settings module
 				end
 				stateSettingsVideoDisplay.checkOptionsLarge() --TODO: provide a function that changes the option and immediately switches
 			end
@@ -66,7 +70,7 @@ function love.load()
 	FONT = G.newFont(32)
 	FONT_SMALL = G.newFont(24)
 
-	currentgamestate = 12  -- TODO: make "skip intro" an option
+	currentgamestate = 12 -- TODO: make "skip intro" an option
 
 	stateMainMenu.setVersion("v0.6.2")
 end

@@ -15,31 +15,59 @@ o.chromaticEffect = 0
 
 o.guiMenu		= love.gui.newGui()
 o.chkFullscreen	= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, false, "Fullscreen")
-o.comboLarge		= o.guiMenu.newComboBox(startx, starty + 64 * 1, 191, 32, {"1920x1080","1280x720","800x600", "640x480"})
+o.resolutionStrings = {"1920x1080", "1280x720", "800x600", "640x480"}
+
+local width, height, flags = love.window.getMode()
+local tmp = width.."x"..height
+local found = 0
+for i = 1, #o.resolutionStrings do
+	if o.resolutionStrings[i] == tmp then
+		print ("found: "..i)
+		found = i
+	end
+end
+if found == 0 then
+	table.insert(o.resolutionStrings,1,tmp)
+	found = 1
+end
+o.comboLarge		= o.guiMenu.newComboBox(startx, starty + 64 * 1, 191, 32, o.resolutionStrings)
+for i = 1, #o.resolutionStrings do
+	print (o.resolutionStrings[i])
+end
+o.comboLarge.updateSelection(found)
+o.optionLarge = o.resolutionStrings[found]
+
 o.btnBack		= o.guiMenu.newButton(startx + 8, starty + 64 * 5 + 8, 176, 34, "Back")
 
-o.optionLarge = small
+
+o.holding = false
 
 o.reset = function()
 	o.guiMenu.flushMouse()
 end
 o.checkOptionsLarge = function()
-	--FIXME make this work with the combobox
-	if o.optionLarge then
-		success = love.window.setMode( 1280, 720, {fullscreen=o.optionFullscreen,vsync=false})--TODO: make vsync an option
-	else
-		success = love.window.setMode( 800, 600 ,{fullscreen=o.optionFullscreen,vsync=false})
+	local iterator = o.optionLarge:gmatch('%d+')
+	local numbers = {}
+	local i = 1
+	for number in iterator do
+		numbers[i] = tonumber(number)
+		i = i + 1
 	end
-	if success then
-		love.postshader.refreshScreenSize()
-		lightWorld.refreshScreenSize()
-		stateMainMenu.refreshScreenSize()
-		stateWorldMenu.refreshScreenSize()
-		stateSettings.refreshScreenSize()
-		stateSettingsVideo.refreshScreenSize()
-		stateSettingsVideoShaders.refreshScreenSize()
-		stateSettingsVideoDisplay.refreshScreenSize()
-		stateSettingsAudio.refreshScreenSize()
+	--TODO we are assuming that x will always have 2 elements. This is unsafe to assume.
+	local width, height, flags = love.window.getMode()
+	if (numbers[1] ~= width and numbers[2] ~= height)then
+		local success = love.window.setMode( numbers[1], numbers[2], {fullscreen=o.optionFullscreen,vsync=false})--TODO: make vsync an option
+		if success then
+			love.postshader.refreshScreenSize()
+			lightWorld.refreshScreenSize()
+			stateMainMenu.refreshScreenSize()
+			stateWorldMenu.refreshScreenSize()
+			stateSettings.refreshScreenSize()
+			stateSettingsVideo.refreshScreenSize()
+			stateSettingsVideoShaders.refreshScreenSize()
+			stateSettingsVideoDisplay.refreshScreenSize()
+			stateSettingsAudio.refreshScreenSize()
+		end
 	end
 end
 o.update = function(dt)
@@ -54,13 +82,17 @@ o.update = function(dt)
 		local success = love.window.setFullscreen( o.optionFullscreen )
 	end
 
-	if o.comboLarge.isHit() then
-	--love.sounds.playSound("sounds/button_pressed.wav")
-	--print "hello"
-	--		o.optionLarge = o.chkLarge.isChecked()
-	--		o.optionFullscreen = o.chkFullscreen.isChecked()
-	--		o.checkOptionsLarge()
+	if o.comboLarge.active then
+		o.holding = true
 	end
+
+	if not o.comboLarge.active and o.holding then
+		--print "releasing"
+		o.optionLarge = o.comboLarge.getSelection()
+		o.checkOptionsLarge()
+		o.holding = false
+	end
+
 
 	if o.btnBack.isHit() or love.keyboard.isDown("escape") then
 		love.sounds.playSound("sounds/button_pressed.wav")
@@ -107,7 +139,7 @@ o.refreshScreenSize = function()
 	local starty = 80
 
 	o.chkFullscreen.setPosition(startx, starty + 64 * 0)
-	o.chkLarge.setPosition(startx, starty + 64 * 1)
+	o.comboLarge.setPosition(startx, starty + 64 * 1)
 	o.btnBack.setPosition(startx + 8, starty + 64 * 5)
 end
 
