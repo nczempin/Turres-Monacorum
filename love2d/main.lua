@@ -59,6 +59,40 @@ function loadOptions()
 		end
 	end
 end
+function saveOptions()
+	local optionsIni = "options.ini"
+
+	if (not FS.exists(optionsIni))then
+	--create ini file
+	end
+	--FIXME: this is just code copied from loadOptions()
+	local option = "display.large"
+	local optionLines = {}
+	local lines = {}
+
+	for line in love.filesystem.lines(optionsIni) do
+		table.insert(lines, line)
+	end
+
+	for i,line in ipairs(lines)do
+		local m1, m2 = string.find(line, option.."=")
+		print (i, m1,m2)
+		if m2 then
+
+			local setting = string.sub(line, m2+1)
+			--TODO: can/should we change the options in conf.lua from here?
+			if string.find(setting, "true")then
+				print "large"
+				stateSettingsVideoDisplay.optionLarge = stateSettingsVideoDisplay.resolutionStrings[2] --TODO: this should really be handled inside the display settings module
+			else
+				print "not large"
+				stateSettingsVideoDisplay.optionLarge =  stateSettingsVideoDisplay.resolutionStrings[3]--TODO: this should really be handled inside the display settings module
+			end
+			stateSettingsVideoDisplay.checkOptionsLarge() --TODO: provide a function that changes the option and immediately switches
+		end
+
+	end
+end
 
 function love.load()
 	G = love.graphics
