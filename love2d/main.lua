@@ -32,7 +32,7 @@ function loadOptions()
 	local optionsIni = "options.ini"
 
 	if (FS.exists(optionsIni))then
-		local option = "display.large"
+		local option = "display.video.fullscreen"
 		local optionLines = {}
 		local lines = {}
 
@@ -48,11 +48,13 @@ function loadOptions()
 				local setting = string.sub(line, m2+1)
 				--TODO: can/should we change the options in conf.lua from here?
 				if string.find(setting, "true")then
-					print "large"
-					stateSettingsVideoDisplay.optionLarge = stateSettingsVideoDisplay.resolutionStrings[2] --TODO: this should really be handled inside the display settings module
+					print "fullscreen"
+					--stateSettingsVideoDisplay.optionLarge = stateSettingsVideoDisplay.resolutionStrings[2] --TODO: this should really be handled inside the display settings module
+					stateSettingsVideoDisplay.optionsFullscreen = true
 				else
-					print "not large"
-					stateSettingsVideoDisplay.optionLarge =  stateSettingsVideoDisplay.resolutionStrings[3]--TODO: this should really be handled inside the display settings module
+					print "not fullscreen"
+					stateSettingsVideoDisplay.optionsFullscreen = false
+					--	stateSettingsVideoDisplay.optionLarge =  stateSettingsVideoDisplay.resolutionStrings[3]--TODO: this should really be handled inside the display settings module
 				end
 				stateSettingsVideoDisplay.checkOptionsLarge() --TODO: provide a function that changes the option and immediately switches
 			end
@@ -63,7 +65,7 @@ function saveOptions()
 	local optionsIni = "options.ini"
 
 	local data = "Hello, world"
-	
+
 	local success = love.filesystem.write( optionsIni, data )
 	print ("success: ", success)
 	print (love.filesystem.getSaveDirectory())
@@ -74,28 +76,28 @@ function saveOptions()
 	local optionLines = {}
 	local lines = {}
 
---	for line in love.filesystem.lines(optionsIni) do
---		table.insert(lines, line)
---	end
---
---	for i,line in ipairs(lines)do
---		local m1, m2 = string.find(line, option.."=")
---		print (i, m1,m2)
---		if m2 then
---
---			local setting = string.sub(line, m2+1)
---			--TODO: can/should we change the options in conf.lua from here?
---			if string.find(setting, "true")then
---				print "large"
---				stateSettingsVideoDisplay.optionLarge = stateSettingsVideoDisplay.resolutionStrings[2] --TODO: this should really be handled inside the display settings module
---			else
---				print "not large"
---				stateSettingsVideoDisplay.optionLarge =  stateSettingsVideoDisplay.resolutionStrings[3]--TODO: this should really be handled inside the display settings module
---			end
---			stateSettingsVideoDisplay.checkOptionsLarge() --TODO: provide a function that changes the option and immediately switches
---		end
---
---	end
+	--	for line in love.filesystem.lines(optionsIni) do
+	--		table.insert(lines, line)
+	--	end
+	--
+	--	for i,line in ipairs(lines)do
+	--		local m1, m2 = string.find(line, option.."=")
+	--		print (i, m1,m2)
+	--		if m2 then
+	--
+	--			local setting = string.sub(line, m2+1)
+	--			--TODO: can/should we change the options in conf.lua from here?
+	--			if string.find(setting, "true")then
+	--				print "large"
+	--				stateSettingsVideoDisplay.optionLarge = stateSettingsVideoDisplay.resolutionStrings[2] --TODO: this should really be handled inside the display settings module
+	--			else
+	--				print "not large"
+	--				stateSettingsVideoDisplay.optionLarge =  stateSettingsVideoDisplay.resolutionStrings[3]--TODO: this should really be handled inside the display settings module
+	--			end
+	--			stateSettingsVideoDisplay.checkOptionsLarge() --TODO: provide a function that changes the option and immediately switches
+	--		end
+	--
+	--	end
 end
 
 function love.load()
