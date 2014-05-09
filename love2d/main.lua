@@ -32,7 +32,8 @@ function loadOptions()
 	local optionsIni = "options.ini"
 
 	if (FS.exists(optionsIni))then
-		local f = function(param)
+		local f = function(setting)
+			local param = string.find(setting, "true")
 			stateSettingsVideoDisplay.optionFullscreen = param
 		end
 		local options = {name="display.video.fullscreen", execute= f}
@@ -50,7 +51,7 @@ function loadOptions()
 
 				local setting = string.sub(line, m2+1)
 				--TODO: can/should we change the options in conf.lua from here?
-				options.execute(string.find(setting, "true"))
+				options.execute(setting)
 				--stateSettingsVideoDisplay.optionLarge = stateSettingsVideoDisplay.resolutionStrings[2] --TODO: this should really be handled inside the display settings module
 				--	stateSettingsVideoDisplay.optionLarge =  stateSettingsVideoDisplay.resolutionStrings[3]--TODO: this should really be handled inside the display settings module
 				stateSettingsVideoDisplay.checkOptionsLarge() --TODO: provide a function that changes the option and immediately switches
