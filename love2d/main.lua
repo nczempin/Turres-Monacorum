@@ -32,11 +32,14 @@ function loadOptions()
 	local optionsIni = "options.ini"
 
 	if (FS.exists(optionsIni))then
-		local f = function(setting)
+		local f1 = function(setting)
 			local param = string.find(setting, "true")
 			stateSettingsVideoDisplay.optionFullscreen = param
 		end
-		local options = {name="display.video.fullscreen", execute= f}
+		local f2= function(setting)
+			stateSettingsVideoDisplay.optionLarge=setting --TODO this needs to be sanitized
+		end
+		local options = {{name="display.video.fullscreen", execute= f1},{name="display.video.resolution",execute = f2}}
 		local optionLines = {}
 		local lines = {}
 
@@ -45,20 +48,23 @@ function loadOptions()
 		end
 
 		for i,line in ipairs(lines)do
-			local m1, m2 = string.find(line, options.name.."=")
-			print (i, m1,m2)
-			if m2 then
+			for j,option in ipairs(options) do
+				local m1, m2 = string.find(line, option.name.."=")
+				print (i, m1,m2)
+				if m2 then
 
-				local setting = string.sub(line, m2+1)
-				--TODO: can/should we change the options in conf.lua from here?
-				options.execute(setting)
-				--stateSettingsVideoDisplay.optionLarge = stateSettingsVideoDisplay.resolutionStrings[2] --TODO: this should really be handled inside the display settings module
-				--	stateSettingsVideoDisplay.optionLarge =  stateSettingsVideoDisplay.resolutionStrings[3]--TODO: this should really be handled inside the display settings module
-				stateSettingsVideoDisplay.checkOptionsLarge() --TODO: provide a function that changes the option and immediately switches
+					local setting = string.sub(line, m2+1)
+					--TODO: can/should we change the options in conf.lua from here?
+					option.execute(setting)
+					--stateSettingsVideoDisplay.optionLarge = stateSettingsVideoDisplay.resolutionStrings[2] --TODO: this should really be handled inside the display settings module
+					--	stateSettingsVideoDisplay.optionLarge =  stateSettingsVideoDisplay.resolutionStrings[3]--TODO: this should really be handled inside the display settings module
+				end
 			end
 		end
 	end
+	stateSettingsVideoDisplay.checkOptionsLarge() --TODO: provide a function that changes the option and immediately switches
 end
+
 function saveOptions()
 	local optionsIni = "options.ini"
 
