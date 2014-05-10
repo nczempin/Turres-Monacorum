@@ -91,7 +91,8 @@ function love.gui.newComboBox(x, y, width, height, list)
 					--G.printf(o.text, o.x + 2, o.y + 6, o.width, "center")
 					G.setBlendMode("additive")
 					G.setColor(color[1], color[2], color[3], color[4])
-					G.printf(o.list[o.selection], o.x, o.y + 4, o.width, "center")
+					local text = o.list[o.selection] or "???"
+					G.printf(text, o.x, o.y + 4, o.width, "center")
 					if o.active then
 						G.setLineWidth(2)
 						local j = 0

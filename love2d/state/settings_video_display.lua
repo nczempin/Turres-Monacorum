@@ -47,7 +47,11 @@ o.reset = function()
 	o.guiMenu.flushMouse()
 end
 o.checkOptionsLarge = function()
-	local iterator = o.optionLarge:gmatch('%d+')
+	local option = o.optionLarge
+	if not option then
+		return --TODO log warning?
+	end
+	local iterator = option:gmatch('%d+')
 	local numbers = {}
 	local i = 1
 	for number in iterator do
