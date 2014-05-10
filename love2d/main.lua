@@ -68,12 +68,37 @@ function loadOptions()
 	print ("possibly changing resolution/fullscreen")
 	stateSettingsVideoDisplay.checkOptionsLarge() --TODO: provide a function that changes the option and immediately switches
 end
+function love.filesystem.rename(from, to)
+	assert(type(from) == "string", "bad argument #1 to rename (string expected, got "..type(from)..")")
+	assert(type(to) == "string", "bad argument #2 to rename (string expected, got "..type(to)..")")
 
+	local writeDir = love.filesystem.getSaveDirectory().."/"
+
+	if not os.rename(writeDir..from, writeDir..to) then
+		return false
+	end
+
+	return true
+end
 function saveOptions()
 	local optionsIni = "options.ini"
+	local data = ""
+	local f1 = function(setting)
+		local param =stateSettingsVideoDisplay.optionFullscreen or false
+		data = data..setting.."="..tostring(param).."\n"
+	end
+	local f2= function(setting)
+		local width, height, flags = love.window.getMode()
+		local param = width.."x"..height
 
-	local data = "Hello, world"
+		data = data..setting.."="..tostring(param).."\n"
+	end
+	local options = {{name="display.video.fullscreen", execute= f1},{name="display.video.resolution",execute = f2}}
+	for _, option in ipairs(options) do
+		option.execute(option.name)
+	end
 
+	love.filesystem.rename(optionsIni,optionsIni.."_old")
 	local success = love.filesystem.write( optionsIni, data )
 	print ("success: ", success)
 	print (love.filesystem.getSaveDirectory())
@@ -260,6 +285,8 @@ function love.keypressed(key, code)
 			love.sounds.playSound("sounds/button_pressed.wav")
 			love.setgamestate(0)
 		end
+	elseif key == "f1" then
+		saveOptions()
 	end
 end
 
