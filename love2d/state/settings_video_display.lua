@@ -1,4 +1,18 @@
 local o = {}
+o.findResolution = function(tmp)
+	local found = 0
+	for i = 1, #o.resolutionStrings do
+		if o.resolutionStrings[i] == tmp then
+			print ("found: "..i)
+			found = i
+		end
+	end
+	if found == 0 then
+		table.insert(o.resolutionStrings,1,tmp)
+		found = 1
+	end
+	return found
+end
 
 local startx = love.window.getWidth() * 0.5 - 191 * 0.5
 local starty = 80
@@ -14,22 +28,15 @@ o.effectTimer = 0
 o.chromaticEffect = 0
 
 o.guiMenu		= love.gui.newGui()
-o.chkFullscreen	= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, false, "Fullscreen")
+
+o.chkFullscreen	= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, o.optionFullscreen, "Fullscreen")
 o.resolutionStrings = {"1920x1080", "1280x720", "800x600", "640x480"}
 
 local width, height, flags = love.window.getMode()
 local tmp = width.."x"..height
-local found = 0
-for i = 1, #o.resolutionStrings do
-	if o.resolutionStrings[i] == tmp then
-		print ("found: "..i)
-		found = i
-	end
-end
-if found == 0 then
-	table.insert(o.resolutionStrings,1,tmp)
-	found = 1
-end
+
+local found = o.findResolution(tmp)
+
 o.comboLarge		= o.guiMenu.newComboBox(startx, starty + 64 * 1, 191, 32, o.resolutionStrings)
 for i = 1, #o.resolutionStrings do
 	print (o.resolutionStrings[i])
@@ -46,7 +53,11 @@ o.reset = function()
 	o.guiMenu.flushMouse()
 end
 o.checkOptionsLarge = function()
-	local iterator = o.optionLarge:gmatch('%d+')
+	local option = o.optionLarge
+	if not option then
+		return --TODO log warning?
+	end
+	local iterator = option:gmatch('%d+')
 	local numbers = {}
 	local i = 1
 	for number in iterator do
@@ -55,7 +66,8 @@ o.checkOptionsLarge = function()
 	end
 	--TODO we are assuming that x will always have 2 elements. This is unsafe to assume.
 	local width, height, flags = love.window.getMode()
-	if (numbers[1] ~= width and numbers[2] ~= height)then
+	local isFullscreen = flags["fullscreen"]
+	if (numbers[1] ~= width or numbers[2] ~= height or isFullscreen ~= o.optionFullscreen)then
 		local success = love.window.setMode( numbers[1], numbers[2], {fullscreen=o.optionFullscreen,vsync=false})--TODO: make vsync an option
 		if success then
 			love.postshader.refreshScreenSize()
