@@ -99,7 +99,8 @@ function love.gui.newComboBox(x, y, width, height, list)
 						for i = 1, #o.list do
 							if i ~= o.selection then
 								j = j + 1
-								G.printf(o.list[i], o.x, o.y + 4+BOUNDING_HEIGHT*(j), o.width, "center")
+								local text = o.list[i] or "???"
+								G.printf(text, o.x, o.y + 4+BOUNDING_HEIGHT*(j), o.width, "center")
 								G.rectangle("line", o.x, o.y+BOUNDING_HEIGHT*(j), o.width, o.height)
 							end
 						end
