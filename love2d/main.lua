@@ -35,6 +35,7 @@ function loadOptions()
 		local f1 = function(setting)
 			local param = string.find(setting, "true")
 			stateSettingsVideoDisplay.optionFullscreen = param
+			stateSettingsVideoDisplay.chkFullscreen.checked = param --TODO: this should be done inside the settings page
 		end
 		local f2= function(setting)
 			stateSettingsVideoDisplay.optionLarge=setting --TODO this needs to be sanitized
@@ -62,6 +63,7 @@ function loadOptions()
 			end
 		end
 	end
+	print ("possibly changing resolution/fullscreen")
 	stateSettingsVideoDisplay.checkOptionsLarge() --TODO: provide a function that changes the option and immediately switches
 end
 
