@@ -39,7 +39,8 @@ function loadOptions()
 		end
 		local f2= function(setting)
 			stateSettingsVideoDisplay.optionLarge=setting --TODO this needs to be sanitized
-			stateSettingsVideoDisplay.comboLarge.updateSelection(setting)
+			local resolutionIndex = stateSettingsVideoDisplay.findResolution(setting)
+			stateSettingsVideoDisplay.comboLarge.updateSelection(resolutionIndex)
 		end
 		local options = {{name="display.video.fullscreen", execute= f1},{name="display.video.resolution",execute = f2}}
 		local optionLines = {}

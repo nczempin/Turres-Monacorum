@@ -1,6 +1,5 @@
 local o = {}
-o.findResolution = function(width, height)
-	local tmp = width.."x"..height
+o.findResolution = function(tmp)
 	local found = 0
 	for i = 1, #o.resolutionStrings do
 		if o.resolutionStrings[i] == tmp then
@@ -34,7 +33,9 @@ o.chkFullscreen	= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, o.opti
 o.resolutionStrings = {"1920x1080", "1280x720", "800x600", "640x480"}
 
 local width, height, flags = love.window.getMode()
-local found = o.findResolution(width,height)
+local tmp = width.."x"..height
+
+local found = o.findResolution(tmp)
 
 o.comboLarge		= o.guiMenu.newComboBox(startx, starty + 64 * 1, 191, 32, o.resolutionStrings)
 for i = 1, #o.resolutionStrings do
