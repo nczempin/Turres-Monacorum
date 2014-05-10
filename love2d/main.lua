@@ -82,15 +82,16 @@ function love.filesystem.rename(from, to)
 end
 function saveOptions()
 	local optionsIni = "options.ini"
-	local data = "#Hello, world\n"
+	local data = ""
 	local f1 = function(setting)
 		local param =stateSettingsVideoDisplay.optionFullscreen or false
 		data = data..setting.."="..tostring(param).."\n"
 	end
 	local f2= function(setting)
-	--		stateSettingsVideoDisplay.optionLarge=setting --TODO this needs to be sanitized
-	--		local resolutionIndex = stateSettingsVideoDisplay.findResolution(setting)
-	--		stateSettingsVideoDisplay.comboLarge.updateSelection(resolutionIndex)
+		local width, height, flags = love.window.getMode()
+		local param = width.."x"..height
+
+		data = data..setting.."="..tostring(param).."\n"
 	end
 	local options = {{name="display.video.fullscreen", execute= f1},{name="display.video.resolution",execute = f2}}
 	for _, option in ipairs(options) do
