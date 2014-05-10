@@ -69,23 +69,35 @@ function loadOptions()
 	stateSettingsVideoDisplay.checkOptionsLarge() --TODO: provide a function that changes the option and immediately switches
 end
 function love.filesystem.rename(from, to)
-   assert(type(from) == "string", "bad argument #1 to rename (string expected, got "..type(from)..")")
-   assert(type(to) == "string", "bad argument #2 to rename (string expected, got "..type(to)..")")
+	assert(type(from) == "string", "bad argument #1 to rename (string expected, got "..type(from)..")")
+	assert(type(to) == "string", "bad argument #2 to rename (string expected, got "..type(to)..")")
 
-   local writeDir = love.filesystem.getSaveDirectory().."/"
+	local writeDir = love.filesystem.getSaveDirectory().."/"
 
-   if not os.rename(writeDir..from, writeDir..to) then
-      return false
-   end
+	if not os.rename(writeDir..from, writeDir..to) then
+		return false
+	end
 
-   return true
+	return true
 end
 function saveOptions()
 	local optionsIni = "options.ini"
+	local data = "#Hello, world\n"
+	local f1 = function(setting)
+		local param =stateSettingsVideoDisplay.optionFullscreen or false
+		data = data..setting.."="..tostring(param).."\n"
+	end
+	local f2= function(setting)
+	--		stateSettingsVideoDisplay.optionLarge=setting --TODO this needs to be sanitized
+	--		local resolutionIndex = stateSettingsVideoDisplay.findResolution(setting)
+	--		stateSettingsVideoDisplay.comboLarge.updateSelection(resolutionIndex)
+	end
+	local options = {{name="display.video.fullscreen", execute= f1},{name="display.video.resolution",execute = f2}}
+	for _, option in ipairs(options) do
+		option.execute(option.name)
+	end
+
 	love.filesystem.rename(optionsIni,optionsIni.."_old")
-
-	local data = "Hello, world"
-
 	local success = love.filesystem.write( optionsIni, data )
 	print ("success: ", success)
 	print (love.filesystem.getSaveDirectory())
