@@ -14,7 +14,8 @@ o.effectTimer = 0
 o.chromaticEffect = 0
 
 o.guiMenu		= love.gui.newGui()
-o.chkFullscreen	= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, false, "Fullscreen")
+
+o.chkFullscreen	= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, o.optionFullscreen, "Fullscreen")
 o.resolutionStrings = {"1920x1080", "1280x720", "800x600", "640x480"}
 
 local width, height, flags = love.window.getMode()
@@ -55,7 +56,8 @@ o.checkOptionsLarge = function()
 	end
 	--TODO we are assuming that x will always have 2 elements. This is unsafe to assume.
 	local width, height, flags = love.window.getMode()
-	if (numbers[1] ~= width and numbers[2] ~= height)then
+	local isFullscreen = flags["fullscreen"]
+	if (numbers[1] ~= width or numbers[2] ~= height or isFullscreen ~= o.optionFullscreen)then
 		local success = love.window.setMode( numbers[1], numbers[2], {fullscreen=o.optionFullscreen,vsync=false})--TODO: make vsync an option
 		if success then
 			love.postshader.refreshScreenSize()
