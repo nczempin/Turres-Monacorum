@@ -1,4 +1,19 @@
 local o = {}
+o.findResolution = function(width, height)
+	local tmp = width.."x"..height
+	local found = 0
+	for i = 1, #o.resolutionStrings do
+		if o.resolutionStrings[i] == tmp then
+			print ("found: "..i)
+			found = i
+		end
+	end
+	if found == 0 then
+		table.insert(o.resolutionStrings,1,tmp)
+		found = 1
+	end
+	return found
+end
 
 local startx = love.window.getWidth() * 0.5 - 191 * 0.5
 local starty = 80
@@ -19,18 +34,8 @@ o.chkFullscreen	= o.guiMenu.newCheckbox(startx, starty + 64 * 0, 191, 32, o.opti
 o.resolutionStrings = {"1920x1080", "1280x720", "800x600", "640x480"}
 
 local width, height, flags = love.window.getMode()
-local tmp = width.."x"..height
-local found = 0
-for i = 1, #o.resolutionStrings do
-	if o.resolutionStrings[i] == tmp then
-		print ("found: "..i)
-		found = i
-	end
-end
-if found == 0 then
-	table.insert(o.resolutionStrings,1,tmp)
-	found = 1
-end
+local found = o.findResolution(width,height)
+
 o.comboLarge		= o.guiMenu.newComboBox(startx, starty + 64 * 1, 191, 32, o.resolutionStrings)
 for i = 1, #o.resolutionStrings do
 	print (o.resolutionStrings[i])
