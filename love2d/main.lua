@@ -51,6 +51,7 @@ function love.load()
 	loadOptions()
 	--saveOptions() --TODO temporarily added for testing
 	FONT = G.newFont(32)
+	FONT_LARGE = G.newFont(64)
 	FONT_SMALL = G.newFont(24)
 
 	currentgamestate = 12 -- TODO: make "skip intro" an option
@@ -93,6 +94,7 @@ function love.setgamestate(newgamestate, option)
 		stateWorldMenu.init()
 	elseif newgamestate == 14 then
 		love.turris.reinit(option)
+		turGame.layerCountdown.init()
 	end
 
 	if currentgamestate == 5 then
