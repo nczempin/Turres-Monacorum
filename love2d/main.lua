@@ -15,6 +15,8 @@ require "spawn"
 require "towerType"
 require "sound"
 
+require "settings"
+
 require "util"
 
 -- states
@@ -22,44 +24,24 @@ stateMainMenu = require("state/main_menu")
 stateIntro = require("state/intro")
 stateWorldMenu = require("state/world_menu")
 stateCredits = require("state/credits")
-stateSettings = require("state/settings")
+stateSettings = require("state/settings_menu")
 stateSettingsVideo = require("state/settings_video")
 stateSettingsVideoShaders = require("state/settings_video_shaders")
 stateSettingsVideoDisplay = require("state/settings_video_display")
 stateSettingsAudio = require("state/settings_audio")
 
-function loadOptions()
-	local optionsIni = "options.ini"
+function love.filesystem.rename(from, to)
+	assert(type(from) == "string", "bad argument #1 to rename (string expected, got "..type(from)..")")
+	assert(type(to) == "string", "bad argument #2 to rename (string expected, got "..type(to)..")")
 
-	if (FS.exists(optionsIni))then
-		local option = "display.large"
-		local optionLines = {}
-		local lines = {}
+	local writeDir = love.filesystem.getSaveDirectory().."/"
 
-		for line in love.filesystem.lines(optionsIni) do
-			table.insert(lines, line)
-		end
-
-		for i,line in ipairs(lines)do
-			local m1, m2 = string.find(line, option.."=")
-			print (i, m1,m2)
-			if m2 then
-
-				local setting = string.sub(line, m2+1)
-				--TODO: can/should we change the options in conf.lua from here?
-				if string.find(setting, "true")then
-					print "large"
-					stateSettingsVideoDisplay.optionLarge = stateSettingsVideoDisplay.resolutionStrings[2] --TODO: this should really be handled inside the display settings module
-				else
-					print "not large"
-					stateSettingsVideoDisplay.optionLarge =  stateSettingsVideoDisplay.resolutionStrings[3]--TODO: this should really be handled inside the display settings module
-				end
-				stateSettingsVideoDisplay.checkOptionsLarge() --TODO: provide a function that changes the option and immediately switches
-			end
-		end
+	if not os.rename(writeDir..from, writeDir..to) then
+		return false
 	end
-end
 
+	return true
+end
 function love.load()
 	G = love.graphics
 	W = love.window
@@ -67,12 +49,13 @@ function love.load()
 	S = love.sounds
 	FS = love.filesystem
 	loadOptions()
+	--saveOptions() --TODO temporarily added for testing
 	FONT = G.newFont(32)
 	FONT_SMALL = G.newFont(24)
 
 	currentgamestate = 12 -- TODO: make "skip intro" an option
 
-	stateMainMenu.setVersion("v0.6.2")
+	stateMainMenu.setVersion("v0.6.3")
 end
 
 function love.getgamestate()
@@ -211,6 +194,8 @@ function love.keypressed(key, code)
 			love.sounds.playSound("sounds/button_pressed.wav")
 			love.setgamestate(0)
 		end
+--	elseif key == "f1" then
+--		saveOptions()
 	end
 end
 
