@@ -1,6 +1,9 @@
 local o = {}
 local SECONDS = 3
-o.countdown = SECONDS
+
+o.init = function(dt)
+	o.countdown = SECONDS
+end
 
 o.update = function(dt)
 	o.countdown = o.countdown - dt

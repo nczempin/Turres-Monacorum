@@ -93,6 +93,7 @@ function love.setgamestate(newgamestate, option)
 		stateWorldMenu.init()
 	elseif newgamestate == 14 then
 		love.turris.reinit(option)
+		turGame.layerCountdown.init()
 	end
 
 	if currentgamestate == 5 then
