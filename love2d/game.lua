@@ -339,12 +339,16 @@ function love.turris.newGame()
 
 						if e then
 							o.player.addEnergy(-energyCost)
+							love.sounds.setSoundVolume(0.5)
 							if e.health > 0.0 then
 								e.health = e.health - t.type.damage*dt
 								if e.health <= 0 then
 									e.dead = true
 								end
 							end
+						else
+							love.sounds.setSoundVolume(0)
+						-- would like to shoot but can't. possibly play a "no energy" sound
 						end
 					end
 				end

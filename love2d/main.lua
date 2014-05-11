@@ -88,6 +88,8 @@ function love.setgamestate(newgamestate, option)
 		turGame.layerGameOver.effectTimer = 0
 		--love.sounds.playBackground("sounds/music/turres_music_1.mp3", "menu")
 		love.sounds.loopSound("sounds/weapons/laser_loop.ogg")
+		love.sounds.setSoundVolume(0)
+
 	elseif newgamestate == 4 or newgamestate == 13 then
 		turGame.layerGameOver.effectTimer = 0
 		love.sounds.playBackground("sounds/music/game_over_music.mp3", "game")
