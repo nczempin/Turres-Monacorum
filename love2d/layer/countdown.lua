@@ -4,6 +4,9 @@ o.countdown = SECONDS
 
 o.update = function(dt)
 	o.countdown = o.countdown - dt
+	if (o.countdown <= 0)then
+		love.setgamestate(1)
+	end
 end
 
 o.draw = function()
