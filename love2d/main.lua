@@ -128,7 +128,7 @@ function love.update(dt)
 		stateIntro.update(dt)
 	elseif (currentgamestate == 13)then
 		turGame.layerWin.update(dt)
-	elseif (currentgamestate == 13)then
+	elseif (currentgamestate == 14)then
 		turGame.layerCountdown.update(dt)
 	end
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
