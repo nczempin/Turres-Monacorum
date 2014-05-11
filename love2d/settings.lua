@@ -55,5 +55,5 @@ function saveOptions()
 
 	love.filesystem.rename(optionsIni,optionsIni.."_old")
 	local success = love.filesystem.write( optionsIni, data )
-	print ("success: ", success)
+	print ("options saved successfully: ", success)
 end

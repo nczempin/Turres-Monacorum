@@ -194,8 +194,8 @@ function love.keypressed(key, code)
 			love.sounds.playSound("sounds/button_pressed.wav")
 			love.setgamestate(0)
 		end
-	elseif key == "f1" then
-		saveOptions()
+--	elseif key == "f1" then
+--		saveOptions()
 	end
 end
 

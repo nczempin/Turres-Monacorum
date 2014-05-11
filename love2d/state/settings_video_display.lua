@@ -70,6 +70,8 @@ o.checkOptionsLarge = function()
 	if (numbers[1] ~= width or numbers[2] ~= height or isFullscreen ~= o.optionFullscreen)then
 		local success = love.window.setMode( numbers[1], numbers[2], {fullscreen=o.optionFullscreen,vsync=false})--TODO: make vsync an option
 		if success then
+			saveOptions()
+			--TODO this needs to be done more elegantly
 			love.postshader.refreshScreenSize()
 			lightWorld.refreshScreenSize()
 			stateMainMenu.refreshScreenSize()
@@ -88,10 +90,11 @@ o.update = function(dt)
 
 	o.guiMenu.update(dt)
 
-	if o.chkFullscreen.isHit() then
+	if o.chkFullscreen.isHit() then --TODO: we should switch on button release, not click
 		love.sounds.playSound("sounds/button_pressed.wav")
 		o.optionFullscreen = o.chkFullscreen.isChecked()
 		local success = love.window.setFullscreen( o.optionFullscreen )
+		saveOptions()
 	end
 
 	if o.comboLarge.active then
