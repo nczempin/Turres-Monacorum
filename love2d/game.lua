@@ -119,6 +119,7 @@ function love.turris.newGame()
 		o.layerHud = love.turris.newHudLayer(o.player)
 		o.layerGameOver = require("layer/gameover")
 		o.layerWin = require("layer/win")
+		o.layerCountdown = require("layer/countdown")
 	end
 
 	-- gameplay
