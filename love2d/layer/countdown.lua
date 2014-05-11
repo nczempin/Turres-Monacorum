@@ -32,7 +32,8 @@ o.draw = function()
 		end
 	end
 	end
-	G.printf(text, 0, 240, W.getWidth(), "center")
+	local scale = 1-(o.countdown-o.oldcountdown)/2
+	G.printf(text, 0, 240, W.getWidth(), "center",0,scale,scale)
 	G.setColor(255, 255, 255, 127)
 end
 
