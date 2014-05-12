@@ -90,9 +90,12 @@ function love.setgamestate(newgamestate, option)
 		love.sounds.loopSound("sounds/weapons/laser_loop.ogg")
 		love.sounds.setSoundVolume(0,"sounds/weapons/laser_loop.ogg")
 
-	elseif newgamestate == 4 or newgamestate == 13 then
+	elseif newgamestate == 4 then
 		turGame.layerGameOver.effectTimer = 0
 		love.sounds.playBackground("sounds/music/game_over_music.mp3", "game")
+	elseif  newgamestate == 13 then
+		turGame.layerGameOver.effectTimer = 0
+		love.sounds.playBackground("sounds/music/level_up.mp3", "game")
 	elseif newgamestate == 11 then
 		stateWorldMenu.init()
 	elseif newgamestate == 14 then
