@@ -51,8 +51,8 @@ function love.turris.newGame()
 		local img -- TODO
 
 		o.enemyType = {}
-		o.enemyType[1] = love.turris.newEnemyType(o.creepAnim1, 100, 1.0)
-		o.enemyType[2] = love.turris.newEnemyType(o.creepAnim2, 2000, 0.5)
+		o.enemyType[1] = love.turris.newEnemyType(1, o.creepAnim1, 100, 1.0)
+		o.enemyType[2] = love.turris.newEnemyType(2, o.creepAnim2, 2000, 0.5)
 
 		o.enemyTypes = { o.enemyType[1], o.enemyType[2] }
 
@@ -87,8 +87,8 @@ function love.turris.newGame()
 		Water.setCollision(false)
 
 		energyTower.setEnergyGeneration(20)
-		energyTower.buildCost = 100
-		massTower.setMassGeneration(2)
+		energyTower.buildCost = 50
+		massTower.setMassGeneration(5)
 
 		o.map.init()
 
@@ -346,7 +346,7 @@ function love.turris.newGame()
 								e.health = e.health - t.type.damage*dt
 								if e.health <= 0 then
 									e.dead = true
-									love.sounds.playSound("sounds/phaser_rotating.mp3")
+									e.enemyType.playDeathSound()
 								end
 							end
 						else
