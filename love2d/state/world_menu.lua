@@ -30,7 +30,7 @@ o.init = function()
 	o.description = {}
 
 	for i = 1, #missions do
-		o.btnStage[i] = o.guiMenu.newButton(o.startx + missions[i].x, missions[i].y, 34, 34, i)
+		o.btnStage[i] = o.guiMenu.newButton(o.startx + missions[i].x, missions[i].y, 34, 34, missions[i].button or "")
 		o.description[i] = {missions[i].title, missions[i].description}
 
 		local locked = true
