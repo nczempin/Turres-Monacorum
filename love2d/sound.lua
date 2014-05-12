@@ -34,7 +34,7 @@ function love.sounds.playSound(soundPath, timeInMilliSeconds)
 	end
 end
 function love.sounds.loopSound(soundPath)
-	TEsound.playLooping(soundPath,"sound", 9999,LOVE_SOUND_SOUNDVOLUME,nil)
+	TEsound.playLooping(soundPath,soundPath, 9999,0.75,nil)
 end
 
 --Sets the Background Volume
@@ -46,9 +46,10 @@ end
 
 
 --Sets the Volume for sounds
-function love.sounds.setSoundVolume(volume)
-	LOVE_SOUND_SOUNDVOLUME	= volume
-	TEsound.volume("sound", volume)
+function love.sounds.setSoundVolume(volume, which)
+	which = which or "sound"
+	--LOVE_SOUND_SOUNDVOLUME	= volume
+	TEsound.volume(which, volume)
 end
 
 --Sets the Backgroundmsuic Volume
