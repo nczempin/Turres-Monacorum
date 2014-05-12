@@ -86,7 +86,7 @@ function love.turris.newGame()
 		spawnEggs.setCollision(false)
 		Water.setCollision(false)
 
-		energyTower.setEnergyGeneration(20)
+		energyTower.setEnergyGeneration(10)
 		energyTower.buildCost = 50
 		massTower.setMassGeneration(5)
 
@@ -361,8 +361,8 @@ function love.turris.newGame()
 
 		-- test
 		--TODO: -> player.update
-		o.player.addMass(dt*2)
-		o.player.addEnergy(dt*5)
+--		o.player.addMass(dt*2)
+--		o.player.addEnergy(dt*5)
 	end
 	--------------------- drawing starts here
 
