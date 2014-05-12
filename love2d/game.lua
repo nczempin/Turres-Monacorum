@@ -142,7 +142,7 @@ function love.turris.newGame()
 				end
 				o.towers[x * o.map.height + y] = t
 				o.towerCount = o.towerCount + 1
-				o.player.addMass(-10)
+				o.player.addMass(-tt.buildCost)
 			end
 		end
 	end
@@ -346,7 +346,7 @@ function love.turris.newGame()
 								e.health = e.health - t.type.damage*dt
 								if e.health <= 0 then
 									e.dead = true
-									love.sounds.playSound("sounds/highpitch_boom.mp3")
+									love.sounds.playSound("sounds/phaser_rotating.mp3")
 								end
 							end
 						else
