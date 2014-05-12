@@ -23,6 +23,9 @@ love.ai.newAI = function()
 	o.nextX = 1
 	o.nextY = 1
 	o.speed = 0
+	o.xVar = math.random()
+	o.yVar = math.random()
+
 
 	o.update = function(dt)
 		if o.newPath then
@@ -129,11 +132,11 @@ love.ai.newAI = function()
 	end
 
 	o.getX = function()
-		return o.currX
+		return o.currX+o.xVar*0.5
 	end
 
 	o.getY = function()
-		return o.currY
+		return o.currY+o.yVar*0.5
 	end
 
 	o.newMap = function(width, height)
