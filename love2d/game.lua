@@ -51,8 +51,8 @@ function love.turris.newGame()
 		local img -- TODO
 
 		o.enemyType = {}
-		o.enemyType[1] = love.turris.newEnemyType(o.creepAnim1, 100, 1.0)
-		o.enemyType[2] = love.turris.newEnemyType(o.creepAnim2, 2000, 0.5)
+		o.enemyType[1] = love.turris.newEnemyType(1, o.creepAnim1, 100, 1.0)
+		o.enemyType[2] = love.turris.newEnemyType(2, o.creepAnim2, 2000, 0.5)
 
 		o.enemyTypes = { o.enemyType[1], o.enemyType[2] }
 
@@ -86,8 +86,9 @@ function love.turris.newGame()
 		spawnEggs.setCollision(false)
 		Water.setCollision(false)
 
-		energyTower.setEnergyGeneration(20)
-		massTower.setMassGeneration(2)
+		energyTower.setEnergyGeneration(10)
+		energyTower.buildCost = 50
+		massTower.setMassGeneration(5)
 
 		o.map.init()
 
@@ -119,6 +120,7 @@ function love.turris.newGame()
 		o.layerHud = love.turris.newHudLayer(o.player)
 		o.layerGameOver = require("layer/gameover")
 		o.layerWin = require("layer/win")
+		o.layerCountdown = require("layer/countdown")
 	end
 
 	-- gameplay
@@ -140,7 +142,7 @@ function love.turris.newGame()
 				end
 				o.towers[x * o.map.height + y] = t
 				o.towerCount = o.towerCount + 1
-				o.player.addMass(-10)
+				o.player.addMass(-tt.buildCost)
 			end
 		end
 	end
@@ -321,6 +323,7 @@ function love.turris.newGame()
 
 		-- update animations
 		--o.creepAnim:update(dt)
+		local laserVolume = 0
 		local lastTowerPos = 0 -- has to be 0 so the first call can detect a tower at field 1
 		for i = 1, o.towerCount do
 			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
@@ -335,26 +338,31 @@ function love.turris.newGame()
 					if energyCost <= o.player.energy then
 						local e = t.determineTarget(o.enemies, distance_euclid)
 						t.target = e --TODO just do that inside tower module
-
+	
 						if e then
+							laserVolume = laserVolume + 0.25
 							o.player.addEnergy(-energyCost)
 							if e.health > 0.0 then
 								e.health = e.health - t.type.damage*dt
 								if e.health <= 0 then
 									e.dead = true
+									e.enemyType.playDeathSound()
 								end
 							end
+						else
+						-- would like to shoot but can't. possibly play a "no energy" sound
 						end
 					end
 				end
 				lastTowerPos = t.x*o.map.height+t.y
 			end
 		end
+		love.sounds.setSoundVolume(laserVolume,"sounds/weapons/laser_loop.ogg")
 
 		-- test
 		--TODO: -> player.update
-		o.player.addMass(dt*2)
-		o.player.addEnergy(dt*5)
+--		o.player.addMass(dt*2)
+--		o.player.addEnergy(dt*5)
 	end
 	--------------------- drawing starts here
 
@@ -677,8 +685,6 @@ function love.turris.newGame()
 		for i = 1, o.enemyCount do
 			local e = o.enemies[i]
 			if e and not e.dead then
-				local x = e.x
-				local y = e.y
 
 				G.setColor(255, 255, 255)
 				--print ("vels: ",e.xVel,e.yVel)
@@ -703,8 +709,9 @@ function love.turris.newGame()
 				else
 					ca:seek(1)
 				end
-
-				ca:draw((e.ai.getX() - 1) * o.map.tileWidth + o.offsetX, (e.ai.getY() - 1) * o.map.tileHeight + math.sin(love.timer.getTime() * 2.0) * 4.0 + o.offsetY - 32)
+				local x = e.ai.getX()
+				local y = e.ai.getY()
+				ca:draw((x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + math.sin(love.timer.getTime() * 2.0) * 4.0 + o.offsetY  - 32)
 			end
 		end
 	end

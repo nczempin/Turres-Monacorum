@@ -9,7 +9,7 @@ soundNames.placingTower = "placingTower"
 
 
 local startTime = 0
-	
+
 --Functions for playing sounds
 -- Adds an BackgroundMusic
 -- @param filepath to BackgroundMusicFile
@@ -33,6 +33,9 @@ function love.sounds.playSound(soundPath, timeInMilliSeconds)
 		TEsound.play(soundPath,"sound",LOVE_SOUND_SOUNDVOLUME,nil,nil)
 	end
 end
+function love.sounds.loopSound(soundPath)
+	TEsound.playLooping(soundPath,soundPath, 9999,0.75,nil)
+end
 
 --Sets the Background Volume
 --@param volume from 0 to 1
@@ -43,9 +46,10 @@ end
 
 
 --Sets the Volume for sounds
-function love.sounds.setSoundVolume(volume)
-	LOVE_SOUND_SOUNDVOLUME	= volume
-	TEsound.volume("sound", volume)
+function love.sounds.setSoundVolume(volume, which)
+	which = which or "sound"
+	--LOVE_SOUND_SOUNDVOLUME	= volume
+	TEsound.volume(which, volume)
 end
 
 --Sets the Backgroundmsuic Volume

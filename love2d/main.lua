@@ -51,11 +51,12 @@ function love.load()
 	loadOptions()
 	--saveOptions() --TODO temporarily added for testing
 	FONT = G.newFont(32)
+	FONT_LARGE = G.newFont(64)
 	FONT_SMALL = G.newFont(24)
 
 	currentgamestate = 12 -- TODO: make "skip intro" an option
 
-	stateMainMenu.setVersion("v0.6.3")
+	stateMainMenu.setVersion("v0.6.4")
 end
 
 function love.getgamestate()
@@ -84,14 +85,19 @@ function love.setgamestate(newgamestate, option)
 		stateMainMenu.effectTimer = 0
 		love.sounds.playBackground("sounds/music/Chiptune_2step_mp3.mp3", "menu")
 	elseif newgamestate == 1 then
-		love.turris.reinit(option)
 		turGame.layerGameOver.effectTimer = 0
-		love.sounds.playBackground("sounds/music/turres_music_1.mp3", "menu")
+		--love.sounds.playBackground("sounds/music/turres_music_1.mp3", "menu")
+		love.sounds.loopSound("sounds/weapons/laser_loop.ogg")
+		love.sounds.setSoundVolume(0,"sounds/weapons/laser_loop.ogg")
+
 	elseif newgamestate == 4 or newgamestate == 13 then
 		turGame.layerGameOver.effectTimer = 0
 		love.sounds.playBackground("sounds/music/game_over_music.mp3", "game")
 	elseif newgamestate == 11 then
 		stateWorldMenu.init()
+	elseif newgamestate == 14 then
+		love.turris.reinit(option)
+		turGame.layerCountdown.init()
 	end
 
 	if currentgamestate == 5 then
@@ -127,6 +133,8 @@ function love.update(dt)
 		stateIntro.update(dt)
 	elseif (currentgamestate == 13)then
 		turGame.layerWin.update(dt)
+	elseif (currentgamestate == 14)then
+		turGame.layerCountdown.update(dt)
 	end
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
 end
@@ -164,9 +172,12 @@ function love.draw()
 		stateWorldMenu.draw()
 	elseif currentgamestate == 12 then --intro
 		stateIntro.draw()
-	elseif currentgamestate == 13 then --intro
+	elseif currentgamestate == 13 then --winning
 		turGame.draw()
 		turGame.layerWin.draw()
+	elseif currentgamestate == 14 then --countdown
+		turGame.draw()
+		turGame.layerCountdown.draw()
 	end
 
 	if stateSettingsVideoShaders.optionScanlines then
@@ -194,8 +205,8 @@ function love.keypressed(key, code)
 			love.sounds.playSound("sounds/button_pressed.wav")
 			love.setgamestate(0)
 		end
---	elseif key == "f1" then
---		saveOptions()
+		--	elseif key == "f1" then
+		--		saveOptions()
 	end
 end
 

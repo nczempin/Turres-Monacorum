@@ -46,7 +46,6 @@ function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 	o.ai.setStartPosition(x, y)
 	o.ai.setEndPosition(baseX, baseY)
 	o.ai.setSpeed(enemyType.baseSpeed)
-
 	o.currentWaypoint = 2
 
 	-- TODO this depends on the type and not on the particular enemy
