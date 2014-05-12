@@ -340,7 +340,7 @@ function love.turris.newGame()
 
 						if e then
 							o.player.addEnergy(-energyCost)
-							love.sounds.setSoundVolume(0.5)
+							love.sounds.setSoundVolume(0.75,"sounds/weapons/laser_loop.ogg")
 							if e.health > 0.0 then
 								e.health = e.health - t.type.damage*dt
 								if e.health <= 0 then
@@ -349,7 +349,7 @@ function love.turris.newGame()
 								end
 							end
 						else
-							--love.sounds.setSoundVolume(0,"sounds/weapons/laser_loop.ogg")
+							love.sounds.setSoundVolume(0,"sounds/weapons/laser_loop.ogg")
 							-- would like to shoot but can't. possibly play a "no energy" sound
 						end
 					end
