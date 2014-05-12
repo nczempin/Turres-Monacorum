@@ -144,24 +144,24 @@ function love.turris.newHudLayer(player)
 		else
 			G.setColor(0, 127, 255, 127)
 		end
-		G.print("Cost: 10 Mass", 208 * 0 + 88, W.getHeight() - 68)
-		G.print("Shoot laser!", 208 * 0 + 88, W.getHeight() - 44)
+		G.print("Cost: 10 M", 208 * 0 + 88, W.getHeight() - 68)
+		G.print("Shoots laser!", 208 * 0 + 88, W.getHeight() - 44)
 
 		if o.btnTower2.isChecked() then
 			G.setColor(255, 127, 0, 255)
 		else
 			G.setColor(255, 127, 0, 127)
 		end
-		G.print("Cost: 10 Mass", 208 * 1 + 88, W.getHeight() - 68)
-		G.print("Give energy", 208 * 1 + 88, W.getHeight() - 44)
+		G.print("Cost: 100 M", 208 * 1 + 88, W.getHeight() - 68)
+		G.print("Gives energy", 208 * 1 + 88, W.getHeight() - 44)
 
 		if o.btnTower3.isChecked() then
 			G.setColor(0, 255, 127, 255)
 		else
 			G.setColor(0, 255, 127, 127)
 		end
-		G.print("Cost: 10 Mass", 208 * 2 + 88, W.getHeight() - 68)
-		G.print("Extract Mass", 208 * 2 + 88, W.getHeight() - 44)
+		G.print("Cost: 10 M", 208 * 2 + 88, W.getHeight() - 68)
+		G.print("Extracts Mass", 208 * 2 + 88, W.getHeight() - 44)
 
 		G.setColor(127, 191, 255, 31)
 		G.rectangle("fill", 16, 16, turGame.map.width * 8, turGame.map.height * 8)

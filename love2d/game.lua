@@ -87,6 +87,7 @@ function love.turris.newGame()
 		Water.setCollision(false)
 
 		energyTower.setEnergyGeneration(20)
+		energyTower.buildCost = 100
 		massTower.setMassGeneration(2)
 
 		o.map.init()
