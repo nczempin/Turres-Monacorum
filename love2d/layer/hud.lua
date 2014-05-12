@@ -58,7 +58,7 @@ function love.turris.newHudLayer(player)
 		if love.keyboard.isDown("1") then
 			love.turris.selectedtower = 1
 			o.btnTower1.setChecked(true)
-		--elseif love.keyboard.isDown("2") then
+			--elseif love.keyboard.isDown("2") then
 			--love.turris.selectedtower = 2 --2 would be the main base which should not be available for manual building
 			--o.guiGame.flushRadioButtons()
 		elseif love.keyboard.isDown("2") then
@@ -68,7 +68,7 @@ function love.turris.newHudLayer(player)
 			love.turris.selectedtower = 4
 			o.guiGame.flushRadioButtons()
 			o.btnTower3.setChecked(true)
-		--elseif love.keyboard.isDown("5") then
+			--elseif love.keyboard.isDown("5") then
 			--love.turris.selectedtower = 5
 			--o.guiGame.flushRadioButtons()
 		end
@@ -144,7 +144,7 @@ function love.turris.newHudLayer(player)
 		else
 			G.setColor(0, 127, 255, 127)
 		end
-		G.print("Cost: 10 M", 208 * 0 + 88, W.getHeight() - 68)
+		G.print("Cost: "..tostring(laserTower.buildCost).." M", 208 * 0 + 88, W.getHeight() - 68)
 		G.print("Shoots laser!", 208 * 0 + 88, W.getHeight() - 44)
 
 		if o.btnTower2.isChecked() then
@@ -152,7 +152,7 @@ function love.turris.newHudLayer(player)
 		else
 			G.setColor(255, 127, 0, 127)
 		end
-		G.print("Cost: 100 M", 208 * 1 + 88, W.getHeight() - 68)
+		G.print("Cost: "..tostring(energyTower.buildCost).." M", 208 * 1 + 88, W.getHeight() - 68)
 		G.print("Gives energy", 208 * 1 + 88, W.getHeight() - 44)
 
 		if o.btnTower3.isChecked() then
@@ -160,8 +160,8 @@ function love.turris.newHudLayer(player)
 		else
 			G.setColor(0, 255, 127, 127)
 		end
-		G.print("Cost: 10 M", 208 * 2 + 88, W.getHeight() - 68)
-		G.print("Extracts Mass", 208 * 2 + 88, W.getHeight() - 44)
+		G.print("Cost: "..tostring(massTower.buildCost).." M", 208 * 2 + 88, W.getHeight() - 68)
+		G.print("Extracts M", 208 * 2 + 88, W.getHeight() - 44)
 
 		G.setColor(127, 191, 255, 31)
 		G.rectangle("fill", 16, 16, turGame.map.width * 8, turGame.map.height * 8)
