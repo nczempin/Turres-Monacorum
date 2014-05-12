@@ -345,10 +345,11 @@ function love.turris.newGame()
 								e.health = e.health - t.type.damage*dt
 								if e.health <= 0 then
 									e.dead = true
+									love.sounds.playSound("sounds/highpitch_boom.mp3")
 								end
 							end
 						else
-							love.sounds.setSoundVolume(0)
+							--love.sounds.setSoundVolume(0,"sounds/weapons/laser_loop.ogg")
 							-- would like to shoot but can't. possibly play a "no energy" sound
 						end
 					end
