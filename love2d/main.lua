@@ -56,7 +56,7 @@ function love.load()
 
 	currentgamestate = 12 -- TODO: make "skip intro" an option
 
-	stateMainMenu.setVersion("v0.6.3")
+	stateMainMenu.setVersion("v0.6.4")
 end
 
 function love.getgamestate()
