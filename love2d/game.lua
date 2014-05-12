@@ -323,6 +323,7 @@ function love.turris.newGame()
 
 		-- update animations
 		--o.creepAnim:update(dt)
+		local laserVolume = 0
 		local lastTowerPos = 0 -- has to be 0 so the first call can detect a tower at field 1
 		for i = 1, o.towerCount do
 			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
@@ -337,10 +338,10 @@ function love.turris.newGame()
 					if energyCost <= o.player.energy then
 						local e = t.determineTarget(o.enemies, distance_euclid)
 						t.target = e --TODO just do that inside tower module
-
+	
 						if e then
+							laserVolume = laserVolume + 0.25
 							o.player.addEnergy(-energyCost)
-							love.sounds.setSoundVolume(0.75,"sounds/weapons/laser_loop.ogg")
 							if e.health > 0.0 then
 								e.health = e.health - t.type.damage*dt
 								if e.health <= 0 then
@@ -349,14 +350,14 @@ function love.turris.newGame()
 								end
 							end
 						else
-							love.sounds.setSoundVolume(0,"sounds/weapons/laser_loop.ogg")
-							-- would like to shoot but can't. possibly play a "no energy" sound
+						-- would like to shoot but can't. possibly play a "no energy" sound
 						end
 					end
 				end
 				lastTowerPos = t.x*o.map.height+t.y
 			end
 		end
+		love.sounds.setSoundVolume(laserVolume,"sounds/weapons/laser_loop.ogg")
 
 		-- test
 		--TODO: -> player.update
