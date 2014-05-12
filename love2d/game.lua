@@ -348,7 +348,7 @@ function love.turris.newGame()
 							end
 						else
 							love.sounds.setSoundVolume(0)
-						-- would like to shoot but can't. possibly play a "no energy" sound
+							-- would like to shoot but can't. possibly play a "no energy" sound
 						end
 					end
 				end
@@ -682,8 +682,6 @@ function love.turris.newGame()
 		for i = 1, o.enemyCount do
 			local e = o.enemies[i]
 			if e and not e.dead then
-				local x = e.x
-				local y = e.y
 
 				G.setColor(255, 255, 255)
 				--print ("vels: ",e.xVel,e.yVel)
@@ -708,8 +706,9 @@ function love.turris.newGame()
 				else
 					ca:seek(1)
 				end
-
-				ca:draw((e.ai.getX() - 1) * o.map.tileWidth + o.offsetX, (e.ai.getY() - 1) * o.map.tileHeight + math.sin(love.timer.getTime() * 2.0) * 4.0 + o.offsetY - 32)
+				local x = e.ai.getX()
+				local y = e.ai.getY()
+				ca:draw((x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + math.sin(love.timer.getTime() * 2.0) * 4.0 + o.offsetY  - 32)
 			end
 		end
 	end
