@@ -184,7 +184,7 @@ function love.draw()
 	elseif currentgamestate == 14 then --countdown
 		turGame.draw()
 		turGame.layerCountdown.draw()
-	elseif currentgamestate == 15 then --intro
+	elseif currentgamestate == 15 then --outro
 		stateOutro.draw()
 	end
 
