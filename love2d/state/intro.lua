@@ -11,7 +11,7 @@ o.vertBackground0 = {
 o.mshBackground0 	= love.graphics.newMesh(o.vertBackground0, o.imgBackground0, "fan")
 o.imgBackground1	= love.graphics.newImage("gfx/love_logo.png")
 o.imgBackground2	= love.graphics.newImage("gfx/world.png")
-o.phase = 1
+o.phase = 2
 
 o.fontTitle = love.graphics.newFont(20)
 
