@@ -33,7 +33,7 @@ o.update = function(dt)
 	elseif o.phase == 2 then
 		o.effectTimer = o.effectTimer + dt
 		o.chromaticEffect = o.chromaticEffect + dt
-		if o.gui.isHit() or love.keyboard.isDown("escape") or(o.showTimer > 4) then
+		if o.gui.isHit() or love.keyboard.isDown("escape") or(o.showTimer > 30) then
 			o.gui.flushMouse()
 			love.setgamestate(0)
 		end
@@ -50,8 +50,11 @@ local quotes ={"War...war never changes.","Fallout","Always put a tower where th
 	"Please use data-driven development ;-)","Nicolai"} --TODO: next step is to get these from an external file
 local quoteno = quoterandomizer:random(1,#quotes/2) -- The second value will always have to be as high as the amount of quotes (the random number is not perfect, though)
 local quoteIndex = 1+(quoteno-1)*2
-o.quote = quotes[quoteIndex]
-o.source = quotes[quoteIndex+1]
+o.quote = "Commander! Can you hear me? This is Station Alpha Z-031 on Mining Colony Monaco XII. We are under siege. I repeat: We are under siege."
+o.quote = o.quote.. " The colony is being attacked by a massive fleet of alien ships. Requesting immediate backup. Enter the planet's orbit and deploy defensive structures from the mother ship."
+o.quote = o.quote .." We don't have much time. Other stations are sending out distress calls as well. Please save us."
+--quotes[quoteIndex]
+o.source = ""--quotes[quoteIndex+1]
 
 o.draw = function()
 	if o.phase == 1 then
