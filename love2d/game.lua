@@ -121,6 +121,7 @@ function love.turris.newGame()
 		o.layerGameOver = require("layer/gameover")
 		o.layerWin = require("layer/win")
 		o.layerCountdown = require("layer/countdown")
+		o.layerMissionBriefing = require("layer/missionBriefing")
 	end
 
 	-- gameplay
@@ -338,7 +339,7 @@ function love.turris.newGame()
 					if energyCost <= o.player.energy then
 						local e = t.determineTarget(o.enemies, distance_euclid)
 						t.target = e --TODO just do that inside tower module
-	
+
 						if e then
 							laserVolume = laserVolume + 0.25
 							o.player.addEnergy(-energyCost)
@@ -361,8 +362,8 @@ function love.turris.newGame()
 
 		-- test
 		--TODO: -> player.update
---		o.player.addMass(dt*2)
---		o.player.addEnergy(dt*5)
+		--		o.player.addMass(dt*2)
+		--		o.player.addEnergy(dt*5)
 	end
 	--------------------- drawing starts here
 

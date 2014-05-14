@@ -100,8 +100,10 @@ function love.setgamestate(newgamestate, option)
 	elseif newgamestate == 11 then
 		stateWorldMenu.init()
 	elseif newgamestate == 14 then
-		love.turris.reinit(option)
 		turGame.layerCountdown.init()
+	elseif newgamestate == 16 then
+		love.turris.reinit(option)
+		turGame.layerMissionBriefing.init()
 	end
 
 	if currentgamestate == 5 then
@@ -189,7 +191,7 @@ function love.draw()
 	elseif currentgamestate == 15 then --outro
 		stateOutro.draw()
 	elseif (currentgamestate == 16)then
-			turGame.draw()
+		turGame.draw()
 		turGame.layerMissionBriefing.draw()
 	end
 
