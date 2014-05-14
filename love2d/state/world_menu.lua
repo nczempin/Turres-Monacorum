@@ -64,7 +64,7 @@ o.update = function(dt)
 	for i = 1, #o.btnStage do
 		if o.btnStage[i].isHit() then
 			love.sounds.playSound("sounds/button_pressed.wav")
-			love.setgamestate(14, missions[i].map)
+			love.setgamestate(16, missions[i])
 			o.guiMenu.flushMouse()
 		end
 	end

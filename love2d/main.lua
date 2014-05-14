@@ -100,8 +100,10 @@ function love.setgamestate(newgamestate, option)
 	elseif newgamestate == 11 then
 		stateWorldMenu.init()
 	elseif newgamestate == 14 then
-		love.turris.reinit(option)
 		turGame.layerCountdown.init()
+	elseif newgamestate == 16 then
+		love.turris.reinit(option.map)
+		turGame.layerMissionBriefing.init(option) 
 	end
 
 	if currentgamestate == 5 then
@@ -141,6 +143,8 @@ function love.update(dt)
 		turGame.layerCountdown.update(dt)
 	elseif (currentgamestate == 15)then
 		stateOutro.update(dt)
+	elseif (currentgamestate == 16)then
+		turGame.layerMissionBriefing.update(dt)
 	end
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
 end
@@ -184,8 +188,11 @@ function love.draw()
 	elseif currentgamestate == 14 then --countdown
 		turGame.draw()
 		turGame.layerCountdown.draw()
-	elseif currentgamestate == 15 then --intro
+	elseif currentgamestate == 15 then --outro
 		stateOutro.draw()
+	elseif (currentgamestate == 16)then
+		turGame.draw()
+		turGame.layerMissionBriefing.draw()
 	end
 
 	if stateSettingsVideoShaders.optionScanlines then
