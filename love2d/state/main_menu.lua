@@ -51,7 +51,7 @@ o.update = function(dt)
 
 	if o.btnQuit.isHit() then
 		love.sounds.playSound("sounds/button_pressed.wav")
-		love.event.quit()
+		love.setgamestate(15)
 	end
 end
 
