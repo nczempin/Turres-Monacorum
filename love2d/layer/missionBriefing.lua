@@ -3,8 +3,8 @@ local o = {}
 o.text = ""
 
 o.guiMenu = love.gui.newGui()
-o.init = function(text, mission)
-	o.text = text
+o.init = function(mission)
+	o.text = mission.briefingText or mission.description
 	o.btnOkay = o.guiMenu.newButton(W.getWidth()/2, W.getHeight()*0.75, 66, 42, "OK")
 	o.mission = mission
 end
