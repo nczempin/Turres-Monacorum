@@ -2,8 +2,8 @@ local o = {}
 
 o.text = ""
 
-o.init = function()
-	o.text = "lorem ipsum dolor sit amet" --TODO: this should be retrieved from the level/wave
+o.init = function(text)
+	o.text = text
 end
 
 o.update = function(dt)
