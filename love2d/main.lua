@@ -22,6 +22,7 @@ require "util"
 -- states
 stateMainMenu = require("state/main_menu")
 stateIntro = require("state/intro")
+stateOutro = require("state/outro")
 stateWorldMenu = require("state/world_menu")
 stateCredits = require("state/credits")
 stateSettings = require("state/settings_menu")
@@ -138,6 +139,8 @@ function love.update(dt)
 		turGame.layerWin.update(dt)
 	elseif (currentgamestate == 14)then
 		turGame.layerCountdown.update(dt)
+	elseif (currentgamestate == 15)then
+		stateOutro.update(dt)
 	end
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
 end
@@ -181,6 +184,8 @@ function love.draw()
 	elseif currentgamestate == 14 then --countdown
 		turGame.draw()
 		turGame.layerCountdown.draw()
+	elseif currentgamestate == 15 then --intro
+		stateOutro.draw()
 	end
 
 	if stateSettingsVideoShaders.optionScanlines then
