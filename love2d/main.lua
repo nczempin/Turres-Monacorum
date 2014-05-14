@@ -102,8 +102,9 @@ function love.setgamestate(newgamestate, option)
 	elseif newgamestate == 14 then
 		turGame.layerCountdown.init()
 	elseif newgamestate == 16 then
-		love.turris.reinit(option)
-		turGame.layerMissionBriefing.init("lorem ipsum dolor sit amet") -- --TODO: this should be retrieved from the level/wave
+		love.turris.reinit(option.map)
+		local text = option.briefingText or ""
+		turGame.layerMissionBriefing.init(text) 
 	end
 
 	if currentgamestate == 5 then
