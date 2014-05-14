@@ -141,6 +141,8 @@ function love.update(dt)
 		turGame.layerCountdown.update(dt)
 	elseif (currentgamestate == 15)then
 		stateOutro.update(dt)
+	elseif (currentgamestate == 16)then
+		turGame.layerMissionBriefing.update(dt)
 	end
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
 end
@@ -186,6 +188,9 @@ function love.draw()
 		turGame.layerCountdown.draw()
 	elseif currentgamestate == 15 then --outro
 		stateOutro.draw()
+	elseif (currentgamestate == 16)then
+			turGame.draw()
+		turGame.layerMissionBriefing.draw()
 	end
 
 	if stateSettingsVideoShaders.optionScanlines then
