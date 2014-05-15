@@ -81,6 +81,8 @@ function love.turris.newGame()
 		spawnHole.setBreakable(false)
 		spawnEggs.setBreakable(false)
 		Water.setBreakable(false)
+		Rock1.setBreakable(false)
+		Rock2.setBreakable(false)
 
 		spawnHole.setCollision(false)
 		spawnEggs.setCollision(false)
@@ -160,6 +162,9 @@ function love.turris.newGame()
 					o.player.addMass(scrapValue)
 
 					o.towerCount = o.towerCount-1
+					if o.towerCount < 0 then
+						print("Warning: Number of towers is negative")
+					end
 					o.towers[x * o.map.height + y] = nil
 					turMap.setState(x, y, 0)
 				else
@@ -339,6 +344,7 @@ function love.turris.newGame()
 		--o.creepAnim:update(dt)
 		local laserVolume = 0
 		local lastTowerPos = 0 -- has to be 0 so the first call can detect a tower at field 1
+--		print ("towerCount: ", o.towerCount)
 		for i = 1, o.towerCount do
 			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
 			local t = o.getnextTower(lastTowerPos + 1) -- the next tower will always be after the first one. Do not ask for a tower after the last one, you will get nil
