@@ -22,6 +22,7 @@ require "util"
 -- states
 stateMainMenu = require("state/main_menu")
 stateIntro = require("state/intro")
+stateOutro = require("state/outro")
 stateWorldMenu = require("state/world_menu")
 stateCredits = require("state/credits")
 stateSettings = require("state/settings_menu")
@@ -49,14 +50,13 @@ function love.load()
 	S = love.sounds
 	FS = love.filesystem
 	loadOptions()
-	--saveOptions() --TODO temporarily added for testing
 	FONT = G.newFont(32)
 	FONT_LARGE = G.newFont(64)
 	FONT_SMALL = G.newFont(24)
 
 	currentgamestate = 12 -- TODO: make "skip intro" an option
 
-	stateMainMenu.setVersion("v0.6.4")
+	stateMainMenu.setVersion("v0.6.5")
 end
 
 function love.getgamestate()
@@ -86,18 +86,22 @@ function love.setgamestate(newgamestate, option)
 		love.sounds.playBackground("sounds/music/Chiptune_2step_mp3.mp3", "menu")
 	elseif newgamestate == 1 then
 		turGame.layerGameOver.effectTimer = 0
-		--love.sounds.playBackground("sounds/music/turres_music_1.mp3", "menu")
+		love.sounds.playBackground("sounds/music/turres_music_1.mp3", "menu")
 		love.sounds.loopSound("sounds/weapons/laser_loop.ogg")
 		love.sounds.setSoundVolume(0,"sounds/weapons/laser_loop.ogg")
-
-	elseif newgamestate == 4 or newgamestate == 13 then
+	elseif newgamestate == 4 then
 		turGame.layerGameOver.effectTimer = 0
 		love.sounds.playBackground("sounds/music/game_over_music.mp3", "game")
+	elseif  newgamestate == 13 then
+		turGame.layerGameOver.effectTimer = 0
+		love.sounds.playBackground("sounds/music/level_up.mp3", "game")
 	elseif newgamestate == 11 then
 		stateWorldMenu.init()
 	elseif newgamestate == 14 then
-		love.turris.reinit(option)
 		turGame.layerCountdown.init()
+	elseif newgamestate == 16 then
+		love.turris.reinit(option.map)
+		turGame.layerMissionBriefing.init(option) 
 	end
 
 	if currentgamestate == 5 then
@@ -135,6 +139,10 @@ function love.update(dt)
 		turGame.layerWin.update(dt)
 	elseif (currentgamestate == 14)then
 		turGame.layerCountdown.update(dt)
+	elseif (currentgamestate == 15)then
+		stateOutro.update(dt)
+	elseif (currentgamestate == 16)then
+		turGame.layerMissionBriefing.update(dt)
 	end
 	TEsound.cleanup()  --Important, Clears all the channels in TEsound
 end
@@ -178,6 +186,11 @@ function love.draw()
 	elseif currentgamestate == 14 then --countdown
 		turGame.draw()
 		turGame.layerCountdown.draw()
+	elseif currentgamestate == 15 then --outro
+		stateOutro.draw()
+	elseif (currentgamestate == 16)then
+		turGame.draw()
+		turGame.layerMissionBriefing.draw()
 	end
 
 	if stateSettingsVideoShaders.optionScanlines then

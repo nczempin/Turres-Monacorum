@@ -91,8 +91,8 @@ function love.turris.newGame()
 		massTower.setMassGeneration(5)
 
 		o.map.init()
-
-		o.player.setMass(20)
+		o.player.setEnergy(o.map.energy or 20)
+		o.player.setMass(o.map.mass or 20)
 
 		o.imgLaser = G.newImage("gfx/laserbeam_blue.png")
 		o.imgLaser:setWrap("repeat", "repeat")
@@ -121,6 +121,8 @@ function love.turris.newGame()
 		o.layerGameOver = require("layer/gameover")
 		o.layerWin = require("layer/win")
 		o.layerCountdown = require("layer/countdown")
+		o.layerMissionBriefing = require("layer/missionBriefing")
+		o.update(0.001)
 	end
 
 	-- gameplay
@@ -338,9 +340,9 @@ function love.turris.newGame()
 					if energyCost <= o.player.energy then
 						local e = t.determineTarget(o.enemies, distance_euclid)
 						t.target = e --TODO just do that inside tower module
-	
+
 						if e then
-							laserVolume = laserVolume + 0.25
+							laserVolume = laserVolume + 0.45
 							o.player.addEnergy(-energyCost)
 							if e.health > 0.0 then
 								e.health = e.health - t.type.damage*dt
@@ -361,8 +363,8 @@ function love.turris.newGame()
 
 		-- test
 		--TODO: -> player.update
---		o.player.addMass(dt*2)
---		o.player.addEnergy(dt*5)
+		--		o.player.addMass(dt*2)
+		--		o.player.addEnergy(dt*5)
 	end
 	--------------------- drawing starts here
 
