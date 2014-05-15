@@ -46,8 +46,8 @@ map = {
 			},
 		},
 		{
-			setMass = 10,
-			setEnergy = 300,
+			setMass = 60,
+			setEnergy = 0,
 			delay = 5,
 			waveCreeps = {
 				{
@@ -130,6 +130,6 @@ map = {
 	},
 	random = {
 	},
-	mass = 0,
-	energy = 500
+	mass = 60,
+	energy = 0
 }
