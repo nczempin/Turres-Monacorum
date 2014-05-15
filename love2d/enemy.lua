@@ -137,7 +137,7 @@ function love.turris.updateEnemies(o, dt)
 				-- TODO: destroy base (explosion!)
 				-- TODO: after explosions have finished -> transition to game over state
 				love.sounds.playSound("sounds/einschlag.mp3")
-				turMap.data[o.baseX][o.baseY].addHealth(-5) --TODO: Each creep does different damage to the base
+				turMap.data[o.baseX][o.baseY].addHealth(-30) --TODO: Each creep does different damage to the base, see issue #87
 				turGame.effectTimer = 0
 
 				gameOverEffect = 0
