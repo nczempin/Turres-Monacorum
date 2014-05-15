@@ -658,37 +658,39 @@ function love.turris.newGame()
 	end
 
 	o.drawMapCursor = function()
-		if o.layerHud.guiGame.hover then
-			local mx = love.mouse.getX()
-			local my = love.mouse.getY()
-			local tileX = math.floor((mx - o.offsetX) / o.map.tileWidth)
-			local tileY = math.floor((my - o.offsetY) / o.map.tileHeight)
+		if o.map.editMode then
+			if o.layerHud.guiGame.hover then
+				local mx = love.mouse.getX()
+				local my = love.mouse.getY()
+				local tileX = math.floor((mx - o.offsetX) / o.map.tileWidth)
+				local tileY = math.floor((my - o.offsetY) / o.map.tileHeight)
 
-			if tileX >= 0 and tileY >= 0 and tileX < o.map.width and tileY < o.map.height then
-				if o.map.data[tileX + 1][tileY + 1].id == 0 then
-					G.setColor(0, 127, 255)
-					G.draw(o.mapCursorNormal, tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight + o.offsetY)
-				else
-					G.setColor(255, 63, 0)
-					G.setLineWidth(2)
-					G.rectangle("line", tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight + o.offsetY, o.map.tileWidth, o.map.tileHeight)
-
-					if lightWorld.optionGlow then
-						G.setBlendMode("alpha")
-						G.setColor(0, 0, 0)
+				if tileX >= 0 and tileY >= 0 and tileX < o.map.width and tileY < o.map.height then
+					if o.map.data[tileX + 1][tileY + 1].id == 0 then
+						G.setColor(0, 127, 255)
+						G.draw(o.mapCursorNormal, tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight + o.offsetY)
 					else
-						G.setColor(255, 255, 255)
-					end
+						G.setColor(255, 63, 0)
+						G.setLineWidth(2)
+						G.rectangle("line", tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight + o.offsetY, o.map.tileWidth, o.map.tileHeight)
 
-					local tower = o.towerType[o.map.data[tileX + 1][tileY + 1].id]
-					if tower.upper then
-						G.draw(tower.upper, tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
-					else
-						G.draw(tower.img, tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
-					end
+						if lightWorld.optionGlow then
+							G.setBlendMode("alpha")
+							G.setColor(0, 0, 0)
+						else
+							G.setColor(255, 255, 255)
+						end
 
-					G.setColor(255, 63, 0)
-					G.draw(o.mapCursorBlock, tileX * o.map.tileWidth + o.offsetX + o.map.tileWidth * 0.5, tileY * o.map.tileHeight + o.offsetY + o.map.tileHeight * 0.5, 0, 0.95 - math.sin(o.effectTimer * 5.0) * 0.05, 0.95 - math.sin(o.effectTimer * 5.0) * 0.05, o.map.tileWidth * 0.5, o.map.tileHeight * 0.5)
+						local tower = o.towerType[o.map.data[tileX + 1][tileY + 1].id]
+						if tower.upper then
+							G.draw(tower.upper, tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
+						else
+							G.draw(tower.img, tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
+						end
+
+						G.setColor(255, 63, 0)
+						G.draw(o.mapCursorBlock, tileX * o.map.tileWidth + o.offsetX + o.map.tileWidth * 0.5, tileY * o.map.tileHeight + o.offsetY + o.map.tileHeight * 0.5, 0, 0.95 - math.sin(o.effectTimer * 5.0) * 0.05, 0.95 - math.sin(o.effectTimer * 5.0) * 0.05, o.map.tileWidth * 0.5, o.map.tileHeight * 0.5)
+					end
 				end
 			end
 		end
