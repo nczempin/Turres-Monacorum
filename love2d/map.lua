@@ -138,6 +138,14 @@ function love.turris.newMap(path)
 				turGame.spawn[#turGame.spawn].addEnemyType(turGame.enemyType[o.waves[o.currentWave].waveCreeps[i].enemyType], o.waves[o.currentWave].waveCreeps[i].delay, o.waves[o.currentWave].waveCreeps[i].count)
 				o.setState(o.waves[o.currentWave].waveCreeps[i].x, o.waves[o.currentWave].waveCreeps[i].y, o.waves[o.currentWave].waveCreeps[i].towerType)
 			end
+			if o.waves[o.currentWave].setEnergy then
+				turGame.player.setEnergy(o.waves[o.currentWave].setEnergy)
+				print("setting Wave Energy")
+			end
+			if o.waves[o.currentWave].setMass then
+				turGame.player.setMass(o.waves[o.currentWave].setMass)
+				print("setting Wave Mass")
+			end
 	end
 	
 	o.getState = function(x, y)
