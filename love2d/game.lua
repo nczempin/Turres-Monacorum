@@ -93,7 +93,6 @@ function love.turris.newGame()
 		o.map.init()
 		
 		
-		o.player.setMass(20)
 
 		o.imgLaser = G.newImage("gfx/laserbeam_blue.png")
 		o.imgLaser:setWrap("repeat", "repeat")
