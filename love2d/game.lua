@@ -91,8 +91,8 @@ function love.turris.newGame()
 		massTower.setMassGeneration(5)
 
 		o.map.init()
-		
-		
+		o.player.setEnergy(o.map.energy or 47)
+		o.player.setMass(o.map.mass or 84)
 
 		o.imgLaser = G.newImage("gfx/laserbeam_blue.png")
 		o.imgLaser:setWrap("repeat", "repeat")
@@ -122,7 +122,7 @@ function love.turris.newGame()
 		o.layerWin = require("layer/win")
 		o.layerCountdown = require("layer/countdown")
 		o.layerMissionBriefing = require("layer/missionBriefing")
-	o.update(0.001)
+		o.update(0.001)
 	end
 
 	-- gameplay

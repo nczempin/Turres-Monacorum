@@ -12,6 +12,8 @@ function love.turris.newMap(path)
 	o.spawn = map.spawn
 	o.tower = map.tower
 	o.random = map.random
+	o.energy = map.energy
+	o.mass = map.mass
 	if map.ground then
 		o.groundColor = map.ground.color
 		o.groundImg = map.ground.img or "ground01"
