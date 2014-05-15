@@ -64,6 +64,10 @@ function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 	o.update = function(dt)
 		o.ai.update(dt)
 	end
+	
+	o.getBaseDamage = function()
+		return o.enemyType.baseDamage
+	end
 
 	o.updateVelocity = function(dirX, dirY)
 		o.xVel = dirX * o.speed
@@ -137,7 +141,8 @@ function love.turris.updateEnemies(o, dt)
 				-- TODO: destroy base (explosion!)
 				-- TODO: after explosions have finished -> transition to game over state
 				love.sounds.playSound("sounds/einschlag.mp3")
-				turMap.data[o.baseX][o.baseY].addHealth(-30) --TODO: Each creep does different damage to the base, see issue #87
+				local damage = e.getBaseDamage()
+				turMap.data[o.baseX][o.baseY].addHealth(-damage) --TODO: Each creep does different damage to the base, see issue #87
 				turGame.effectTimer = 0
 
 				gameOverEffect = 0
