@@ -143,6 +143,7 @@ function love.turris.updateEnemies(o, dt)
 				love.sounds.playSound("sounds/einschlag.mp3")
 				local damage = e.getBaseDamage()
 				print ("damage: ",damage)
+				print ("base x, y: ",o.baseX, o.baseY)
 				turMap.data[o.baseX][o.baseY].addHealth(-damage) --TODO: Each creep does different damage to the base, see issue #87
 				turGame.effectTimer = 0
 
