@@ -342,7 +342,7 @@ function love.turris.newGame()
 						t.target = e --TODO just do that inside tower module
 
 						if e then
-							laserVolume = laserVolume + 0.25
+							laserVolume = laserVolume + 0.45
 							o.player.addEnergy(-energyCost)
 							if e.health > 0.0 then
 								e.health = e.health - t.type.damage*dt
