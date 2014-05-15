@@ -9,11 +9,12 @@ function love.turris.newMap(path)
 	o.tileHeight = map.tileHeight or 48
 	o.baseX = map.baseX or math.floor(o.width * 0.5)
 	o.baseY = map.baseY or math.floor(o.height * 0.5)
-	o.spawn = map.spawn
+	o.waves = map.waves
 	o.tower = map.tower
 	o.random = map.random
 	o.energy = map.energy
 	o.mass = map.mass
+	o.currentWave = 0
 	if map.ground then
 		o.groundColor = map.ground.color
 		o.groundImg = map.ground.img or "ground01"
@@ -96,13 +97,8 @@ function love.turris.newMap(path)
 		end
 		o.setState(o.baseX, o.baseY, 2)
 
-		if o.spawn then
-			turGame.spawn = {}
-			for i = 1, #o.spawn do
-				turGame.spawn[#turGame.spawn + 1] = love.turris.newSpawn(o, o.spawn[i].x, o.spawn[i].y, o.baseX, o.baseY)
-				turGame.spawn[#turGame.spawn].addEnemyType(turGame.enemyType[o.spawn[i].enemyType], o.spawn[i].delay, o.spawn[i].count)
-				o.setState(o.spawn[i].x, o.spawn[i].y, o.spawn[i].towerType)
-			end
+		if o.waves then
+			o.nextWave() --this will spawn the first wave
 		end
 
 		if o.tower then
@@ -130,6 +126,20 @@ function love.turris.newMap(path)
 		love.graphics.draw(o.mshGround, ox, oy)
 	end
 
+	o.isLastWave = function()
+		return o.currentWave == #o.waves
+	end
+	
+	o.nextWave = function()
+			turGame.spawn = {} -- resets the spawn list
+			o.currentWave = o.currentWave+1
+			for i = 1, #o.waves[o.currentWave].waveCreeps do
+				turGame.spawn[#turGame.spawn + 1] = love.turris.newSpawn(o, o.waves[o.currentWave].waveCreeps[i].x, o.waves[o.currentWave].waveCreeps[i].y, o.baseX, o.baseY)
+				turGame.spawn[#turGame.spawn].addEnemyType(turGame.enemyType[o.waves[o.currentWave].waveCreeps[i].enemyType], o.waves[o.currentWave].waveCreeps[i].delay, o.waves[o.currentWave].waveCreeps[i].count)
+				o.setState(o.waves[o.currentWave].waveCreeps[i].x, o.waves[o.currentWave].waveCreeps[i].y, o.waves[o.currentWave].waveCreeps[i].towerType)
+			end
+	end
+	
 	o.getState = function(x, y)
 		if x > 0 and y > 0 and x <= o.width and y <= o.height then
 			return o.data[x][y].id

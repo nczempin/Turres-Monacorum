@@ -266,19 +266,31 @@ function love.turris.newGame()
 		o.dayTime = o.dayTime + dt * 0.01
 		o.spawnTime = o.spawnTime + dt
 		T.updateEnemies(o, dt)
-
-		local win = true
-
+		
+		local waveFinished = true
+		
 		for i = 1, #o.enemies do
 			if not o.enemies[i].dead then
-				win = false
+				waveFinished = false
 			end
 		end
 
 		for i = 1, #o.spawn do
 			if o.spawn[i].count > 0 then
-				win = false
+				waveFinished = false
 			end
+		end
+
+		local win = true
+		
+		if waveFinished then
+			if not o.map.isLastWave() then
+				--spawn next wave
+				o.map.nextWave()
+				win = false
+			end --else: all waves finished, game won
+		else
+			win = false
 		end
 
 		if win then
