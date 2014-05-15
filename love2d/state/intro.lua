@@ -33,8 +33,8 @@ o.update = function(dt)
 	end
 end
 
-o.quote = "Commander! Can you hear me? This is Station Alpha Z-031 on Mining Colony Monaco XII. We are under siege. I repeat: We are under siege."
-o.quote = o.quote.. " The colony is being attacked by a massive fleet of alien ships. Requesting immediate backup. Enter the planet's orbit and deploy defensive structures from the mother ship."
+o.quote = "Commander! Can you hear me? This is Station Alpha Z-031 on Mining Colony Monaco XIV. We are under siege. I repeat: We are under siege."
+o.quote = o.quote.. " The colony is being attacked by a massive fleet of alien ships. Requesting immediate backup."
 o.quote = o.quote .." We don't have much time. Other stations are sending out distress calls as well. Please save us."
 o.source = ""
 

@@ -50,14 +50,13 @@ function love.load()
 	S = love.sounds
 	FS = love.filesystem
 	loadOptions()
-	--saveOptions() --TODO temporarily added for testing
 	FONT = G.newFont(32)
 	FONT_LARGE = G.newFont(64)
 	FONT_SMALL = G.newFont(24)
 
 	currentgamestate = 12 -- TODO: make "skip intro" an option
 
-	stateMainMenu.setVersion("v0.6.4")
+	stateMainMenu.setVersion("v0.6.5")
 end
 
 function love.getgamestate()
@@ -90,7 +89,6 @@ function love.setgamestate(newgamestate, option)
 		love.sounds.playBackground("sounds/music/turres_music_1.mp3", "menu")
 		love.sounds.loopSound("sounds/weapons/laser_loop.ogg")
 		love.sounds.setSoundVolume(0,"sounds/weapons/laser_loop.ogg")
-
 	elseif newgamestate == 4 then
 		turGame.layerGameOver.effectTimer = 0
 		love.sounds.playBackground("sounds/music/game_over_music.mp3", "game")
