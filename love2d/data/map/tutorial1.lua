@@ -4,6 +4,34 @@ map = {
 	baseX = 3,
 	baseY = 5,
 	waves = {
+		--		{
+		--			delay = 2,
+		--			waveCreeps = {
+		--				{
+		--					enemyType = 1,
+		--					towerType = 7,
+		--					x = 11,
+		--					y = 11,
+		--					delay = 3,
+		--					count = 1
+		--				},
+		--			},
+		--		},
+		--		{
+		--			setMass = 10,
+		--			setEnergy = 300,
+		--			delay = 5,
+		--			waveCreeps = {
+		--				{
+		--					enemyType = 1,
+		--					towerType = 7,
+		--					x = 11,
+		--					y = 11,
+		--					delay = 4,
+		--					count = 12
+		--				},
+		--			},
+		--		},
 		{
 			delay = 2,
 			waveCreeps = {
@@ -31,8 +59,7 @@ map = {
 					count = 12
 				},
 			},
-		},
-	},
+		},},
 	tower = {
 		{
 			towerType = 10,
