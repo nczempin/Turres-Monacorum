@@ -1,6 +1,6 @@
 function love.turris.newMap(path)
 	-- load map object
-	love.filesystem.load("data/map/" .. path .. ".ini")()
+	love.filesystem.load("data/map/" .. path .. ".lua")()
 
 	local o = {}
 	o.width = map.width or 16
@@ -139,6 +139,14 @@ function love.turris.newMap(path)
 				turGame.spawn[#turGame.spawn + 1] = love.turris.newSpawn(o, o.waves[o.currentWave].waveCreeps[i].x, o.waves[o.currentWave].waveCreeps[i].y, o.baseX, o.baseY)
 				turGame.spawn[#turGame.spawn].addEnemyType(turGame.enemyType[o.waves[o.currentWave].waveCreeps[i].enemyType], o.waves[o.currentWave].waveCreeps[i].delay, o.waves[o.currentWave].waveCreeps[i].count)
 				o.setState(o.waves[o.currentWave].waveCreeps[i].x, o.waves[o.currentWave].waveCreeps[i].y, o.waves[o.currentWave].waveCreeps[i].towerType)
+			end
+			if o.waves[o.currentWave].setEnergy then
+				turGame.player.setEnergy(o.waves[o.currentWave].setEnergy)
+				print("setting Wave Energy")
+			end
+			if o.waves[o.currentWave].setMass then
+				turGame.player.setMass(o.waves[o.currentWave].setMass)
+				print("setting Wave Mass")
 			end
 	end
 	
