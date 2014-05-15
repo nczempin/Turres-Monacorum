@@ -1,6 +1,6 @@
 function love.turris.newMap(path)
 	-- load map object
-	love.filesystem.load("data/map/" .. path .. ".ini")()
+	love.filesystem.load("data/map/" .. path .. ".lua")()
 
 	local o = {}
 	o.width = map.width or 16
