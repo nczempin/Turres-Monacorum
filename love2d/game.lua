@@ -88,6 +88,7 @@ function love.turris.newGame()
 
 		energyTower.setEnergyGeneration(10)
 		energyTower.buildCost = 50
+		
 		massTower.setMassGeneration(5)
 
 		o.map.init()
@@ -346,6 +347,7 @@ function love.turris.newGame()
 			if t then
 				o.player.addEnergy(t.type.energyGeneration * dt)
 				o.player.addMass(t.type.massGeneration * dt)
+				print ("mass: ",t.type.massGeneration * dt)
 				if t.id == 1 then -- laser tower
 					t.target = nil
 					local energyCost = dt * t.type.shotCost
