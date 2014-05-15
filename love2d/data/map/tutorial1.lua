@@ -4,34 +4,6 @@ map = {
 	baseX = 3,
 	baseY = 5,
 	waves = {
-		--		{
-		--			delay = 2,
-		--			waveCreeps = {
-		--				{
-		--					enemyType = 1,
-		--					towerType = 7,
-		--					x = 11,
-		--					y = 11,
-		--					delay = 3,
-		--					count = 1
-		--				},
-		--			},
-		--		},
-		--		{
-		--			setMass = 10,
-		--			setEnergy = 300,
-		--			delay = 5,
-		--			waveCreeps = {
-		--				{
-		--					enemyType = 1,
-		--					towerType = 7,
-		--					x = 11,
-		--					y = 11,
-		--					delay = 4,
-		--					count = 12
-		--				},
-		--			},
-		--		},
 		{
 			delay = 2,
 			waveCreeps = {
@@ -46,8 +18,8 @@ map = {
 			},
 		},
 		{
-			setMass = 60,
-			setEnergy = 0,
+			setMass = 0,
+			setEnergy = 350,
 			delay = 5,
 			waveCreeps = {
 				{
@@ -55,6 +27,44 @@ map = {
 					towerType = 7,
 					x = 11,
 					y = 11,
+					delay = 4,
+					count = 12
+				},
+			},
+		},
+		{
+			setMass = 60,
+			setEnergy = 0,
+			delay = 2,
+			waveCreeps = {
+				{
+					enemyType = 2,
+					towerType = 7,
+					x = 11,
+					y = 11,
+					delay = 3,
+					count = 1
+				},
+			},
+		},
+		{
+			setMass = 15,
+			setEnergy = 0,
+			delay = 5,
+			waveCreeps = {
+				{
+					enemyType = 2,
+					towerType = 7,
+					x = 11,
+					y = 11,
+					delay = 6,
+					count = 3
+				},
+				{
+					enemyType = 1,
+					towerType = 7,
+					x = 2,
+					y = 1,
 					delay = 4,
 					count = 12
 				},
@@ -130,6 +140,6 @@ map = {
 	},
 	random = {
 	},
-	mass = 60,
-	energy = 0
+	mass = 10,
+	energy = 25
 }
