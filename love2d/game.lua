@@ -93,6 +93,7 @@ function love.turris.newGame()
 		energyTower.setEnergyGeneration(10)
 		energyTower.buildCost = 50
 		massTower.setMassGeneration(1)
+		massTower.buildCost = 15
 
 		o.map.init()
 		o.player.setEnergy(o.map.energy or 20)
