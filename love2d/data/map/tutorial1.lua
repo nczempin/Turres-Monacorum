@@ -140,6 +140,6 @@ map = {
 	},
 	random = {
 	},
-	mass = 10,
-	energy = 25
+	mass = 30,
+	energy = 200
 }

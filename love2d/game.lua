@@ -710,16 +710,13 @@ function love.turris.newGame()
 		for i = 1, o.enemyCount do
 			local e = o.enemies[i]
 			if e then
-				if e.dead then
-					if e.deathTimer <= 13 then
-						local x = e.ai.getX()
-						local y = e.ai.getY()
+				if not e.dead or (e.deathTimer > 0 and e.deathTimer <= 13) then
+					if (e.deathTimer > 0 and e.deathTimer <= 13) then
+						G.setColor(255, 255, 255, math.max(0, 255 - e.deathTimer * 32))
+					else
 						G.setColor(255, 255, 255)
-						o.creepExplosionAnim:seek(math.floor(e.deathTimer) + 1)
-						o.creepExplosionAnim:draw((x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY  - 48)
 					end
-				else
-					G.setColor(255, 255, 255)
+
 					--print ("vels: ",e.xVel,e.yVel)
 					local dir = e.getDirection()
 					--print ("dir: ",dir)
@@ -745,6 +742,14 @@ function love.turris.newGame()
 					local x = e.ai.getX()
 					local y = e.ai.getY()
 					ca:draw((x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + math.sin(love.timer.getTime() * 2.0) * 4.0 + o.offsetY  - 32)
+
+					if (e.deathTimer > 0 and e.deathTimer <= 13) then
+						local x = e.ai.getX()
+						local y = e.ai.getY()
+						G.setColor(255, 255, 255)
+						o.creepExplosionAnim:seek(math.floor(e.deathTimer) + 1)
+						o.creepExplosionAnim:draw((x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY  - 48)
+					end
 				end
 			end
 		end
