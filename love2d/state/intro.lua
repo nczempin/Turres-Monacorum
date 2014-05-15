@@ -44,8 +44,8 @@ o.draw = function()
 
 	love.graphics.setColor(95 + math.sin(o.effectTimer * 0.1) * 63, 191 + math.cos(o.effectTimer) * 31, 223 + math.sin(o.effectTimer) * 31, 127)
 	love.graphics.setFont(o.fontTitle)
-	love.graphics.printf(o.quote, love.window.getWidth() * 0.5 - 128, love.window.getHeight() * 0.5 - 16, love.window.getWidth() * 0.5, "left")
-	love.graphics.printf(o.source, love.window.getWidth() * 0.5 + 64, love.window.getHeight() * 0.5 + 16, love.window.getWidth() * 0.5, "left")
+	love.graphics.printf(o.quote, love.window.getWidth() * 0.125, love.window.getHeight() * 0.5 - 48, love.window.getWidth() * 0.75, "center")
+	love.graphics.printf(o.source, love.window.getWidth() * 0.125, love.window.getHeight() * 0.5 + 48, love.window.getWidth() * 0.75, "center")
 
 	if math.random(0, love.timer.getFPS() * 8) == 0 then
 		o.chromaticEffect = math.random(0, 5) * 0.1

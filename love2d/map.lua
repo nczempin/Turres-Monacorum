@@ -15,6 +15,8 @@ function love.turris.newMap(path)
 	o.energy = map.energy
 	o.mass = map.mass
 	o.currentWave = 0
+	o.editMode = true;
+
 	if map.ground then
 		o.groundColor = map.ground.color
 		o.groundImg = map.ground.img or "ground01"
