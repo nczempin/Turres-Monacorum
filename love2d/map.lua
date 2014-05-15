@@ -149,7 +149,7 @@ function love.turris.newMap(path)
 			end
 			if o.waves[o.currentWave].missionText then
 				print("adding overlayMessage")
-				o.overlayIngameMessage.init(o.waves[o.currentWave].missionText, true, false)
+				o.overlayIngameMessage.init(o.waves[o.currentWave].missionText, true, false, true)
 				local k = o.overlayIngameMessage.getCopy()
 				love.addsecondaryoverlay(k)
 			end

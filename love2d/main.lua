@@ -58,6 +58,7 @@ function love.load()
 	secondarygamestate = {}
 	secondarygamestate.drawOK = true
 	secondarygamestate.updateOK = true
+	secondarygamestate.mouseOK = true
 	secondarygamestate.overlays = {}
 
 	stateMainMenu.setVersion("v0.6.5")
@@ -142,11 +143,15 @@ end
 function love.update(dt)
 	secondarygamestate.drawOK = true
 	secondarygamestate.updateOK = true
+	secondarygamestate.mouseOK = true
 	if #secondarygamestate.overlays > 0 then
 		for k=1, #secondarygamestate.overlays do
 			secondarygamestate.overlays[k].update(dt)
 			if secondarygamestate.overlays[k].noDraw then
 				secondarygamestate.drawOK = false
+			end
+			if secondarygamestate.overlays[k].noMouse then
+				secondarygamestate.mouseOK = false
 			end
 			if secondarygamestate.overlays[k].noUpdate then
 				secondarygamestate.updateOK = false
