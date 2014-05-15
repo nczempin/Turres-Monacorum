@@ -14,6 +14,7 @@ function love.turris.newMap(path)
 	o.random = map.random
 	o.energy = map.energy
 	o.mass = map.mass
+	o.overlayIngameMessage = require("layer/notification") -- quick solution for now. should be moved somewhere else later
 	o.currentWave = 0
 	if map.ground then
 		o.groundColor = map.ground.color
@@ -145,6 +146,12 @@ function love.turris.newMap(path)
 			if o.waves[o.currentWave].setMass then
 				turGame.player.setMass(o.waves[o.currentWave].setMass)
 				print("setting Wave Mass")
+			end
+			if o.waves[o.currentWave].missionText then
+				print("adding overlayMessage")
+				o.overlayIngameMessage.init(o.waves[o.currentWave].missionText, true, false)
+				local k = o.overlayIngameMessage.getCopy()
+				love.addsecondaryoverlay(k)
 			end
 	end
 	
