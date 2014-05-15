@@ -51,7 +51,7 @@ function love.turris.newGame()
 		local img -- TODO
 
 		o.enemyType = {}
-		o.enemyType[1] = love.turris.newEnemyType(1, o.creepAnim1, 100, 1.0)
+		o.enemyType[1] = love.turris.newEnemyType(1, o.creepAnim1, 400, 1.0)
 		o.enemyType[2] = love.turris.newEnemyType(2, o.creepAnim2, 2000, 0.5)
 
 		o.enemyTypes = { o.enemyType[1], o.enemyType[2] }
@@ -90,7 +90,7 @@ function love.turris.newGame()
 
 		energyTower.setEnergyGeneration(10)
 		energyTower.buildCost = 50
-		massTower.setMassGeneration(5)
+		massTower.setMassGeneration(1)
 
 		o.map.init()
 		o.player.setEnergy(o.map.energy or 20)
