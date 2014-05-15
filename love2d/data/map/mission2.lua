@@ -7,7 +7,7 @@ map = {
 		{
 			delay = 3,
 			waveCreeps = {
-					{
+				{
 					enemyType = 1,
 					towerType = 7,
 					x = 8,
@@ -36,7 +36,7 @@ map = {
 		{
 			delay = 5,
 			waveCreeps = {
-					{
+				{
 					enemyType = 1,
 					towerType = 7,
 					x = 8,

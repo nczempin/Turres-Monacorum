@@ -9,13 +9,13 @@ map = {
 			waveCreeps = {
 				{
 					enemyType = 1,
-			towerType = 7,
-			x = 11,
-			y = 11,
-			delay = 3,
-			count = 1
-		},
-	},
+					towerType = 7,
+					x = 11,
+					y = 11,
+					delay = 3,
+					count = 1
+				},
+			},
 		},
 		{
 			setMass = 10,
@@ -34,7 +34,7 @@ map = {
 		},
 	},
 	tower = {
-			{
+		{
 			towerType = 10,
 			x = 5,
 			y = 5,
@@ -64,37 +64,37 @@ map = {
 			x = 10,
 			y = 5,
 		},
-	{
+		{
 			towerType = 10,
 			x = 11,
 			y = 5,
 		},
-{
+		{
 			towerType = 10,
 			x = 11,
 			y = 6,
 		},
-{
+		{
 			towerType = 10,
 			x = 11,
 			y = 7,
 		},
-{
+		{
 			towerType = 10,
 			x = 11,
 			y = 8,
 		},
-{
+		{
 			towerType = 10,
 			x = 11,
 			y = 9,
 		},
-{
+		{
 			towerType = 10,
 			x = 11,
 			y = 10,
 		},
-{
+		{
 			towerType = 8,
 			x = 10,
 			y = 11,
