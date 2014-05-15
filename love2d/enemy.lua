@@ -40,6 +40,7 @@ function love.turris.newEnemy(enemyType, map, x, y, baseX, baseY)
 	o.x = x
 	o.y = y
 	o.dead = false
+	o.deathTimer = 0;
 	--o.waypoints = o.generateWaypoints(map, x, y, baseX, baseY, nil)
 	o.ai = love.ai.newAI()
 	o.ai.setMap(map.collision)
@@ -131,7 +132,9 @@ function love.turris.updateEnemies(o, dt)
 	for i = 1, #o.enemies do
 		local e = o.enemies[i]
 
-		if not e.dead then
+		if e.dead then
+			e.deathTimer = e.deathTimer + dt * 20.0
+		else
 			e.update(dt)
 
 			if e.ai.path and e.ai.getCurrentLength() < 0.5 then

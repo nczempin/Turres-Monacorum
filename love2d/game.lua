@@ -48,6 +48,8 @@ function love.turris.newGame()
 		o.creepAnim1 = newAnimation(o.creepImg1, o.creepImg1:getWidth(), o.creepImg1:getHeight() / 8.0, 0, 0)
 		o.creepImg2 = G.newImage("gfx/creep01_diffuse_sheet.png")
 		o.creepAnim2 = newAnimation(o.creepImg2, o.creepImg2:getWidth(), o.creepImg2:getHeight() / 8.0, 0, 0)
+		o.creepExplosion = G.newImage("gfx/explosion_green.png")
+		o.creepExplosionAnim = newAnimation(o.creepExplosion, o.creepExplosion:getWidth() / 13.0, o.creepExplosion:getHeight(), 0, 0)
 		local img -- TODO
 
 		o.enemyType = {}
@@ -706,34 +708,43 @@ function love.turris.newGame()
 		G.setBlendMode("alpha")
 		for i = 1, o.enemyCount do
 			local e = o.enemies[i]
-			if e and not e.dead then
-
-				G.setColor(255, 255, 255)
-				--print ("vels: ",e.xVel,e.yVel)
-				local dir = e.getDirection()
-				--print ("dir: ",dir)
-				--local directionAnim = (dir + math.pi) / (math.pi * 0.25) - 1
-				if directionAnim == 0 then
-					directionAnim = 8
-				end
-
-				local ca = e.sheet
-				local dir = e.ai.getDirection()
-
-				if dir == 1 then
-					ca:seek(1)
-				elseif dir == 2 then
-					ca:seek(5)
-				elseif dir == 3 then
-					ca:seek(7)
-				elseif dir == 4 then
-					ca:seek(3)
+			if e then
+				if e.dead then
+					if e.deathTimer <= 13 then
+						local x = e.ai.getX()
+						local y = e.ai.getY()
+						G.setColor(255, 255, 255)
+						o.creepExplosionAnim:seek(math.floor(e.deathTimer) + 1)
+						o.creepExplosionAnim:draw((x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY  - 48)
+					end
 				else
-					ca:seek(1)
+					G.setColor(255, 255, 255)
+					--print ("vels: ",e.xVel,e.yVel)
+					local dir = e.getDirection()
+					--print ("dir: ",dir)
+					--local directionAnim = (dir + math.pi) / (math.pi * 0.25) - 1
+					if directionAnim == 0 then
+						directionAnim = 8
+					end
+
+					local ca = e.sheet
+					local dir = e.ai.getDirection()
+
+					if dir == 1 then
+						ca:seek(1)
+					elseif dir == 2 then
+						ca:seek(5)
+					elseif dir == 3 then
+						ca:seek(7)
+					elseif dir == 4 then
+						ca:seek(3)
+					else
+						ca:seek(1)
+					end
+					local x = e.ai.getX()
+					local y = e.ai.getY()
+					ca:draw((x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + math.sin(love.timer.getTime() * 2.0) * 4.0 + o.offsetY  - 32)
 				end
-				local x = e.ai.getX()
-				local y = e.ai.getY()
-				ca:draw((x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + math.sin(love.timer.getTime() * 2.0) * 4.0 + o.offsetY  - 32)
 			end
 		end
 	end
