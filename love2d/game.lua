@@ -91,8 +91,8 @@ function love.turris.newGame()
 		massTower.setMassGeneration(5)
 
 		o.map.init()
-		o.player.setEnergy(o.map.energy or 47)
-		o.player.setMass(o.map.mass or 84)
+		o.player.setEnergy(o.map.energy or 20)
+		o.player.setMass(o.map.mass or 20)
 
 		o.imgLaser = G.newImage("gfx/laserbeam_blue.png")
 		o.imgLaser:setWrap("repeat", "repeat")
