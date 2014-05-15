@@ -421,7 +421,7 @@ function love.turris.newGame()
 
 	o.drawTowerHealth = function()
 		G.setBlendMode("alpha")
-
+		local bx, by = o.map.baseX, o.map.baseY
 		if o.map and o.map.width and o.map.height then
 			for i = 0, o.map.width - 1 do
 				for k = 0, o.map.height - 1 do
@@ -432,8 +432,12 @@ function love.turris.newGame()
 						-- health
 						local health = tile.health
 						local maxHealth = tile.maxHealth
-						print ("i,k: ", i, k)
-						if health < maxHealth then
+						--						if (i+1==bx and k+1 ==by)then
+						--							print ("i,k: ", i+1, k+1)
+						--						end
+						if (i+1==bx and k+1 ==by)then
+							--print ("health: ",health)
+							--					if health < maxHealth then
 							--draw health bar
 							G.setColor(0, 0, 0, 127)
 							G.rectangle("fill", i * o.map.tileWidth + o.offsetX - 2, k * o.map.tileHeight + o.offsetY - 16 - 2 - (tower.img:getHeight() - o.map.tileHeight), 64 + 4, 8 + 4)

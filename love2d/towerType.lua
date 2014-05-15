@@ -13,7 +13,7 @@ function love.turris.newTowerType(path)
 	o.buildCost = 10 --mass
 	o.scrapValue = 5 --mass
 	o.shotCost = 10 --energy per second
-	o.breakable = true
+	o.breakable = false
 	o.energyGeneration = 0
 	o.massGeneration = 0
 
