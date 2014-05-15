@@ -10,8 +10,9 @@ o.externalLibsFont = love.graphics.newFont(o.externalLibsFontSize)
 o.names = {
 	"Aldo Brießmann (Code)",
 	"Elena Reinertz (Graphics)",
+	"Julian Colbus (Story)",
 	"Marcus Ihde (Code)",
-	"Meral Leyla (Sound)",
+	"Meral Leyla (Sound, Music)",
 	"Michael Steidl (Code, Sound)",
 	"Nicolai Czempin (Code)",
 	"Robin Kocaurek (Graphics)"

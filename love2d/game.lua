@@ -33,7 +33,7 @@ function love.turris.newGame()
 		o.player = love.turris.newPlayer()
 		o.setMap(turMap.getMap())
 		o.baseX = map.baseX
-		o.baseY = map.baseX
+		o.baseY = map.baseY
 		o.towers.maxamount = o.map.width * o.map.height
 
 		for x = 1, o.map.height do
@@ -51,7 +51,7 @@ function love.turris.newGame()
 		local img -- TODO
 
 		o.enemyType = {}
-		o.enemyType[1] = love.turris.newEnemyType(1, o.creepAnim1, 100, 1.0)
+		o.enemyType[1] = love.turris.newEnemyType(1, o.creepAnim1, 400, 1.0)
 		o.enemyType[2] = love.turris.newEnemyType(2, o.creepAnim2, 2000, 0.5)
 
 		o.enemyTypes = { o.enemyType[1], o.enemyType[2] }
@@ -81,6 +81,8 @@ function love.turris.newGame()
 		spawnHole.setBreakable(false)
 		spawnEggs.setBreakable(false)
 		Water.setBreakable(false)
+		Rock1.setBreakable(false)
+		Rock2.setBreakable(false)
 
 		spawnHole.setCollision(false)
 		spawnEggs.setCollision(false)
@@ -88,11 +90,11 @@ function love.turris.newGame()
 
 		energyTower.setEnergyGeneration(10)
 		energyTower.buildCost = 50
-		massTower.setMassGeneration(5)
+		massTower.setMassGeneration(1)
 
 		o.map.init()
-
-		o.player.setMass(20)
+		o.player.setEnergy(o.map.energy or 20)
+		o.player.setMass(o.map.mass or 20)
 
 		o.imgLaser = G.newImage("gfx/laserbeam_blue.png")
 		o.imgLaser:setWrap("repeat", "repeat")
@@ -121,6 +123,8 @@ function love.turris.newGame()
 		o.layerGameOver = require("layer/gameover")
 		o.layerWin = require("layer/win")
 		o.layerCountdown = require("layer/countdown")
+		o.layerMissionBriefing = require("layer/missionBriefing")
+		o.update(0.001)
 	end
 
 	-- gameplay
@@ -158,6 +162,9 @@ function love.turris.newGame()
 					o.player.addMass(scrapValue)
 
 					o.towerCount = o.towerCount-1
+					if o.towerCount < 0 then
+						print("Warning: Number of towers is negative")
+					end
 					o.towers[x * o.map.height + y] = nil
 					turMap.setState(x, y, 0)
 				else
@@ -264,19 +271,31 @@ function love.turris.newGame()
 		o.dayTime = o.dayTime + dt * 0.01
 		o.spawnTime = o.spawnTime + dt
 		T.updateEnemies(o, dt)
-
-		local win = true
-
+		
+		local waveFinished = true
+		
 		for i = 1, #o.enemies do
 			if not o.enemies[i].dead then
-				win = false
+				waveFinished = false
 			end
 		end
 
 		for i = 1, #o.spawn do
 			if o.spawn[i].count > 0 then
-				win = false
+				waveFinished = false
 			end
+		end
+
+		local win = true
+		
+		if waveFinished then
+			if not o.map.isLastWave() then
+				--spawn next wave
+				o.map.nextWave()
+				win = false
+			end --else: all waves finished, game won
+		else
+			win = false
 		end
 
 		if win then
@@ -325,6 +344,7 @@ function love.turris.newGame()
 		--o.creepAnim:update(dt)
 		local laserVolume = 0
 		local lastTowerPos = 0 -- has to be 0 so the first call can detect a tower at field 1
+--		print ("towerCount: ", o.towerCount)
 		for i = 1, o.towerCount do
 			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
 			local t = o.getnextTower(lastTowerPos + 1) -- the next tower will always be after the first one. Do not ask for a tower after the last one, you will get nil
@@ -338,9 +358,9 @@ function love.turris.newGame()
 					if energyCost <= o.player.energy then
 						local e = t.determineTarget(o.enemies, distance_euclid)
 						t.target = e --TODO just do that inside tower module
-	
+
 						if e then
-							laserVolume = laserVolume + 0.25
+							laserVolume = laserVolume + 0.45
 							o.player.addEnergy(-energyCost)
 							if e.health > 0.0 then
 								e.health = e.health - t.type.damage*dt
@@ -361,8 +381,8 @@ function love.turris.newGame()
 
 		-- test
 		--TODO: -> player.update
---		o.player.addMass(dt*2)
---		o.player.addEnergy(dt*5)
+		--		o.player.addMass(dt*2)
+		--		o.player.addEnergy(dt*5)
 	end
 	--------------------- drawing starts here
 
