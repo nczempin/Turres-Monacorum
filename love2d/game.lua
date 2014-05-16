@@ -34,7 +34,7 @@ function love.turris.newGame()
 		o.setMap(turMap.getMap())
 		o.baseX = map.baseX
 		o.baseY = map.baseY
-		o.towers.maxamount = o.map.width * o.map.height
+		o.towers.maxamount = (o.map.width+1) * o.map.height
 
 		for x = 1, o.map.height do
 			for y = 1, o.map.width do
