@@ -61,7 +61,7 @@ function love.load()
 	secondarygamestate.mouseOK = true
 	secondarygamestate.overlays = {}
 
-	stateMainMenu.setVersion("v0.6.5")
+	stateMainMenu.setVersion("v0.6.6")
 end
 
 function love.getgamestate()
