@@ -83,8 +83,8 @@ function love.turris.newGame()
 		spawnHole.setBreakable(false)
 		spawnEggs.setBreakable(false)
 		Water.setBreakable(false)
-		Rock1.setBreakable(false)
-		Rock2.setBreakable(false)
+		Rock1.setBreakable(true)
+		Rock2.setBreakable(true)
 
 		spawnHole.setCollision(false)
 		spawnEggs.setCollision(false)
@@ -163,10 +163,8 @@ function love.turris.newGame()
 				if o.towerType[state].breakable then -- TODO: let towers other than type 1 be deleted
 					local scrapValue = o.towerType[state].scrapValue
 					o.player.addMass(scrapValue)
-
-					o.towerCount = o.towerCount-1
-					if o.towerCount < 0 then
-						print("Warning: Number of towers is negative")
+					if state < 5 then
+						o.towerCount = o.towerCount-1
 					end
 					o.towers[x * o.map.height + y] = nil
 					turMap.setState(x, y, 0)
