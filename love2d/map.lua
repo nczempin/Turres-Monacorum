@@ -149,6 +149,14 @@ function love.turris.newMap(path)
 				turGame.player.setMass(o.waves[o.currentWave].setMass)
 				print("setting Wave Mass")
 			end
+			if o.waves[o.currentWave].addEnergy then
+				turGame.player.addEnergy(o.waves[o.currentWave].addEnergy)
+				print("setting Wave Energy")
+			end
+			if o.waves[o.currentWave].addMass then
+				turGame.player.addMass(o.waves[o.currentWave].addMass)
+				print("setting Wave Mass")
+			end
 			if o.waves[o.currentWave].missionText then
 				print("adding overlayMessage")
 				o.overlayIngameMessage.init(o.waves[o.currentWave].missionText, true, false, true)
