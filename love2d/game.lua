@@ -33,7 +33,7 @@ function love.turris.newGame()
 		o.player = love.turris.newPlayer()
 		o.setMap(turMap.getMap())
 		o.baseX = map.baseX
-		o.baseY = map.baseX
+		o.baseY = map.baseY
 		o.towers.maxamount = o.map.width * o.map.height
 
 		for x = 1, o.map.height do
@@ -48,10 +48,12 @@ function love.turris.newGame()
 		o.creepAnim1 = newAnimation(o.creepImg1, o.creepImg1:getWidth(), o.creepImg1:getHeight() / 8.0, 0, 0)
 		o.creepImg2 = G.newImage("gfx/creep01_diffuse_sheet.png")
 		o.creepAnim2 = newAnimation(o.creepImg2, o.creepImg2:getWidth(), o.creepImg2:getHeight() / 8.0, 0, 0)
+		o.creepExplosion = G.newImage("gfx/explosion_green.png")
+		o.creepExplosionAnim = newAnimation(o.creepExplosion, o.creepExplosion:getWidth() / 13.0, o.creepExplosion:getHeight(), 0, 0)
 		local img -- TODO
 
 		o.enemyType = {}
-		o.enemyType[1] = love.turris.newEnemyType(1, o.creepAnim1, 100, 1.0)
+		o.enemyType[1] = love.turris.newEnemyType(1, o.creepAnim1, 400, 1.0)
 		o.enemyType[2] = love.turris.newEnemyType(2, o.creepAnim2, 2000, 0.5)
 
 		o.enemyTypes = { o.enemyType[1], o.enemyType[2] }
@@ -81,6 +83,8 @@ function love.turris.newGame()
 		spawnHole.setBreakable(false)
 		spawnEggs.setBreakable(false)
 		Water.setBreakable(false)
+		Rock1.setBreakable(false)
+		Rock2.setBreakable(false)
 
 		spawnHole.setCollision(false)
 		spawnEggs.setCollision(false)
@@ -88,7 +92,8 @@ function love.turris.newGame()
 
 		energyTower.setEnergyGeneration(10)
 		energyTower.buildCost = 50
-		massTower.setMassGeneration(5)
+		massTower.setMassGeneration(1)
+		massTower.buildCost = 15
 
 		o.map.init()
 		o.player.setEnergy(o.map.energy or 20)
@@ -160,6 +165,9 @@ function love.turris.newGame()
 					o.player.addMass(scrapValue)
 
 					o.towerCount = o.towerCount-1
+					if o.towerCount < 0 then
+						print("Warning: Number of towers is negative")
+					end
 					o.towers[x * o.map.height + y] = nil
 					turMap.setState(x, y, 0)
 				else
@@ -266,19 +274,31 @@ function love.turris.newGame()
 		o.dayTime = o.dayTime + dt * 0.01
 		o.spawnTime = o.spawnTime + dt
 		T.updateEnemies(o, dt)
-
-		local win = true
-
+		
+		local waveFinished = true
+		
 		for i = 1, #o.enemies do
 			if not o.enemies[i].dead then
-				win = false
+				waveFinished = false
 			end
 		end
 
 		for i = 1, #o.spawn do
 			if o.spawn[i].count > 0 then
-				win = false
+				waveFinished = false
 			end
+		end
+
+		local win = true
+		
+		if waveFinished then
+			if not o.map.isLastWave() then
+				--spawn next wave
+				o.map.nextWave()
+				win = false
+			end --else: all waves finished, game won
+		else
+			win = false
 		end
 
 		if win then
@@ -327,6 +347,7 @@ function love.turris.newGame()
 		--o.creepAnim:update(dt)
 		local laserVolume = 0
 		local lastTowerPos = 0 -- has to be 0 so the first call can detect a tower at field 1
+--		print ("towerCount: ", o.towerCount)
 		for i = 1, o.towerCount do
 			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
 			local t = o.getnextTower(lastTowerPos + 1) -- the next tower will always be after the first one. Do not ask for a tower after the last one, you will get nil
@@ -639,37 +660,39 @@ function love.turris.newGame()
 	end
 
 	o.drawMapCursor = function()
-		if o.layerHud.guiGame.hover then
-			local mx = love.mouse.getX()
-			local my = love.mouse.getY()
-			local tileX = math.floor((mx - o.offsetX) / o.map.tileWidth)
-			local tileY = math.floor((my - o.offsetY) / o.map.tileHeight)
+		if o.map.editMode then
+			if o.layerHud.guiGame.hover then
+				local mx = love.mouse.getX()
+				local my = love.mouse.getY()
+				local tileX = math.floor((mx - o.offsetX) / o.map.tileWidth)
+				local tileY = math.floor((my - o.offsetY) / o.map.tileHeight)
 
-			if tileX >= 0 and tileY >= 0 and tileX < o.map.width and tileY < o.map.height then
-				if o.map.data[tileX + 1][tileY + 1].id == 0 then
-					G.setColor(0, 127, 255)
-					G.draw(o.mapCursorNormal, tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight + o.offsetY)
-				else
-					G.setColor(255, 63, 0)
-					G.setLineWidth(2)
-					G.rectangle("line", tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight + o.offsetY, o.map.tileWidth, o.map.tileHeight)
-
-					if lightWorld.optionGlow then
-						G.setBlendMode("alpha")
-						G.setColor(0, 0, 0)
+				if tileX >= 0 and tileY >= 0 and tileX < o.map.width and tileY < o.map.height then
+					if o.map.data[tileX + 1][tileY + 1].id == 0 then
+						G.setColor(0, 127, 255)
+						G.draw(o.mapCursorNormal, tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight + o.offsetY)
 					else
-						G.setColor(255, 255, 255)
-					end
+						G.setColor(255, 63, 0)
+						G.setLineWidth(2)
+						G.rectangle("line", tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight + o.offsetY, o.map.tileWidth, o.map.tileHeight)
 
-					local tower = o.towerType[o.map.data[tileX + 1][tileY + 1].id]
-					if tower.upper then
-						G.draw(tower.upper, tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
-					else
-						G.draw(tower.img, tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
-					end
+						if lightWorld.optionGlow then
+							G.setBlendMode("alpha")
+							G.setColor(0, 0, 0)
+						else
+							G.setColor(255, 255, 255)
+						end
 
-					G.setColor(255, 63, 0)
-					G.draw(o.mapCursorBlock, tileX * o.map.tileWidth + o.offsetX + o.map.tileWidth * 0.5, tileY * o.map.tileHeight + o.offsetY + o.map.tileHeight * 0.5, 0, 0.95 - math.sin(o.effectTimer * 5.0) * 0.05, 0.95 - math.sin(o.effectTimer * 5.0) * 0.05, o.map.tileWidth * 0.5, o.map.tileHeight * 0.5)
+						local tower = o.towerType[o.map.data[tileX + 1][tileY + 1].id]
+						if tower.upper then
+							G.draw(tower.upper, tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
+						else
+							G.draw(tower.img, tileX * o.map.tileWidth + o.offsetX, tileY * o.map.tileHeight - (tower.img:getHeight() - o.map.tileHeight) + o.offsetY)
+						end
+
+						G.setColor(255, 63, 0)
+						G.draw(o.mapCursorBlock, tileX * o.map.tileWidth + o.offsetX + o.map.tileWidth * 0.5, tileY * o.map.tileHeight + o.offsetY + o.map.tileHeight * 0.5, 0, 0.95 - math.sin(o.effectTimer * 5.0) * 0.05, 0.95 - math.sin(o.effectTimer * 5.0) * 0.05, o.map.tileWidth * 0.5, o.map.tileHeight * 0.5)
+					end
 				end
 			end
 		end
@@ -686,34 +709,48 @@ function love.turris.newGame()
 		G.setBlendMode("alpha")
 		for i = 1, o.enemyCount do
 			local e = o.enemies[i]
-			if e and not e.dead then
+			if e then
+				if not e.dead or (e.deathTimer > 0 and e.deathTimer <= 13) then
+					if (e.deathTimer > 0 and e.deathTimer <= 13) then
+						G.setColor(255, 255, 255, math.max(0, 255 - e.deathTimer * 32))
+					else
+						G.setColor(255, 255, 255)
+					end
 
-				G.setColor(255, 255, 255)
-				--print ("vels: ",e.xVel,e.yVel)
-				local dir = e.getDirection()
-				--print ("dir: ",dir)
-				--local directionAnim = (dir + math.pi) / (math.pi * 0.25) - 1
-				if directionAnim == 0 then
-					directionAnim = 8
+					--print ("vels: ",e.xVel,e.yVel)
+					local dir = e.getDirection()
+					--print ("dir: ",dir)
+					--local directionAnim = (dir + math.pi) / (math.pi * 0.25) - 1
+					if directionAnim == 0 then
+						directionAnim = 8
+					end
+
+					local ca = e.sheet
+					local dir = e.ai.getDirection()
+
+					if dir == 1 then
+						ca:seek(1)
+					elseif dir == 2 then
+						ca:seek(5)
+					elseif dir == 3 then
+						ca:seek(7)
+					elseif dir == 4 then
+						ca:seek(3)
+					else
+						ca:seek(1)
+					end
+					local x = e.ai.getX()
+					local y = e.ai.getY()
+					ca:draw((x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + math.sin(love.timer.getTime() * 2.0) * 4.0 + o.offsetY  - 32)
+
+					if (e.deathTimer > 0 and e.deathTimer <= 13) then
+						local x = e.ai.getX()
+						local y = e.ai.getY()
+						G.setColor(255, 255, 255)
+						o.creepExplosionAnim:seek(math.floor(e.deathTimer) + 1)
+						o.creepExplosionAnim:draw((x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + o.offsetY  - 48)
+					end
 				end
-
-				local ca = e.sheet
-				local dir = e.ai.getDirection()
-
-				if dir == 1 then
-					ca:seek(1)
-				elseif dir == 2 then
-					ca:seek(5)
-				elseif dir == 3 then
-					ca:seek(7)
-				elseif dir == 4 then
-					ca:seek(3)
-				else
-					ca:seek(1)
-				end
-				local x = e.ai.getX()
-				local y = e.ai.getY()
-				ca:draw((x - 1) * o.map.tileWidth + o.offsetX, (y - 1) * o.map.tileHeight + math.sin(love.timer.getTime() * 2.0) * 4.0 + o.offsetY  - 32)
 			end
 		end
 	end

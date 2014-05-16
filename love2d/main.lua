@@ -54,13 +54,41 @@ function love.load()
 	FONT_LARGE = G.newFont(64)
 	FONT_SMALL = G.newFont(24)
 
-	currentgamestate = 12 -- TODO: make "skip intro" an option
+	love.setgamestate(12) -- TODO: make "skip intro" an option
+	secondarygamestate = {}
+	secondarygamestate.drawOK = true
+	secondarygamestate.updateOK = true
+	secondarygamestate.mouseOK = true
+	secondarygamestate.overlays = {}
 
-	stateMainMenu.setVersion("v0.6.5")
+	stateMainMenu.setVersion("v0.6.6")
 end
 
 function love.getgamestate()
 	return currentgamestate
+end
+
+function love.getsecondarygamestate()
+	return secondarygamestate
+end
+
+function love.clearsecondaryoverlay(tobecleared)
+	if tobecleared == nil then
+		secondarygamestate.overlays = {}
+	else
+		if tobecleared == #secondarygamestate.overlays then
+		else
+			for i = tobecleared, #secondarygamestate.overlays-1 do
+				secondarygamestate.overlays[i] = secondarygamestate.overlays[i+1]
+			end
+		end
+		secondarygamestate.overlays[tobecleared] = nil
+	end
+end
+
+-- an overlay MUST have the methods update() and draw() and the boolean variables "noUpdate", "noDraw" and "obsolete"
+function love.addsecondaryoverlay(overlay)
+	secondarygamestate.overlays[#secondarygamestate.overlays+1] = overlay
 end
 
 function love.turris.reinit(map)
@@ -92,6 +120,9 @@ function love.setgamestate(newgamestate, option)
 	elseif newgamestate == 4 then
 		turGame.layerGameOver.effectTimer = 0
 		love.sounds.playBackground("sounds/music/game_over_music.mp3", "game")
+	elseif newgamestate == 12 then
+		print "hello"
+		love.sounds.playBackground("sounds/music/turres_mix_plus_siren.mp3", "menu")
 	elseif  newgamestate == 13 then
 		turGame.layerGameOver.effectTimer = 0
 		love.sounds.playBackground("sounds/music/level_up.mp3", "game")
@@ -113,38 +144,60 @@ function love.setgamestate(newgamestate, option)
 end
 
 function love.update(dt)
-	if (currentgamestate == 0)then
-		stateMainMenu.update(dt)
-	elseif (currentgamestate == 1)then
-		turGame.update(dt)
-	elseif (currentgamestate == 4)then
-		turGame.layerGameOver.update(dt)
-	elseif (currentgamestate == 5)then
-		stateCredits.update(dt)
-	elseif (currentgamestate == 6)then
-		stateSettings.update(dt)
-	elseif (currentgamestate == 7)then
-		stateSettingsVideo.update(dt)
-	elseif (currentgamestate == 8)then
-		stateSettingsVideoShaders.update(dt)
-	elseif (currentgamestate == 9)then
-		stateSettingsVideoDisplay.update(dt)
-	elseif (currentgamestate == 10)then
-		stateSettingsAudio.update(dt)
-	elseif (currentgamestate == 11)then
-		stateWorldMenu.update(dt)
-	elseif (currentgamestate == 12)then
-		stateIntro.update(dt)
-	elseif (currentgamestate == 13)then
-		turGame.layerWin.update(dt)
-	elseif (currentgamestate == 14)then
-		turGame.layerCountdown.update(dt)
-	elseif (currentgamestate == 15)then
-		stateOutro.update(dt)
-	elseif (currentgamestate == 16)then
-		turGame.layerMissionBriefing.update(dt)
+	secondarygamestate.drawOK = true
+	secondarygamestate.updateOK = true
+	secondarygamestate.mouseOK = true
+	if #secondarygamestate.overlays > 0 then
+		for k=1, #secondarygamestate.overlays do
+			secondarygamestate.overlays[k].update(dt)
+			if secondarygamestate.overlays[k].noDraw then
+				secondarygamestate.drawOK = false
+			end
+			if secondarygamestate.overlays[k].noMouse then
+				secondarygamestate.mouseOK = false
+			end
+			if secondarygamestate.overlays[k].noUpdate then
+				secondarygamestate.updateOK = false
+			end
+			if secondarygamestate.overlays[k].obsolete then
+				love.clearsecondaryoverlay(k)
+			end
+		end
 	end
-	TEsound.cleanup()  --Important, Clears all the channels in TEsound
+	if secondarygamestate.updateOK then
+		if (currentgamestate == 0)then
+			stateMainMenu.update(dt)
+		elseif (currentgamestate == 1)then
+			turGame.update(dt)
+		elseif (currentgamestate == 4)then
+			turGame.layerGameOver.update(dt)
+		elseif (currentgamestate == 5)then
+			stateCredits.update(dt)
+		elseif (currentgamestate == 6)then
+			stateSettings.update(dt)
+		elseif (currentgamestate == 7)then
+			stateSettingsVideo.update(dt)
+		elseif (currentgamestate == 8)then
+			stateSettingsVideoShaders.update(dt)
+		elseif (currentgamestate == 9)then
+			stateSettingsVideoDisplay.update(dt)
+		elseif (currentgamestate == 10)then
+			stateSettingsAudio.update(dt)
+		elseif (currentgamestate == 11)then
+			stateWorldMenu.update(dt)
+		elseif (currentgamestate == 12)then
+			stateIntro.update(dt)
+		elseif (currentgamestate == 13)then
+			turGame.layerWin.update(dt)
+		elseif (currentgamestate == 14)then
+			turGame.layerCountdown.update(dt)
+		elseif (currentgamestate == 15)then
+			stateOutro.update(dt)
+		elseif (currentgamestate == 16)then
+			turGame.layerMissionBriefing.update(dt)
+		end
+		TEsound.cleanup()  --Important, Clears all the channels in TEsound
+	end
 end
 
 function love.draw()
@@ -156,41 +209,49 @@ function love.draw()
 	G.setColor(0, 0, 0)
 	G.rectangle("fill", 0, 0, W.getWidth(), W.getHeight())
 
-	if(currentgamestate == 0) then --render main menu only
-		stateMainMenu.draw()
-	elseif(currentgamestate == 1) then --render game only
-		turGame.draw()
-		scanlineStrength = 2.0
-	elseif(currentgamestate == 4) then -- render game + "game over" message on top
-		turGame.draw()
-		turGame.layerGameOver.draw()
-	elseif currentgamestate == 5 then --credits screen
-		stateCredits.draw()
-	elseif currentgamestate == 6 then --settings screen
-		stateSettings.draw()
-	elseif currentgamestate == 7 then --settings screen
-		stateSettingsVideo.draw()
-	elseif currentgamestate == 8 then --settings screen
-		stateSettingsVideoShaders.draw()
-	elseif currentgamestate == 9 then --settings screen
-		stateSettingsVideoDisplay.draw()
-	elseif currentgamestate == 10 then --settings audio
-		stateSettingsAudio.draw()
-	elseif currentgamestate == 11 then --settings world
-		stateWorldMenu.draw()
-	elseif currentgamestate == 12 then --intro
-		stateIntro.draw()
-	elseif currentgamestate == 13 then --winning
-		turGame.draw()
-		turGame.layerWin.draw()
-	elseif currentgamestate == 14 then --countdown
-		turGame.draw()
-		turGame.layerCountdown.draw()
-	elseif currentgamestate == 15 then --outro
-		stateOutro.draw()
-	elseif (currentgamestate == 16)then
-		turGame.draw()
-		turGame.layerMissionBriefing.draw()
+	if secondarygamestate.drawOK then
+		if(currentgamestate == 0) then --render main menu only
+			stateMainMenu.draw()
+		elseif(currentgamestate == 1) then --render game only
+			turGame.draw()
+			scanlineStrength = 2.0
+		elseif(currentgamestate == 4) then -- render game + "game over" message on top
+			turGame.draw()
+			turGame.layerGameOver.draw()
+		elseif currentgamestate == 5 then --credits screen
+			stateCredits.draw()
+		elseif currentgamestate == 6 then --settings screen
+			stateSettings.draw()
+		elseif currentgamestate == 7 then --settings screen
+			stateSettingsVideo.draw()
+		elseif currentgamestate == 8 then --settings screen
+			stateSettingsVideoShaders.draw()
+		elseif currentgamestate == 9 then --settings screen
+			stateSettingsVideoDisplay.draw()
+		elseif currentgamestate == 10 then --settings audio
+			stateSettingsAudio.draw()
+		elseif currentgamestate == 11 then --settings world
+			stateWorldMenu.draw()
+		elseif currentgamestate == 12 then --intro
+			stateIntro.draw()
+		elseif currentgamestate == 13 then --winning
+			turGame.draw()
+			turGame.layerWin.draw()
+		elseif currentgamestate == 14 then --countdown
+			turGame.draw()
+			turGame.layerCountdown.draw()
+		elseif currentgamestate == 15 then --outro
+			stateOutro.draw()
+		elseif (currentgamestate == 16)then
+			turGame.draw()
+			turGame.layerMissionBriefing.draw()
+		end
+	end
+	if #secondarygamestate.overlays > 0 then
+		for k=1,#secondarygamestate.overlays do
+			secondarygamestate.overlays[k].draw()
+		end
+	else 
 	end
 
 	if stateSettingsVideoShaders.optionScanlines then

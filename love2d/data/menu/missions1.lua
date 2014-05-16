@@ -5,7 +5,7 @@ missions = {
 		y = 130,
 		title = "Tutorial 1",
 		description = "Tutorial 1.\n\nMapsize: Small",
-		briefingText = "These aliens seem to be carrying explosives that they want to carry into our main generator. Prevent them from doing so by building laser towers!",
+		briefingText = "If they destroy our main generator the ensuing resonance cascade will cut off our communications, rendering us entirely unprotected! I've scrambled together some resources, hopefully a LASER TOWER can hold them off long enough until I'm able to provide you with more.",
 		button = "T",
 	},
 	{

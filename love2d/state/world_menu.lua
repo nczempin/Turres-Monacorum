@@ -14,7 +14,7 @@ o.selDescription = nil
 
 o.guiMenu = love.gui.newGui()
 
-love.filesystem.load("data/menu/missions1.ini")()
+love.filesystem.load("data/menu/missions1.lua")()
 
 if love.filesystem.exists("save.ini") then
 	love.turris.save = Tserial.unpack(love.filesystem.read("save.ini"))
