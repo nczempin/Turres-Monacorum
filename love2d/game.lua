@@ -96,8 +96,8 @@ function love.turris.newGame()
 		massTower.buildCost = 15
 
 		o.map.init()
-		o.player.setEnergy(o.map.energy or 20)
-		o.player.setMass(o.map.mass or 20)
+		o.player.setEnergy(o.map.energy or 100)
+		o.player.setMass(o.map.mass or 100)
 
 		o.imgLaser = G.newImage("gfx/laserbeam_blue.png")
 		o.imgLaser:setWrap("repeat", "repeat")
