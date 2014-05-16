@@ -18,7 +18,7 @@ map = {
 			},
 		},
 		{
-			missionText = "The residual energy wasn't enough, but I've rerouted some power from the secondary EPS conduits ahead of the next wave. Good luck! ",
+			missionText = "While the lasers seem to have an effect on the aliens, the residual energy wasn't enough to stop them from damaging our main generator.\nI've rerouted some power from the secondary EPS conduits, let's blast it into their next wave. Good luck! ",
 			setMass = 0,
 			setEnergy = 350,
 			delay = 5,
@@ -34,7 +34,7 @@ map = {
 			},
 		},
 		{
-			missionText = "I gave it all we had; and still they managed to get through. We managed to convert some of the aliens' biomass to construction material, it should be enough for an energy tower. We're running out of time!",
+			missionText = "I gave it all we had; and still some of them made it through.\nWe were able to convert some of the destroyed aliens' biomass to construction material, it should be enough for an ENERGY TOWER. We're running out of time!",
 			setMass = 60,
 			setEnergy = 0,
 			delay = 2,
@@ -50,6 +50,7 @@ map = {
 			},
 		},
 		{
+			missionText = "Thas was close! And there are even more waves incoming, from new spawn points.\nBuild a MASS TOWER so we can build more towers out of dead aliens.\nWe cannot hold much longer!",
 			setMass = 15,
 			setEnergy = 0,
 			delay = 5,
