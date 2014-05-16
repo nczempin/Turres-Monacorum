@@ -25,7 +25,7 @@ o.update = function(dt)
 	o.gui.update(dt)
 
 	o.showTimer = o.showTimer + dt
-	if o.gui.isHit() or love.keyboard.isDown("escape") or (o.showTimer > 4) then
+	if o.gui.isHit() or love.keyboard.isDown("escape") or (o.showTimer > 99999) then
 		o.showTimer = 0
 		love.event.quit()
 	end
