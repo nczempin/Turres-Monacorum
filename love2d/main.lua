@@ -54,7 +54,7 @@ function love.load()
 	FONT_LARGE = G.newFont(64)
 	FONT_SMALL = G.newFont(24)
 
-	currentgamestate = 12 -- TODO: make "skip intro" an option
+	love.setgamestate(12) -- TODO: make "skip intro" an option
 	secondarygamestate = {}
 	secondarygamestate.drawOK = true
 	secondarygamestate.updateOK = true
@@ -120,6 +120,9 @@ function love.setgamestate(newgamestate, option)
 	elseif newgamestate == 4 then
 		turGame.layerGameOver.effectTimer = 0
 		love.sounds.playBackground("sounds/music/game_over_music.mp3", "game")
+	elseif newgamestate == 12 then
+		print "hello"
+		love.sounds.playBackground("sounds/music/turres_mix_plus_siren.mp3", "menu")
 	elseif  newgamestate == 13 then
 		turGame.layerGameOver.effectTimer = 0
 		love.sounds.playBackground("sounds/music/level_up.mp3", "game")

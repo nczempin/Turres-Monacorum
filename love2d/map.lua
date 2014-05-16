@@ -1,6 +1,6 @@
 function love.turris.newMap(path)
 	-- load map object
-	love.filesystem.load("data/map/" .. path .. ".ini")()
+	love.filesystem.load("data/map/" .. path .. ".lua")()
 
 	local o = {}
 	o.width = map.width or 16
@@ -16,6 +16,8 @@ function love.turris.newMap(path)
 	o.mass = map.mass
 	o.overlayIngameMessage = require("layer/notification") -- quick solution for now. should be moved somewhere else later
 	o.currentWave = 0
+	o.editMode = true;
+
 	if map.ground then
 		o.groundColor = map.ground.color
 		o.groundImg = map.ground.img or "ground01"
