@@ -18,7 +18,7 @@ map = {
 			},
 		},
 		{
-			missionText = "Click on the map again to place another turret",
+			missionText = "The residual energy wasn't enough, but I've rerouted some power from the secondary EPS conduits ahead of the next wave. Good luck! ",
 			setMass = 0,
 			setEnergy = 350,
 			delay = 5,
@@ -34,6 +34,7 @@ map = {
 			},
 		},
 		{
+			missionText = "I gave it all we had; and still they managed to get through. We managed to convert some of the aliens' biomass to construction material, it should be enough for an energy tower. We're running out of time!",
 			setMass = 60,
 			setEnergy = 0,
 			delay = 2,
@@ -141,6 +142,6 @@ map = {
 	},
 	random = {
 	},
-	mass = 30,
-	energy = 200
+	mass = 10,
+	energy = 25
 }
