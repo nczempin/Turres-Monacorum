@@ -5,15 +5,17 @@ map = {
 	baseY = 5,
 	waves = {
 		{
-			delay = 2,
+			addMass = 250,
+			addEnergy = 260,
+			delay = 0,
 			waveCreeps = {
 				{
-					enemyType = 1,
+					enemyType = 2,
 					towerType = 7,
-					x = 11,
-					y = 11,
-					delay = 3,
-					count = 2
+					x = 6,
+					y = 3,
+					delay = 1,
+					count = 4
 				},
 			},
 		},
@@ -143,6 +145,6 @@ map = {
 	},
 	random = {
 	},
-	mass = 10,
-	energy = 50
+	mass = 999,
+	energy = 999
 }

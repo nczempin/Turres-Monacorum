@@ -53,6 +53,8 @@ function love.load()
 	FONT = G.newFont(32)
 	FONT_LARGE = G.newFont(64)
 	FONT_SMALL = G.newFont(24)
+	FONT_SMALLER = G.newFont(18)
+	FONT_SMALLEST = G.newFont(10)
 
 	love.setgamestate(12) -- TODO: make "skip intro" an option
 	secondarygamestate = {}
@@ -61,7 +63,7 @@ function love.load()
 	secondarygamestate.mouseOK = true
 	secondarygamestate.overlays = {}
 
-	stateMainMenu.setVersion("v0.6.6")
+	stateMainMenu.setVersion("v0.7.0")
 end
 
 function love.getgamestate()
@@ -77,6 +79,7 @@ function love.clearsecondaryoverlay(tobecleared)
 		secondarygamestate.overlays = {}
 	else
 		if tobecleared == #secondarygamestate.overlays then
+		--do nothing
 		else
 			for i = tobecleared, #secondarygamestate.overlays-1 do
 				secondarygamestate.overlays[i] = secondarygamestate.overlays[i+1]

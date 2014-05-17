@@ -34,7 +34,7 @@ function love.turris.newGame()
 		o.setMap(turMap.getMap())
 		o.baseX = map.baseX
 		o.baseY = map.baseY
-		o.towers.maxamount = o.map.width * o.map.height
+		o.towers.maxamount = (o.map.width+1) * o.map.height
 
 		for x = 1, o.map.height do
 			for y = 1, o.map.width do
@@ -83,8 +83,8 @@ function love.turris.newGame()
 		spawnHole.setBreakable(false)
 		spawnEggs.setBreakable(false)
 		Water.setBreakable(false)
-		Rock1.setBreakable(false)
-		Rock2.setBreakable(false)
+		Rock1.setBreakable(true)
+		Rock2.setBreakable(true)
 
 		spawnHole.setCollision(false)
 		spawnEggs.setCollision(false)
@@ -96,8 +96,8 @@ function love.turris.newGame()
 		massTower.buildCost = 15
 
 		o.map.init()
-		o.player.setEnergy(o.map.energy or 20)
-		o.player.setMass(o.map.mass or 20)
+		o.player.setEnergy(o.map.energy or 100)
+		o.player.setMass(o.map.mass or 100)
 
 		o.imgLaser = G.newImage("gfx/laserbeam_blue.png")
 		o.imgLaser:setWrap("repeat", "repeat")
@@ -163,10 +163,8 @@ function love.turris.newGame()
 				if o.towerType[state].breakable then -- TODO: let towers other than type 1 be deleted
 					local scrapValue = o.towerType[state].scrapValue
 					o.player.addMass(scrapValue)
-
-					o.towerCount = o.towerCount-1
-					if o.towerCount < 0 then
-						print("Warning: Number of towers is negative")
+					if state < 5 then
+						o.towerCount = o.towerCount-1
 					end
 					o.towers[x * o.map.height + y] = nil
 					turMap.setState(x, y, 0)
@@ -274,11 +272,11 @@ function love.turris.newGame()
 		o.dayTime = o.dayTime + dt * 0.01
 		o.spawnTime = o.spawnTime + dt
 		T.updateEnemies(o, dt)
-		
+
 		local waveFinished = true
-		
+
 		for i = 1, #o.enemies do
-			if not o.enemies[i].dead then
+			if not o.enemies[i].dead or o.enemies[i].deathTimer <= 13 then
 				waveFinished = false
 			end
 		end
@@ -290,7 +288,7 @@ function love.turris.newGame()
 		end
 
 		local win = true
-		
+
 		if waveFinished then
 			if not o.map.isLastWave() then
 				--spawn next wave
@@ -347,7 +345,7 @@ function love.turris.newGame()
 		--o.creepAnim:update(dt)
 		local laserVolume = 0
 		local lastTowerPos = 0 -- has to be 0 so the first call can detect a tower at field 1
---		print ("towerCount: ", o.towerCount)
+		--		print ("towerCount: ", o.towerCount)
 		for i = 1, o.towerCount do
 			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
 			local t = o.getnextTower(lastTowerPos + 1) -- the next tower will always be after the first one. Do not ask for a tower after the last one, you will get nil

@@ -1,11 +1,19 @@
 missions = {
-	{
-		map = "tutorial1",
+--	{
+--		map = "debug1",
+--		x = 150,
+--		y = 130,
+--		title = "Debug 1",
+--		description = "Debug 1.\n\nMapsize: Small",
+--		briefingText = "For trying out new features efficiently",
+--		button = "D",
+--	},
+	{		map = "tutorial1",
 		x = 300,
 		y = 130,
 		title = "Tutorial 1",
 		description = "Tutorial 1.\n\nMapsize: Small",
-		briefingText = "If they destroy our main generator the ensuing resonance cascade will cut off our communications, rendering us entirely unprotected! I've scrambled together some resources, hopefully a LASER TOWER can hold them off long enough until I'm able to provide you with more.",
+		briefingText = "If they destroy our MAIN GENERATOR, the ensuing resonance cascade will cut off our communications, rendering us entirely unprotected!\n I've scrounged together some resources, hopefully you can hold them off until I'm able to provide you with more.\n\nBuild a LASER TOWER in a good spot!",
 		button = "T",
 	},
 	{
