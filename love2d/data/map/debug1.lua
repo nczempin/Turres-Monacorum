@@ -7,15 +7,15 @@ map = {
 		{
 			addMass = 250,
 			addEnergy = 260,
-			delay = 1,
+			delay = 0,
 			waveCreeps = {
 				{
-					enemyType = 1,
+					enemyType = 2,
 					towerType = 7,
 					x = 6,
 					y = 3,
 					delay = 1,
-					count = 2
+					count = 4
 				},
 			},
 		},
