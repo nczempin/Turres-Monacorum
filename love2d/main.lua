@@ -53,6 +53,8 @@ function love.load()
 	FONT = G.newFont(32)
 	FONT_LARGE = G.newFont(64)
 	FONT_SMALL = G.newFont(24)
+	FONT_SMALLER = G.newFont(18)
+	FONT_SMALLEST = G.newFont(10)
 
 	love.setgamestate(12) -- TODO: make "skip intro" an option
 	secondarygamestate = {}

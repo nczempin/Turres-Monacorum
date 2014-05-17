@@ -21,7 +21,7 @@ end
 
 o.draw = function()
 	love.postshader.addEffect("monochrom")
-	G.setFont(FONT)
+	G.setFont(FONT_SMALLER)
 	G.setColor(0, 0, 0, 127)
 	G.rectangle("fill", W.getWidth() * 0.125 - 16, 160 - 16, W.getWidth() * 0.75 + 32, 256 + 32);
 	G.setColor(255, 127, 0)
@@ -30,6 +30,7 @@ o.draw = function()
 	local scale = 1---(o.countdown-o.oldcountdown)/2
 	G.printf(o.text, W.getWidth() * 0.125, 160, W.getWidth() * 0.75, "center", 0, scale, scale)
 	G.setColor(255, 255, 255, 127)
+	G.setFont(FONT)
 	o.guiMenu.draw()
 end
 
