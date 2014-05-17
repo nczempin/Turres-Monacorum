@@ -33,7 +33,6 @@ o.draw = function()
 	G.setFont(FONT)
 	G.setColor(255, 127, 0, 127)
 	local scale = 1---(o.countdown-o.oldcountdown)/2
-	G.printf(o.text, 0, 240, W.getWidth(), "center",0,scale,scale)
 	love.turris.drawMessage(x1,x2,y1,rectX1,text,scale,alignment)
 	G.setColor(255, 255, 255, 127)
 	o.guiMenu.draw()
