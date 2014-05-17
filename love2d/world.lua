@@ -18,7 +18,7 @@ buttonDetected = 0
 -- GameStates:0=MainMenu, 1=inGame, 2=Load, 3=Settings, 4=Game Over, 5 = Credits
 
 function love.turris.checkleftclick(clickx,clicky)
-	currentgstate = love.getgamestate()
+	local currentgstate = love.getgamestate()
 	if secondarygamestate.mouseOK then
 		if currentgstate == 1 then --ingame
 			if turGame.layerHud.guiGame.hover then

@@ -4,7 +4,7 @@ o.text = ""
 
 o.guiMenu = love.gui.newGui()
 o.init = function(text, disableUpdate, disableDraw, disableMouse)
-	o.text = text or "Somebody called for a notification without providing any text. This was surely intentional"
+	o.text = text or "Somebody called for a notification without providing any text. This was surely unintentional"
 	o.noUpdate = disableUpdate or false
 	o.noDraw = disableDraw or false
 	o.noMouse = disableMouse or false
@@ -23,10 +23,18 @@ o.update = function(dt)
 end
 
 o.draw = function()
+	local x1 = W.getWidth() * 0.125
+	local x2 = W.getWidth() * 0.75
+	local y1 = 160
+	local rectX1 = x1 - 16
+	local text = o.text
+	local scale = 1
+	local alignment = "left"
 	G.setFont(FONT)
 	G.setColor(255, 127, 0, 127)
 	local scale = 1---(o.countdown-o.oldcountdown)/2
 	G.printf(o.text, 0, 240, W.getWidth(), "center",0,scale,scale)
+	love.turris.drawMessage(x1,x2,y1,rectX1,text,scale,alignment)
 	G.setColor(255, 255, 255, 127)
 	o.guiMenu.draw()
 end

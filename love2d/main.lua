@@ -79,6 +79,7 @@ function love.clearsecondaryoverlay(tobecleared)
 		secondarygamestate.overlays = {}
 	else
 		if tobecleared == #secondarygamestate.overlays then
+		--do nothing
 		else
 			for i = tobecleared, #secondarygamestate.overlays-1 do
 				secondarygamestate.overlays[i] = secondarygamestate.overlays[i+1]
