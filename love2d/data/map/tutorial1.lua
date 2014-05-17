@@ -13,7 +13,7 @@ map = {
 					x = 11,
 					y = 11,
 					delay = 3,
-					count = 1
+					count = 2
 				},
 			},
 		},
@@ -144,5 +144,5 @@ map = {
 	random = {
 	},
 	mass = 10,
-	energy = 25
+	energy = 50
 }
