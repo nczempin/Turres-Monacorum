@@ -4,7 +4,7 @@ o.text = ""
 
 o.guiMenu = love.gui.newGui()
 o.init = function(text, disableUpdate, disableDraw, disableMouse)
-	o.text = text or "Somebody called for a notification without providing any text. This was surely intentional"
+	o.text = text or "Somebody called for a notification without providing any text. This was surely unintentional"
 	o.noUpdate = disableUpdate or false
 	o.noDraw = disableDraw or false
 	o.noMouse = disableMouse or false
