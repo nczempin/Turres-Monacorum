@@ -272,11 +272,11 @@ function love.turris.newGame()
 		o.dayTime = o.dayTime + dt * 0.01
 		o.spawnTime = o.spawnTime + dt
 		T.updateEnemies(o, dt)
-		
+
 		local waveFinished = true
-		
+
 		for i = 1, #o.enemies do
-			if not o.enemies[i].dead then
+			if not o.enemies[i].dead or o.enemies[i].deathTimer <= 13 then
 				waveFinished = false
 			end
 		end
@@ -288,7 +288,7 @@ function love.turris.newGame()
 		end
 
 		local win = true
-		
+
 		if waveFinished then
 			if not o.map.isLastWave() then
 				--spawn next wave
@@ -345,7 +345,7 @@ function love.turris.newGame()
 		--o.creepAnim:update(dt)
 		local laserVolume = 0
 		local lastTowerPos = 0 -- has to be 0 so the first call can detect a tower at field 1
---		print ("towerCount: ", o.towerCount)
+		--		print ("towerCount: ", o.towerCount)
 		for i = 1, o.towerCount do
 			-- TODO which tower shoots what should be determined in update(); here we should only draw what has already been determined
 			local t = o.getnextTower(lastTowerPos + 1) -- the next tower will always be after the first one. Do not ask for a tower after the last one, you will get nil
