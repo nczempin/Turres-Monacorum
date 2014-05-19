@@ -75,6 +75,11 @@ map = {
 		},},
 	tower = {
 		{
+			towerType = 1,
+			x = 10,
+			y = 4,
+		},
+		{
 			towerType = 10,
 			x = 5,
 			y = 5,
