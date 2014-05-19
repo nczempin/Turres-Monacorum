@@ -106,7 +106,7 @@ function love.turris.newMap(path)
 
 		if o.tower then
 			for i = 1, #o.tower do
-				o.setState(o.tower[i].x, o.tower[i].y, o.tower[i].towerType)
+				turGame.addTower(o.tower[i].x, o.tower[i].y, o.tower[i].towerType)
 			end
 		end
 
