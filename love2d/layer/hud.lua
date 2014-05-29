@@ -48,6 +48,7 @@ function love.turris.newHudLayer(player)
   o.update = function(dt)
     o.guiGame.update(dt)
 
+
     if o.btnTower1.isHit() then
       love.turris.selectedtower = 1
     elseif o.btnTower2.isHit() then
@@ -56,6 +57,7 @@ function love.turris.newHudLayer(player)
       love.turris.selectedtower = 4
     end
 
+    --TODO: ignore keyboard selection when towers are disabled. Leaving this in here for now for debugging
     if love.keyboard.isDown("1") then
       love.turris.selectedtower = 1
       o.btnTower1.setChecked(true)
