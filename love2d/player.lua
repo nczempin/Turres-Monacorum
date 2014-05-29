@@ -6,7 +6,10 @@ function love.turris.newPlayer()
   o.energy = 99999
 
   o.massDisplayDisabled = true
+  o.energyDisplayDisabled = true
   o.laserTowerDisplayDisabled = true
+  o.energyTowerDisplayDisabled = true
+  o.massTowerDisplayDisabled = true
 
   o.addMass = function(mass)
     o.mass = o.mass + mass
