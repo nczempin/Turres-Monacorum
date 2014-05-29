@@ -103,7 +103,7 @@ function love.turris.reinit(map)
 	lightMouse = lightWorld.newLight(0, 0, 31, 191, 63, 300)
 	lightMouse.setRange(300)
 
-	love.turris.selectedtower = 1
+	love.turris.selectedtower = 0 --TODO now that we can disable towers, we need to set this explicitly
 	turGame = love.turris.newGame()
 	turMap = love.turris.newMap(map)
 	turGame.init()
