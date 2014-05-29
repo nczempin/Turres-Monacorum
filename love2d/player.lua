@@ -1,28 +1,29 @@
 function love.turris.newPlayer()
 
-	local o = {}
+  local o = {}
 
-	o.mass = 99999
-	o.energy = 99999
-	
-	o.massDisplayDisabled = true
+  o.mass = 99999
+  o.energy = 99999
 
-	o.addMass = function(mass)
-		o.mass = o.mass + mass
-	end
+  o.massDisplayDisabled = true
+  o.laserTowerDisplayDisabled = true
 
-	o.addEnergy = function(energy)
-		o.energy = o.energy + energy
-	end
+  o.addMass = function(mass)
+    o.mass = o.mass + mass
+  end
 
-	o.setMass = function(mass)
-		o.mass = mass
-	end
+  o.addEnergy = function(energy)
+    o.energy = o.energy + energy
+  end
 
-	o.setEnergy = function(energy)
-		o.energy = energy
-	end
+  o.setMass = function(mass)
+    o.mass = mass
+  end
 
-	return o
+  o.setEnergy = function(energy)
+    o.energy = energy
+  end
+
+  return o
 
 end
