@@ -96,56 +96,60 @@ function love.turris.newHudLayer(player)
 		G.setLineWidth(2)
 		
 		
-		
---		G.setColor(0, 127, 255)
---		G.rectangle("line", W.getWidth() - 352, 16, 160, 36)
---		G.setColor(0, 127, 255, 15)
---		G.rectangle("fill", W.getWidth() - 352, 16, 160, 36)
---		G.setColor(0, 127, 255, 255)
---		G.printf(math.floor(mass), W.getWidth() - 352, 16, 128, "right")
---		G.draw(o.iconMass, W.getWidth() - 208, 34, love.timer.getTime() * 0.5, 1, 1, 8, 8)
+		-- mass level
+		G.setColor(0, 127, 255)
+		G.rectangle("line", W.getWidth() - 352, 16, 160, 36)
+		G.setColor(0, 127, 255, 15)
+		G.rectangle("fill", W.getWidth() - 352, 16, 160, 36)
+		G.setColor(0, 127, 255, 255)
+		G.printf(math.floor(mass), W.getWidth() - 352, 16, 128, "right")
+		G.draw(o.iconMass, W.getWidth() - 208, 34, love.timer.getTime() * 0.5, 1, 1, 8, 8)
 
 
 
-
---		G.setColor(255, 127, 0)
---		G.rectangle("line", W.getWidth() - 176, 16, 160, 36)
---		G.setColor(255, 127, 0, 15)
---		G.rectangle("fill", W.getWidth() - 176, 16, 160, 36)
---		G.setColor(255, 127, 0, 255)
---		G.printf(math.floor(energy), W.getWidth() - 176, 16, 128, "right")
---		G.setColor(255, 127, 0, 191 + math.sin(love.timer.getTime() * 5.0) * 63)
---		G.draw(o.iconEnergy, W.getWidth() - 40, 16)
-
-
+    -- energy level
+		G.setColor(255, 127, 0)
+		G.rectangle("line", W.getWidth() - 176, 16, 160, 36)
+		G.setColor(255, 127, 0, 15)
+		G.rectangle("fill", W.getWidth() - 176, 16, 160, 36)
+		G.setColor(255, 127, 0, 255)
+		G.printf(math.floor(energy), W.getWidth() - 176, 16, 128, "right")
+		G.setColor(255, 127, 0, 191 + math.sin(love.timer.getTime() * 5.0) * 63)
+		G.draw(o.iconEnergy, W.getWidth() - 40, 16)
 
 
---		if o.btnTower1.isChecked() then
---			G.setColor(0, 127, 255, 127)
---		else
---			G.setColor(0, 127, 255, 31)
---		end
---		G.rectangle("fill", 208 * 0 + 16, W.getHeight() - 108, 192, 28)
---		if o.btnTower2.isChecked() then
---			G.setColor(255, 127, 0, 127)
---		else
---			G.setColor(255, 127, 0, 31)
---		end
---		G.rectangle("fill", 208 * 1 + 16, W.getHeight() - 108, 192, 28)
---		if o.btnTower3.isChecked() then
---			G.setColor(0, 255, 127, 127)
---		else
---			G.setColor(0, 255, 127, 31)
---		end
---		G.rectangle("fill", 208 * 2 + 16, W.getHeight() - 108, 192, 28)
 
---		G.setFont(o.fontTitle)
---		G.setColor(0, 0, 0)
---		G.printf("Laser Tower", 208 * 0 + 16, W.getHeight() - 108, 192, "center")
---		G.printf("Energy Tower", 208 * 1 + 16, W.getHeight() - 108, 192, "center")
---		G.printf("Mass Tower", 208 * 2 + 16, W.getHeight() - 108, 192, "center")
+    -- button headers
+		if o.btnTower1.isChecked() then
+			G.setColor(0, 127, 255, 127)
+		else
+			G.setColor(0, 127, 255, 31)
+		end
+		G.rectangle("fill", 208 * 0 + 16, W.getHeight() - 108, 192, 28)
+		if o.btnTower2.isChecked() then
+			G.setColor(255, 127, 0, 127)
+		else
+			G.setColor(255, 127, 0, 31)
+		end
+		G.rectangle("fill", 208 * 1 + 16, W.getHeight() - 108, 192, 28)
+		if o.btnTower3.isChecked() then
+			G.setColor(0, 255, 127, 127)
+		else
+			G.setColor(0, 255, 127, 31)
+		end
+		G.rectangle("fill", 208 * 2 + 16, W.getHeight() - 108, 192, 28)
 
---		o.guiGame.draw()
+    --button header titles
+		G.setFont(o.fontTitle)
+		G.setColor(0, 0, 0)
+		G.printf("Laser Tower", 208 * 0 + 16, W.getHeight() - 108, 192, "center")
+		G.printf("Energy Tower", 208 * 1 + 16, W.getHeight() - 108, 192, "center")
+		G.printf("Mass Tower", 208 * 2 + 16, W.getHeight() - 108, 192, "center")
+
+    -- draws buttons
+		o.guiGame.draw()
+
+
 
 		G.setFont(o.fontDescription)
 		-- laser tower text
