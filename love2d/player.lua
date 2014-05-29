@@ -4,6 +4,8 @@ function love.turris.newPlayer()
 
 	o.mass = 99999
 	o.energy = 99999
+	
+	o.massDisplayDisabled = true
 
 	o.addMass = function(mass)
 		o.mass = o.mass + mass
