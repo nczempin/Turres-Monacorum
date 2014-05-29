@@ -147,31 +147,34 @@ function love.turris.newHudLayer(player)
 
 --		o.guiGame.draw()
 
---		G.setFont(o.fontDescription)
---		if o.btnTower1.isChecked() then
---			G.setColor(0, 127, 255, 255)
---		else
---			G.setColor(0, 127, 255, 127)
---		end
---		G.print("Cost: "..tostring(laserTower.buildCost).." M", 208 * 0 + 88, W.getHeight() - 68)
---		G.print("Shoots laser!", 208 * 0 + 88, W.getHeight() - 44)
---
---		if o.btnTower2.isChecked() then
---			G.setColor(255, 127, 0, 255)
---		else
---			G.setColor(255, 127, 0, 127)
---		end
---		G.print("Cost: "..tostring(energyTower.buildCost).." M", 208 * 1 + 88, W.getHeight() - 68)
---		G.print("Gives energy", 208 * 1 + 88, W.getHeight() - 44)
---
---		if o.btnTower3.isChecked() then
---			G.setColor(0, 255, 127, 255)
---		else
---			G.setColor(0, 255, 127, 127)
---		end
---		G.print("Cost: "..tostring(massTower.buildCost).." M", 208 * 2 + 88, W.getHeight() - 68)
---		G.print("Extracts M", 208 * 2 + 88, W.getHeight() - 44)
---
+		G.setFont(o.fontDescription)
+		-- laser tower text
+		if o.btnTower1.isChecked() then
+			G.setColor(0, 127, 255, 255)
+		else
+			G.setColor(0, 127, 255, 127)
+		end
+		G.print("Cost: "..tostring(laserTower.buildCost).." M", 208 * 0 + 88, W.getHeight() - 68)
+		G.print("Shoots laser!", 208 * 0 + 88, W.getHeight() - 44)
+
+    -- energy tower text
+		if o.btnTower2.isChecked() then
+			G.setColor(255, 127, 0, 255)
+		else
+			G.setColor(255, 127, 0, 127)
+		end
+		G.print("Cost: "..tostring(energyTower.buildCost).." M", 208 * 1 + 88, W.getHeight() - 68)
+		G.print("Gives energy", 208 * 1 + 88, W.getHeight() - 44)
+
+    -- mass tower text
+		if o.btnTower3.isChecked() then
+			G.setColor(0, 255, 127, 255)
+		else
+			G.setColor(0, 255, 127, 127)
+		end
+		G.print("Cost: "..tostring(massTower.buildCost).." M", 208 * 2 + 88, W.getHeight() - 68)
+		G.print("Extracts M", 208 * 2 + 88, W.getHeight() - 44)
+
 
 --    minimap
 --		G.setColor(127, 191, 255, 31)
