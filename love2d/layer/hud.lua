@@ -19,7 +19,7 @@ function love.turris.newHudLayer(player)
   o.btnTower1.setTextPosition(32, -32)
   o.btnTower1.setImagePosition(4, -11)
   o.btnTower1.setChecked(true)
-  
+
 
   --o.btnTower2.setFontSize(16)
   --o.btnTower2.setText("Energy Tower (3)")
@@ -125,7 +125,13 @@ function love.turris.newHudLayer(player)
     -- buttons
 
     --laser tower
-    if not o.player.laserTowerDisplayDisabled then
+    if o.player.laserTowerDisplayDisabled then
+      o.btnTower1.visible = false
+      o.btnTower1.enabled = false
+
+    else
+      o.btnTower1.visible = true
+      o.btnTower1.enabled = true
       if o.btnTower1.isChecked() then
         G.setColor(0, 127, 255, 127)
       else
