@@ -172,6 +172,8 @@ function love.turris.newHudLayer(player)
 --		G.print("Cost: "..tostring(massTower.buildCost).." M", 208 * 2 + 88, W.getHeight() - 68)
 --		G.print("Extracts M", 208 * 2 + 88, W.getHeight() - 44)
 --
+
+--    minimap
 --		G.setColor(127, 191, 255, 31)
 --		G.rectangle("fill", 16, 16, turGame.map.width * 8, turGame.map.height * 8)
 --
@@ -190,13 +192,14 @@ function love.turris.newHudLayer(player)
 --				end
 --			end
 --		end
---
---		for i = 1, #turGame.enemies do
---			if not turGame.enemies[i].dead then
---				G.setColor(255, 0, 0, 127)
---				G.rectangle("fill", 16 + (turGame.enemies[i].ai.getX() - 1) * 8, 16 + (turGame.enemies[i].ai.getY() - 1) * 8, 8, 8)
---			end
---		end
+
+    --minimap enemies
+		for i = 1, #turGame.enemies do
+			if not turGame.enemies[i].dead then
+				G.setColor(255, 0, 0, 127)
+				G.rectangle("fill", 16 + (turGame.enemies[i].ai.getX() - 1) * 8, 16 + (turGame.enemies[i].ai.getY() - 1) * 8, 8, 8)
+			end
+		end
 	end
 
 	return o
