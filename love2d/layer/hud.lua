@@ -94,100 +94,109 @@ function love.turris.newHudLayer(player)
 
 		G.setFont(FONT)
 		G.setLineWidth(2)
-		G.setColor(0, 127, 255)
-		G.rectangle("line", W.getWidth() - 352, 16, 160, 36)
-		G.setColor(0, 127, 255, 15)
-		G.rectangle("fill", W.getWidth() - 352, 16, 160, 36)
-		G.setColor(0, 127, 255, 255)
-		G.printf(math.floor(mass), W.getWidth() - 352, 16, 128, "right")
-		G.draw(o.iconMass, W.getWidth() - 208, 34, love.timer.getTime() * 0.5, 1, 1, 8, 8)
+		
+		
+		
+--		G.setColor(0, 127, 255)
+--		G.rectangle("line", W.getWidth() - 352, 16, 160, 36)
+--		G.setColor(0, 127, 255, 15)
+--		G.rectangle("fill", W.getWidth() - 352, 16, 160, 36)
+--		G.setColor(0, 127, 255, 255)
+--		G.printf(math.floor(mass), W.getWidth() - 352, 16, 128, "right")
+--		G.draw(o.iconMass, W.getWidth() - 208, 34, love.timer.getTime() * 0.5, 1, 1, 8, 8)
 
-		G.setColor(255, 127, 0)
-		G.rectangle("line", W.getWidth() - 176, 16, 160, 36)
-		G.setColor(255, 127, 0, 15)
-		G.rectangle("fill", W.getWidth() - 176, 16, 160, 36)
-		G.setColor(255, 127, 0, 255)
-		G.printf(math.floor(energy), W.getWidth() - 176, 16, 128, "right")
-		G.setColor(255, 127, 0, 191 + math.sin(love.timer.getTime() * 5.0) * 63)
-		G.draw(o.iconEnergy, W.getWidth() - 40, 16)
 
-		if o.btnTower1.isChecked() then
-			G.setColor(0, 127, 255, 127)
-		else
-			G.setColor(0, 127, 255, 31)
-		end
-		G.rectangle("fill", 208 * 0 + 16, W.getHeight() - 108, 192, 28)
-		if o.btnTower2.isChecked() then
-			G.setColor(255, 127, 0, 127)
-		else
-			G.setColor(255, 127, 0, 31)
-		end
-		G.rectangle("fill", 208 * 1 + 16, W.getHeight() - 108, 192, 28)
-		if o.btnTower3.isChecked() then
-			G.setColor(0, 255, 127, 127)
-		else
-			G.setColor(0, 255, 127, 31)
-		end
-		G.rectangle("fill", 208 * 2 + 16, W.getHeight() - 108, 192, 28)
 
-		G.setFont(o.fontTitle)
-		G.setColor(0, 0, 0)
-		G.printf("Laser Tower", 208 * 0 + 16, W.getHeight() - 108, 192, "center")
-		G.printf("Energy Tower", 208 * 1 + 16, W.getHeight() - 108, 192, "center")
-		G.printf("Mass Tower", 208 * 2 + 16, W.getHeight() - 108, 192, "center")
 
-		o.guiGame.draw()
+--		G.setColor(255, 127, 0)
+--		G.rectangle("line", W.getWidth() - 176, 16, 160, 36)
+--		G.setColor(255, 127, 0, 15)
+--		G.rectangle("fill", W.getWidth() - 176, 16, 160, 36)
+--		G.setColor(255, 127, 0, 255)
+--		G.printf(math.floor(energy), W.getWidth() - 176, 16, 128, "right")
+--		G.setColor(255, 127, 0, 191 + math.sin(love.timer.getTime() * 5.0) * 63)
+--		G.draw(o.iconEnergy, W.getWidth() - 40, 16)
 
-		G.setFont(o.fontDescription)
-		if o.btnTower1.isChecked() then
-			G.setColor(0, 127, 255, 255)
-		else
-			G.setColor(0, 127, 255, 127)
-		end
-		G.print("Cost: "..tostring(laserTower.buildCost).." M", 208 * 0 + 88, W.getHeight() - 68)
-		G.print("Shoots laser!", 208 * 0 + 88, W.getHeight() - 44)
 
-		if o.btnTower2.isChecked() then
-			G.setColor(255, 127, 0, 255)
-		else
-			G.setColor(255, 127, 0, 127)
-		end
-		G.print("Cost: "..tostring(energyTower.buildCost).." M", 208 * 1 + 88, W.getHeight() - 68)
-		G.print("Gives energy", 208 * 1 + 88, W.getHeight() - 44)
 
-		if o.btnTower3.isChecked() then
-			G.setColor(0, 255, 127, 255)
-		else
-			G.setColor(0, 255, 127, 127)
-		end
-		G.print("Cost: "..tostring(massTower.buildCost).." M", 208 * 2 + 88, W.getHeight() - 68)
-		G.print("Extracts M", 208 * 2 + 88, W.getHeight() - 44)
 
-		G.setColor(127, 191, 255, 31)
-		G.rectangle("fill", 16, 16, turGame.map.width * 8, turGame.map.height * 8)
+--		if o.btnTower1.isChecked() then
+--			G.setColor(0, 127, 255, 127)
+--		else
+--			G.setColor(0, 127, 255, 31)
+--		end
+--		G.rectangle("fill", 208 * 0 + 16, W.getHeight() - 108, 192, 28)
+--		if o.btnTower2.isChecked() then
+--			G.setColor(255, 127, 0, 127)
+--		else
+--			G.setColor(255, 127, 0, 31)
+--		end
+--		G.rectangle("fill", 208 * 1 + 16, W.getHeight() - 108, 192, 28)
+--		if o.btnTower3.isChecked() then
+--			G.setColor(0, 255, 127, 127)
+--		else
+--			G.setColor(0, 255, 127, 31)
+--		end
+--		G.rectangle("fill", 208 * 2 + 16, W.getHeight() - 108, 192, 28)
 
-		for i = 1, turGame.map.width do
-			for k = 1, turGame.map.height do
-				if turGame.map.data[i][k].id >= 1 then
-					if turGame.map.data[i][k].id <= 4 then
-						G.setColor(0, 255, 0, 127)
-					elseif turGame.map.data[i][k].id >= 6 and turGame.map.data[i][k].id <= 7 then
-						G.setColor(255, 127, 0, 127)
-					else
-						G.setColor(255, 255, 255, 31)
-					end
+--		G.setFont(o.fontTitle)
+--		G.setColor(0, 0, 0)
+--		G.printf("Laser Tower", 208 * 0 + 16, W.getHeight() - 108, 192, "center")
+--		G.printf("Energy Tower", 208 * 1 + 16, W.getHeight() - 108, 192, "center")
+--		G.printf("Mass Tower", 208 * 2 + 16, W.getHeight() - 108, 192, "center")
 
-					G.rectangle("fill", 16 + (i - 1) * 8, 16 + (k - 1) * 8, 8, 8)
-				end
-			end
-		end
+--		o.guiGame.draw()
 
-		for i = 1, #turGame.enemies do
-			if not turGame.enemies[i].dead then
-				G.setColor(255, 0, 0, 127)
-				G.rectangle("fill", 16 + (turGame.enemies[i].ai.getX() - 1) * 8, 16 + (turGame.enemies[i].ai.getY() - 1) * 8, 8, 8)
-			end
-		end
+--		G.setFont(o.fontDescription)
+--		if o.btnTower1.isChecked() then
+--			G.setColor(0, 127, 255, 255)
+--		else
+--			G.setColor(0, 127, 255, 127)
+--		end
+--		G.print("Cost: "..tostring(laserTower.buildCost).." M", 208 * 0 + 88, W.getHeight() - 68)
+--		G.print("Shoots laser!", 208 * 0 + 88, W.getHeight() - 44)
+--
+--		if o.btnTower2.isChecked() then
+--			G.setColor(255, 127, 0, 255)
+--		else
+--			G.setColor(255, 127, 0, 127)
+--		end
+--		G.print("Cost: "..tostring(energyTower.buildCost).." M", 208 * 1 + 88, W.getHeight() - 68)
+--		G.print("Gives energy", 208 * 1 + 88, W.getHeight() - 44)
+--
+--		if o.btnTower3.isChecked() then
+--			G.setColor(0, 255, 127, 255)
+--		else
+--			G.setColor(0, 255, 127, 127)
+--		end
+--		G.print("Cost: "..tostring(massTower.buildCost).." M", 208 * 2 + 88, W.getHeight() - 68)
+--		G.print("Extracts M", 208 * 2 + 88, W.getHeight() - 44)
+--
+--		G.setColor(127, 191, 255, 31)
+--		G.rectangle("fill", 16, 16, turGame.map.width * 8, turGame.map.height * 8)
+--
+--		for i = 1, turGame.map.width do
+--			for k = 1, turGame.map.height do
+--				if turGame.map.data[i][k].id >= 1 then
+--					if turGame.map.data[i][k].id <= 4 then
+--						G.setColor(0, 255, 0, 127)
+--					elseif turGame.map.data[i][k].id >= 6 and turGame.map.data[i][k].id <= 7 then
+--						G.setColor(255, 127, 0, 127)
+--					else
+--						G.setColor(255, 255, 255, 31)
+--					end
+--
+--					G.rectangle("fill", 16 + (i - 1) * 8, 16 + (k - 1) * 8, 8, 8)
+--				end
+--			end
+--		end
+--
+--		for i = 1, #turGame.enemies do
+--			if not turGame.enemies[i].dead then
+--				G.setColor(255, 0, 0, 127)
+--				G.rectangle("fill", 16 + (turGame.enemies[i].ai.getX() - 1) * 8, 16 + (turGame.enemies[i].ai.getY() - 1) * 8, 8, 8)
+--			end
+--		end
 	end
 
 	return o
