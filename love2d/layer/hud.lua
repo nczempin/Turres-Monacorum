@@ -182,37 +182,44 @@ function love.turris.newHudLayer(player)
       G.print("Gives energy", 208 * 1 + 88, W.getHeight() - 44)
     end
 
+    if o.player.massTowerDisplayDisabled then
+      o.btnTower3.visible = false
+      o.btnTower3.enabled = false
 
-    if o.btnTower3.isChecked() then
-      G.setColor(0, 255, 127, 127)
     else
-      G.setColor(0, 255, 127, 31)
+      o.btnTower3.visible = true
+      o.btnTower3.enabled = true
+
+      if o.btnTower3.isChecked() then
+        G.setColor(0, 255, 127, 127)
+      else
+        G.setColor(0, 255, 127, 31)
+      end
+      G.rectangle("fill", 208 * 2 + 16, W.getHeight() - 108, 192, 28)
+
+      --button header titles
+      G.setFont(o.fontTitle)
+      G.setColor(0, 0, 0)
+      G.printf("Mass Tower", 208 * 2 + 16, W.getHeight() - 108, 192, "center")
+
+      -- draws buttons
+      o.guiGame.draw()
+
+
+
+
+
+      -- mass tower text
+      if o.btnTower3.isChecked() then
+        G.setColor(0, 255, 127, 255)
+      else
+        G.setColor(0, 255, 127, 127)
+      end
+      G.setFont(o.fontDescription)
+      G.print("Cost: "..tostring(massTower.buildCost).." M", 208 * 2 + 88, W.getHeight() - 68)
+      G.print("Extracts M", 208 * 2 + 88, W.getHeight() - 44)
+
     end
-    G.rectangle("fill", 208 * 2 + 16, W.getHeight() - 108, 192, 28)
-
-    --button header titles
-    G.setFont(o.fontTitle)
-    G.setColor(0, 0, 0)
-    G.printf("Mass Tower", 208 * 2 + 16, W.getHeight() - 108, 192, "center")
-
-    -- draws buttons
-    o.guiGame.draw()
-
-
-
-
-
-    -- mass tower text
-    if o.btnTower3.isChecked() then
-      G.setColor(0, 255, 127, 255)
-    else
-      G.setColor(0, 255, 127, 127)
-    end
-    G.setFont(o.fontDescription)
-    G.print("Cost: "..tostring(massTower.buildCost).." M", 208 * 2 + 88, W.getHeight() - 68)
-    G.print("Extracts M", 208 * 2 + 88, W.getHeight() - 44)
-
-
     --    minimap
     --		G.setColor(127, 191, 255, 31)
     --		G.rectangle("fill", 16, 16, turGame.map.width * 8, turGame.map.height * 8)
