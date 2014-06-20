@@ -18,7 +18,7 @@ function love.turris.newHudLayer(player)
   --o.btnTower1.setText("Laser Tower (1)")
   o.btnTower1.setTextPosition(32, -32)
   o.btnTower1.setImagePosition(4, -11)
-  o.btnTower1.setChecked(true)
+  o.btnTower1.setChecked(false)
 
 
   --o.btnTower2.setFontSize(16)
@@ -202,14 +202,7 @@ function love.turris.newHudLayer(player)
       G.setColor(0, 0, 0)
       G.printf("Mass Tower", 208 * 2 + 16, W.getHeight() - 108, 192, "center")
 
-      -- draws buttons
-      o.guiGame.draw()
-
-
-
-
-
-      -- mass tower text
+       -- mass tower text
       if o.btnTower3.isChecked() then
         G.setColor(0, 255, 127, 255)
       else
@@ -220,6 +213,9 @@ function love.turris.newHudLayer(player)
       G.print("Extracts M", 208 * 2 + 88, W.getHeight() - 44)
 
     end
+         -- draws buttons
+      o.guiGame.draw()
+    
     --    minimap
     --		G.setColor(127, 191, 255, 31)
     --		G.rectangle("fill", 16, 16, turGame.map.width * 8, turGame.map.height * 8)

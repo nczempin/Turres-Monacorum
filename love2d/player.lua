@@ -7,7 +7,9 @@ function love.turris.newPlayer()
 
   o.massDisplayDisabled = true
   o.energyDisplayDisabled = true
-  o.laserTowerDisplayDisabled = true
+  
+  
+  o.laserTowerDisplayDisabled = false
   o.energyTowerDisplayDisabled = true
   o.massTowerDisplayDisabled = true
 
