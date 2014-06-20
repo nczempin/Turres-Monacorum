@@ -154,14 +154,33 @@ function love.turris.newHudLayer(player)
       G.print("Shoots laser!", 208 * 0 + 88, W.getHeight() - 44)
     end
 
+    if o.player.energyTowerDisplayDisabled then
+      o.btnTower2.visible = false
+      o.btnTower2.enabled = false
 
-    if o.btnTower2.isChecked() then
-      G.setColor(255, 127, 0, 127)
     else
-      G.setColor(255, 127, 0, 31)
-    end
-    G.rectangle("fill", 208 * 1 + 16, W.getHeight() - 108, 192, 28)
+      o.btnTower2.visible = true
+      o.btnTower2.enabled = true
 
+      if o.btnTower2.isChecked() then
+        G.setColor(255, 127, 0, 127)
+      else
+        G.setColor(255, 127, 0, 31)
+      end
+      G.rectangle("fill", 208 * 1 + 16, W.getHeight() - 108, 192, 28)
+      G.setFont(o.fontTitle)
+      G.setColor(0, 0, 0)
+      G.printf("Energy Tower", 208 * 1 + 16, W.getHeight() - 108, 192, "center")
+      -- energy tower text
+      G.setFont(o.fontDescription)
+      if o.btnTower2.isChecked() then
+        G.setColor(255, 127, 0, 255)
+      else
+        G.setColor(255, 127, 0, 127)
+      end
+      G.print("Cost: "..tostring(energyTower.buildCost).." M", 208 * 1 + 88, W.getHeight() - 68)
+      G.print("Gives energy", 208 * 1 + 88, W.getHeight() - 44)
+    end
 
 
     if o.btnTower3.isChecked() then
@@ -174,9 +193,6 @@ function love.turris.newHudLayer(player)
     --button header titles
     G.setFont(o.fontTitle)
     G.setColor(0, 0, 0)
-    G.printf("Energy Tower", 208 * 1 + 16, W.getHeight() - 108, 192, "center")
-    G.setFont(o.fontTitle)
-    G.setColor(0, 0, 0)
     G.printf("Mass Tower", 208 * 2 + 16, W.getHeight() - 108, 192, "center")
 
     -- draws buttons
@@ -185,15 +201,6 @@ function love.turris.newHudLayer(player)
 
 
 
-    -- energy tower text
-    G.setFont(o.fontDescription)
-    if o.btnTower2.isChecked() then
-      G.setColor(255, 127, 0, 255)
-    else
-      G.setColor(255, 127, 0, 127)
-    end
-    G.print("Cost: "..tostring(energyTower.buildCost).." M", 208 * 1 + 88, W.getHeight() - 68)
-    G.print("Gives energy", 208 * 1 + 88, W.getHeight() - 44)
 
     -- mass tower text
     if o.btnTower3.isChecked() then
