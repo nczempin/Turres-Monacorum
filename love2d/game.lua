@@ -139,7 +139,7 @@ function love.turris.newGame()
 			if state and state == 0 then
 				--print ("x, y:",x,y)
 				local tt = o.towerType[id]
-				if tt.buildCost > o.player.mass then return end
+				if not tt or tt.buildCost > o.player.mass then return end
 				local t = love.turris.newTower(tt, x, y, id)
 				--print ("tower: ",t, t.x, t.y)
 				o.map.setState(t.x, t.y, id)
