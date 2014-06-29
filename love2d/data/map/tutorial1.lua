@@ -8,8 +8,8 @@ map = {
       disableUI =
       {
 
-        massDisplayDisabled = true,
-        energyDisplayDisabled = true,
+        massDisplayDisabled = false,
+        energyDisplayDisabled = false,
 
 
         laserTowerDisplayDisabled = false,

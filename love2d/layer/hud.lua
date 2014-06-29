@@ -4,6 +4,8 @@ massColour ={ 0, 255, 127}
 massLevelFillColour ={ 0, 127, 255,15}
 laserColour = {0,127,255}
 
+alarmColour = {255,0,0}
+
 
 function love.turris.newHudLayer(player)
   local o = {}
@@ -113,6 +115,9 @@ function love.turris.newHudLayer(player)
       G.setColor(massLevelFillColour)
       G.rectangle("fill", W.getWidth() - 352, 16, 160, 36)
       G.setColor(massColour, 255)
+      if mass <= 1 then
+        G.setColor(alarmColour,255)
+      end
       G.printf(math.floor(mass), W.getWidth() - 352, 16, 128, "right")
       G.draw(o.iconMass, W.getWidth() - 208, 34, love.timer.getTime() * 0.5, 1, 1, 8, 8)
     end
@@ -125,6 +130,9 @@ function love.turris.newHudLayer(player)
       G.setColor(energyLevelFillColour)
       G.rectangle("fill", W.getWidth() - 176, 16, 160, 36)
       G.setColor(energyColour, 255)
+      if energy <= 1 then
+        G.setColor(alarmColour,255)
+      end
       G.printf(math.floor(energy), W.getWidth() - 176, 16, 128, "right")
       G.setColor(energyColour, 191 + math.sin(love.timer.getTime() * 5.0) * 63)
       G.draw(o.iconEnergy, W.getWidth() - 40, 16)
@@ -141,7 +149,7 @@ function love.turris.newHudLayer(player)
     else
       o.btnTower1.visible = true
       o.btnTower1.enabled = true
-       if o.btnTower1.isChecked() then
+      if o.btnTower1.isChecked() then
         G.setColor(laserColour, 127)
       else
         G.setColor(laserColour, 31)
