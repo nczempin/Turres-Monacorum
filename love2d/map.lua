@@ -163,6 +163,10 @@ function love.turris.newMap(path)
 				local k = o.overlayIngameMessage.getCopy()
 				love.addsecondaryoverlay(k)
 			end
+			turGame.disableUI = require ("disableUI")
+			if o.waves[o.currentWave].disableUI then
+			   turGame.disableUI = o.waves[o.currentWave].disableUI
+			end
 	end
 	
 	o.getState = function(x, y)
