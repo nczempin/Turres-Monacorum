@@ -98,14 +98,18 @@ function love.turris.newHudLayer(player)
     G.setFont(FONT)
     G.setLineWidth(2)
 
+      local energyColour = {255,127,0}
+     local energyLevelFillColour = {255,127,0,15}
+      local massColour ={ 0, 255, 127}
+    local massLevelFillColour ={ 0, 127, 255,15}
 
     -- mass level
     if not turGame.disableUI.massDisplayDisabled then
-      G.setColor(0, 127, 255)
+      G.setColor(massColour)
       G.rectangle("line", W.getWidth() - 352, 16, 160, 36)
-      G.setColor(0, 127, 255, 15)
+      G.setColor(massLevelFillColour)
       G.rectangle("fill", W.getWidth() - 352, 16, 160, 36)
-      G.setColor(0, 127, 255, 255)
+      G.setColor(massColour, 255)
       G.printf(math.floor(mass), W.getWidth() - 352, 16, 128, "right")
       G.draw(o.iconMass, W.getWidth() - 208, 34, love.timer.getTime() * 0.5, 1, 1, 8, 8)
     end
@@ -113,13 +117,13 @@ function love.turris.newHudLayer(player)
 
     -- energy level
     if not turGame.disableUI.energyDisplayDisabled then
-      G.setColor(255, 127, 0)
+      G.setColor(energyColour)
       G.rectangle("line", W.getWidth() - 176, 16, 160, 36)
-      G.setColor(255, 127, 0, 15)
+      G.setColor(energyLevelFillColour)
       G.rectangle("fill", W.getWidth() - 176, 16, 160, 36)
-      G.setColor(255, 127, 0, 255)
+      G.setColor(energyColour, 255)
       G.printf(math.floor(energy), W.getWidth() - 176, 16, 128, "right")
-      G.setColor(255, 127, 0, 191 + math.sin(love.timer.getTime() * 5.0) * 63)
+      G.setColor(energyColour, 191 + math.sin(love.timer.getTime() * 5.0) * 63)
       G.draw(o.iconEnergy, W.getWidth() - 40, 16)
     end
 
@@ -162,7 +166,6 @@ function love.turris.newHudLayer(player)
     else
       o.btnTower2.visible = true
       o.btnTower2.enabled = true
-      local energyColour = {255,127,0}
       if o.btnTower2.isChecked() then
         G.setColor(energyColour, 127)
       else
@@ -190,7 +193,6 @@ function love.turris.newHudLayer(player)
     else
       o.btnTower3.visible = true
       o.btnTower3.enabled = true
-      local massColour ={ 0, 255, 127}
       if o.btnTower3.isChecked() then
         G.setColor(massColour, 127)
       else

@@ -1,8 +1,8 @@
 
 local o = {}
 
-o.massDisplayDisabled = true
-o.energyDisplayDisabled = true
+o.massDisplayDisabled = false
+o.energyDisplayDisabled = false
 
 
 o.laserTowerDisplayDisabled = false
