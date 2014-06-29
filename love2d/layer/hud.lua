@@ -134,10 +134,11 @@ function love.turris.newHudLayer(player)
     else
       o.btnTower1.visible = true
       o.btnTower1.enabled = true
+      local laserColour = {0,127,255}
       if o.btnTower1.isChecked() then
-        G.setColor(0, 127, 255, 127)
+        G.setColor(laserColour, 127)
       else
-        G.setColor(0, 127, 255, 31)
+        G.setColor(laserColour, 31)
       end
       G.rectangle("fill", 208 * 0 + 16, W.getHeight() - 108, 192, 28)
       G.setFont(o.fontTitle)
@@ -146,9 +147,9 @@ function love.turris.newHudLayer(player)
       G.setFont(o.fontDescription)
       -- laser tower text
       if o.btnTower1.isChecked() then
-        G.setColor(0, 127, 255, 255)
+        G.setColor(laserColour, 255)
       else
-        G.setColor(0, 127, 255, 127)
+        G.setColor(laserColour, 127)
       end
       G.print("Cost: "..tostring(laserTower.buildCost).." M", 208 * 0 + 88, W.getHeight() - 68)
       G.print("Shoots laser!", 208 * 0 + 88, W.getHeight() - 44)
@@ -161,11 +162,11 @@ function love.turris.newHudLayer(player)
     else
       o.btnTower2.visible = true
       o.btnTower2.enabled = true
-
+      local energyColour = {255,127,0}
       if o.btnTower2.isChecked() then
-        G.setColor(255, 127, 0, 127)
+        G.setColor(energyColour, 127)
       else
-        G.setColor(255, 127, 0, 31)
+        G.setColor(energyColour, 31)
       end
       G.rectangle("fill", 208 * 1 + 16, W.getHeight() - 108, 192, 28)
       G.setFont(o.fontTitle)
@@ -174,9 +175,9 @@ function love.turris.newHudLayer(player)
       -- energy tower text
       G.setFont(o.fontDescription)
       if o.btnTower2.isChecked() then
-        G.setColor(255, 127, 0, 255)
+        G.setColor(energyColour, 255)
       else
-        G.setColor(255, 127, 0, 127)
+        G.setColor(energyColour, 127)
       end
       G.print("Cost: "..tostring(energyTower.buildCost).." M", 208 * 1 + 88, W.getHeight() - 68)
       G.print("Gives energy", 208 * 1 + 88, W.getHeight() - 44)
@@ -189,11 +190,11 @@ function love.turris.newHudLayer(player)
     else
       o.btnTower3.visible = true
       o.btnTower3.enabled = true
-
+      local massColour ={ 0, 255, 127}
       if o.btnTower3.isChecked() then
-        G.setColor(0, 255, 127, 127)
+        G.setColor(massColour, 127)
       else
-        G.setColor(0, 255, 127, 31)
+        G.setColor(massColour, 31)
       end
       G.rectangle("fill", 208 * 2 + 16, W.getHeight() - 108, 192, 28)
 
@@ -202,20 +203,20 @@ function love.turris.newHudLayer(player)
       G.setColor(0, 0, 0)
       G.printf("Mass Tower", 208 * 2 + 16, W.getHeight() - 108, 192, "center")
 
-       -- mass tower text
+      -- mass tower text
       if o.btnTower3.isChecked() then
-        G.setColor(0, 255, 127, 255)
+        G.setColor(massColour, 255)
       else
-        G.setColor(0, 255, 127, 127)
+        G.setColor(massColour, 127)
       end
       G.setFont(o.fontDescription)
       G.print("Cost: "..tostring(massTower.buildCost).." M", 208 * 2 + 88, W.getHeight() - 68)
       G.print("Extracts M", 208 * 2 + 88, W.getHeight() - 44)
 
     end
-         -- draws buttons
-      o.guiGame.draw()
-    
+    -- draws buttons
+    o.guiGame.draw()
+
     --    minimap
     --		G.setColor(127, 191, 255, 31)
     --		G.rectangle("fill", 16, 16, turGame.map.width * 8, turGame.map.height * 8)

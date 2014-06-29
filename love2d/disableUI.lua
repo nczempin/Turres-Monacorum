@@ -5,8 +5,8 @@ o.massDisplayDisabled = true
 o.energyDisplayDisabled = true
 
 
-o.laserTowerDisplayDisabled = true
-o.energyTowerDisplayDisabled = true
+o.laserTowerDisplayDisabled = false
+o.energyTowerDisplayDisabled = false
 o.massTowerDisplayDisabled = true
 
 return o
