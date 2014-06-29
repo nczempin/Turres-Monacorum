@@ -1,3 +1,9 @@
+energyColour = {255,127,0}
+energyLevelFillColour = {255,127,0,15}
+massColour ={ 0, 255, 127}
+massLevelFillColour ={ 0, 127, 255,15}
+
+
 function love.turris.newHudLayer(player)
   local o = {}
 
@@ -98,10 +104,6 @@ function love.turris.newHudLayer(player)
     G.setFont(FONT)
     G.setLineWidth(2)
 
-      local energyColour = {255,127,0}
-     local energyLevelFillColour = {255,127,0,15}
-      local massColour ={ 0, 255, 127}
-    local massLevelFillColour ={ 0, 127, 255,15}
 
     -- mass level
     if not turGame.disableUI.massDisplayDisabled then
