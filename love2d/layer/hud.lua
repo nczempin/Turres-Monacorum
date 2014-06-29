@@ -2,6 +2,7 @@ energyColour = {255,127,0}
 energyLevelFillColour = {255,127,0,15}
 massColour ={ 0, 255, 127}
 massLevelFillColour ={ 0, 127, 255,15}
+laserColour = {0,127,255}
 
 
 function love.turris.newHudLayer(player)
@@ -140,8 +141,7 @@ function love.turris.newHudLayer(player)
     else
       o.btnTower1.visible = true
       o.btnTower1.enabled = true
-      local laserColour = {0,127,255}
-      if o.btnTower1.isChecked() then
+       if o.btnTower1.isChecked() then
         G.setColor(laserColour, 127)
       else
         G.setColor(laserColour, 31)
