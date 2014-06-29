@@ -100,7 +100,7 @@ function love.turris.newHudLayer(player)
 
 
     -- mass level
-    if not o.player.massDisplayDisabled then
+    if not turGame.disableUI.massDisplayDisabled then
       G.setColor(0, 127, 255)
       G.rectangle("line", W.getWidth() - 352, 16, 160, 36)
       G.setColor(0, 127, 255, 15)
@@ -112,7 +112,7 @@ function love.turris.newHudLayer(player)
 
 
     -- energy level
-    if not o.player.energyDisplayDisabled then
+    if not turGame.disableUI.energyDisplayDisabled then
       G.setColor(255, 127, 0)
       G.rectangle("line", W.getWidth() - 176, 16, 160, 36)
       G.setColor(255, 127, 0, 15)
@@ -127,7 +127,7 @@ function love.turris.newHudLayer(player)
     -- buttons
 
     --laser tower
-    if o.player.laserTowerDisplayDisabled then
+    if turGame.disableUI.laserTowerDisplayDisabled then
       o.btnTower1.visible = false
       o.btnTower1.enabled = false
 
@@ -154,7 +154,7 @@ function love.turris.newHudLayer(player)
       G.print("Shoots laser!", 208 * 0 + 88, W.getHeight() - 44)
     end
 
-    if o.player.energyTowerDisplayDisabled then
+    if turGame.disableUI.energyTowerDisplayDisabled then
       o.btnTower2.visible = false
       o.btnTower2.enabled = false
 
@@ -182,7 +182,7 @@ function love.turris.newHudLayer(player)
       G.print("Gives energy", 208 * 1 + 88, W.getHeight() - 44)
     end
 
-    if o.player.massTowerDisplayDisabled then
+    if turGame.disableUI.massTowerDisplayDisabled then
       o.btnTower3.visible = false
       o.btnTower3.enabled = false
 

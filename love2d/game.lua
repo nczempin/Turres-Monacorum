@@ -31,6 +31,7 @@ function love.turris.newGame()
 
 	o.init = function()
 		o.player = love.turris.newPlayer()
+		o.disableUI = require("disableUI")
 		o.setMap(turMap.getMap())
 		o.baseX = map.baseX
 		o.baseY = map.baseY
