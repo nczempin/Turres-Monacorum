@@ -8,7 +8,7 @@ missions = {
 --		briefingText = "For trying out new features efficiently",
 --		button = "D",
 --	},
-	{		map = "tutorial1",
+	{		map = "tutorial0",
 		x = 300,
 		y = 130,
 		title = "Tutorial 1",
