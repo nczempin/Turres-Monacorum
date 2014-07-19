@@ -3,9 +3,12 @@ map = {
   height = 11,
   baseX = 3,
   baseY = 5,
+
+  mass = 0,
+  energy = 0,
   waves = {
     {
-    missionText = "If they destroy our MAIN GENERATOR, the ensuing resonance cascade will cut off our communications, rendering us entirely unprotected!\n I've scrounged together some resources, hopefully you can hold them off until I'm able to provide you with more.\n\nBuild a LASER TOWER in a good spot!",
+      missionText = "If they destroy our MAIN GENERATOR, the ensuing resonance cascade will cut off our communications, rendering us entirely unprotected!\n I've scrounged together some resources, hopefully you can hold them off until I'm able to provide you with more.\n\nBuild a LASER TOWER in a good spot!",
       disableUI =
       {
 
@@ -155,7 +158,5 @@ map = {
 
   },
   random = {
-  },
-  mass = 10,
-  energy = 25
+  }
 }
