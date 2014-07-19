@@ -5,6 +5,7 @@ map = {
   baseY = 5,
   waves = {
     {
+    missionText = "If they destroy our MAIN GENERATOR, the ensuing resonance cascade will cut off our communications, rendering us entirely unprotected!\n I've scrounged together some resources, hopefully you can hold them off until I'm able to provide you with more.\n\nBuild a LASER TOWER in a good spot!",
       disableUI =
       {
 
