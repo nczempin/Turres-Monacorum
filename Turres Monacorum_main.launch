@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.koneki.ldt.debug.core.lualocaldebug">
+<stringAttribute key="interpreterArguments" value="${workspace_loc:Turres Monacorum/love2d}"/>
+<stringAttribute key="mainScript" value="love2d/main.lua"/>
+<stringAttribute key="nature" value="org.eclipse.koneki.ldt.nature"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/Turres Monacorum/love2d/main.lua"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<stringAttribute key="process_factory_id" value="org.eclipse.dltk.launching.scriptProcessFactory"/>
+<stringAttribute key="project" value="Turres Monacorum"/>
+<stringAttribute key="workingDir" value="${workspace_loc:Turres Monacorum/love2d}"/>
+</launchConfiguration>
