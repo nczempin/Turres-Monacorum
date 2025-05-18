@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Determine changed files
+        id: filter
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            code:
+              - '**/*.lua'
+              - '**/*.json'
+              - '**/*.yaml'
+              - '**/*.yml'
+            docs:
+              - '**/*.md'
+              - '**/*.txt'
+
+      - name: Install dependencies
+        if: steps.filter.outputs.code == 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y luarocks love
+          sudo luarocks install luacheck
+          sudo luarocks install busted
+
+      - name: Run linter
+        if: steps.filter.outputs.code == 'true'
+        run: luacheck .
+
+      - name: Run tests
+        if: steps.filter.outputs.code == 'true'
+        run: busted
