@@ -1,16 +1,28 @@
-Turres Monacorum
+# Turres Monacorum
 
-http://nczempin.github.io/Turres-Monacorum/
+[![CI](https://github.com/nczempin/Turres-Monacorum/actions/workflows/ci.yml/badge.svg?branch=work)](https://github.com/nczempin/Turres-Monacorum/actions/workflows/ci.yml)
 
-Tested with Löve2d 0.9.1.
+Turres Monacorum is a tower defense game built with [Löve2D](https://love2d.org/). It challenges you to defend a medieval monastery from waves of invaders by placing and upgrading towers. The project began as a hobby collaboration and is maintained as an open source game.
 
-* Full 64-bit Windows Binary (including dependencies):
-On Windows (64 bit), unzip the zip file and start the "turres-monacorum-[...].exe".
+Visit the project page at <http://nczempin.github.io/Turres-Monacorum/>.
 
-* Binary that requires Löve2d to be installed (get it from http://love2d.org/ for Windows, Mac or Linux):
-On Windows, drag the file "turres-monacorum-[...].love" onto the love.exe or a shortcut of the exe.
-On Linux and on MacOS, use the .love file as described in your löve documentation.
+## Prerequisites
 
-* For source distribution, just pick your favourite branch from https://github.com/nczempin/Turres-Monacorum and either clone the project via your favourite Git client [we like SourceTree] or just download the provided .zip or .tar.gz source snapshots.
+- Löve2D 0.9.1 or newer
+- [7‑Zip](https://www.7-zip.org/) to package a Windows build
+- Optional: LuaRocks with `luacheck` and `busted` for local linting and tests
 
-* To create your own distributable archive on Windows, run the `buildlöve.bat` script found in the repository root. The batch file packages the contents of the `love2d` directory together with the prebuilt Löve2D binaries from `buildmaterial\lovewin64`. It requires [7‑Zip](https://www.7-zip.org/); edit the path to `7z.exe` at the top of the script if necessary. Running the script produces a `tm.zip` file in the project root containing `tm.exe` and all needed DLLs. Temporary files are written to `buildtmp/`, which is listed in `.gitignore`.
+## Build and Test
+
+A GitHub Actions workflow runs lint and test jobs on every push. To invoke the same checks locally, run:
+
+```bash
+luacheck .
+busted
+```
+
+To create a Windows distributable, execute `buildlöve.bat` from the repository root. The script packs `love2d` together with prebuilt binaries found in `buildmaterial/lovewin64`.
+
+## Status
+
+The game is playable but still under active development. Contributions are welcome!
