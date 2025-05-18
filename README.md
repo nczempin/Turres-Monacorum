@@ -1,14 +1,26 @@
-Turres Monacorum
+# Turres Monacorum
 
-http://nczempin.github.io/Turres-Monacorum/
+[![Build Status](https://github.com/nczempin/Turres-Monacorum/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/nczempin/Turres-Monacorum/actions/workflows/ci.yml)
 
-Tested with Löve2d 0.9.1.
+**Project status:** Archived
 
-* Full 64-bit Windows Binary (including dependencies):
-On Windows (64 bit), unzip the zip file and start the "turres-monacorum-[...].exe".
+Turres Monacorum is a tower-defense game where you defend a monastery from incoming hordes by building towers.
 
-* Binary that requires Löve2d to be installed (get it from http://love2d.org/ for Windows, Mac or Linux):
-On Windows, drag the file "turres-monacorum-[...].love" onto the love.exe or a shortcut of the exe.
-On Linux and on MacOS, use the .love file as described in your löve documentation.
+## Requirements
+- [LÖVE](https://love2d.org/) 0.9.1 or newer
 
-* For source distribution, just pick your favourite branch from https://github.com/nczempin/Turres-Monacorum and either clone the project via your favourite Git client [we like SourceTree] or just download the provided .zip or .tar.gz source snapshots.
+## Running locally
+```bash
+git clone https://github.com/nczempin/Turres-Monacorum.git
+cd Turres-Monacorum
+love love2d
+```
+
+## Building a release
+On Windows, run:
+```cmd
+buildlöve.bat
+```
+This packages `tm.zip` with a standalone executable.
+
+See `license.txt` for licensing information.
