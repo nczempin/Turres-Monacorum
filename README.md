@@ -12,3 +12,6 @@ On Windows, drag the file "turres-monacorum-[...].love" onto the love.exe or a s
 On Linux and on MacOS, use the .love file as described in your löve documentation.
 
 * For source distribution, just pick your favourite branch from https://github.com/nczempin/Turres-Monacorum and either clone the project via your favourite Git client [we like SourceTree] or just download the provided .zip or .tar.gz source snapshots.
+
+## Setup
+Run `./setup.sh` (or `setup.bat` on Windows) to install dependencies before building.
