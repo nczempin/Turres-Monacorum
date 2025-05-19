@@ -1,3 +1,15 @@
 love.exe - Shortcut.lnk
-/buildtmp
+
+# editor/OS files
+*.swp
+*.log
+.DS_Store
+
+# build artifacts
+/buildtmp/
 /tm.zip
+*.love
+
+# IDE folders
+.vscode/
+.idea/
