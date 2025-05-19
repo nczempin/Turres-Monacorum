@@ -13,3 +13,4 @@ love.exe - Shortcut.lnk
 # IDE folders
 .vscode/
 .idea/
+/build

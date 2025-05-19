@@ -31,3 +31,14 @@ The game is playable but still under active development. Contributions are welco
 
 ## Setup
 Run `./setup.sh` (or `setup.bat` on Windows) to install dependencies before building.
+## Development
+
+Use the provided `Makefile` for common tasks:
+
+```
+make        # build, test and package the game
+make build  # create build/game.love from src/lua
+make test   # run tests (none by default)
+make package  # create build/tm.zip using the Love2D runtime if present
+make clean  # remove build artifacts
+```
