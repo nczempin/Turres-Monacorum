@@ -1,0 +1,21 @@
+name: Build
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nhartland/love-build@v1
+        with:
+          app_name: Turres-Monacorum
+          love_version: '0.9.1'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Turres-Monacorum-builds
+          path: builds/
