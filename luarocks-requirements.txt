@@ -1,0 +1,2 @@
+luasocket 3.0rc1-2
+luafilesystem 1.8.0-1

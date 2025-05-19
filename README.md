@@ -26,3 +26,8 @@ To create a Windows distributable, execute `buildlöve.bat` from the repository 
 ## Status
 
 The game is playable but still under active development. Contributions are welcome!
+
+* For source distribution, just pick your favourite branch from https://github.com/nczempin/Turres-Monacorum and either clone the project via your favourite Git client [we like SourceTree] or just download the provided .zip or .tar.gz source snapshots.
+
+## Setup
+Run `./setup.sh` (or `setup.bat` on Windows) to install dependencies before building.
