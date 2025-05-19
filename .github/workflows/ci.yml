@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for code changes
+        id: changes
+        shell: bash
+        run: |
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          git fetch origin "$BASE_SHA"
+          CHANGED_FILES=$(git diff --name-only "$BASE_SHA"..HEAD)
+          echo "Changed files: $CHANGED_FILES"
+          run=false
+          for file in $CHANGED_FILES; do
+            case "$file" in
+              *.md|*.txt|docs/*)
+                continue
+                ;;
+              *)
+                if git diff "$BASE_SHA"..HEAD -- "$file" \
+                    | grep -E '^[+-]' \
+                    | grep -vE '^(---|\+\+\+|@@)' \
+                    | grep -vE '^[+-]\s*(#|--|//|/\*|\*|$)' >/dev/null; then
+                  run=true
+                  break
+                fi
+                ;;
+            esac
+          done
+          echo "run=$run" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Lua
+        if: steps.changes.outputs.run == 'true'
+        uses: leafo/gh-actions-lua@v9
+        with:
+          lua-version: "5.4"
+
+      - name: Set up Luarocks
+        if: steps.changes.outputs.run == 'true'
+        uses: leafo/gh-actions-luarocks@v4
+
+      - name: Cache Lua dependencies
+        if: steps.changes.outputs.run == 'true'
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/luarocks
+            ~\AppData\Local\luarocks
+          key: ${{ runner.os }}-luarocks-${{ hashFiles('**/*.rockspec') }}
+          restore-keys: ${{ runner.os }}-luarocks-
+
+      - name: Run setup
+        if: steps.changes.outputs.run == 'true'
+        run: ./setup
+
+      - name: Build and test
+        if: steps.changes.outputs.run == 'true'
+        run: make
+
+      - name: Skip checks
+        if: steps.changes.outputs.run != 'true'
+        run: echo "Skipping tests and linters for documentation or comment-only changes."

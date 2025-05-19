@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+set -e
+
+echo "Running setup script"
+if command -v luarocks >/dev/null 2>&1; then
+  echo "Installing Lua dependencies if rockspec files are present"
+  if ls *.rockspec 1>/dev/null 2>&1; then
+    for spec in *.rockspec; do
+      luarocks install --local "$spec"
+    done
+  else
+    echo "No rockspec found, skipping dependency installation"
+  fi
+else
+  echo "LuaRocks not found, skipping dependency installation"
+fi
