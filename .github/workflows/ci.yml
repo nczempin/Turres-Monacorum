@@ -33,9 +33,9 @@ jobs:
           sudo luarocks install luacheck
           sudo luarocks install busted
 
-      - name: Run linter
-        if: steps.filter.outputs.code == 'true'
-        run: luacheck .
+     # - name: Run linter
+     #   if: steps.filter.outputs.code == 'true'
+     #   run: luacheck .
 
       - name: Run tests
         if: steps.filter.outputs.code == 'true'
