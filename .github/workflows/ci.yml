@@ -39,4 +39,9 @@ jobs:
 
       - name: Run tests
         if: steps.filter.outputs.code == 'true'
-        run: busted
+        run: |
+          if find . -name "*_spec.lua" -o -name "spec_*.lua" | head -1 | grep -q .; then
+            busted
+          else
+            echo "No test files found, skipping tests"
+          fi
