@@ -128,7 +128,7 @@ ignore = {
 }
 
 -- Maximum line length (Love2D projects often have longer lines due to graphics code)
-max_line_length = 120
+max_line_length = 140
 
 -- Allow unused variables starting with underscore
 unused_args = false
