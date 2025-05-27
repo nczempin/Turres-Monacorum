@@ -10,15 +10,25 @@ Visit the project page at <http://nczempin.github.io/Turres-Monacorum/>.
 
 - Löve2D 0.9.1 or newer
 - [7‑Zip](https://www.7-zip.org/) to package a Windows build
-- Optional: LuaRocks with `luacheck` and `busted` for local linting and tests
+- For development: LuaRocks with `luacheck` and `busted` for linting and tests
 
 ## Build and Test
 
-A GitHub Actions workflow runs lint and test jobs on every push. To invoke the same checks locally, run:
+A GitHub Actions workflow runs lint and test jobs on every push. 
+
+### Development Setup
+
+To set up linting and testing tools locally:
 
 ```bash
-luacheck .
-busted
+./scripts/setup-linting.sh
+```
+
+Then run the same checks locally:
+
+```bash
+luacheck love2d/    # Run linting
+busted              # Run tests
 ```
 
 To create a Windows distributable, execute `buildlöve.bat` from the repository root. The script packs `love2d` together with prebuilt binaries found in `buildmaterial/lovewin64`.

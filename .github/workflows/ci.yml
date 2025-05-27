@@ -29,13 +29,13 @@ jobs:
         if: steps.filter.outputs.code == 'true'
         run: |
           sudo apt-get update
-          sudo apt-get install -y luarocks love
+          sudo apt-get install -y luarocks love lua5.1 liblua5.1-dev
           sudo luarocks install luacheck
           sudo luarocks install busted
 
-     # - name: Run linter
-     #   if: steps.filter.outputs.code == 'true'
-     #   run: luacheck .
+      - name: Run linter
+        if: steps.filter.outputs.code == 'true'
+        run: luacheck love2d/
 
       - name: Run tests
         if: steps.filter.outputs.code == 'true'
