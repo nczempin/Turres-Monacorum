@@ -1,0 +1,25 @@
+name: Build LÖVE Game
+
+on:
+  push:
+    branches: [main, master, develop, work]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build with love-build
+        uses: nhartland/love-build@v1
+        with:
+          app_name: Turres-Monacorum
+          love_version: '0.9.1'
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Turres-Monacorum
+          path: dist/**
