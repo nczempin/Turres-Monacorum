@@ -59,9 +59,16 @@ globals = {
     "stateMainMenu", "stateWorldMenu", "stateSettings", "stateSettingsVideo",
     "stateSettingsVideoShaders", "stateSettingsVideoDisplay", "stateSettingsAudio",
     
-    -- Utility functions and variables
+    -- Utility functions and variables  
     "saveOptions", "getclickedfield", "holdOffset", "holdOffsetX", "holdOffsetY",
-    "gameOverEffect", "buttonDetected", "currentgstate"
+    "gameOverEffect", "buttonDetected", "currentgstate", "distance_manhattan",
+    "distance_euclid", "getAllNodes", "findNode", "printWaypoints",
+    
+    -- Font constants
+    "FONT_SMALLER", "FONT_NORMAL", "FONT_LARGER",
+    
+    -- External library references
+    "Tserial"
 }
 
 -- Read-only globals (should not be assigned to)
@@ -124,6 +131,9 @@ codes = true
 ignore = {
     "212",  -- Unused argument (common in Love2D callbacks)
     "213",  -- Unused loop variable (common in game loops)
+    "542",  -- Empty if branch (sometimes used for placeholder logic)
+    "611",  -- Line contains only whitespace (formatting issue)
+    "612",  -- Line contains trailing whitespace
     "614",  -- Trailing whitespace in comments
 }
 
