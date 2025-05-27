@@ -131,10 +131,14 @@ codes = true
 ignore = {
     "212",  -- Unused argument (common in Love2D callbacks)
     "213",  -- Unused loop variable (common in game loops)
+    "431",  -- Shadowing upvalue (often acceptable in game code)
+    "432",  -- Shadowing upvalue argument (often acceptable)
     "542",  -- Empty if branch (sometimes used for placeholder logic)
     "611",  -- Line contains only whitespace (formatting issue)
     "612",  -- Line contains trailing whitespace
+    "613",  -- Trailing whitespace in string (formatting)
     "614",  -- Trailing whitespace in comments
+    "631",  -- Line too long (handled by max_line_length setting)
 }
 
 -- Maximum line length (Love2D projects often have longer lines due to graphics code)
