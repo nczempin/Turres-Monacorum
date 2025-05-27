@@ -65,7 +65,23 @@ globals = {
     "distance_euclid", "getAllNodes", "findNode", "printWaypoints",
     
     -- Font constants
-    "FONT_SMALLER", "FONT_NORMAL", "FONT_LARGER",
+    "FONT_SMALLER", "FONT_NORMAL", "FONT_LARGER", "FONT", "FONT_LARGE", "FONT_SMALL", "FONT_SMALLEST",
+    
+    -- Game state globals
+    "stateIntro", "stateOutro", "stateCredits", "loadOptions",
+    
+    -- Color globals
+    "energyColour", "energyLevelFillColour", "massColour", "massLevelFillColour", 
+    "laserColour", "alarmColour",
+    
+    -- Graphics globals
+    "lightMouse", "directionAnim",
+    
+    -- Sound globals
+    "LOVE_SOUND_BGMUSICVOLUME", "LOVE_SOUND_SOUNDVOLUME", "soundNames",
+    
+    -- UI globals
+    "img", "small",
     
     -- External library references
     "Tserial"
@@ -131,6 +147,8 @@ codes = true
 ignore = {
     "212",  -- Unused argument (common in Love2D callbacks)
     "213",  -- Unused loop variable (common in game loops)
+    "411",  -- Variable was previously defined (acceptable for temporary variables)
+    "421",  -- Shadowing definition of variable (acceptable in local scopes)
     "431",  -- Shadowing upvalue (often acceptable in game code)
     "432",  -- Shadowing upvalue argument (often acceptable)
     "542",  -- Empty if branch (sometimes used for placeholder logic)
