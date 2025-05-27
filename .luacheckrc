@@ -46,7 +46,22 @@ globals = {
     "missions", "levels", "difficulty", "progression",
     
     -- External libraries
-    "TSerial", "Jumper", "grid", "pathfinder"
+    "TSerial", "Jumper", "grid", "pathfinder", "newAnimation",
+    
+    -- Game state variables
+    "turGame", "turMap", "currentgamestate", "secondarygamestate",
+    
+    -- Tower and object types
+    "laserTower", "generatorTower", "energyTower", "massTower", "bombTower",
+    "spawnHole", "spawnEggs", "Water", "Rock1", "Rock2",
+    
+    -- Game state management
+    "stateMainMenu", "stateWorldMenu", "stateSettings", "stateSettingsVideo",
+    "stateSettingsVideoShaders", "stateSettingsVideoDisplay", "stateSettingsAudio",
+    
+    -- Utility functions and variables
+    "saveOptions", "getclickedfield", "holdOffset", "holdOffsetX", "holdOffsetY",
+    "gameOverEffect", "buttonDetected", "currentgstate"
 }
 
 -- Read-only globals (should not be assigned to)
