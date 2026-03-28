@@ -30,7 +30,7 @@ o.update = function(dt)
 
 	if o.btnBack.isHit() or love.keyboard.isDown("escape") then
 		love.sounds.playSound("sounds/button_pressed.wav")
-		love.setgamestate(0)
+		love.setgamestate(6)
 		o.guiMenu.flushMouse()
 	end
 
