@@ -110,9 +110,13 @@ function love.turris.reinit(map)
 	turGame.mission = map
 end
 
+local settingsStates = {[6]=true, [7]=true, [8]=true, [9]=true, [10]=true}
+
 function love.setgamestate(newgamestate, option)
 	love.clearsecondaryoverlay()
-	love.sounds.stopSound("all")
+	if not settingsStates[newgamestate] then
+		love.sounds.stopSound("all")
+	end
 	if newgamestate == 0 then
 		stateMainMenu.effectTimer = 0
 		love.sounds.playBackground("sounds/music/Chiptune_2step_mp3.mp3", "menu")
