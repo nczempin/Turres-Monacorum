@@ -111,6 +111,7 @@ function love.turris.reinit(map)
 end
 
 function love.setgamestate(newgamestate, option)
+	love.clearsecondaryoverlay()
 	love.sounds.stopSound("all")
 	if newgamestate == 0 then
 		stateMainMenu.effectTimer = 0
